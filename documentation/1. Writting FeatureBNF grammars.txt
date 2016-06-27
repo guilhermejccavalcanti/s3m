@@ -1,0 +1,156 @@
+									---------------------------------------------------------------------
+									The FeatureBNF Grammar Specification Language (formerly gCIDE)
+									---------------------------------------------------------------------
+
+
+
+
+Basics
+-----------------------
+
+To create a language plug-in for CIDE, the FeatureBNF grammar for that language is processed by astgen. This tool generates classes for an AST and a JavaCC grammar, that has to be subsequentially processed by JavaCC to create a parser. Finally the generated classes are adapted for the de.ovgu.cide.core.language extension point using the ILanguageExtension interface.
+
+Due to this process (first processing by astgen, then by JavaCC) the grammar consists of two parts. The first part contains instructions for JavaCC, especially declarations for the lexer, that are not required by astgen. These instructions are directly in the JavaCC format and are not preprocessed by astgen. Please refer to the JavaCC documentation for details.
+
+The second part consists of annotated productions that are processed by astgen. Both parts are separated by the keyword GRAMMARSTART. The part after GRAMMARSTART consists only of productions in the following form:
+ProductionName : Tokens :: ChoiceName | Tokens :: ChoiceName | ... ;
+
+A production can consist of multiple choices, each of which can consist of a sequence of tokens, and can (but must not) be named (names must not collide with production names). Tokens can be non-terminals that reference other productions, tokens from the lexer written in pointy brackets, constant texts written in double quotes or special annotations we explain below. For example
+ConstructorDeclaration: [ TypeParameters ] <IDENTIFIER> FormalParameters [ "throws" NameList ] "{" [ ExplicitConstructorInvocation ] ( BlockStatement )* "}" ;
+
+Possible modifieres are (X)* for multiple items, (X)+ for one or more items, [X] or (X)? for optional items. X can be a sequence of tokens, that however can only contain a single non-terminal or or lexer-token (if more are required, these must be refactored into an own production, if only constants are required add the pseudo lexer token <NONE>);
+
+
+
+Annotations for Lists
+-----------------------
+
+In case list items are parsed by a production, but cannot be parsed only with the (X)* modifier, e.g., in
+Production: <IDENTIFIER> ":" Choice ( "|" Choice )* ";" ;
+
+add a &LI annotation before every list element. These will then be combined in a single list in the created AST.
+Production: <IDENTIFIER> ":" &LI Choice ( "|" &LI Choice )* ";" ;
+
+
+
+Optional Elements
+-----------------------
+
+If elements that are mandatory by the grammar should be colored anyway, they can be annotated as optional in the grammar using the OPTIONAL keyword. The optional keyword wraps a token and provides the default value that is inserted when the item is removed.
+FieldDeclaration: OPTIONAL(Type,"int") VariableDeclarator ";" ;
+
+
+
+Wrappers
+-----------------------
+
+Wrappers require two annotations, one where they are used and one to determine which element is wrapped. Consider the following example:
+Statement: Block | StatementExpression | IfStatement{Statement} | ...;
+IfStatement: "if" "(" Expression ")" Statement! ;
+
+The IfStatement may warp around the "then" statement. To define this, the IfStatement is annotated with {X} that contains the type of the wrapped element. Note, this annotation is defined where IfStatement is referenced in Statement, it is not defined in the IfStatement production itself. Inside the IfStatement production the wrapped element is identified with a ! as annotation after the element.
+
+
+
+Lookahead
+-----------------------
+
+Lookahead works exactly as in JavaCC, however the notation is slightly different. First, the keyword is LL instead of LOOKAHEAD, second if a semantic lookahead is to be used it must be written in double quotes. Example which shows both use cases:
+TypeDeclaration: LL(2) Modifiers ClassOrInterfaceDeclaration | LL("Modifiers()") Modifiers EnumDeclaration;
+
+
+
+Pretty printer annotations
+-----------------------
+
+The pretty printer is automatically created from the grammar. By default it just returns a sequence of tokens separated by a single whitespace following some heuristics. These heuristics can changed or turned off by overwriting the generated SimplePrintVisitor. If whitespaces should be preserved completely, they must be parsed as special tokens by the lexer (see JavaCC manual).
+
+Linebreaks and indentation can be specified using grammar annotations. @+ specifies that all following lines should be indented, @- reverses this. @! specifies that a line break should be added at this position. With @~ it is even possible to specify that a single whitespace should be added. The annotations can be combined e.g., @+!
+
+Example:
+PackageDeclaration: "package" Name ";" @!;
+ClassOrInterfaceBody: "{" @+! ( ClassOrInterfaceBodyDeclaration @! @! )* @-! "}" ;
+
+
+
+JavaCC Specials
+-----------------------
+
+If Java code is to be inserted in the created JavaCC grammar, it can be done with a special JAVA annotation, that contains the Java code in double quotes.
+StorageClassSpecifier: <AUTO> | <REGISTER> | <TYPEDEF> JAVA("typedefParsingStack.push(Boolean.TRUE);") ;
+
+If the lexer is extended with JAVACODE in JavaCC, it can be used with the JAVATOKEN annotation, e.g.,
+Grammar : JAVATOKEN(findIntroductionBlock) (Production)* <EOF>;
+
+
+
+Example
+-----------------------
+
+PARSER_BEGIN(JavaParser)
+package tmp.generated_simple;
+
+import java.io.*;
+import java.util.*;
+import cide.gast.*;
+import cide.gparser.*;
+
+public class JavaParser {}
+PARSER_END(JavaParser)
+
+SKIP : {
+  " "
+| "\t"
+| "\n"
+| "\r"
+| "\f"
+}
+
+TOKEN :
+{
+  < ABSTRACT: "abstract" >
+| < ASSERT: "assert" >
+| < BOOLEAN: "boolean" >
+| < BREAK: "break" >
+}
+
+TOKEN :
+{
+  < INTEGER_LITERAL:
+        <DECIMAL_LITERAL> (["l","L"])?
+      | <HEX_LITERAL> (["l","L"])?
+      | <OCTAL_LITERAL> (["l","L"])?
+  >
+}
+
+// ... more lexer instructions here
+
+GRAMMARSTART
+
+CompilationUnit: (TypeDeclaration)* <EOF>;
+
+TypeDeclaration: "class" Name [ "extends" Name ] ClassBody @! @!;
+
+Name: <IDENTIFIER>;
+
+ClassBody: "{" @+! (Member)* @-! "}";
+
+Member: Method | Field;
+Method: "void" Name "(" ")" Block;
+Field: Name ";" @!;
+
+Block: "{" @+! (Statement)* @-! "}" @!;
+
+Statement: 
+	LL(2) MethodInvocation ";" @! | 
+	IfStatement{Block} | 
+	Assignment ";" @! | 
+	Block;
+
+MethodInvocation: Name "(" ")";
+Assignment: Name "=" Expression;
+IfStatement: "if" "(" Expression ")" Block! [ "else" Block ];
+
+Expression: LL(2) BinaryExpression | UnaryExpression;
+UnaryExpression: <INTEGER_LITERAL>;
+BinaryExpression: OPTIONAL(UnaryExpression, "0") "+" OPTIONAL(Expression, "0");
