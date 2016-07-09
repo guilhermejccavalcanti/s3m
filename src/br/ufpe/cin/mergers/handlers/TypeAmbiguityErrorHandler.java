@@ -84,7 +84,9 @@ public final class TypeAmbiguityErrorHandler {
 			List<String> rightContributions = differ.diffText2Insertions(differences);
 			String membername = leftImportedMember.substring(0,leftImportedMember.length()-1);
 			for(String ctrb : rightContributions){
-				if(ctrb.matches("(?s).*\\b"+membername+"\\b.*") && !ctrb.contains("import")){
+				//if(ctrb.contains(membername) && !ctrb.contains("import") && ctrb.matches("((?s).*\\b\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*\\.)*\\p{javaJavaIdentifierStart}\\p{javaJavaIdentifierPart}*\\b.*")){
+				//if(ctrb.matches("(?s).*\\b"+membername+"\\b.*") && !ctrb.contains("import")){
+				if(ctrb.matches("(?s).*(?<!\\.)\\b"+membername+"\\b.*") && !ctrb.contains("import")){
 					return true;
 				}
 			}
@@ -95,7 +97,7 @@ public final class TypeAmbiguityErrorHandler {
 			List<String> leftContributions = differ.diffText2Insertions(differences);
 			String membername = rightImportedMember.substring(0,rightImportedMember.length()-1);
 			for(String ctrb : leftContributions){
-				if(ctrb.matches("(?s).*\\b"+membername+"\\b.*") && !ctrb.contains("import")){
+				if(ctrb.matches("(?s).*(?<!\\.)\\b"+membername+"\\b.*") && !ctrb.contains("import")){
 					return true;
 				}
 			}

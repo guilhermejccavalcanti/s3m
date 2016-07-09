@@ -175,18 +175,7 @@ public class JFSTMerge {
 			e.printStackTrace();
 		}*/
 
-		MergeContext ctx = new JFSTMerge().mergeFiles(
-				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importmembermember\\left\\Test\\src\\Test.java"), 
-				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importmembermember\\base\\Test\\src\\Test.java"), 
-				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importmembermember\\right\\Test\\src\\Test.java"),
-				null);
-
-		new JFSTMerge().mergeFiles(
-				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagepackage\\left\\Test\\src\\Test.java"), 
-				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagepackage\\base\\Test\\src\\Test.java"), 
-				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagepackage\\right\\Test\\src\\Test.java"),
-				null);
-		
+	
 		new JFSTMerge().mergeFiles(
 				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagemember\\left\\Test\\src\\Test.java"), 
 				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagemember\\base\\Test\\src\\Test.java"), 
