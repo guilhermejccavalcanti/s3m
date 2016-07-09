@@ -2,8 +2,6 @@ package br.ufpe.cin.app;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -110,14 +108,16 @@ public class JFSTMerge {
 				+ ((base != null)?base.getAbsolutePath() :"<empty base>") + "\n"
 				+ ((right!= null)?right.getAbsolutePath():"<empty right>")
 				);
-		MergeContext context = new MergeContext();
+		MergeContext context = new MergeContext(left,base,right,outputFilePath);
 		try{
-			context.semistructuredOutput= SemistructuredMerge.merge(left, base, right,context);
+			//run unstructured merge first is necessary due to future steps.
 			context.unstructuredOutput 	= TextualMerge.merge(left, base, right, false);		
+			context.semistructuredOutput= SemistructuredMerge.merge(left, base, right,context);
 		} catch(Exception e){
 			//in case of any error during the merging process, merge with unstructured merge
-			System.err.println(e.toString());
-			System.err.println( "Error while merging.\n" + "Fallback merge strategy: call textual merge\n");
+			System.err.println( "Error while merging.\n" + "Fallback merge strategy: call textual merge");
+			System.err.println("Cause: ");
+			e.printStackTrace();
 
 			context.unstructuredOutput  = TextualMerge.merge(left, base, right, false);
 			context.semistructuredOutput= TextualMerge.merge(left, base, right, false);
@@ -153,7 +153,7 @@ public class JFSTMerge {
 		//				"C:\\Users\\Guilherme\\Desktop\\test\\Test.java");
 
 
-		new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_lucenesolr\\rev_dc62b_aff97\\rev_dc62b-aff97.revisions");
+		//new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_lucenesolr\\rev_dc62b_aff97\\rev_dc62b-aff97.revisions");
 
 		//TODO
 		//C:\\tstfstmerge\\java_retrofit\\rev_941ae_2ef7c\\rev_left_941ae\\retrofit\\src\\main\\java\\retrofit\\http\\Header.java
@@ -174,5 +174,24 @@ public class JFSTMerge {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+
+		MergeContext ctx = new JFSTMerge().mergeFiles(
+				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importmembermember\\left\\Test\\src\\Test.java"), 
+				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importmembermember\\base\\Test\\src\\Test.java"), 
+				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importmembermember\\right\\Test\\src\\Test.java"),
+				null);
+
+		new JFSTMerge().mergeFiles(
+				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagepackage\\left\\Test\\src\\Test.java"), 
+				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagepackage\\base\\Test\\src\\Test.java"), 
+				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagepackage\\right\\Test\\src\\Test.java"),
+				null);
+		
+		new JFSTMerge().mergeFiles(
+				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagemember\\left\\Test\\src\\Test.java"), 
+				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagemember\\base\\Test\\src\\Test.java"), 
+				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagemember\\right\\Test\\src\\Test.java"),
+				null);
+
 	}
 }

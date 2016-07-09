@@ -8,9 +8,14 @@ sourceSets {
       }
 }
 
-// the jar libraries are available in the /dependencies folder, not in a remote repository
+repositories {
+	mavenCentral()
+}
+
+// most of the jar libraries are available in the /dependencies folder, not in a remote repository
 dependencies {
 	compile fileTree(dir: 'dependencies', include: ['*.jar'])
+	testCompile 'junit:junit:4.12'
 }
 
 // the lines bellow deal with exporting a running jar

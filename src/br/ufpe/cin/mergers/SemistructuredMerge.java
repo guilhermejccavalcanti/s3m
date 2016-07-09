@@ -2,6 +2,7 @@ package br.ufpe.cin.mergers;
 
 import java.io.File;
 
+import br.ufpe.cin.mergers.handlers.ConflictsHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
@@ -30,12 +31,19 @@ public final class SemistructuredMerge {
 	 * @return string representing the merge result.
 	 */
 	public static String merge(File left, File base, File right, MergeContext context) throws Exception {
-		JParser parser = new JParser();
+		//parsing the files to be merged
+		JParser parser 	 = new JParser();
 		FSTNode leftTree = parser.parse(left);
 		FSTNode baseTree = parser.parse(base);
 		FSTNode rightTree= parser.parse(right);
-		context = merge(leftTree,baseTree,rightTree);
-		//context.join(merge(leftTree,baseTree,rightTree)); to keep the reference
+
+		//merging
+		//context = merge(leftTree,baseTree,rightTree);
+		context.join(merge(leftTree,baseTree,rightTree)); 
+
+		//handling special kinds of conflicts 
+		ConflictsHandler.handle(context);
+
 		return Prettyprinter.print(context.superImposedTree);
 	}
 
@@ -51,7 +59,6 @@ public final class SemistructuredMerge {
 		FSTNode mergeLeftBaseRight= superimpose(mergeLeftBase, right, null, context, false);
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
 		mergeMatchedContent(mergeLeftBaseRight);
-		//TODO: FPFN
 		context.superImposedTree = mergeLeftBaseRight;
 		return context;
 	}
@@ -109,7 +116,9 @@ public final class SemistructuredMerge {
 							context.deletedBaseNodes.remove(childA);
 							context.deletedBaseNodes.add(cloneA);
 						} else {
-							context.nodesAddedByLeft.add(cloneA); //node added by left
+							if(!context.nodesAddedByLeft.contains(cloneA)){
+								context.nodesAddedByLeft.add(cloneA); //node added by left
+							}
 						}
 					} else { 
 						if(!isProcessingBaseTree) {
@@ -219,17 +228,17 @@ public final class SemistructuredMerge {
 			for(FSTNode child : ((FSTNonTerminal)node).getChildren())
 				mergeMatchedContent(child);
 		} else if(node instanceof FSTTerminal) {
-				if(((FSTTerminal)node).getBody().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
-					String body = ((FSTTerminal) node).getBody() + " ";
-					String[] splittedBodyContent = body.split(SemistructuredMerge.MERGE_SEPARATOR);
-					
-					String leftContent = splittedBodyContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "").trim();
-					String baseContent = splittedBodyContent[1].trim();
-					String rightContent= splittedBodyContent[2].trim();
-					
-					String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, true);
-					((FSTTerminal) node).setBody(mergedBodyContent);
-				}
+			if(((FSTTerminal)node).getBody().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
+				String body = ((FSTTerminal) node).getBody() + " ";
+				String[] splittedBodyContent = body.split(SemistructuredMerge.MERGE_SEPARATOR);
+
+				String leftContent = splittedBodyContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "").trim();
+				String baseContent = splittedBodyContent[1].trim();
+				String rightContent= splittedBodyContent[2].trim();
+
+				String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, true);
+				((FSTTerminal) node).setBody(mergedBodyContent);
+			}
 		} else {
 			System.err.println("Warning: node is neither non-terminal nor terminal!");			
 		}		

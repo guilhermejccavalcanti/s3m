@@ -27,7 +27,8 @@ public final class TextualMerge {
 	 * @return string representing merge result (might be null in case of errors).
 	 */
 	public static String merge(File left, File base, File right, boolean ignoreWhiteSpaces){
-		/*			String mergeCommand = ""; 
+		/* this commented code is an alternative to call unstructured merge by command line 		
+		 * String mergeCommand = ""; 
 			if(System.getProperty("os.name").contains("Windows")){
 				mergeCommand = "C:/KDiff3/bin/diff3.exe -m -E " + "\"" 
 						+ left.getPath() + "\"" + " " + "\"" 
@@ -46,7 +47,7 @@ public final class TextualMerge {
 
 		String textualMergeResult = null;
 		try{
-			//we treat invalid files as empty strings 
+			//we treat invalid files as empty files 
 			String leftContent = ((left == null || !left.exists()) ? "" : FilesManager.readFileContent(left));
 			String baseContent = ((base == null || !base.exists()) ? "" : FilesManager.readFileContent(base));
 			String rightContent= ((right== null || !right.exists())? "" : FilesManager.readFileContent(right));
@@ -74,7 +75,7 @@ public final class TextualMerge {
 					new RawText(Constants.encode(baseContent)), 
 					new RawText(Constants.encode(leftContent)), 
 					new RawText(Constants.encode(rightContent))
-					);
+					);		
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
 			(new MergeFormatter()).formatMerge(output, mergeCommand, "BASE", "LEFT", "RIGHT", Constants.CHARACTER_ENCODING);
 			textualMergeResult = new String(output.toByteArray(), Constants.CHARACTER_ENCODING);
@@ -83,5 +84,14 @@ public final class TextualMerge {
 			System.exit(-1);
 		}
 		return textualMergeResult;
+	}
+	
+	public static void main(String[] args) {
+		String merged = TextualMerge.merge(
+				new File("C:/Users/Guilherme/Google Drive/Pós-Graduação/Pesquisa/Outros/running_examples/exemplos diff3/examplesDiff34/left/Teste.java"), 
+				new File("C:/Users/Guilherme/Google Drive/Pós-Graduação/Pesquisa/Outros/running_examples/exemplos diff3/examplesDiff34/base/Teste.java"), 
+				new File("C:/Users/Guilherme/Google Drive/Pós-Graduação/Pesquisa/Outros/running_examples/exemplos diff3/examplesDiff34/right/Teste.java"), 
+		false);
+		FilesManager.extractMergeConflicts(merged);
 	}
 }
