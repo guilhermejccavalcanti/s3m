@@ -54,7 +54,13 @@ public final class SemistructuredMerge {
 	 * @param right tree
 	 */
 	private static MergeContext merge(FSTNode left, FSTNode base, FSTNode right){
-		MergeContext context = new MergeContext();
+		//indexes are necessary to a proper matching between nodes
+		left.index = 0;
+		base.index = 1;
+		right.index= 2;
+		
+		
+		MergeContext context 	  = new MergeContext();
 		FSTNode mergeLeftBase 	  = superimpose(left, base, null, context, true);
 		FSTNode mergeLeftBaseRight= superimpose(mergeLeftBase, right, null, context, false);
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);

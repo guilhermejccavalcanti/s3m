@@ -454,7 +454,7 @@ ExtendsList:
        "extends" &LI ClassOrInterfaceTypeAnnotation ( "," &LI ClassOrInterfaceTypeAnnotation )*
 ;
 
-@FSTTerminal(name="ImplList", merge="SemanticConflict")
+@FSTTerminal(name="ImplList", merge="LineBased")
 ImplementsList:  
 		"implements" &LI ClassOrInterfaceTypeAnnotation ( "," &LI ClassOrInterfaceTypeAnnotation )*
 ;

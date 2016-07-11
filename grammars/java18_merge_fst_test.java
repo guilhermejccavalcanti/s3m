@@ -9,9 +9,14 @@
 import rx.util.functions.Action1;
 
 @Incubating
-public enum DuplicatesStrategy {
+public enum DuplicatesStrategy implements A, B {
     INCLUDE,
     EXCLUDE;
+    
+    public int sum(int a, int b, int c){
+    	return a + b + c;
+    }
+    
     public static DuplicatesStrategy fromString(String str) {
         return valueOf(str.toUpperCase());
     }

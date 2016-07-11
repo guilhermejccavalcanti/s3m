@@ -177,9 +177,9 @@ public class JFSTMerge {
 
 	
 		new JFSTMerge().mergeFiles(
-				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagemember\\left\\Test\\src\\Test.java"), 
-				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagemember\\base\\Test\\src\\Test.java"), 
-				new File("C:\\GGTS\\workspacedev\\jFSTMerge\\testfiles\\importpackagemember\\right\\Test\\src\\Test.java"),
+				new File("C:\\Users\\Guilherme\\Desktop\\importpackagemember\\left\\Test\\src\\Test.java"), 
+				new File("C:\\Users\\Guilherme\\Desktop\\importpackagemember\\base\\Test\\src\\Test.java"), 
+				new File("C:\\Users\\Guilherme\\Desktop\\importpackagemember\\right\\Test\\src\\Test.java"),
 				null);
 
 	}
