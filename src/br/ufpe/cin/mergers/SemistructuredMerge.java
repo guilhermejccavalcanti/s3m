@@ -2,6 +2,7 @@ package br.ufpe.cin.mergers;
 
 import java.io.File;
 
+import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.handlers.ConflictsHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.parser.JParser;
@@ -64,7 +65,7 @@ public final class SemistructuredMerge {
 		FSTNode mergeLeftBase 	  = superimpose(left, base, null, context, true);
 		FSTNode mergeLeftBaseRight= superimpose(mergeLeftBase, right, null, context, false);
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
-		mergeMatchedContent(mergeLeftBaseRight);
+		mergeMatchedContent(mergeLeftBaseRight,context);
 		context.superImposedTree = mergeLeftBaseRight;
 		return context;
 	}
@@ -229,10 +230,10 @@ public final class SemistructuredMerge {
 	 * We use the tags from the method {@link #markContributions(String, String, boolean, int, int)} to guide this process.
 	 * @param node to be merged
 	 */
-	private static void mergeMatchedContent(FSTNode node) {
+	private static void mergeMatchedContent(FSTNode node, MergeContext context) {
 		if(node instanceof FSTNonTerminal) {
 			for(FSTNode child : ((FSTNonTerminal)node).getChildren())
-				mergeMatchedContent(child);
+				mergeMatchedContent(child,context);
 		} else if(node instanceof FSTTerminal) {
 			if(((FSTTerminal)node).getBody().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
 				String body = ((FSTTerminal) node).getBody() + " ";
@@ -244,9 +245,36 @@ public final class SemistructuredMerge {
 
 				String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, true);
 				((FSTTerminal) node).setBody(mergedBodyContent);
+				
+				
+				identifyNodesEditedInOnlyOneVersion(node, context, leftContent,baseContent, rightContent);
 			}
 		} else {
 			System.err.println("Warning: node is neither non-terminal nor terminal!");			
 		}		
+	}
+
+	/**
+	 * Verifies if a node was edited in only one of the revisions (left, or right), and fill the given merge context with
+	 * this information.
+	 * @param node
+	 * @param context
+	 * @param leftContent
+	 * @param baseContent
+	 * @param rightContent
+	 */
+	private static void identifyNodesEditedInOnlyOneVersion(FSTNode node,
+			MergeContext context, String leftContent, String baseContent,
+			String rightContent) {
+		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
+		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
+		String rightContenttrim= FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);
+		if(!baseContenttrim.isEmpty()){
+			if(baseContenttrim.equals(leftContenttrim) && !rightContenttrim.equals(leftContenttrim)){
+				context.nodesEditedByRight.add(node);
+			} else if(baseContenttrim.equals(rightContenttrim) && !leftContent.equals(rightContenttrim)){
+				context.nodesEditedByLeft.add(node);
+			}
+		}
 	}
 }

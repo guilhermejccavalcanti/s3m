@@ -20,7 +20,12 @@ public class MergeContext {
 	
 	public List<FSTNode> nodesAddedByLeft = new ArrayList<FSTNode>();
 	public List<FSTNode> nodesAddedByRight= new ArrayList<FSTNode>();
+	
 	public List<FSTNode> deletedBaseNodes = new ArrayList<FSTNode>();
+
+	public List<FSTNode> nodesEditedByLeft = new ArrayList<FSTNode>(); 
+	public List<FSTNode> nodesEditedByRight= new ArrayList<FSTNode>();
+	
 
 	public FSTNode superImposedTree;
 	public String semistructuredOutput;
@@ -41,14 +46,12 @@ public class MergeContext {
 	 * @param otherContext the context to be joined with
 	 */
 	public MergeContext join(MergeContext otherContext){
-		for(FSTNode n : otherContext.nodesAddedByLeft){
-			this.nodesAddedByLeft.add(n);
-		}
-		for(FSTNode n : otherContext.nodesAddedByRight){
-			this.nodesAddedByRight.add(n);
-		}
+		this.nodesAddedByLeft.	addAll(otherContext.nodesAddedByLeft);
+		this.nodesAddedByRight.	addAll(otherContext.nodesAddedByRight);
+		this.nodesEditedByLeft.	addAll(otherContext.nodesEditedByLeft);
+		this.nodesEditedByRight.addAll(otherContext.nodesEditedByRight);
+
 		this.superImposedTree = otherContext.superImposedTree;
-		
 		return this;
 	}
 	

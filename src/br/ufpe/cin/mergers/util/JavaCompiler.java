@@ -84,7 +84,7 @@ public class JavaCompiler {
 	private String generateUnitName(MergeContext context) {
 		String unitName = "anyname";
 		try{
-			String projectpath = FilesManager.estimateProjectFolderPath(context);
+			String projectpath = FilesManager.estimateProjectRootFolderPath(context);
 			String pattern = Pattern.quote(System.getProperty("file.separator"));
 			String[] splt  = projectpath.split(pattern);
 			String projectname = File.separator + splt[splt.length-1] + File.separator;
@@ -141,7 +141,7 @@ public class JavaCompiler {
 				}
 			}
 		}
-		return filespath.isEmpty()? null : filespath.toArray(new String[0]);
+		return filespath.isEmpty()? (new String[] {""}) : filespath.toArray(new String[0]);
 	}
 
 	private String[] fillEncondings(int size){

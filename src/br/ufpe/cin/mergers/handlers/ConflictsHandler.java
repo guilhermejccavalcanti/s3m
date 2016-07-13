@@ -13,10 +13,11 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * @author Guilherme
  */
 final public class ConflictsHandler {
-	
+
 	public static void handle(MergeContext context){
 		context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
 		findAndDetectTypeAmbiguityErrors(context);
+		findAndDetectNewElementReferencingEditedOne(context);
 	}
 
 	private static void findAndDetectTypeAmbiguityErrors(MergeContext context) {
@@ -24,17 +25,26 @@ final public class ConflictsHandler {
 		LinkedList<FSTNode> rightImportStatements = new LinkedList<FSTNode>();
 
 		//identifying the import statements added by left and right
-		for(FSTNode leftNode : context.nodesAddedByLeft){
+		for(int i = 0; i < context.nodesAddedByLeft.size();i++){
+			FSTNode leftNode = context.nodesAddedByLeft.get(i);
 			if((leftNode instanceof FSTTerminal) && leftNode.getType().contains("ImportDeclaration")){
 				leftImportStatements.add(leftNode);
+				context.nodesAddedByLeft.remove(i); //to not interfere with the others handlers
 			}
 		}
-		for(FSTNode rightNode : context.nodesAddedByRight){
+		for(int i = 0; i<context.nodesAddedByRight.size();i++){
+			FSTNode rightNode = context.nodesAddedByRight.get(i);
 			if((rightNode instanceof FSTTerminal) && rightNode.getType().contains("ImportDeclaration")){
 				rightImportStatements.add(rightNode);
+				context.nodesAddedByRight.remove(i);
 			}
 		}
 		//invoking the specific handler for type ambiguity errors
 		TypeAmbiguityErrorHandler.handle(context, leftImportStatements, rightImportStatements);
+	}
+
+	private static void findAndDetectNewElementReferencingEditedOne(MergeContext context) {
+		//invoking the specific handler for new element referencing edited one
+		NewElementReferencingEditedOneHandler.handle(context);
 	}
 }

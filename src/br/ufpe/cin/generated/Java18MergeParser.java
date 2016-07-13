@@ -527,7 +527,7 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
       n = ClassOrInterfaceTypeAnnotation(true);
                                                                                                                            replaceName(n);
     }
-                                                                                                                                               {if (true) return productionEndTerminal("ImplementsList","ImplList","ImplList","Replacement","SemanticConflict",first,token);}
+                                                                                                                                               {if (true) return productionEndTerminal("ImplementsList","ImplList","ImplList","Replacement","LineBased",first,token);}
     throw new Error("Missing return statement in function");
   }
 

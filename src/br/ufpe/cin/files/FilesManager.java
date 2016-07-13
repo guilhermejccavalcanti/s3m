@@ -3,7 +3,6 @@ package br.ufpe.cin.files;
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.File;
-import java.io.IOException;
 import java.io.StringReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -311,7 +310,7 @@ public final class FilesManager {
 	 * @param context
 	 * @return projects file path, or "" in case not able to estimate
 	 */
-	public static String estimateProjectFolderPath(MergeContext context){
+	public static String estimateProjectRootFolderPath(MergeContext context){
 		File left  = context.getLeft();
 		File base  = context.getBase();
 		File right = context.getRight();
@@ -319,7 +318,7 @@ public final class FilesManager {
 		if(left!=null && left.getAbsolutePath().contains(File.separator+"src"+File.separator)){
 			int srcidx = left.getAbsolutePath().indexOf(File.separator+"src"+File.separator);
 			rootFolderPath = (left.getAbsolutePath().substring(0, srcidx))+File.separator;
-		}else if(base!=null && base.getAbsolutePath().contains(File.separator+"src"+File.separator)){
+		} else if(base!=null && base.getAbsolutePath().contains(File.separator+"src"+File.separator)){
 			int srcidx = base.getAbsolutePath().indexOf(File.separator+"src"+File.separator);
 			rootFolderPath = (base.getAbsolutePath().substring(0, srcidx))+File.separator;
 		} else if(right!=null && right.getAbsolutePath().contains(File.separator+"src"+File.separator)){
@@ -355,93 +354,5 @@ public final class FilesManager {
 			rootFolderPathRight= (right.getAbsolutePath().substring(0, srcidx))+File.separator;
 		}
 		return new String[] {rootFolderPathLeft, rootFolderPathBase, rootFolderPathRight};
-	}
-
-
-	/**
-	 * Given 3 files to be merged, determines the new lines (contributions) added.
-	 * @param left
-	 * @param right
-	 * @param base
-	 * @return the contribution of the given files
-	 * @throws IOException
-	 */
-/*	public  ArrayList<ArrayList<String>> findLinesContributionsNonNumeric(File left, File right, File base)  {
-		Diff3 d = new Diff3();
-		d.diffFile(left.getAbsolutePath(),base.getAbsolutePath(),right.getAbsolutePath());
-		d.print();
-
-		ArrayList<ArrayList<String>> allContribs= new ArrayList<ArrayList<String>>(); 
-		ArrayList<String> contribLinesFromLeft 	= new ArrayList<String>();
-		ArrayList<String> contribLinesFromRight = new ArrayList<String>();
-
-		String hunkPattern 			= "(=+)[1-3]"; //1 - LEFT, 2 - BASE, 3 - RIGHt
-		String changePattern1		= "(\\d):(\\d)+[a-zA-Z]";
-		String changePattern2		= "(\\d):(\\d)+,(\\d)+[a-zA-Z]";
-		String fileIndicator 		= "";
-		String changeIndicator	= null;
-
-
-		BufferedReader buffer 	= new BufferedReader(new InputStreamReader(process.getInputStream()));
-		String currentLine 		= "";
-		while ((currentLine=buffer.readLine())!=null) {
-			//System.out.println(currentLine);
-			if(currentLine.matches(hunkPattern)){
-				fileIndicator 		= currentLine.substring(currentLine.length()-1);
-			} else if(currentLine.matches(changePattern1) || currentLine.matches(changePattern2)) {
-				changeIndicator 	= (currentLine.split(":"))[0];
-			} else {
-				if(changeIndicator.equals(fileIndicator))
-					addNumberOfLineContribution(contribLinesFromLeft,contribLinesFromRight, fileIndicator,currentLine);				
-			}
-		}
-
-		allContribs.add(contribLinesFromLeft);
-		allContribs.add(contribLinesFromRight);
-		return allContribs;
-	}*/
-
-	private void addNumberOfLineContribution(
-			ArrayList<String> contribLinesFromLeft,
-			ArrayList<String> contribLinesFromRight, String fileIndicator,
-			String line) {
-		if(			fileIndicator.equals("1")){
-			contribLinesFromLeft.add(line);
-		}  else if (fileIndicator.equals("3")) {
-			contribLinesFromRight.add(line);
-		}
-	}
-
-
-	public static void main(String[] args) throws Exception {
-		/*		JParser p = new JParser();
-		FSTNode n = p.parse(new File("C:/Users/Guilherme/Google Drive/Pós-Graduação/Pesquisa/Outros/running_examples/exemplos diff3/examplesDiff34/base/Teste.java"));
-		System.out.println(n.printFST(0));
-		FilesManager.findAndDeleteASTNode(n, "import java.awt.*;");
-		System.out.println(n.printFST(0));*/
-
-		/*
-		JParser p = new JParser();
-		FSTNode n = p.parse(new File("C:/Users/Guilherme/Google Drive/Pós-Graduação/Pesquisa/Outros/running_examples/exemplos diff3/examplesDiff34/base/Teste.java"));
-		System.out.println(n.printFST(0));
-		System.out.println(FilesManager.findAndReplaceASTNodeContent(n, "import java.util.*;", "blablable"));
-		System.out.println(n.printFST(0));*/
-
-		/*		FilesManager.fillFilesTuples(
-				"C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\examples_nssmerge\\rev2\\left.java", 
-				"C:/Users/Guilherme/Google Drive/Pós-Graduação/Pesquisa/Outros/running_examples/examples_nssmerge/rev2/base", 
-				"C:/Users/Guilherme/Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\examples_nssmerge\\rev2\\right");*/
-		
-		String left = FilesManager.readFileContent(new File("C:\\Users\\Guilherme\\Desktop\\cenimport\\left\\Test\\src\\Test.java"));
-		String base = FilesManager.readFileContent(new File("C:\\Users\\Guilherme\\Desktop\\cenimport\\base\\Test\\src\\Test.java"));
-		String right= FilesManager.readFileContent(new File("C:\\Users\\Guilherme\\Desktop\\cenimport\\right\\Test\\src\\Test.java"));
-		
-		GoogleTextDiffMatchPatch d = new GoogleTextDiffMatchPatch();
-		List<GoogleTextDiffMatchPatch.Diff> dfs = d.diffMainAtLineLevel(right,left);
-		System.out.println(d.diffText2Insertions(dfs));
-		for(GoogleTextDiffMatchPatch.Diff df : dfs){
-			System.out.println(df.getText());
-		}
-
 	}
 }

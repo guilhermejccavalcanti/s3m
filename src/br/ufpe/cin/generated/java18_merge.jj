@@ -443,7 +443,7 @@ FSTInfo ExtendsList(boolean inTerminal) : { Token first=null,t;FSTInfo n;
 
 FSTInfo ImplementsList(boolean inTerminal) : { Token first=null,t;FSTInfo n; 
 } { {first=getToken(1); productionStart(inTerminal); } (
-	"implements" n=ClassOrInterfaceTypeAnnotation(true){ replaceName(n);} ("," n=ClassOrInterfaceTypeAnnotation(true){ replaceName(n);})* {return productionEndTerminal("ImplementsList","ImplList","ImplList","Replacement","SemanticConflict",first,token);}
+	"implements" n=ClassOrInterfaceTypeAnnotation(true){ replaceName(n);} ("," n=ClassOrInterfaceTypeAnnotation(true){ replaceName(n);})* {return productionEndTerminal("ImplementsList","ImplList","ImplList","Replacement","LineBased",first,token);}
 
  )  }
 

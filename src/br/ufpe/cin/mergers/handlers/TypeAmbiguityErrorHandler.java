@@ -33,33 +33,36 @@ public final class TypeAmbiguityErrorHandler {
 		 * in semistructured merge as well (might be false positive). If there isn't, we go futher and compile the semistructured 
 		 * output to look for compilation problems. 
 		 */
-		List<MergeConflict> unstructuredMergeConflicts = FilesManager.extractMergeConflicts(context.unstructuredOutput);
-		JavaCompiler compiler = new JavaCompiler();
-		compiler.compile(context);	//compiling source code
-		while(!leftImportStatementsNodes.isEmpty()){
-			FSTNode leftImportStatementNode = ((FSTTerminal)leftImportStatementsNodes.poll());
-			String leftImportStatement 		= ((FSTTerminal) leftImportStatementNode).getBody();
-			for(FSTNode rightImportStatementNode : rightImportStatementsNodes){
-				//getting the imported member
-				String rightImportStatement = ((FSTTerminal)rightImportStatementNode).getBody(); 
-				String[] aux = rightImportStatement.split("\\.");
-				String rightImportedMember = aux[aux.length-1];
-				aux = leftImportStatement.split("\\.");
-				String leftImportedMember  = aux[aux.length-1];
-				//possible compilation type ambiguity error: p.* vs q.* or p.Z vs. q.Z	
-				if( (rightImportedMember.equals("*;") && leftImportedMember.equals("*;")) ||
-						(rightImportedMember.equals(leftImportedMember))){
-					if(thereIsCompiltationProblemWithImportedStatements(compiler,context,leftImportStatement,rightImportStatement)){
-						generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
-					} else if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
-						generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
-					}
-				}
-				//possible behaviorial type ambiguity error: p.Z vs. q.*
-				else if(rightImportedMember.equals("*;") || leftImportedMember.equals("*;")) {	
-					if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
-						if(thereIsContributionUsingImportedMember(context,rightImportedMember, leftImportedMember)){
+		if(!leftImportStatementsNodes.isEmpty() && !rightImportStatementsNodes.isEmpty()){
+			List<MergeConflict> unstructuredMergeConflicts = FilesManager.extractMergeConflicts(context.unstructuredOutput);
+			JavaCompiler compiler = new JavaCompiler();
+			compiler.compile(context);	//compiling source code
+			while(!leftImportStatementsNodes.isEmpty()){
+				FSTNode leftImportStatementNode = ((FSTTerminal)leftImportStatementsNodes.poll());
+				String leftImportStatement 		= ((FSTTerminal) leftImportStatementNode).getBody();
+				for(FSTNode rightImportStatementNode : rightImportStatementsNodes){
+					//getting the imported member
+					String rightImportStatement = ((FSTTerminal)rightImportStatementNode).getBody(); 
+					String[] aux = rightImportStatement.split("\\.");
+					String rightImportedMember = aux[aux.length-1];
+					aux = leftImportStatement.split("\\.");
+					String leftImportedMember  = aux[aux.length-1];
+					//possible compilation type ambiguity error: p.* vs q.* or p.Z vs. q.Z	
+					if( (rightImportedMember.equals("*;") && leftImportedMember.equals("*;")) ||
+							(rightImportedMember.equals(leftImportedMember))){
+						if(thereIsCompiltationProblemWithImportedStatements(compiler,context,leftImportStatement,rightImportStatement)){
 							generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
+						} 
+						/*					else if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
+						generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
+					}*/
+					}
+					//possible behaviorial type ambiguity error: p.Z vs. q.*
+					else if(rightImportedMember.equals("*;") || leftImportedMember.equals("*;")) {	
+						if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
+							if(thereIsContributionUsingImportedMember(context,rightImportedMember, leftImportedMember)){
+								generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
+							}
 						}
 					}
 				}
@@ -68,7 +71,7 @@ public final class TypeAmbiguityErrorHandler {
 	}
 
 	/**
-	 * Verifying if the contributions of the class that imported the package refers to the member imported in the other class
+	 * Verifies if the contributions of the class that imported the package refers to the member imported in the other class
 	 * @param context
 	 * @param rightImportedMember
 	 * @param leftImportedMember
