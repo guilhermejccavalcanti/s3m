@@ -35,6 +35,7 @@ public final class Prettyprinter {
 			root.accept(printer);
 			printable = printer.getResult();
 		}
+		//printable = printable.trim().replaceAll(" +", " "); //fix for a bug in java18_merge.SimplePrintVisitor, not working 
 		return printable;
 	}
 

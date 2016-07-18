@@ -2,6 +2,7 @@ package br.ufpe.cin.app;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -132,13 +133,13 @@ public class JFSTMerge {
 	}
 
 	public static void main(String[] args) {
-		/*		try {
+				try {
 			PrintStream pp = new PrintStream(new File("output-file.txt"));
 			System.setOut(pp);
 			System.setErr(pp);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}*/
+		}
 
 		//		new JFSTMerge().mergeFiles(
 		//				new File("C:\\Users\\Guilherme\\Desktop\\test\\left\\Teste.java"), 
@@ -153,7 +154,7 @@ public class JFSTMerge {
 		//				"C:\\Users\\Guilherme\\Desktop\\test\\Test.java");
 
 
-		//new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_lucenesolr\\rev_dc62b_aff97\\rev_dc62b-aff97.revisions");
+		new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_lucenesolr\\rev_dc62b_aff97\\rev_dc62b-aff97.revisions");
 
 		//TODO
 		//C:\\tstfstmerge\\java_retrofit\\rev_941ae_2ef7c\\rev_left_941ae\\retrofit\\src\\main\\java\\retrofit\\http\\Header.java
@@ -176,11 +177,11 @@ public class JFSTMerge {
 		}*/
 
 	
-		new JFSTMerge().mergeFiles(
+/*		new JFSTMerge().mergeFiles(
 				new File("C:\\Users\\Guilherme\\Desktop\\importpackagemember\\left\\Test\\src\\Test.java"), 
 				new File("C:\\Users\\Guilherme\\Desktop\\importpackagemember\\base\\Test\\src\\Test.java"), 
 				new File("C:\\Users\\Guilherme\\Desktop\\importpackagemember\\right\\Test\\src\\Test.java"),
-				null);
+				null);*/
 
 	}
 }

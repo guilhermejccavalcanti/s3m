@@ -2,6 +2,7 @@ package br.ufpe.cin.files;
 
 import java.io.BufferedReader;
 import java.io.BufferedWriter;
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringReader;
 import java.nio.file.Files;
@@ -16,6 +17,10 @@ import org.apache.commons.io.FilenameUtils;
 
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
+
+import com.github.javaparser.JavaParser;
+import com.github.javaparser.ast.CompilationUnit;
+
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
@@ -354,5 +359,19 @@ public final class FilesManager {
 			rootFolderPathRight= (right.getAbsolutePath().substring(0, srcidx))+File.separator;
 		}
 		return new String[] {rootFolderPathLeft, rootFolderPathBase, rootFolderPathRight};
+	}
+
+	/**
+	 * Indents a given string representing Java source code.
+	 * @param sourceCode
+	 * @return indented sourceCode
+	 */
+	public static String indentCode(String sourceCode){
+		String indentedCode = sourceCode;
+		try{
+			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes()));
+			indentedCode = indenter.toString();
+		} catch (Exception e){} //in case of any errors, returns the non-indented sourceCode
+		return indentedCode;
 	}
 }

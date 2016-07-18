@@ -4,6 +4,8 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import de.ovgu.cide.fstgen.ast.FSTNode;
 
 /**
@@ -18,13 +20,16 @@ public class MergeContext {
 	File left;
 	String outputFilePath;
 	
-	public List<FSTNode> nodesAddedByLeft = new ArrayList<FSTNode>();
-	public List<FSTNode> nodesAddedByRight= new ArrayList<FSTNode>();
+	public List<FSTNode> addedLeftNodes = new ArrayList<FSTNode>();
+	public List<FSTNode> addedRightNodes= new ArrayList<FSTNode>();
 	
 	public List<FSTNode> deletedBaseNodes = new ArrayList<FSTNode>();
+	public List<Pair<String,FSTNode>> deletedLeftNodes = new ArrayList<Pair<String,FSTNode>>();
+	public List<Pair<String,FSTNode>> deletedRightNodes= new ArrayList<Pair<String,FSTNode>>();
 
-	public List<FSTNode> nodesEditedByLeft = new ArrayList<FSTNode>(); 
-	public List<FSTNode> nodesEditedByRight= new ArrayList<FSTNode>();
+
+	public List<FSTNode> editedLeftNodes = new ArrayList<FSTNode>(); 
+	public List<FSTNode> editedRightNodes= new ArrayList<FSTNode>();
 	
 
 	public FSTNode superImposedTree;
@@ -46,10 +51,15 @@ public class MergeContext {
 	 * @param otherContext the context to be joined with
 	 */
 	public MergeContext join(MergeContext otherContext){
-		this.nodesAddedByLeft.	addAll(otherContext.nodesAddedByLeft);
-		this.nodesAddedByRight.	addAll(otherContext.nodesAddedByRight);
-		this.nodesEditedByLeft.	addAll(otherContext.nodesEditedByLeft);
-		this.nodesEditedByRight.addAll(otherContext.nodesEditedByRight);
+		this.addedLeftNodes. addAll(otherContext.addedLeftNodes);
+		this.addedRightNodes.addAll(otherContext.addedRightNodes);
+		
+		this.editedLeftNodes. addAll(otherContext.editedLeftNodes);
+		this.editedRightNodes.addAll(otherContext.editedRightNodes);
+		
+		this.deletedBaseNodes. addAll(otherContext.deletedBaseNodes);
+		this.deletedLeftNodes. addAll(otherContext.deletedLeftNodes);
+		this.deletedRightNodes.addAll(otherContext.deletedRightNodes);
 
 		this.superImposedTree = otherContext.superImposedTree;
 		return this;

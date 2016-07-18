@@ -18,6 +18,7 @@ final public class ConflictsHandler {
 		context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
 		findAndDetectTypeAmbiguityErrors(context);
 		findAndDetectNewElementReferencingEditedOne(context);
+		findAndResolveRenamingOrDeletionConflicts(context);
 	}
 
 	private static void findAndDetectTypeAmbiguityErrors(MergeContext context) {
@@ -25,18 +26,18 @@ final public class ConflictsHandler {
 		LinkedList<FSTNode> rightImportStatements = new LinkedList<FSTNode>();
 
 		//identifying the import statements added by left and right
-		for(int i = 0; i < context.nodesAddedByLeft.size();i++){
-			FSTNode leftNode = context.nodesAddedByLeft.get(i);
+		for(int i = 0; i < context.addedLeftNodes.size();i++){
+			FSTNode leftNode = context.addedLeftNodes.get(i);
 			if((leftNode instanceof FSTTerminal) && leftNode.getType().contains("ImportDeclaration")){
 				leftImportStatements.add(leftNode);
-				context.nodesAddedByLeft.remove(i); //to not interfere with the others handlers
+				context.addedLeftNodes.remove(i); //to not interfere with the others handlers
 			}
 		}
-		for(int i = 0; i<context.nodesAddedByRight.size();i++){
-			FSTNode rightNode = context.nodesAddedByRight.get(i);
+		for(int i = 0; i<context.addedRightNodes.size();i++){
+			FSTNode rightNode = context.addedRightNodes.get(i);
 			if((rightNode instanceof FSTTerminal) && rightNode.getType().contains("ImportDeclaration")){
 				rightImportStatements.add(rightNode);
-				context.nodesAddedByRight.remove(i);
+				context.addedRightNodes.remove(i);
 			}
 		}
 		//invoking the specific handler for type ambiguity errors
@@ -46,5 +47,10 @@ final public class ConflictsHandler {
 	private static void findAndDetectNewElementReferencingEditedOne(MergeContext context) {
 		//invoking the specific handler for new element referencing edited one
 		NewElementReferencingEditedOneHandler.handle(context);
+	}
+	
+	private static void findAndResolveRenamingOrDeletionConflicts(MergeContext context) {
+		//invoking the specific handler for renaming and deletion conflicts
+		RenamingOrDeletionConflictsHandler.handle(context);
 	}
 }

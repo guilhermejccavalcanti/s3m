@@ -12,14 +12,7 @@ public class MergeConflict {
 	public String right;
 	public String body;
 
-	public MergeConflict(String body, String left, String right) {
-		this.left = left;
-		this.right = right;
-		this.body = body;
-	}
-
-	public MergeConflict(String leftConflictingContent,
-			String rightConflictingContent) {
+	public MergeConflict(String leftConflictingContent,	String rightConflictingContent) {
 		this.left  = leftConflictingContent;
 		this.right = rightConflictingContent;
 		this.body  ="<<<<<<< LEFT\n"+
@@ -28,7 +21,18 @@ public class MergeConflict {
 				    rightConflictingContent+
 				    ">>>>>>> RIGHT";
 	}
-
+	
+	public MergeConflict(String leftConflictingContent,	String rightConflictingContent, String message) {
+		this.left  = leftConflictingContent;
+		this.right = rightConflictingContent;
+		this.body  ="<<<<<<< LEFT\n"+
+				    leftConflictingContent+
+				    "======= "+ message + " \n" +
+				    rightConflictingContent+
+				    ">>>>>>> RIGHT";
+	}
+	
+	
 	public boolean contains(String leftPattern, String rightPattern){
 		if(leftPattern.isEmpty() || rightPattern.isEmpty()){
 			return false;

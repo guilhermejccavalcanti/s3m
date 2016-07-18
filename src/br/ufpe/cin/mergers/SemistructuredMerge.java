@@ -2,6 +2,8 @@ package br.ufpe.cin.mergers;
 
 import java.io.File;
 
+import org.apache.commons.lang3.tuple.Pair;
+
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.handlers.ConflictsHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
@@ -45,7 +47,8 @@ public final class SemistructuredMerge {
 		//handling special kinds of conflicts 
 		ConflictsHandler.handle(context);
 
-		return Prettyprinter.print(context.superImposedTree);
+		//during the parsing process, code indentation is typically lost, so we reindent the code
+		return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
 	}
 
 	/**
@@ -101,7 +104,7 @@ public final class SemistructuredMerge {
 						if(isProcessingBaseTree) { 
 							context.deletedBaseNodes.add(cloneB); //base nodes deleted by left
 						} else {
-							context.nodesAddedByRight.add(cloneB); //nodes added by right
+							context.addedRightNodes.add(cloneB); //nodes added by right
 						}
 					} else {
 						if( childA.index == -1)
@@ -123,8 +126,8 @@ public final class SemistructuredMerge {
 							context.deletedBaseNodes.remove(childA);
 							context.deletedBaseNodes.add(cloneA);
 						} else {
-							if(!context.nodesAddedByLeft.contains(cloneA)){
-								context.nodesAddedByLeft.add(cloneA); //node added by left
+							if(!context.addedLeftNodes.contains(cloneA)){
+								context.addedLeftNodes.add(cloneA); //node added by left
 							}
 						}
 					} else { 
@@ -246,8 +249,9 @@ public final class SemistructuredMerge {
 				String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, true);
 				((FSTTerminal) node).setBody(mergedBodyContent);
 				
+				identifyNodesEditedInOnlyOneVersion(node,context,leftContent,baseContent, rightContent);
 				
-				identifyNodesEditedInOnlyOneVersion(node, context, leftContent,baseContent, rightContent);
+				identifyPossibleNodesDeletionOrRenamings(node,context,leftContent, baseContent, rightContent);
 			}
 		} else {
 			System.err.println("Warning: node is neither non-terminal nor terminal!");			
@@ -255,7 +259,30 @@ public final class SemistructuredMerge {
 	}
 
 	/**
-	 * Verifies if a node was edited in only one of the revisions (left, or right), and fill the given merge context with
+	 * Verifies if a node was deleted/renamed in one of the revisions
+	 * @param node
+	 * @param context
+	 * @param leftContent
+	 * @param baseContent
+	 * @param rightContent
+	 */
+	private static void identifyPossibleNodesDeletionOrRenamings(FSTNode node,MergeContext context, String leftContent, String baseContent,	String rightContent) {
+		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
+		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
+		String rightContenttrim= FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);
+		if(!baseContenttrim.isEmpty()){
+			if(!baseContenttrim.equals(leftContenttrim) && rightContenttrim.isEmpty()){
+				Pair<String,FSTNode> tuple = Pair.of(baseContent, node);
+				context.deletedRightNodes.add(tuple);
+			} else if(!baseContenttrim.equals(rightContenttrim) && leftContenttrim.isEmpty()){
+				Pair<String,FSTNode> tuple = Pair.of(baseContent, node);
+				context.deletedLeftNodes.add(tuple);
+			}
+		}
+	}
+
+	/**
+	 * Verifies if a node was edited in only one of the revisions (left, or right), and fills the given merge context with
 	 * this information.
 	 * @param node
 	 * @param context
@@ -263,17 +290,15 @@ public final class SemistructuredMerge {
 	 * @param baseContent
 	 * @param rightContent
 	 */
-	private static void identifyNodesEditedInOnlyOneVersion(FSTNode node,
-			MergeContext context, String leftContent, String baseContent,
-			String rightContent) {
+	private static void identifyNodesEditedInOnlyOneVersion(FSTNode node,MergeContext context, String leftContent, String baseContent,String rightContent) {
 		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
 		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
 		String rightContenttrim= FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);
 		if(!baseContenttrim.isEmpty()){
 			if(baseContenttrim.equals(leftContenttrim) && !rightContenttrim.equals(leftContenttrim)){
-				context.nodesEditedByRight.add(node);
-			} else if(baseContenttrim.equals(rightContenttrim) && !leftContent.equals(rightContenttrim)){
-				context.nodesEditedByLeft.add(node);
+				context.editedRightNodes.add(node);
+			} else if(baseContenttrim.equals(rightContenttrim) && !leftContenttrim.equals(rightContenttrim)){
+				context.editedLeftNodes.add(node);
 			}
 		}
 	}

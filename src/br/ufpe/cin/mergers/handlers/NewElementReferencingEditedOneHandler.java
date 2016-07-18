@@ -12,7 +12,7 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * Behavioral errors might occur when one developer adds an element that refers to an edited one.
  * This class handle such cases.
  */
-public class NewElementReferencingEditedOneHandler {
+public final class NewElementReferencingEditedOneHandler {
 
 	public static void handle(MergeContext context) {
 		/*
@@ -21,12 +21,12 @@ public class NewElementReferencingEditedOneHandler {
 		 * in semistructured merge as well (might be false positive). If there isn't, we go futher and textually we look 
 		 * if added elements refers to the edited ones.  In particular, we handle the likewise cases: field declarations and methods.
 		 */
-		if((!context.nodesEditedByLeft.isEmpty() && !context.nodesAddedByRight.isEmpty()) ||
-		   (!context.nodesEditedByRight.isEmpty()&& !context.nodesAddedByLeft.isEmpty())){
+		if((!context.editedLeftNodes.isEmpty() && !context.addedRightNodes.isEmpty()) ||
+		   (!context.editedRightNodes.isEmpty()&& !context.addedLeftNodes.isEmpty())){
 		List<MergeConflict> unstructuredMergeConflicts = FilesManager.extractMergeConflicts(context.unstructuredOutput);
-		for(FSTNode addedLeftNode : context.nodesAddedByLeft){
+		for(FSTNode addedLeftNode : context.addedLeftNodes){
 			if(isValidNode(addedLeftNode)){
-				for(FSTNode editedRightNode : context.nodesEditedByRight){
+				for(FSTNode editedRightNode : context.editedRightNodes){
 					if(isValidNode(editedRightNode)){
 						String newElementContent 	  = ((FSTTerminal) addedLeftNode).getBody();
 						String editedElementContent   = getEditedElementContent(editedRightNode);
@@ -40,9 +40,9 @@ public class NewElementReferencingEditedOneHandler {
 				}
 			}
 		}
-		for(FSTNode addedRightNode : context.nodesAddedByRight){
+		for(FSTNode addedRightNode : context.addedRightNodes){
 			if(isValidNode(addedRightNode)){
-				for(FSTNode editedLeftNode : context.nodesEditedByLeft){
+				for(FSTNode editedLeftNode : context.editedLeftNodes){
 					if(isValidNode(editedLeftNode)){
 						String newElementContent 	  = ((FSTTerminal) addedRightNode).getBody();
 						String editedElementContent   = getEditedElementContent(editedLeftNode);
