@@ -2,15 +2,20 @@ package br.ufpe.cin.app;
 
 import java.io.BufferedReader;
 import java.io.File;
-import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+import br.ufpe.cin.exceptions.PrintException;
+import br.ufpe.cin.exceptions.SemistructuredMergeException;
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.files.FilesTuple;
+import br.ufpe.cin.logging.LoggerFactory;
 import br.ufpe.cin.mergers.SemistructuredMerge;
 import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeContext;
@@ -24,6 +29,9 @@ import br.ufpe.cin.printers.Prettyprinter;
  * @author Guilherme
  */
 public class JFSTMerge {
+
+	//log of activities
+	private static final Logger LOGGER = LoggerFactory.make();
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -39,7 +47,7 @@ public class JFSTMerge {
 			List<String> listRevisions = new ArrayList<>();
 			BufferedReader reader = Files.newBufferedReader(Paths.get(revisionsPath));
 			listRevisions = reader.lines().collect(Collectors.toList());
-			if(listRevisions.size()!=3) throw new Exception("Invalid .revisions file!"); //TODO testar!
+			if(listRevisions.size()!=3) throw new Exception("Invalid .revisions file!");
 
 			//merging the identified directories
 			if(!listRevisions.isEmpty()){
@@ -63,7 +71,9 @@ public class JFSTMerge {
 				Prettyprinter.generateMergedScenario(scenario);
 			}
 		} catch(Exception e){
-			e.printStackTrace();
+			System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			LOGGER.log(Level.SEVERE,"",e);
+			System.exit(-1);
 		}
 		return scenario;
 	}
@@ -88,8 +98,13 @@ public class JFSTMerge {
 			tuple.setContext(context);
 
 			//printing the resulting merged code
-			Prettyprinter.generateMergedTuple(outputDirPath, tuple);
-
+			try{
+				Prettyprinter.generateMergedTuple(outputDirPath, tuple);
+			} catch (PrintException pe) {
+				System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+				LOGGER.log(Level.SEVERE,"",pe);
+				System.exit(-1);
+			}
 		}
 		return filesTuple;
 	}
@@ -114,47 +129,56 @@ public class JFSTMerge {
 			//run unstructured merge first is necessary due to future steps.
 			context.unstructuredOutput 	= TextualMerge.merge(left, base, right, false);		
 			context.semistructuredOutput= SemistructuredMerge.merge(left, base, right,context);
-		} catch(Exception e){
-			//in case of any error during the merging process, merge with unstructured merge
-			System.err.println( "Error while merging.\n" + "Fallback merge strategy: call textual merge");
-			System.err.println("Cause: ");
-			e.printStackTrace();
 
-			context.unstructuredOutput  = TextualMerge.merge(left, base, right, false);
-			context.semistructuredOutput= TextualMerge.merge(left, base, right, false);
+		} catch(TextualMergeException tme){ //textual merge must work even when semistructured not, so this exception precedes others
+			System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			LOGGER.log(Level.SEVERE,"",tme);
+			System.exit(-1);
+
+		} catch(SemistructuredMergeException sme){
+			//in case of any error during the merging process, merge with unstructured merge //log it
+			LOGGER.log(Level.WARNING,"",sme);
+			context.semistructuredOutput=context.unstructuredOutput;
 		}
 
 		//printing the resulting merged code
-		Prettyprinter.printOnScreenMergedCode(context);
-		Prettyprinter.generateMergedFile(context, outputFilePath);
+		try {
+			Prettyprinter.printOnScreenMergedCode(context);
+			Prettyprinter.generateMergedFile(context, outputFilePath);
+		} catch (PrintException pe) {
+			System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			LOGGER.log(Level.SEVERE,"",pe);
+			System.exit(-1);
+		}
+
 		System.out.println("Merge files finished.");
 
 		return context;
 	}
 
 	public static void main(String[] args) {
-				try {
+		/*		try {
 			PrintStream pp = new PrintStream(new File("output-file.txt"));
 			System.setOut(pp);
 			System.setErr(pp);
 		} catch (Exception e) {
 			e.printStackTrace();
-		}
+		}*/
 
-		//		new JFSTMerge().mergeFiles(
-		//				new File("C:\\Users\\Guilherme\\Desktop\\test\\left\\Teste.java"), 
-		//				new File("C:\\Users\\Guilherme\\Desktop\\test\\base\\Teste.java"), 
-		//				null,  
-		//				"C:\\Users\\Guilherme\\Desktop\\test\\Test.java");
+		/*				new JFSTMerge().mergeFiles(
+						new File("C:\\Users\\Guilherme\\Desktop\\test\\left\\Teste.java"), 
+						new File("C:\\Users\\Guilherme\\Desktop\\test\\base\\Teste.java"), 
+						null,  
+						"C:\\Users\\Guilherme\\Desktop\\test\\Test.java");*/
 
-		//		new JFSTMerge().mergeFiles(
-		//				new File("C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\exemplos diff3\\voldemort\\left\\Repartitioner.java"), 
-		//				new File("C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\exemplos diff3\\voldemort\\base\\Repartitioner.java"), 
-		//				new File("C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\exemplos diff3\\voldemort\\right\\Repartitioner.java"), 
-		//				"C:\\Users\\Guilherme\\Desktop\\test\\Test.java");
+		/*				new JFSTMerge().mergeFiles(
+						new File("C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\exemplos diff3\\voldemort\\left\\Repartitioner.java"), 
+						new File("C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\exemplos diff3\\voldemort\\base\\Repartitioner.java"), 
+						new File("C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\exemplos diff3\\voldemort\\right\\Repartitioner.java"), 
+						"C:\\Users\\Guilherme\\Desktop\\test\\Test.java");*/
 
 
-		new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_lucenesolr\\rev_dc62b_aff97\\rev_dc62b-aff97.revisions");
+		//new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_lucenesolr\\rev_dc62b_aff97\\rev_dc62b-aff97.revisions");
 
 		//TODO
 		//C:\\tstfstmerge\\java_retrofit\\rev_941ae_2ef7c\\rev_left_941ae\\retrofit\\src\\main\\java\\retrofit\\http\\Header.java
@@ -176,12 +200,10 @@ public class JFSTMerge {
 			e.printStackTrace();
 		}*/
 
-	
-/*		new JFSTMerge().mergeFiles(
-				new File("C:\\Users\\Guilherme\\Desktop\\importpackagemember\\left\\Test\\src\\Test.java"), 
-				new File("C:\\Users\\Guilherme\\Desktop\\importpackagemember\\base\\Test\\src\\Test.java"), 
-				new File("C:\\Users\\Guilherme\\Desktop\\importpackagemember\\right\\Test\\src\\Test.java"),
-				null);*/
-
+		new JFSTMerge().mergeFiles(
+				new File("C:\\Users\\Guilherme\\Desktop\\test\\left\\Test.java"), 
+				new File("C:\\Users\\Guilherme\\Desktop\\test\\base\\Test.java"), 
+				new File("C:\\Users\\Guilherme\\Desktop\\test\\right\\Test.java"),  
+				null);
 	}
 }

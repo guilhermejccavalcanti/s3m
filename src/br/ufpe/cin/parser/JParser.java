@@ -4,12 +4,14 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.io.FilenameUtils;
 
 import br.ufpe.cin.generated.Java18MergeParser;
 import cide.gparser.OffsetCharStream;
 import cide.gparser.ParseException;
+import cide.gparser.TokenMgrError;
 import de.ovgu.cide.fstgen.ast.FSTFeatureNode;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
@@ -29,8 +31,9 @@ public class JParser {
 	 * @return ast representing the java file
 	 * @throws ParseException 
 	 * @throws FileNotFoundException 
+	 * @throws UnsupportedEncodingException 
 	 */
-	public FSTNode parse(File javaFile) throws Exception{
+	public FSTNode parse(File javaFile) throws ParseException, UnsupportedEncodingException, FileNotFoundException, TokenMgrError {
 		FSTFeatureNode generatedAst = new FSTFeatureNode("");//root node
 		if(isValidFile(javaFile)){
 			System.out.println("Parsing: " + javaFile.getAbsolutePath());
@@ -51,7 +54,7 @@ public class JParser {
 	private boolean isValidFile(File file) {
 		return file != null && file.exists() && isJavaFile(file);
 	}
-	
+
 	/**
 	 * Checks if a given file is a .java file.
 	 * @param file

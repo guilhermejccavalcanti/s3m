@@ -169,32 +169,4 @@ public final class TypeAmbiguityErrorHandler {
 		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftImportStatement, newConflict.body);
 		FilesManager.findAndDeleteASTNode(context.superImposedTree, rightImportStatement);
 	}
-
-	/*	
-	private static void generateConflictWithImportStatements(MergeContext context, FSTNode leftImportStatementNode, FSTNode rightImportStatementNode) {
-		String leftImportStatement = ((FSTTerminal) leftImportStatementNode).getBody();
-		String rightImportStatement= ((FSTTerminal)rightImportStatementNode).getBody();
-
-		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(leftImportStatement+'\n', rightImportStatement+'\n');
-
-		//second put the conflict in one of the nodes containing the import statements
-		((FSTTerminal) leftImportStatementNode).setBody(newConflict.body);
-
-		//finally deletes the other node containing the orther import statement
-		FilesManager.findAndDeleteASTNode(context.superImposedTree, rightImportStatement);
-
-		//(((FSTTerminal) rightImportStatementNode).getParent()).removeChild(rightImportStatementNode);
-	}*/
-
-	public static void main(String[] args) throws IOException {
-		String a = "D:\\GGTS\\workspacedev\\left\\jFSTMerge\\src\\br\\ufpe\\cin\\mergers\\handlers\\TypeAmbiguityErrorHandler.java";
-		String b = "C:\\GGTS\\b\\right\\jFSTMerge\\src\\br\\ufpe\\cin\\mergers\\handlers\\TypeAmbiguityErrorHandler.java";
-
-		System.out.println(StringUtils.difference(a,b));
-
-
-
-	}
-
 }

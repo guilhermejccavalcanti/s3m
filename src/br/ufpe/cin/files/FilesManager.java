@@ -92,7 +92,7 @@ public final class FilesManager {
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()));
 			content = reader.lines().collect(Collectors.joining("\n"));
 		}catch(Exception e){
-			System.out.println(e.getMessage());
+			System.err.println(e.getMessage());
 		}
 		return content;
 	}
@@ -164,7 +164,7 @@ public final class FilesManager {
 	}
 
 	/**
-	 * Writes a content in the file of the given file path.
+	 * Writes the given content in the file of the given file path.
 	 * @param filePath
 	 * @param content
 	 * @return boolean indicating the success of the write operation.

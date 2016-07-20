@@ -103,7 +103,7 @@ public class JavaCompiler {
 				int srcidx = right.getAbsolutePath().indexOf(projectname);
 				unitName = (right.getAbsolutePath().substring(srcidx, right.getAbsolutePath().length()));
 			}
-		}catch(Exception e){}
+		}catch(Exception e){} //in case of any error gives a generic unit name
 		return unitName;
 	}
 

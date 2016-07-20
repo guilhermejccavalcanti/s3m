@@ -3,6 +3,7 @@ package br.ufpe.cin.printers;
 import java.io.File;
 import java.util.List;
 
+import br.ufpe.cin.exceptions.PrintException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.files.FilesTuple;
 import br.ufpe.cin.generated.SimplePrintVisitor;
@@ -56,26 +57,21 @@ public final class Prettyprinter {
 	 * output file.
 	 * @param context
 	 * @param outputFilePath of the merged file. 
-	 * @throws Exception in case cannot write output file.
+	 * @throws PrintException in case cannot write output file.
 	 */
-	public static void generateMergedFile(MergeContext context, String outputFilePath) {
-		try{
-			if(outputFilePath != null){
-				String semistructuredOutputFilePath 	= outputFilePath;
-				String semistructuredMergeOutputContent = context.semistructuredOutput;
-				boolean writeSucceed = FilesManager.writeContent(semistructuredOutputFilePath, semistructuredMergeOutputContent);
-				if(writeSucceed){
-					String unstructuredOutputFilePath  		= outputFilePath +".merge"; 
-					String unstructuredMergeOutputContent 	= context.unstructuredOutput;
-					writeSucceed = FilesManager.writeContent(unstructuredOutputFilePath, unstructuredMergeOutputContent);
-				}
-				if(!writeSucceed){
-					throw new Exception("Unable to generate merged output file!");
-				}
+	public static void generateMergedFile(MergeContext context, String outputFilePath) throws PrintException {
+		if(outputFilePath != null){
+			String semistructuredOutputFilePath 	= outputFilePath;
+			String semistructuredMergeOutputContent = context.semistructuredOutput;
+			boolean writeSucceed = FilesManager.writeContent(semistructuredOutputFilePath, semistructuredMergeOutputContent);
+			if(writeSucceed){
+				String unstructuredOutputFilePath  		= outputFilePath +".merge"; 
+				String unstructuredMergeOutputContent 	= context.unstructuredOutput;
+				writeSucceed = FilesManager.writeContent(unstructuredOutputFilePath, unstructuredMergeOutputContent);
 			}
-		}catch(Exception e){
-			e.printStackTrace();
-			System.exit(-1);
+			if(!writeSucceed){
+				throw new PrintException("Unable to generate merged output file!");
+			}
 		}
 	}
 
@@ -83,9 +79,9 @@ public final class Prettyprinter {
 	 * Prints the merged code of the given file tuple into a given directory.
 	 * @param outputDirPath
 	 * @param tuple
-	 * @throws Exception in case cannot write output file.
+	 * @throws PrintException in case cannot write output file.
 	 */
-	public static void generateMergedTuple(String outputDirPath, FilesTuple tuple) {
+	public static void generateMergedTuple(String outputDirPath, FilesTuple tuple) throws PrintException {
 		if(outputDirPath != null){
 			String fileNameExample;
 			if(tuple.getBaseFile()!=null){
@@ -102,8 +98,9 @@ public final class Prettyprinter {
 
 	/**
 	 * Create files with the resulting merged code of the given merge scenario.
+	 * @throws PrintException 
 	 */
-	public static void generateMergedScenario(MergeScenario scenario)  {
+	public static void generateMergedScenario(MergeScenario scenario) throws PrintException  {
 		String mergedDirectory = 	(new File(scenario.getRevisionsFilePath())).getParent() +
 				File.separator +
 				scenario.getLeftRevisionID()+"_"+

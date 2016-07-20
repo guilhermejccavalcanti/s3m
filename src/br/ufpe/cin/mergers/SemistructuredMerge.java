@@ -1,14 +1,20 @@
 package br.ufpe.cin.mergers;
 
 import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import br.ufpe.cin.exceptions.SemistructuredMergeException;
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.handlers.ConflictsHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
+import cide.gparser.ParseException;
+import cide.gparser.TokenMgrError;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
@@ -32,21 +38,28 @@ public final class SemistructuredMerge {
 	 * @param right
 	 * @param context an empty MergeContext to store relevant information of the merging process.
 	 * @return string representing the merge result.
+	 * @throws SemistructuredMergeException 
+	 * @throws TextualMergeException 
 	 */
-	public static String merge(File left, File base, File right, MergeContext context) throws Exception {
-		//parsing the files to be merged
-		JParser parser 	 = new JParser();
-		FSTNode leftTree = parser.parse(left);
-		FSTNode baseTree = parser.parse(base);
-		FSTNode rightTree= parser.parse(right);
+	public static String merge(File left, File base, File right, MergeContext context) throws SemistructuredMergeException, TextualMergeException{
+		try{
+			//parsing the files to be merged
+			JParser parser 	 = new JParser();
+			FSTNode leftTree = parser.parse(left);
+			FSTNode baseTree = parser.parse(base);
+			FSTNode rightTree= parser.parse(right);
 
-		//merging
-		//context = merge(leftTree,baseTree,rightTree);
-		context.join(merge(leftTree,baseTree,rightTree)); 
+			//merging
+			//context = merge(leftTree,baseTree,rightTree);
+			context.join(merge(leftTree,baseTree,rightTree)); 
 
-		//handling special kinds of conflicts 
-		ConflictsHandler.handle(context);
+			//handling special kinds of conflicts 
+			ConflictsHandler.handle(context);
 
+		} catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex){
+			throw new SemistructuredMergeException(ex.getMessage(),context);
+		}
+		
 		//during the parsing process, code indentation is typically lost, so we reindent the code
 		return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
 	}
@@ -56,14 +69,15 @@ public final class SemistructuredMerge {
 	 * @param left tree
 	 * @param base tree
 	 * @param right tree
+	 * @throws TextualMergeException 
 	 */
-	private static MergeContext merge(FSTNode left, FSTNode base, FSTNode right){
+	private static MergeContext merge(FSTNode left, FSTNode base, FSTNode right) throws TextualMergeException{
 		//indexes are necessary to a proper matching between nodes
 		left.index = 0;
 		base.index = 1;
 		right.index= 2;
-		
-		
+
+
 		MergeContext context 	  = new MergeContext();
 		FSTNode mergeLeftBase 	  = superimpose(left, base, null, context, true);
 		FSTNode mergeLeftBaseRight= superimpose(mergeLeftBase, right, null, context, false);
@@ -232,8 +246,9 @@ public final class SemistructuredMerge {
 	 * This method merges these parents' content. For instance, calling unstructured merge to merge methods' body.
 	 * We use the tags from the method {@link #markContributions(String, String, boolean, int, int)} to guide this process.
 	 * @param node to be merged
+	 * @throws TextualMergeException 
 	 */
-	private static void mergeMatchedContent(FSTNode node, MergeContext context) {
+	private static void mergeMatchedContent(FSTNode node, MergeContext context) throws TextualMergeException {
 		if(node instanceof FSTNonTerminal) {
 			for(FSTNode child : ((FSTNonTerminal)node).getChildren())
 				mergeMatchedContent(child,context);
@@ -248,9 +263,9 @@ public final class SemistructuredMerge {
 
 				String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, true);
 				((FSTTerminal) node).setBody(mergedBodyContent);
-				
+
 				identifyNodesEditedInOnlyOneVersion(node,context,leftContent,baseContent, rightContent);
-				
+
 				identifyPossibleNodesDeletionOrRenamings(node,context,leftContent, baseContent, rightContent);
 			}
 		} else {

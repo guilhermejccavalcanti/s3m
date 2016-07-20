@@ -10,6 +10,7 @@ import org.eclipse.jgit.merge.MergeAlgorithm;
 import org.eclipse.jgit.merge.MergeFormatter;
 import org.eclipse.jgit.merge.MergeResult;
 
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 
 /**
@@ -25,8 +26,9 @@ public final class TextualMerge {
 	 * @param right
 	 * @param ignoreWhiteSpaces to avoid false positives conflicts due to different spacings.
 	 * @return string representing merge result (might be null in case of errors).
+	 * @throws TextualMergeException 
 	 */
-	public static String merge(File left, File base, File right, boolean ignoreWhiteSpaces){
+	public static String merge(File left, File base, File right, boolean ignoreWhiteSpaces) throws TextualMergeException{
 		/* this commented code is an alternative to call unstructured merge by command line 		
 		 * String mergeCommand = ""; 
 			if(System.getProperty("os.name").contains("Windows")){
@@ -46,16 +48,11 @@ public final class TextualMerge {
 			textualMergeResult = reader.lines().collect(Collectors.joining("\n"));*/
 
 		String textualMergeResult = null;
-		try{
-			//we treat invalid files as empty files 
-			String leftContent = ((left == null || !left.exists()) ? "" : FilesManager.readFileContent(left));
-			String baseContent = ((base == null || !base.exists()) ? "" : FilesManager.readFileContent(base));
-			String rightContent= ((right== null || !right.exists())? "" : FilesManager.readFileContent(right));
-			textualMergeResult = merge(leftContent,baseContent,rightContent,ignoreWhiteSpaces);
-		}catch(Exception e){
-			e.printStackTrace();
-			System.exit(-1);
-		}
+		//we treat invalid files as empty files 
+		String leftContent = ((left == null || !left.exists()) ? "" : FilesManager.readFileContent(left));
+		String baseContent = ((base == null || !base.exists()) ? "" : FilesManager.readFileContent(base));
+		String rightContent= ((right== null || !right.exists())? "" : FilesManager.readFileContent(right));
+		textualMergeResult = merge(leftContent,baseContent,rightContent,ignoreWhiteSpaces);
 		return textualMergeResult;
 	}
 
@@ -66,8 +63,9 @@ public final class TextualMerge {
 	 * @param rightContent
 	 * @param ignoreWhiteSpaces to avoid false positives conflicts due to different spacings.
 	 * @return merged string.
+	 * @throws TextualMergeException 
 	 */
-	public static String merge(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces){
+	public static String merge(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException{
 		String textualMergeResult = null;
 		try{
 			RawTextComparator textComparator = ((ignoreWhiteSpaces) ? RawTextComparator.WS_IGNORE_ALL : RawTextComparator.DEFAULT);
@@ -80,18 +78,8 @@ public final class TextualMerge {
 			(new MergeFormatter()).formatMerge(output, mergeCommand, "BASE", "LEFT", "RIGHT", Constants.CHARACTER_ENCODING);
 			textualMergeResult = new String(output.toByteArray(), Constants.CHARACTER_ENCODING);
 		}catch(Exception e){
-			e.printStackTrace();
-			System.exit(-1);
+			throw new TextualMergeException(e.getMessage(), leftContent,baseContent,rightContent);
 		}
 		return textualMergeResult;
-	}
-	
-	public static void main(String[] args) {
-		String merged = TextualMerge.merge(
-				new File("C:/Users/Guilherme/Google Drive/Pós-Graduação/Pesquisa/Outros/running_examples/exemplos diff3/examplesDiff34/left/Teste.java"), 
-				new File("C:/Users/Guilherme/Google Drive/Pós-Graduação/Pesquisa/Outros/running_examples/exemplos diff3/examplesDiff34/base/Teste.java"), 
-				new File("C:/Users/Guilherme/Google Drive/Pós-Graduação/Pesquisa/Outros/running_examples/exemplos diff3/examplesDiff34/right/Teste.java"), 
-		false);
-		FilesManager.extractMergeConflicts(merged);
 	}
 }
