@@ -1,10 +1,8 @@
 package br.ufpe.cin.mergers.handlers;
 
-import java.io.IOException;
 import java.util.LinkedList;
 import java.util.List;
 
-import org.apache.commons.lang.StringUtils;
 import org.eclipse.jdt.core.compiler.IProblem;
 
 import br.ufpe.cin.files.FilesManager;
@@ -168,5 +166,8 @@ public final class TypeAmbiguityErrorHandler {
 		//second put the conflict in one of the nodes containing the import statements, and deletes the other node containing the orther import statement
 		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftImportStatement, newConflict.body);
 		FilesManager.findAndDeleteASTNode(context.superImposedTree, rightImportStatement);
+
+		//statistics
+		context.typeAmbiguityErrorsConflicts++;
 	}
 }

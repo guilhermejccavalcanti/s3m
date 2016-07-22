@@ -36,6 +36,8 @@ public class NewElementReferencingEditedOneHandlerTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
 		assertTrue(mergeResult.contains("<<<<<<<LEFTinta=15;=======intm(){returna+15;}>>>>>>>RIGHT"));
+		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
+
 	}
 	
 	
@@ -49,6 +51,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
 		assertTrue(mergeResult.contains("<<<<<<<LEFTstaticintm(){return15;}=======inta=m();>>>>>>>RIGHT"));
+		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
 	}
 	
 	@Test
@@ -61,6 +64,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
 		assertTrue(mergeResult.contains("<<<<<<<LEFTinta=15;=======intb=a+20;>>>>>>>RIGHT"));
+		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
 	}
 	
 	
@@ -74,5 +78,6 @@ public class NewElementReferencingEditedOneHandlerTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
 		assertTrue(mergeResult.contains("<<<<<<<LEFTstaticStringm(){return\"insidemethodmedited\";}=======voidn(){if(m().equals(\"something...\")){System.out.println(\"insidemethodn\");}}>>>>>>>RIGHT"));
+		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
 	}
 }

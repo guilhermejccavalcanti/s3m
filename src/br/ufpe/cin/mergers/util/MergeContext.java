@@ -36,6 +36,11 @@ public class MergeContext {
 	public String semistructuredOutput;
 	public String unstructuredOutput;
 	
+	public int newElementReferencingEditedOneConflicts = 0;
+	public int renamingConflicts = 0;
+	public int typeAmbiguityErrorsConflicts = 0;
+	public int deletionConflicts = 0;
+	
 	public MergeContext(){
 	}
 
@@ -62,6 +67,11 @@ public class MergeContext {
 		this.deletedRightNodes.addAll(otherContext.deletedRightNodes);
 
 		this.superImposedTree = otherContext.superImposedTree;
+		this.renamingConflicts+=otherContext.renamingConflicts;
+		this.newElementReferencingEditedOneConflicts+=otherContext.newElementReferencingEditedOneConflicts;
+		this.typeAmbiguityErrorsConflicts+=otherContext.typeAmbiguityErrorsConflicts;
+		this.deletionConflicts+=otherContext.deletionConflicts;
+		
 		return this;
 	}
 	

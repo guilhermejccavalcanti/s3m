@@ -35,6 +35,9 @@ public final class RenamingOrDeletionConflictsHandler {
 					}
 					if(similarNodes.isEmpty()){//there is no similar node. it is a possible deletion, so remove the conflict keeping the edited version of the content 
 						FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent,editedNodeContent);
+						
+						//statistics
+						context.deletionConflicts++;
 					} else {
 						String possibleRenamingContent = getMostSimilarContent(similarNodes);
 						generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, editedNodeContent,true);
@@ -61,6 +64,9 @@ public final class RenamingOrDeletionConflictsHandler {
 					}
 					if(similarNodes.isEmpty()){//there is no similar node. it is a possible deletion, so remove the conflict keeping the edited version of the content 
 						FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent,editedNodeContent);
+						
+						//statistics
+						context.deletionConflicts++;
 					} else {
 						String possibleRenamingContent = getMostSimilarContent(similarNodes);
 						generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, editedNodeContent,false);
@@ -136,5 +142,8 @@ public final class RenamingOrDeletionConflictsHandler {
 			FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
 
 		}
+		
+		//statistics
+		context.renamingConflicts++;
 	}
 }

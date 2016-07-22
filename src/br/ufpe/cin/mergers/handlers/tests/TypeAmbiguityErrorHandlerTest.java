@@ -36,6 +36,7 @@ public class TypeAmbiguityErrorHandlerTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
 		assertTrue(mergeResult.contains("<<<<<<<LEFTimportjava.awt.List;=======importjava.util.List;>>>>>>>RIGHT"));
+		assertTrue(ctx.typeAmbiguityErrorsConflicts==1);
 	}
 	
 	@Test
@@ -48,6 +49,7 @@ public class TypeAmbiguityErrorHandlerTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
 		assertTrue(mergeResult.contains("<<<<<<<LEFTimportpckt.*;=======importpcktright.*;>>>>>>>RIGHT"));
+		assertTrue(ctx.typeAmbiguityErrorsConflicts==1);
 	}
 	
 	@Test
@@ -60,6 +62,7 @@ public class TypeAmbiguityErrorHandlerTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
 		assertTrue(mergeResult.contains("<<<<<<<LEFTimportpckt.A;=======importpcktright.*;>>>>>>>RIGHT"));
+		assertTrue(ctx.typeAmbiguityErrorsConflicts==1);
 	}
 
 }

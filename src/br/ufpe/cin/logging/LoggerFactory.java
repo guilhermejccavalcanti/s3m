@@ -3,6 +3,7 @@ package br.ufpe.cin.logging;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.logging.SimpleFormatter;
 import java.util.logging.XMLFormatter;
 
 
@@ -16,7 +17,7 @@ public class LoggerFactory {
 	 * Creates and configures a logger.
 	 * @return configured Logger
 	 */
-	public static Logger make() {
+	public static Logger make(boolean statistics) {
 		//determining the caller of the factory
 		Throwable t = new Throwable();
 		StackTraceElement directCaller = t.getStackTrace()[1];
@@ -26,18 +27,26 @@ public class LoggerFactory {
 
 		try{
 			//creating FileHandler to record the logs
-			FileHandler fileHandler = new FileHandler("./jfstmerge.log",true);
+			String logpath = "";
+			if(statistics){
+				logpath = "./jfstmerge.statistics";
+			} else {
+				logpath = "./jfstmerge.log";
+			}
 
-			//creating SimpleFormatter to record the logs as simple plain text
-			//Formatter simpleFormatter = new SimpleFormatter();
+			FileHandler fileHandler = new FileHandler(logpath,true);
 
 			//setting formatter to the handler
-			fileHandler.setFormatter(new XMLFormatter());
+			if(statistics){
+				fileHandler.setFormatter(new SimpleFormatter());
+			} else {
+				fileHandler.setFormatter(new XMLFormatter());
+			}
 
 			//setting Level to ALL
 			fileHandler.setLevel(Level.ALL);
 			logger.setLevel(Level.ALL);
-			
+
 			//disable console output
 			logger.setUseParentHandlers(false);
 
@@ -47,10 +56,5 @@ public class LoggerFactory {
 			logger.log(Level.SEVERE, "Error occur during logging's creation.", e);
 		}
 		return logger;
-	}
-
-	public static void main(String[] args) {
-		Logger l = LoggerFactory.make();
-		l.log(Level.SEVERE,"something");
 	}
 }

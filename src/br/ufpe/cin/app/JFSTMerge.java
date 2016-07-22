@@ -21,6 +21,7 @@ import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.MergeScenario;
 import br.ufpe.cin.printers.Prettyprinter;
+import br.ufpe.cin.statistics.Statistics;
 
 /**
  * Main class, responsible for performing <i>semistructured</i> merge in java files.
@@ -31,7 +32,7 @@ import br.ufpe.cin.printers.Prettyprinter;
 public class JFSTMerge {
 
 	//log of activities
-	private static final Logger LOGGER = LoggerFactory.make();
+	private static final Logger LOGGER = LoggerFactory.make(false);
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -51,6 +52,8 @@ public class JFSTMerge {
 
 			//merging the identified directories
 			if(!listRevisions.isEmpty()){
+				LOGGER.log(Level.INFO,"MERGING SCENARIO: " + revisionsPath);
+
 				System.out.println("MERGING REVISIONS: \n" 
 						+ listRevisions.get(0) + "\n"
 						+ listRevisions.get(1) + "\n"
@@ -150,6 +153,9 @@ public class JFSTMerge {
 			LOGGER.log(Level.SEVERE,"",pe);
 			System.exit(-1);
 		}
+		
+		//computing statistics
+		Statistics.compute(context);
 
 		System.out.println("Merge files finished.");
 

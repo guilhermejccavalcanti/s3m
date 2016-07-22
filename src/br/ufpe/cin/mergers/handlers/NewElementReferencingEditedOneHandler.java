@@ -114,5 +114,8 @@ public final class NewElementReferencingEditedOneHandler {
 		//second put the conflict in one of the nodes containing the import statements, and deletes the other node containing the orther import statement
 		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, editedElementContent, newConflict.body);
 		FilesManager.findAndDeleteASTNode(context.superImposedTree, addedElementContent);
+		
+		//statistics
+		context.newElementReferencingEditedOneConflicts++;
 	}
 }
