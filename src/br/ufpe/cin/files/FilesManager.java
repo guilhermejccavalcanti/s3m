@@ -92,7 +92,7 @@ public final class FilesManager {
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()));
 			content = reader.lines().collect(Collectors.joining("\n"));
 		}catch(Exception e){
-			System.err.println(e.getMessage());
+			//System.err.println(e.getMessage());
 		}
 		return content;
 	}
@@ -373,5 +373,49 @@ public final class FilesManager {
 			indentedCode = indenter.toString();
 		} catch (Exception e){} //in case of any errors, returns the non-indented sourceCode
 		return indentedCode;
+	}
+
+	/**
+	 * Optimization that merges files equals or consistently changed. e.g left equals to right.
+	 * @param left file
+	 * @param base file
+	 * @param right file
+	 * @param outputFilePath
+	 * @param context
+	 * @return <b>true</b> if the files are equal or consistently changed, <b>false</b> otherwise
+	 */
+	public static boolean areFilesDifferent(File left, File base, File right,String outputFilePath, MergeContext context) {
+		boolean result = true;
+		
+		//reading files content
+		String auxleft = FilesManager.readFileContent(left);
+		String leftcontent = (auxleft == null)?"":auxleft;
+		String leftcontenttrim = (auxleft == null)?"":FilesManager.getStringContentIntoSingleLineNoSpacing(auxleft);
+		
+		String auxright = FilesManager.readFileContent(right);
+		String rightcontent= (auxright == null)?"":auxright;
+		String rightcontenttrim= (auxright== null)?"":FilesManager.getStringContentIntoSingleLineNoSpacing(auxright);
+		
+		String auxbase = FilesManager.readFileContent(base);
+		String basecontentrim = (auxbase == null)?"":FilesManager.getStringContentIntoSingleLineNoSpacing(auxbase);
+		
+		//comparing files content
+		if(basecontentrim.equals(leftcontenttrim)){
+			//result is right
+			context.semistructuredOutput = rightcontent;
+			context.unstructuredOutput = rightcontent;
+			result = false;
+		} else if(basecontentrim.equals(rightcontenttrim)){
+			//result is left
+			context.semistructuredOutput = leftcontent;
+			context.unstructuredOutput = leftcontent;
+			result = false;
+		} else if(leftcontenttrim.equals(rightcontenttrim)){
+			//result is both left or right
+			context.semistructuredOutput = leftcontent;
+			context.unstructuredOutput = leftcontent;
+			result = false;
+		}
+		return result;
 	}
 }

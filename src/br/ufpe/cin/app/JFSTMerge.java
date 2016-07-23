@@ -121,27 +121,32 @@ public class JFSTMerge {
 	 * @return context with relevant information gathered during the merging process.
 	 */
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath){
-		FilesManager.validateFiles(left, base, right);
+		FilesManager.validateFiles(left, base, right);		
 		System.out.println("MERGING FILES: \n" 
 				+ ((left != null)?left.getAbsolutePath() :"<empty left>") + "\n"
 				+ ((base != null)?base.getAbsolutePath() :"<empty base>") + "\n"
 				+ ((right!= null)?right.getAbsolutePath():"<empty right>")
 				);
+
 		MergeContext context = new MergeContext(left,base,right,outputFilePath);
-		try{
-			//run unstructured merge first is necessary due to future steps.
-			context.unstructuredOutput 	= TextualMerge.merge(left, base, right, false);		
-			context.semistructuredOutput= SemistructuredMerge.merge(left, base, right,context);
 
-		} catch(TextualMergeException tme){ //textual merge must work even when semistructured not, so this exception precedes others
-			System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
-			LOGGER.log(Level.SEVERE,"",tme);
-			System.exit(-1);
+		//there is no need to call specific merge algorithms in equal or consistenly changes files
+		if(FilesManager.areFilesDifferent(left,base,right,outputFilePath,context)){
+			try{
+				//run unstructured merge first is necessary due to future steps.
+				context.unstructuredOutput 	= TextualMerge.merge(left, base, right, false);		
+				context.semistructuredOutput= SemistructuredMerge.merge(left, base, right,context);
 
-		} catch(SemistructuredMergeException sme){
-			//in case of any error during the merging process, merge with unstructured merge //log it
-			LOGGER.log(Level.WARNING,"",sme);
-			context.semistructuredOutput=context.unstructuredOutput;
+			} catch(TextualMergeException tme){ //textual merge must work even when semistructured not, so this exception precedes others
+				System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+				LOGGER.log(Level.SEVERE,"",tme);
+				System.exit(-1);
+
+			} catch(SemistructuredMergeException sme){
+				//in case of any error during the merging process, merge with unstructured merge //log it
+				LOGGER.log(Level.WARNING,"",sme);
+				context.semistructuredOutput=context.unstructuredOutput;
+			}
 		}
 
 		//printing the resulting merged code
@@ -153,7 +158,7 @@ public class JFSTMerge {
 			LOGGER.log(Level.SEVERE,"",pe);
 			System.exit(-1);
 		}
-		
+
 		//computing statistics
 		Statistics.compute(context);
 
@@ -206,10 +211,22 @@ public class JFSTMerge {
 			e.printStackTrace();
 		}*/
 
-		new JFSTMerge().mergeFiles(
+		/*		new JFSTMerge().mergeFiles(
 				new File("C:\\Users\\Guilherme\\Desktop\\test\\left\\Test.java"), 
 				new File("C:\\Users\\Guilherme\\Desktop\\test\\base\\Test.java"), 
 				new File("C:\\Users\\Guilherme\\Desktop\\test\\right\\Test.java"),  
+				null);*/
+
+		/*		new JFSTMerge().mergeFiles(
+				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\left\\Test.java"), 
+				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\base\\Test.java"), 
+				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\right\\Test.java"),  
+				null);*/
+
+				new JFSTMerge().mergeFiles(
+				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\left\\Test.java"), 
+				null, 
+				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\right\\Test.java"),  
 				null);
 	}
 }
