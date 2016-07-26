@@ -22,11 +22,19 @@ public class FilesTuple {
 	private File unstructuredOutput;
 	private File semistructuredOutput;
 	
+	private String outputpath;
 	
 	public FilesTuple(File left, File base, File right){
 		this.leftFile = left;
 		this.baseFile = base;
 		this.rightFile = right;		
+	}
+	
+	public FilesTuple(File left, File base, File right, String outputpath){
+		this.leftFile = left;
+		this.baseFile = base;
+		this.rightFile = right;
+		this.outputpath= outputpath;
 	}
 
 	public File getLeftFile() {
@@ -76,6 +84,14 @@ public class FilesTuple {
 	public void setContext(MergeContext context) {
 		this.context = context;
 	}
+	
+	public String getOutputpath() {
+		return outputpath;
+	}
+
+	public void setOutputpath(String outputpath) {
+		this.outputpath = outputpath;
+	}
 
 	@Override
 	public String toString() {
@@ -83,4 +99,25 @@ public class FilesTuple {
 			   "BASE: " + ((baseFile == null) ? "empty" : baseFile.getAbsolutePath()) + "\n" +
 			   "RIGHT: "+ ((rightFile == null)? "empty" : rightFile.getAbsolutePath()) ;
 	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if(obj instanceof FilesTuple){
+			FilesTuple tp = (FilesTuple) obj;
+			
+			String thisleftid = (this.leftFile !=null)?leftFile.getAbsolutePath():"";
+			String thisbaseid = (this.baseFile !=null)?baseFile.getAbsolutePath():"";
+			String thisrightid= (this.rightFile!=null)?rightFile.getAbsolutePath():"";
+			
+			String otherleftid = (tp.leftFile !=null)?tp.leftFile.getAbsolutePath():"";
+			String otherbaseid = (tp.baseFile !=null)?tp.baseFile.getAbsolutePath():"";
+			String otherrightid= (tp.rightFile!=null)?tp.rightFile.getAbsolutePath():"";
+			
+			return thisleftid.equals(otherleftid) && thisbaseid.equals(otherbaseid) && thisrightid.equals(otherrightid);
+			
+		} else {
+			return false;
+		}
+	}
+	
 }

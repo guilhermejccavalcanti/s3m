@@ -37,7 +37,7 @@ public class SemistructuredMergeException extends Exception {
 		messageBuilder.append(((context.getRight()!= null)?context.getRight().getAbsolutePath():"<empty right>"));
 		messageBuilder.append("\nLEFT FILE CONTENT:\n" + ((context.getLeft() != null)?FilesManager.readFileContent(context.getLeft()):"<empty left>"));
 		messageBuilder.append("\nBASE FILE CONTENT:\n" + ((context.getBase() != null)?FilesManager.readFileContent(context.getBase()):"<empty base>"));
-		messageBuilder.append("\nRIGHT FILE CONTENT:\n" + ((context.getRight() != null)?FilesManager.readFileContent(context.getRight()):"<empty right>"));
+		messageBuilder.append("\nRIGHT FILE CONTENT:\n"+ ((context.getRight()!= null)?FilesManager.readFileContent(context.getRight()):"<empty right>"));
 		messageBuilder.append("\nFallback merge strategy: call textual merge");
 		return messageBuilder.toString();
 	}

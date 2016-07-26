@@ -53,13 +53,98 @@ public final class FilesManager {
 		LinkedList<String> filesPathFromLeft = new LinkedList<String>(listFilesPath(leftDir));
 		LinkedList<String> filesPathFromRight = new LinkedList<String>(listFilesPath(rightDir));
 
-		//searches corresponding files begginning from files in the base version, followed by files in left version, and finally in files in right version
+		//searches corresponding files beginning from files in the base version, followed by files in left version, and finally in files in right version
 		searchCorrespondingFiles(leftDir, baseDir, rightDir, tuples, filesPathFromLeft, filesPathFromBase, filesPathFromRight,false,true,false);
 		searchCorrespondingFiles(baseDir, leftDir, rightDir, tuples, filesPathFromBase, filesPathFromLeft, filesPathFromRight,true,false,false);
 		searchCorrespondingFiles(leftDir, rightDir, baseDir, tuples, filesPathFromLeft, filesPathFromRight, filesPathFromBase,false,false,true);
 
 		return tuples;
 	}
+
+	/**
+	 * Fills a list of matched files across the revisions involved in a three-way merge.
+	 * @param leftDir
+	 * @param baseDir
+	 * @param rightDir
+	 * @param outputpath
+	 * @return list of tuples of matched files
+	 */
+	public static List<FilesTuple> fillFilesTuples(String leftDir, String baseDir, String rightDir, String outputpath){
+		//avoiding file systems separator issues
+		leftDir = FilenameUtils.separatorsToSystem(leftDir);
+		baseDir = FilenameUtils.separatorsToSystem(baseDir);
+		rightDir= FilenameUtils.separatorsToSystem(rightDir);
+
+		List<FilesTuple> tuples = new ArrayList<FilesTuple>();
+
+		//first, matches files of the three directories
+		LinkedList<String> filesFromLeft = new LinkedList<String>(listFiles(leftDir));
+		LinkedList<String> filesFromBase = new LinkedList<String>(listFiles(baseDir));
+		LinkedList<String> filesFromRight= new LinkedList<String>(listFiles(rightDir));
+		for(String l: filesFromLeft){
+			File leftFile = new File(l);
+			File baseFile = new File(baseDir + File.separator +leftFile.getName());
+			File rightFile= new File(rightDir+ File.separator +leftFile.getName());
+
+			if(!baseFile.exists()) baseFile = null;
+			if(!rightFile.exists())rightFile= null;
+
+			FilesTuple tp = new FilesTuple(leftFile, baseFile, rightFile, ((null!=outputpath)?outputpath:rightDir));
+			if(!tuples.contains(tp)) tuples.add(tp);
+		}
+		for(String b: filesFromBase){
+			File baseFile = new File(b);
+			File leftFile = new File(leftDir + File.separator +baseFile.getName());
+			File rightFile= new File(rightDir+ File.separator +baseFile.getName());
+
+			if(!leftFile.exists()) leftFile = null;
+			if(!rightFile.exists())rightFile= null;
+
+			FilesTuple tp = new FilesTuple(leftFile, baseFile, rightFile, ((null!=outputpath)?outputpath:rightDir));
+			if(!tuples.contains(tp)) tuples.add(tp);
+		}
+		for(String r: filesFromRight){
+			File rightFile= new File(r);
+			File baseFile = new File(baseDir + File.separator +rightFile.getName());
+			File leftFile = new File(leftDir + File.separator +rightFile.getName());
+
+			if(!baseFile.exists()) baseFile = null;
+			if(!leftFile.exists()) leftFile = null;
+
+			FilesTuple tp = new FilesTuple(leftFile, baseFile, rightFile, ((null!=outputpath)?outputpath:rightDir));
+			if(!tuples.contains(tp)) tuples.add(tp);
+		}
+
+		//second, run recursively over the subdirectories
+		LinkedList<String> subdirectoriesFromLeft = new LinkedList<String>(listDirectories(leftDir));
+		LinkedList<String> subdirectoriesFromBase = new LinkedList<String>(listDirectories(baseDir));
+		LinkedList<String> subdirectoriesFromRight= new LinkedList<String>(listDirectories(rightDir));
+		for(String sl : subdirectoriesFromLeft){
+			String foldername = new File(sl).getName();
+			
+			List<FilesTuple> tps = fillFilesTuples(sl, (baseDir+File.separator+foldername), (rightDir+File.separator+foldername), outputpath);
+			tuples.removeAll(tps);
+			tuples.addAll(tps);
+		}
+		for(String sb : subdirectoriesFromBase){
+			String foldername = new File(sb).getName();
+			
+			List<FilesTuple> tps = fillFilesTuples((leftDir+File.separator+foldername), sb, (rightDir+File.separator+foldername), outputpath);
+			tuples.removeAll(tps);
+			tuples.addAll(tps);
+		}
+		for(String sr : subdirectoriesFromRight){
+			String foldername = new File(sr).getName();
+			
+			List<FilesTuple> tps = fillFilesTuples((leftDir+File.separator+foldername), (baseDir+File.separator+foldername), sr, outputpath);
+			tuples.removeAll(tps);
+			tuples.addAll(tps);
+		}
+		return tuples;
+	}
+
+
+
 
 	/**
 	 * Lists all files path from a directory and its subdirectories.
@@ -75,6 +160,42 @@ public final class FilesManager {
 					allFiles.add(file.getAbsolutePath());
 				} else if (file.isDirectory()){
 					allFiles.addAll(listFilesPath(file.getAbsolutePath()));
+				}
+			}
+		}
+		return allFiles;
+	}
+
+	/**
+	 * Lists all files path from a directory.
+	 * @param root directory path
+	 * @return list containing all files path found
+	 */
+	public static List<String> listFiles(String directory){
+		List<String> allFiles = new ArrayList<String>();
+		File[] fList = (new File(directory)).listFiles();
+		if(fList != null){
+			for (File file : fList){
+				if (file.isFile()){
+					allFiles.add(file.getAbsolutePath());
+				} 
+			}
+		}
+		return allFiles;
+	}
+
+	/**
+	 * Lists all subdirectories from a given directory.
+	 * @param root directory path
+	 * @return list containing all files path found
+	 */
+	public static List<String> listDirectories(String directory){
+		List<String> allFiles = new ArrayList<String>();
+		File[] fList = (new File(directory)).listFiles();
+		if(fList != null){
+			for (File file : fList){
+				if (file.isDirectory()){
+					allFiles.add(file.getAbsolutePath());
 				}
 			}
 		}
@@ -217,9 +338,9 @@ public final class FilesManager {
 	 * @return list o merge conflicts
 	 */
 	public static List<MergeConflict> extractMergeConflicts(String mergedCode){
-		String CONFLICT_HEADER_BEGIN= "<<<<<<< LEFT";
+		String CONFLICT_HEADER_BEGIN= "<<<<<<< MINE";
 		String CONFLICT_MID			= "=======";
-		String CONFLICT_HEADER_END 	= ">>>>>>> RIGHT";
+		String CONFLICT_HEADER_END 	= ">>>>>>> YOURS";
 		String leftConflictingContent = "";
 		String rightConflictingContent= "";
 		boolean isConflictOpen		  = false;
@@ -386,19 +507,19 @@ public final class FilesManager {
 	 */
 	public static boolean areFilesDifferent(File left, File base, File right,String outputFilePath, MergeContext context) {
 		boolean result = true;
-		
+
 		//reading files content
 		String auxleft = FilesManager.readFileContent(left);
 		String leftcontent = (auxleft == null)?"":auxleft;
 		String leftcontenttrim = (auxleft == null)?"":FilesManager.getStringContentIntoSingleLineNoSpacing(auxleft);
-		
+
 		String auxright = FilesManager.readFileContent(right);
 		String rightcontent= (auxright == null)?"":auxright;
 		String rightcontenttrim= (auxright== null)?"":FilesManager.getStringContentIntoSingleLineNoSpacing(auxright);
-		
+
 		String auxbase = FilesManager.readFileContent(base);
 		String basecontentrim = (auxbase == null)?"":FilesManager.getStringContentIntoSingleLineNoSpacing(auxbase);
-		
+
 		//comparing files content
 		if(basecontentrim.equals(leftcontenttrim)){
 			//result is right
@@ -417,5 +538,12 @@ public final class FilesManager {
 			result = false;
 		}
 		return result;
+	}
+
+	public static void main(String[] args) {
+		List<FilesTuple> f = FilesManager.fillFilesTuples("C:\\Users\\Guilherme\\Desktop\\testfolders\\left", 
+				"C:\\Users\\Guilherme\\Desktop\\testfolders\\base", 
+				"C:\\Users\\Guilherme\\Desktop\\testfolders\\right", null);
+		System.out.println(f);
 	}
 }
