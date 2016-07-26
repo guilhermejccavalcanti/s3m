@@ -81,9 +81,9 @@ public final class Prettyprinter {
 	 * @param tuple
 	 * @throws PrintException in case cannot write output file.
 	 */
-	public static void generateMergedTuple(String outputDirPath, FilesTuple tuple) throws PrintException {
+	public static void generateMergedTuple(FilesTuple tuple) throws PrintException {
+		String outputDirPath = tuple.getOutputpath();
 		if(outputDirPath != null){
-			outputDirPath = generateOutputPath(outputDirPath,tuple);
 			String fileNameExample;
 			if(tuple.getBaseFile()!=null){
 				fileNameExample = tuple.getBaseFile().getName();
@@ -97,23 +97,17 @@ public final class Prettyprinter {
 		}
 	}
 
-	private static String generateOutputPath(String outputDirPath,FilesTuple tuple) {
-		// TODO Auto-generated method stub
-		return null;
-	}
-
 	/**
 	 * Create files with the resulting merged code of the given merge scenario.
 	 * @throws PrintException 
 	 */
 	public static void generateMergedScenario(MergeScenario scenario) throws PrintException  {
-		String mergedDirectory = 	(new File(scenario.getRevisionsFilePath())).getParent() +
-				File.separator +
-				scenario.getLeftRevisionID()+"_"+
-				scenario.getRightRevisionID();
+		String mergedRevisionId = "rev_"+scenario.getLeftRevisionID()+"-"+scenario.getRightRevisionID();
 		List<FilesTuple> tuples = scenario.getTuples();
 		for(FilesTuple mergedTuple : tuples){
-			generateMergedTuple(mergedDirectory, mergedTuple);
+			String mergedDirectory = mergedTuple.getOutputpath().replace(scenario.getRightRevisionID(), mergedRevisionId); 
+			mergedTuple.setOutputpath(mergedDirectory);
+			generateMergedTuple(mergedTuple);
 		}
 	}
 

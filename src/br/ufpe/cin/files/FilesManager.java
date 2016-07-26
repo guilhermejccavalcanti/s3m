@@ -40,6 +40,7 @@ public final class FilesManager {
 	 * @param rightDir
 	 * @return list of tuples of matched files
 	 */
+	@Deprecated
 	public static List<FilesTuple> fillFilesTuples(String leftDir, String baseDir, String rightDir){
 		//avoiding file systems separator issues
 		leftDir = FilenameUtils.separatorsToSystem(leftDir);
@@ -123,7 +124,7 @@ public final class FilesManager {
 			String foldername = new File(sl).getName();
 			
 			List<FilesTuple> tps = fillFilesTuples(sl, (baseDir+File.separator+foldername), (rightDir+File.separator+foldername), outputpath);
-			tuples.removeAll(tps);
+			tuples.removeAll(tps); //removing duplicates
 			tuples.addAll(tps);
 		}
 		for(String sb : subdirectoriesFromBase){
@@ -142,9 +143,6 @@ public final class FilesManager {
 		}
 		return tuples;
 	}
-
-
-
 
 	/**
 	 * Lists all files path from a directory and its subdirectories.

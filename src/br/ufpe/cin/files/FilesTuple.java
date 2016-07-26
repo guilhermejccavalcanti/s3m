@@ -19,9 +19,6 @@ public class FilesTuple {
 
 	private MergeContext context;
 	
-	private File unstructuredOutput;
-	private File semistructuredOutput;
-	
 	private String outputpath;
 	
 	public FilesTuple(File left, File base, File right){
@@ -59,22 +56,6 @@ public class FilesTuple {
 
 	public void setRightFile(File rightFile) {
 		this.rightFile = rightFile;
-	}
-
-	public File getUnstructuredOutput() {
-		return unstructuredOutput;
-	}
-
-	public void setUnstructuredOutput(File unstructuredOutput) {
-		this.unstructuredOutput = unstructuredOutput;
-	}
-
-	public File getSemistructuredOutput() {
-		return semistructuredOutput;
-	}
-
-	public void setSemistructuredOutput(File semistructuredOutput) {
-		this.semistructuredOutput = semistructuredOutput;
 	}
 	
 	public MergeContext getContext() {

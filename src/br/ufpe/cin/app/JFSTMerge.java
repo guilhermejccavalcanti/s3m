@@ -90,7 +90,7 @@ public class JFSTMerge {
 	 * @return merged files tuples
 	 */
 	public List<FilesTuple> mergeDirectories(String leftDirPath, String baseDirPath, String rightDirPath, String outputDirPath){
-		List<FilesTuple> filesTuple = FilesManager.fillFilesTuples(leftDirPath, baseDirPath, rightDirPath);
+		List<FilesTuple> filesTuple = FilesManager.fillFilesTuples(leftDirPath, baseDirPath, rightDirPath, outputDirPath);
 		for(FilesTuple tuple : filesTuple){
 			File left = tuple.getLeftFile();
 			File base = tuple.getBaseFile();
@@ -101,12 +101,14 @@ public class JFSTMerge {
 			tuple.setContext(context);
 
 			//printing the resulting merged code
-			try{
-				Prettyprinter.generateMergedTuple(outputDirPath, tuple);
-			} catch (PrintException pe) {
-				System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
-				LOGGER.log(Level.SEVERE,"",pe);
-				System.exit(-1);
+			if(outputDirPath!=null){
+				try{
+					Prettyprinter.generateMergedTuple(tuple);
+				} catch (PrintException pe) {
+					System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+					LOGGER.log(Level.SEVERE,"",pe);
+					System.exit(-1);
+				}
 			}
 		}
 		return filesTuple;
@@ -234,7 +236,7 @@ public class JFSTMerge {
 				"C:\\Users\\Guilherme\\Desktop\\testimage\\base", 
 				"C:\\Users\\Guilherme\\Desktop\\testimage\\right", 
 				null);*/
-		
-		new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\test\\rev.revisions");
+
+		new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\recentes\\test\\rev.revisions");
 	}
 }
