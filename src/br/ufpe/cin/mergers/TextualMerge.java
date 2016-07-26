@@ -75,7 +75,7 @@ public final class TextualMerge {
 					new RawText(Constants.encode(rightContent))
 					);		
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
-			(new MergeFormatter()).formatMerge(output, mergeCommand, "BASE", "LEFT", "RIGHT", Constants.CHARACTER_ENCODING);
+			(new MergeFormatter()).formatMerge(output, mergeCommand, "BASE", "MINE", "YOURS", Constants.CHARACTER_ENCODING);
 			textualMergeResult = new String(output.toByteArray(), Constants.CHARACTER_ENCODING);
 		}catch(Exception e){
 			throw new TextualMergeException(e.getMessage(), leftContent,baseContent,rightContent);

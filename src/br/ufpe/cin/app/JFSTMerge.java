@@ -83,9 +83,9 @@ public class JFSTMerge {
 
 	/**
 	 * Merges directories.
-	 * @param leftDirPath
-	 * @param baseDirPath
-	 * @param rightDirPath
+	 * @param leftDirPath (mine)
+	 * @param baseDirPath (older)
+	 * @param rightDirPath (yours)
 	 * @param outputDirPath can be null, in this case, the output will only be printed in the console.
 	 * @return merged files tuples
 	 */
@@ -114,9 +114,9 @@ public class JFSTMerge {
 
 	/**
 	 * Three-way semistructured merge of the given .java files.
-	 * @param left version of the file, or <b>null</b> in case of intentional empty file.
-	 * @param base version of the file, or <b>null</b> in case of intentional empty file.
-	 * @param right version of the file, or <b>null</b> in case of intentional empty file.
+	 * @param left (mine) version of the file, or <b>null</b> in case of intentional empty file. 
+	 * @param base (older) version of the file, or <b>null</b> in case of intentional empty file. 
+	 * @param right (yours) version of the file, or <b>null</b> in case of intentional empty file. 
 	 * @param outputFilePath of the merged file. Can be <b>null</b>, in this case, the output will only be printed in the console.
 	 * @return context with relevant information gathered during the merging process.
 	 */
@@ -223,10 +223,18 @@ public class JFSTMerge {
 				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\right\\Test.java"),  
 				null);*/
 
-				new JFSTMerge().mergeFiles(
+		/*				new JFSTMerge().mergeFiles(
 				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\left\\Test.java"), 
 				null, 
 				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\right\\Test.java"),  
-				null);
+				null);*/
+
+		/*		new JFSTMerge().mergeDirectories(
+				"C:\\Users\\Guilherme\\Desktop\\testimage\\left", 
+				"C:\\Users\\Guilherme\\Desktop\\testimage\\base", 
+				"C:\\Users\\Guilherme\\Desktop\\testimage\\right", 
+				null);*/
+		
+		new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\test\\rev.revisions");
 	}
 }

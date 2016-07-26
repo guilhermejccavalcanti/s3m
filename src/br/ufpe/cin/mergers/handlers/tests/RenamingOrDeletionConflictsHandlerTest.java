@@ -35,7 +35,7 @@ public class RenamingOrDeletionConflictsHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(mergeResult.contains("<<<<<<<LEFTintsum(inta,intb){returna+b;}=======(cause:possiblerenaming)intdoMath(inta,intb){returna*b;}>>>>>>>RIGHT"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEintsum(inta,intb){returna+b;}=======(cause:possiblerenaming)intdoMath(inta,intb){returna*b;}>>>>>>>YOURS"));
 		assertTrue(ctx.renamingConflicts == 1);
 	}
 
@@ -48,7 +48,7 @@ public class RenamingOrDeletionConflictsHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(mergeResult.contains("<<<<<<<LEFTintdoMath(inta,intb){returna*b;}=======(cause:possiblerenaming)intsum(inta,intb){returna+b;}>>>>>>>RIGHT"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEintdoMath(inta,intb){returna*b;}=======(cause:possiblerenaming)intsum(inta,intb){returna+b;}>>>>>>>YOURS"));
 		assertTrue(ctx.renamingConflicts == 1);
 	}
 	
@@ -61,7 +61,7 @@ public class RenamingOrDeletionConflictsHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(!mergeResult.contains("<<<<<<<LEFT"));
+		assertTrue(!mergeResult.contains("<<<<<<<MINE"));
 		assertTrue(ctx.deletionConflicts == 1);
 	}
 
@@ -74,7 +74,7 @@ public class RenamingOrDeletionConflictsHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(!mergeResult.contains(">>>>>>>RIGHT"));
+		assertTrue(!mergeResult.contains(">>>>>>>YOURS"));
 		assertTrue(ctx.deletionConflicts == 1);
 	}
 

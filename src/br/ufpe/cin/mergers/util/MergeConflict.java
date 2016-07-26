@@ -15,21 +15,21 @@ public class MergeConflict {
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent) {
 		this.left  = leftConflictingContent;
 		this.right = rightConflictingContent;
-		this.body  ="<<<<<<< LEFT\n"+
+		this.body  ="<<<<<<< MINE\n"+
 				    leftConflictingContent+
 				    "=======\n"+
 				    rightConflictingContent+
-				    ">>>>>>> RIGHT";
+				    ">>>>>>> YOURS";
 	}
 	
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent, String message) {
 		this.left  = leftConflictingContent;
 		this.right = rightConflictingContent;
-		this.body  ="<<<<<<< LEFT\n"+
+		this.body  ="<<<<<<< MINE\n"+
 				    leftConflictingContent+
 				    "======= "+ message + " \n" +
 				    rightConflictingContent+
-				    ">>>>>>> RIGHT";
+				    ">>>>>>> YOURS";
 	}
 	
 	

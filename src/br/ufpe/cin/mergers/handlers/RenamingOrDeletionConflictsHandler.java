@@ -12,6 +12,13 @@ import br.ufpe.cin.mergers.util.MergeContext;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
+/**
+ * Renaming or deletions conflicts happen when one developer edits a element renamed or deleted by other.
+ * Semistructured merge is unable to detect such cases because it matches elements via its identifier, so
+ * if a element is renamed or deleted it cannot match the elements anymore. This class overcomes this issue.
+ * @author Guilherme
+ *
+ */
 public final class RenamingOrDeletionConflictsHandler {
 
 	public static void handle(MergeContext context) {
@@ -110,7 +117,7 @@ public final class RenamingOrDeletionConflictsHandler {
 	private static boolean nodeHasConflict(FSTNode node) {
 		if(isValidNode(node)){
 			String body = ((FSTTerminal) node).getBody();
-			return body.contains("<<<<<<< LEFT");
+			return body.contains("<<<<<<< MINE");
 		}
 		return false;
 	}
