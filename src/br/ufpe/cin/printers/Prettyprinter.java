@@ -61,6 +61,7 @@ public final class Prettyprinter {
 	 */
 	public static void generateMergedFile(MergeContext context, String outputFilePath) throws PrintException {
 		if(outputFilePath != null){
+			if(outputFilePath.isEmpty())outputFilePath = context.getRight().getAbsolutePath(); //merging mine(left) into yours(right)
 			String semistructuredOutputFilePath 	= outputFilePath;
 			String semistructuredMergeOutputContent = context.semistructuredOutput;
 			boolean writeSucceed = FilesManager.writeContent(semistructuredOutputFilePath, semistructuredMergeOutputContent);

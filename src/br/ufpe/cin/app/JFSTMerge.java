@@ -23,6 +23,10 @@ import br.ufpe.cin.mergers.util.MergeScenario;
 import br.ufpe.cin.printers.Prettyprinter;
 import br.ufpe.cin.statistics.Statistics;
 
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+
 /**
  * Main class, responsible for performing <i>semistructured</i> merge in java files.
  * It also merges non java files, however, in these cases, traditional linebased
@@ -33,6 +37,17 @@ public class JFSTMerge {
 
 	//log of activities
 	private static final Logger LOGGER = LoggerFactory.make(false);
+
+	//command line options
+	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
+	List<String> filespath = new ArrayList<String>();
+
+	@Parameter(names = "-d", arity = 3, description = "Directories to be merged (mine, base, yours)")
+	List<String> directoriespath = new ArrayList<String>();;
+
+	@Parameter(names = "-o", description = "Destination of the merged content")
+	String outputpath = "";
+
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -169,7 +184,28 @@ public class JFSTMerge {
 		return context;
 	}
 
+
+
 	public static void main(String[] args) {
+
+		/*new JFSTMerge().mergeDirectories(
+				"C:\\Users\\Guilherme\\Desktop\\recentes\\testest\\left", 
+				"C:\\Users\\Guilherme\\Desktop\\recentes\\testest\\left", 
+				"C:\\Users\\Guilherme\\Desktop\\recentes\\testest\\left",  
+				null);*/
+
+
+
+
+				try{
+			JFSTMerge merger = new JFSTMerge();
+			new JCommander(merger, args);
+			merger.run();
+		} catch(ParameterException pe){
+			System.err.println(pe.getMessage());
+		}
+		
+				
 		/*		try {
 			PrintStream pp = new PrintStream(new File("output-file.txt"));
 			System.setOut(pp);
@@ -237,6 +273,17 @@ public class JFSTMerge {
 				"C:\\Users\\Guilherme\\Desktop\\testimage\\right", 
 				null);*/
 
-		new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\recentes\\test\\rev.revisions");
+		//new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\recentes\\test\\rev.revisions");
+
+
+	}
+
+	private void run() {
+		CommandLineValidator.validateCommandLineOptions(this);
+		if(!filespath.isEmpty()){
+			mergeFiles(new File(filespath.get(0)), new File(filespath.get(1)), new File(filespath.get(2)), outputpath);
+		} else if(!directoriespath.isEmpty()){
+			mergeDirectories(directoriespath.get(0), directoriespath.get(1), directoriespath.get(2), outputpath);
+		}
 	}
 }

@@ -17,7 +17,7 @@ public class PrintException extends Exception {
 	}
 	
 	public PrintException(String message){
-		super("Unexpected error while performing print routines:/n"
+		super("Unexpected error while performing print routines.\n"
 				+ message);
 	}
 

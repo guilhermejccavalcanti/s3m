@@ -90,7 +90,7 @@ public final class FilesManager {
 			if(!baseFile.exists()) baseFile = null;
 			if(!rightFile.exists())rightFile= null;
 
-			FilesTuple tp = new FilesTuple(leftFile, baseFile, rightFile, ((null!=outputpath)?outputpath:rightDir));
+			FilesTuple tp = new FilesTuple(leftFile, baseFile, rightFile, ((null!=outputpath&&!outputpath.isEmpty())?outputpath:rightDir));
 			if(!tuples.contains(tp)) tuples.add(tp);
 		}
 		for(String b: filesFromBase){
@@ -101,7 +101,7 @@ public final class FilesManager {
 			if(!leftFile.exists()) leftFile = null;
 			if(!rightFile.exists())rightFile= null;
 
-			FilesTuple tp = new FilesTuple(leftFile, baseFile, rightFile, ((null!=outputpath)?outputpath:rightDir));
+			FilesTuple tp = new FilesTuple(leftFile, baseFile, rightFile, ((null!=outputpath&&!outputpath.isEmpty())?outputpath:rightDir));
 			if(!tuples.contains(tp)) tuples.add(tp);
 		}
 		for(String r: filesFromRight){
@@ -112,7 +112,7 @@ public final class FilesManager {
 			if(!baseFile.exists()) baseFile = null;
 			if(!leftFile.exists()) leftFile = null;
 
-			FilesTuple tp = new FilesTuple(leftFile, baseFile, rightFile, ((null!=outputpath)?outputpath:rightDir));
+			FilesTuple tp = new FilesTuple(leftFile, baseFile, rightFile, ((null!=outputpath&&!outputpath.isEmpty())?outputpath:rightDir));
 			if(!tuples.contains(tp)) tuples.add(tp);
 		}
 
@@ -536,12 +536,5 @@ public final class FilesManager {
 			result = false;
 		}
 		return result;
-	}
-
-	public static void main(String[] args) {
-		List<FilesTuple> f = FilesManager.fillFilesTuples("C:\\Users\\Guilherme\\Desktop\\testfolders\\left", 
-				"C:\\Users\\Guilherme\\Desktop\\testfolders\\base", 
-				"C:\\Users\\Guilherme\\Desktop\\testfolders\\right", null);
-		System.out.println(f);
 	}
 }
