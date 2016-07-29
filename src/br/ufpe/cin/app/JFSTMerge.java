@@ -45,9 +45,9 @@ public class JFSTMerge {
 	@Parameter(names = "-d", arity = 3, description = "Directories to be merged (mine, base, yours)")
 	List<String> directoriespath = new ArrayList<String>();;
 
-	@Parameter(names = "-o", description = "Destination of the merged content")
+	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
+			+ "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
-
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -105,7 +105,15 @@ public class JFSTMerge {
 	 * @return merged files tuples
 	 */
 	public List<FilesTuple> mergeDirectories(String leftDirPath, String baseDirPath, String rightDirPath, String outputDirPath){
-		List<FilesTuple> filesTuple = FilesManager.fillFilesTuples(leftDirPath, baseDirPath, rightDirPath, outputDirPath);
+		//		long t0 = System.currentTimeMillis();
+
+		List<FilesTuple> filesTuple = FilesManager.fillFilesTuples(leftDirPath, baseDirPath, rightDirPath, outputDirPath, new ArrayList<String>());
+		//		System.out.println(filesTuple.size());
+
+		//		long t1 = System.currentTimeMillis();
+		//		System.out.println((t1-t0)/1000);
+		//		System.exit(-1);
+
 		for(FilesTuple tuple : filesTuple){
 			File left = tuple.getLeftFile();
 			File base = tuple.getBaseFile();
@@ -184,56 +192,11 @@ public class JFSTMerge {
 		return context;
 	}
 
-
-
 	public static void main(String[] args) {
+		//JFSTMerge merger = new JFSTMerge();
+		//merger.run(args);
 
-		/*new JFSTMerge().mergeDirectories(
-				"C:\\Users\\Guilherme\\Desktop\\recentes\\testest\\left", 
-				"C:\\Users\\Guilherme\\Desktop\\recentes\\testest\\left", 
-				"C:\\Users\\Guilherme\\Desktop\\recentes\\testest\\left",  
-				null);*/
-
-
-
-
-				try{
-			JFSTMerge merger = new JFSTMerge();
-			new JCommander(merger, args);
-			merger.run();
-		} catch(ParameterException pe){
-			System.err.println(pe.getMessage());
-		}
-		
-				
-		/*		try {
-			PrintStream pp = new PrintStream(new File("output-file.txt"));
-			System.setOut(pp);
-			System.setErr(pp);
-		} catch (Exception e) {
-			e.printStackTrace();
-		}*/
-
-		/*				new JFSTMerge().mergeFiles(
-						new File("C:\\Users\\Guilherme\\Desktop\\test\\left\\Teste.java"), 
-						new File("C:\\Users\\Guilherme\\Desktop\\test\\base\\Teste.java"), 
-						null,  
-						"C:\\Users\\Guilherme\\Desktop\\test\\Test.java");*/
-
-		/*				new JFSTMerge().mergeFiles(
-						new File("C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\exemplos diff3\\voldemort\\left\\Repartitioner.java"), 
-						new File("C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\exemplos diff3\\voldemort\\base\\Repartitioner.java"), 
-						new File("C:\\Users\\Guilherme\\Google Drive\\Pós-Graduação\\Pesquisa\\Outros\\running_examples\\exemplos diff3\\voldemort\\right\\Repartitioner.java"), 
-						"C:\\Users\\Guilherme\\Desktop\\test\\Test.java");*/
-
-
-		//new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_lucenesolr\\rev_dc62b_aff97\\rev_dc62b-aff97.revisions");
-
-		//TODO
-		//C:\\tstfstmerge\\java_retrofit\\rev_941ae_2ef7c\\rev_left_941ae\\retrofit\\src\\main\\java\\retrofit\\http\\Header.java
-		//C:\\tstfstmerge\\java_retrofit\\rev_941ae_2ef7c\\rev_941ae-2ef7c.revisions
-
-		/*		try {
+/*		try {
 			List<String> listRevisions = new ArrayList<>();
 			BufferedReader reader;
 			reader = Files.newBufferedReader(Paths.get("C:\\tstfstmerge\\all.revisions"));
@@ -244,46 +207,37 @@ public class JFSTMerge {
 			}
 			long tf = System.currentTimeMillis();
 			System.out.println((tf - t0)/1000);
-		} catch (IOException e) {
+		} catch (Exception e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
 
-		/*		new JFSTMerge().mergeFiles(
-				new File("C:\\Users\\Guilherme\\Desktop\\test\\left\\Test.java"), 
-				new File("C:\\Users\\Guilherme\\Desktop\\test\\base\\Test.java"), 
-				new File("C:\\Users\\Guilherme\\Desktop\\test\\right\\Test.java"),  
-				null);*/
-
-		/*		new JFSTMerge().mergeFiles(
-				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\left\\Test.java"), 
-				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\base\\Test.java"), 
-				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\right\\Test.java"),  
-				null);*/
-
-		/*				new JFSTMerge().mergeFiles(
-				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\left\\Test.java"), 
-				null, 
-				new File("C:\\Users\\Guilherme\\Desktop\\testequals\\right\\Test.java"),  
-				null);*/
-
-		/*		new JFSTMerge().mergeDirectories(
-				"C:\\Users\\Guilherme\\Desktop\\testimage\\left", 
-				"C:\\Users\\Guilherme\\Desktop\\testimage\\base", 
-				"C:\\Users\\Guilherme\\Desktop\\testimage\\right", 
-				null);*/
-
-		//new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\recentes\\test\\rev.revisions");
-
+		//new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_orientdb\\rev_ededb_3b3c3\\rev_ededb-3b3c3.revisions");
+		//new JFSTMerge().mergeRevisions("E:\\Mestrado\\FPFNAnalysis\\projects\\cassandra\\revisions\\rev_751e5_a946e\\rev_751e5-a946e.revisions");
+		//new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\testdd\\rev.revisions");
+		new JFSTMerge().mergeFiles(
+				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_left_28db5\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java"), 
+				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_base_448cc\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java"),
+				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_right_41a62\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java")
+				,null);
 
 	}
 
-	private void run() {
-		CommandLineValidator.validateCommandLineOptions(this);
-		if(!filespath.isEmpty()){
-			mergeFiles(new File(filespath.get(0)), new File(filespath.get(1)), new File(filespath.get(2)), outputpath);
-		} else if(!directoriespath.isEmpty()){
-			mergeDirectories(directoriespath.get(0), directoriespath.get(1), directoriespath.get(2), outputpath);
+	private void run(String[] args) {
+
+		JCommander commandLineOptions = new JCommander(this);
+		try{
+			commandLineOptions.parse(args);
+			CommandLineValidator.validateCommandLineOptions(this);
+			if(!filespath.isEmpty()){
+				mergeFiles(new File(filespath.get(0)), new File(filespath.get(1)), new File(filespath.get(2)), outputpath);
+			} else if(!directoriespath.isEmpty()){
+				mergeDirectories(directoriespath.get(0), directoriespath.get(1), directoriespath.get(2), outputpath);
+			}
+		}catch(ParameterException pe){
+			System.err.println(pe.getMessage());
+			commandLineOptions.setProgramName("JFSTMerge");
+			commandLineOptions.usage();
 		}
 	}
 }

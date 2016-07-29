@@ -63,8 +63,4 @@ public class JParser {
 	private boolean isJavaFile(File file){
 		return FilenameUtils.getExtension(file.getAbsolutePath()).equalsIgnoreCase("java");
 	}
-
-	/*	public static void main(String[] args) {
-		new JParser().parse(new File("C:\\GGTS\\workspace\\ssmerge\\fstgen\\test\\Test.java"));
-	}*/
 }

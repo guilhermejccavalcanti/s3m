@@ -9,7 +9,7 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 /**
  * Class responsbile for dealing with language specific conflicts that
- * just superimposition of trees are not able to detect/resolve.
+ * just superimposition of trees is not able to detect/resolve.
  * @author Guilherme
  */
 final public class ConflictsHandler {

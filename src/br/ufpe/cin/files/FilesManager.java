@@ -68,9 +68,14 @@ public final class FilesManager {
 	 * @param baseDir
 	 * @param rightDir
 	 * @param outputpath
+	 * @param visitedPaths should be empty in the first iteration
 	 * @return list of tuples of matched files
 	 */
-	public static List<FilesTuple> fillFilesTuples(String leftDir, String baseDir, String rightDir, String outputpath){
+	public static List<FilesTuple> fillFilesTuples(String leftDir, String baseDir, String rightDir, String outputpath, List<String> visitedPaths){
+		//avoiding revisiting directories
+		String visitedPath = leftDir + baseDir + rightDir;
+		visitedPaths.add(visitedPath);
+
 		//avoiding file systems separator issues
 		leftDir = FilenameUtils.separatorsToSystem(leftDir);
 		baseDir = FilenameUtils.separatorsToSystem(baseDir);
@@ -122,24 +127,30 @@ public final class FilesManager {
 		LinkedList<String> subdirectoriesFromRight= new LinkedList<String>(listDirectories(rightDir));
 		for(String sl : subdirectoriesFromLeft){
 			String foldername = new File(sl).getName();
-			
-			List<FilesTuple> tps = fillFilesTuples(sl, (baseDir+File.separator+foldername), (rightDir+File.separator+foldername), outputpath);
-			tuples.removeAll(tps); //removing duplicates
-			tuples.addAll(tps);
+
+			if(!visitedPaths.contains(sl+ (baseDir+File.separator+foldername)+ (rightDir+File.separator+foldername))){
+				List<FilesTuple> tps = fillFilesTuples(sl, (baseDir+File.separator+foldername), (rightDir+File.separator+foldername), outputpath,visitedPaths);
+				tuples.removeAll(tps); //removing duplicates
+				tuples.addAll(tps);
+			}
 		}
 		for(String sb : subdirectoriesFromBase){
 			String foldername = new File(sb).getName();
-			
-			List<FilesTuple> tps = fillFilesTuples((leftDir+File.separator+foldername), sb, (rightDir+File.separator+foldername), outputpath);
-			tuples.removeAll(tps);
-			tuples.addAll(tps);
+
+			if(!visitedPaths.contains((leftDir+File.separator+foldername)+ sb + (rightDir+File.separator+foldername))){
+				List<FilesTuple> tps = fillFilesTuples((leftDir+File.separator+foldername), sb, (rightDir+File.separator+foldername), outputpath,visitedPaths);
+				tuples.removeAll(tps);
+				tuples.addAll(tps);
+			}
 		}
 		for(String sr : subdirectoriesFromRight){
 			String foldername = new File(sr).getName();
-			
-			List<FilesTuple> tps = fillFilesTuples((leftDir+File.separator+foldername), (baseDir+File.separator+foldername), sr, outputpath);
-			tuples.removeAll(tps);
-			tuples.addAll(tps);
+
+			if(!visitedPaths.contains((leftDir+File.separator+foldername)+ (baseDir+File.separator+foldername)+ sr)){
+				List<FilesTuple> tps = fillFilesTuples((leftDir+File.separator+foldername), (baseDir+File.separator+foldername), sr, outputpath,visitedPaths);
+				tuples.removeAll(tps);
+				tuples.addAll(tps);
+			}
 		}
 		return tuples;
 	}
