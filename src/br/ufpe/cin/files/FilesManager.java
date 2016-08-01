@@ -310,6 +310,8 @@ public final class FilesManager {
 				BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
 				writer.write(content);
 				writer.flush();	writer.close();
+			} catch(NullPointerException ne){
+				//empty, necessary for integration with git version control system
 			} catch(Exception e){
 				System.err.println(e.toString());
 				return false;

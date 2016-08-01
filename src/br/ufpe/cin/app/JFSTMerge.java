@@ -193,10 +193,10 @@ public class JFSTMerge {
 	}
 
 	public static void main(String[] args) {
-		//JFSTMerge merger = new JFSTMerge();
-		//merger.run(args);
+		JFSTMerge merger = new JFSTMerge();
+		merger.run(args);
 
-/*		try {
+		/*				try {
 			List<String> listRevisions = new ArrayList<>();
 			BufferedReader reader;
 			reader = Files.newBufferedReader(Paths.get("C:\\tstfstmerge\\all.revisions"));
@@ -215,11 +215,11 @@ public class JFSTMerge {
 		//new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_orientdb\\rev_ededb_3b3c3\\rev_ededb-3b3c3.revisions");
 		//new JFSTMerge().mergeRevisions("E:\\Mestrado\\FPFNAnalysis\\projects\\cassandra\\revisions\\rev_751e5_a946e\\rev_751e5-a946e.revisions");
 		//new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\testdd\\rev.revisions");
-		new JFSTMerge().mergeFiles(
+		/*		new JFSTMerge().mergeFiles(
 				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_left_28db5\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java"), 
 				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_base_448cc\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java"),
 				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_right_41a62\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java")
-				,null);
+				,null);*/
 
 	}
 
