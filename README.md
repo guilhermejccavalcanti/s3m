@@ -4,8 +4,10 @@
 jFSTMerge
 ========
 
-Copyright (c) 2016 by the Federal University of Pernambuco
+Copyright (c) 2016 by the Federal University of Pernambuco.
+
 A semistructured merge tool for Java applications.
+
 Contact Guilherme Cavalcanti &lt;<gjcc@cin.ufpe.br>&gt; for any reason.
 
 Compilation
