@@ -10,6 +10,7 @@ import org.eclipse.jgit.merge.MergeAlgorithm;
 import org.eclipse.jgit.merge.MergeFormatter;
 import org.eclipse.jgit.merge.MergeResult;
 
+import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 
@@ -78,7 +79,7 @@ public final class TextualMerge {
 			(new MergeFormatter()).formatMerge(output, mergeCommand, "BASE", "MINE", "YOURS", Constants.CHARACTER_ENCODING);
 			textualMergeResult = new String(output.toByteArray(), Constants.CHARACTER_ENCODING);
 		}catch(Exception e){
-			throw new TextualMergeException(e.getMessage(), leftContent,baseContent,rightContent);
+			throw new TextualMergeException(ExceptionUtils.getCauseMessage(e), leftContent,baseContent,rightContent);
 		}
 		return textualMergeResult;
 	}

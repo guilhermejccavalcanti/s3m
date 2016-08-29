@@ -36,7 +36,7 @@ import com.beust.jcommander.ParameterException;
 public class JFSTMerge {
 
 	//log of activities
-	private static final Logger LOGGER = LoggerFactory.make(false);
+	private static final Logger LOGGER = LoggerFactory.make();
 
 	//command line options
 	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
@@ -88,8 +88,9 @@ public class JFSTMerge {
 				//printing the resulting merged codes
 				Prettyprinter.generateMergedScenario(scenario);
 			}
+			
 		} catch(Exception e){
-			System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 			LOGGER.log(Level.SEVERE,"",e);
 			System.exit(-1);
 		}
@@ -128,7 +129,7 @@ public class JFSTMerge {
 				try{
 					Prettyprinter.generateMergedTuple(tuple);
 				} catch (PrintException pe) {
-					System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+					System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 					LOGGER.log(Level.SEVERE,"",pe);
 					System.exit(-1);
 				}
@@ -163,7 +164,7 @@ public class JFSTMerge {
 				context.semistructuredOutput= SemistructuredMerge.merge(left, base, right,context);
 
 			} catch(TextualMergeException tme){ //textual merge must work even when semistructured not, so this exception precedes others
-				System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+				System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 				LOGGER.log(Level.SEVERE,"",tme);
 				System.exit(-1);
 
@@ -179,13 +180,19 @@ public class JFSTMerge {
 			Prettyprinter.printOnScreenMergedCode(context);
 			Prettyprinter.generateMergedFile(context, outputFilePath);
 		} catch (PrintException pe) {
-			System.err.println("An error occurred. See the jfstmerge.log file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 			LOGGER.log(Level.SEVERE,"",pe);
 			System.exit(-1);
 		}
 
 		//computing statistics
-		Statistics.compute(context);
+		try{
+			Statistics.compute(context);
+		} catch(Exception e){
+			System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			LOGGER.log(Level.SEVERE,"",e);
+			System.exit(-1);
+		}
 
 		System.out.println("Merge files finished.");
 

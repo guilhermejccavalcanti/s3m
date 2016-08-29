@@ -1,9 +1,9 @@
 package br.ufpe.cin.logging;
 
+import java.io.File;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.SimpleFormatter;
 import java.util.logging.XMLFormatter;
 
 
@@ -12,12 +12,14 @@ import java.util.logging.XMLFormatter;
  * @author Guilherme
  */
 public class LoggerFactory {
+	
+	public static String logfile = "";
 
 	/**
 	 * Creates and configures a logger.
 	 * @return configured Logger
 	 */
-	public static Logger make(boolean statistics) {
+	public static Logger make() {
 		//determining the caller of the factory
 		Throwable t = new Throwable();
 		StackTraceElement directCaller = t.getStackTrace()[1];
@@ -27,21 +29,17 @@ public class LoggerFactory {
 
 		try{
 			//creating FileHandler to record the logs
-			String logpath = "";
-			if(statistics){
-				logpath = "./jfstmerge.statistics";
-			} else {
-				logpath = "./jfstmerge.log";
-			}
+			String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			new File(logpath).mkdirs(); //assuring that the directories exists
+			logpath = logpath + "jfstmerge.log";
+			logfile = logpath;
+
+			manageLogBuffer(logpath);
 
 			FileHandler fileHandler = new FileHandler(logpath,true);
 
 			//setting formatter to the handler
-			if(statistics){
-				fileHandler.setFormatter(new SimpleFormatter());
-			} else {
-				fileHandler.setFormatter(new XMLFormatter());
-			}
+			fileHandler.setFormatter(new XMLFormatter());
 
 			//setting Level to ALL
 			fileHandler.setLevel(Level.ALL);
@@ -56,5 +54,20 @@ public class LoggerFactory {
 			logger.log(Level.SEVERE, "Error occur during logging's creation.", e);
 		}
 		return logger;
+	}
+
+	/**
+	 * When log's size reaches 20 megabytes,a new empty log is started, and the previous one is backup.
+	 * @param logpath
+	 */
+	private static void manageLogBuffer(String logpath) {
+		File log = new File(logpath);
+		if(log.exists()){
+			long logSizeMB = log.length() / (1024 * 1024);
+			if(logSizeMB > 20){
+				File newLog = new File(logpath+System.currentTimeMillis());
+				log.renameTo(newLog);
+			}
+		}
 	}
 }

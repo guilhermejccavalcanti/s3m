@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
@@ -57,7 +58,7 @@ public final class SemistructuredMerge {
 			ConflictsHandler.handle(context);
 
 		} catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex){
-			throw new SemistructuredMergeException(ex.getMessage(),context);
+			throw new SemistructuredMergeException(ExceptionUtils.getCauseMessage(ex),context);
 		}
 		
 		//during the parsing process, code indentation is typically lost, so we reindent the code
