@@ -6,8 +6,6 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
-import org.apache.commons.io.FilenameUtils;
-
 import br.ufpe.cin.generated.Java18MergeParser;
 import cide.gparser.OffsetCharStream;
 import cide.gparser.ParseException;
@@ -61,6 +59,7 @@ public class JParser {
 	 * @return true in case file extension is <i>java</i>, or false
 	 */
 	private boolean isJavaFile(File file){
-		return FilenameUtils.getExtension(file.getAbsolutePath()).equalsIgnoreCase("java");
+		//return FilenameUtils.getExtension(file.getAbsolutePath()).equalsIgnoreCase("java");
+		return file.getName().toLowerCase().contains(".java");
 	}
 }
