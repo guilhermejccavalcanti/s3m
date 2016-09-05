@@ -88,7 +88,7 @@ public class JFSTMerge {
 				//printing the resulting merged codes
 				Prettyprinter.generateMergedScenario(scenario);
 			}
-			
+
 		} catch(Exception e){
 			System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 			LOGGER.log(Level.SEVERE,"",e);
@@ -221,7 +221,9 @@ public class JFSTMerge {
 
 		//new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_orientdb\\rev_ededb_3b3c3\\rev_ededb-3b3c3.revisions");
 		//new JFSTMerge().mergeRevisions("E:\\Mestrado\\FPFNAnalysis\\projects\\cassandra\\revisions\\rev_751e5_a946e\\rev_751e5-a946e.revisions");
-		//new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\testdd\\rev.revisions");
+		//new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\exemplos jfstmerge\\testenum\\rev.revisions");
+		//new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\exemplos jfstmerge\\testimport\\rev.revisions");
+
 		/*		new JFSTMerge().mergeFiles(
 				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_left_28db5\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java"), 
 				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_base_448cc\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java"),

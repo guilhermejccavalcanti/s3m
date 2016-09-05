@@ -60,7 +60,7 @@ public final class SemistructuredMerge {
 		} catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex){
 			throw new SemistructuredMergeException(ExceptionUtils.getCauseMessage(ex),context);
 		}
-		
+
 		//during the parsing process, code indentation is typically lost, so we reindent the code
 		return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
 	}
@@ -115,7 +115,11 @@ public final class SemistructuredMerge {
 						if( childB.index == -1)
 							childB.index = nodeB.index;
 						cloneB.index = childB.index;
+
+						//if(!context.deletedBaseNodes.contains(cloneB) && !isProcessingBaseTree){ //TODO: needs more testing, managing removals
 						nonterminalComposed.addChild(cloneB);//cloneB must be removed afterwards if it is a base node 
+						//}
+
 						if(isProcessingBaseTree) { 
 							context.deletedBaseNodes.add(cloneB); //base nodes deleted by left
 						} else {
@@ -136,13 +140,20 @@ public final class SemistructuredMerge {
 						if(childA.index == -1)
 							childA.index = nodeA.index;
 						cloneA.index = childA.index;
+
+						/*if(isProcessingBaseTree && !context.addedLeftNodes.contains(cloneA)){ //is a new left node in relation to base
+						context.addedLeftNodes.add(cloneA); //node added by left
+						}*/
+
+						//only if is a new left node =~ it is not a base node 
 						nonterminalComposed.addChild(cloneA);
+
 						if( context.deletedBaseNodes.contains(childA)) { //this is only possible when processing right nodes because this is a base node not present either in left and right
 							context.deletedBaseNodes.remove(childA);
 							context.deletedBaseNodes.add(cloneA);
 						} else {
 							if(!context.addedLeftNodes.contains(cloneA)){
-								context.addedLeftNodes.add(cloneA); //node added by left
+								context.addedLeftNodes.add(cloneA); //node added by left in relation to right
 							}
 						}
 					} else { 
@@ -225,19 +236,21 @@ public final class SemistructuredMerge {
 	 */
 	private static void removeRemainingBaseNodes(FSTNode mergedTree, MergeContext context) {
 		boolean removed = false;
-		for(FSTNode loneBaseNode : context.deletedBaseNodes) {
-			if(mergedTree == loneBaseNode) {
-				FSTNonTerminal parent = (FSTNonTerminal)mergedTree.getParent();
-				if(parent != null) {
-					parent.removeChild(mergedTree);
-					removed = true;
+		if(!context.deletedBaseNodes.isEmpty()){
+			for(FSTNode loneBaseNode : context.deletedBaseNodes) {
+				if(mergedTree == loneBaseNode) {
+					FSTNonTerminal parent = (FSTNonTerminal)mergedTree.getParent();
+					if(parent != null) {
+						parent.removeChild(mergedTree);
+						removed = true;
+					}
 				}
 			}
-		}
-		if(!removed && mergedTree instanceof FSTNonTerminal) {
-			Object[] children = ((FSTNonTerminal)mergedTree).getChildren().toArray();
-			for(Object child : children) {
-				removeRemainingBaseNodes((FSTNode)child, context);
+			if(!removed && mergedTree instanceof FSTNonTerminal) {
+				Object[] children = ((FSTNonTerminal)mergedTree).getChildren().toArray();
+				for(Object child : children) {
+					removeRemainingBaseNodes((FSTNode)child, context);
+				}
 			}
 		}
 	}

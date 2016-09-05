@@ -163,6 +163,19 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 			printFeatures(nonTerminal,false);
 			return false;
 		}
+		if (nonTerminal.getType().equals("EnumConstants")) {
+			printFeatures(nonTerminal,true);
+			Iterator<FSTNode> listElements = getChildren(nonTerminal, "EnumConstant").iterator();
+			if (listElements.hasNext()) {
+				listElements.next().accept(this);
+			}
+			while (listElements.hasNext()) {
+				printToken(",");
+				listElements.next().accept(this);
+			}
+			printFeatures(nonTerminal,false);
+			return false;
+		}
 		if (nonTerminal.getType().equals("InnerClassDecl")) {
 			printFeatures(nonTerminal,true);
 			{

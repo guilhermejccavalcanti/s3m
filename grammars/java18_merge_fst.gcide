@@ -369,7 +369,7 @@ PackageDeclaration:
 		( Annotation )* <PACKAGE> Name ";" @!
 ;
 
-@FSTTerminal(name="{Name}{ImportPackage}")
+@FSTTerminal(name="{Name}{ImportPackage}",merge="LineBased")
 ImportDeclaration:  
         <IMPORT> [ "static" <NONE>] Name [ ImportPackage ] ";" @!
 ;
@@ -479,15 +479,17 @@ EnumBody:
 		"}"
 ;
 
-@FSTNonTerminal(name="")
+@FSTNonTerminal()
 EnumBodyInternal: 
 		";" ( ClassOrInterfaceBodyDeclaration )* 
 ;
 
+@FSTNonTerminal()
 EnumConstants: 
 		&LI EnumConstant ( LOOK_AHEAD(2) "," &LI EnumConstant )* 
 ;
 
+@FSTTerminal(name="{<IDENTIFIER>}",merge="LineBased")
 EnumConstant: 
         ( Annotation )* <IDENTIFIER> [ Arguments ] [ ClassOrInterfaceBody ]
 ;

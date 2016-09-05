@@ -116,7 +116,7 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
       ;
     }
     jj_consume_token(SEMICOLON);
-                                                                                                                                                                        {if (true) return productionEndTerminal("ImportDeclaration","{Name}{ImportPackage}","{Name}{ImportPackage}","Replacement","Default",first,token);}
+                                                                                                                                                                        {if (true) return productionEndTerminal("ImportDeclaration","{Name}{ImportPackage}","{Name}{ImportPackage}","Replacement","LineBased",first,token);}
     throw new Error("Missing return statement in function");
   }
 
@@ -655,15 +655,15 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
       n = ClassOrInterfaceBodyDeclaration(inTerminal);
                                                             replaceName(n);
     }
-                                                                                {if (true) return productionEndNonTerminal("EnumBodyInternal","","");}
+                                                                                {if (true) return productionEndNonTerminal("EnumBodyInternal","-","-");}
     throw new Error("Missing return statement in function");
   }
 
   final public FSTInfo EnumConstants(boolean inTerminal) throws ParseException {
                                               Token first=null,t;FSTInfo n;
      first=getToken(1); productionStart(inTerminal);
-    n = EnumConstant(true);
-                              replaceName(n);
+    n = EnumConstant(inTerminal);
+                                    replaceName(n);
     label_10:
     while (true) {
       if (jj_2_7(2)) {
@@ -672,10 +672,10 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
         break label_10;
       }
       jj_consume_token(COMMA);
-      n = EnumConstant(true);
-                                                                                       replaceName(n);
+      n = EnumConstant(inTerminal);
+                                                                                                   replaceName(n);
     }
-                                                                                                           {if (true) return productionEndTerminal("EnumConstants","-","-","Replacement","Default",first,token);}
+                                                                                                                       {if (true) return productionEndNonTerminal("EnumConstants","-","-");}
     throw new Error("Missing return statement in function");
   }
 
@@ -695,11 +695,12 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
       n = Annotation(true);
                              replaceName(n);
     }
-    jj_consume_token(IDENTIFIER);
+    t = jj_consume_token(IDENTIFIER);
+                                                                replaceName(new FSTInfo("<IDENTIFIER>",t.image));
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LPAREN:
       n = Arguments(true);
-                                                                                 replaceName(n);
+                                                                                                                                       replaceName(n);
       break;
     default:
       jj_la1[31] = jj_gen;
@@ -708,13 +709,13 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case LBRACE:
       n = ClassOrInterfaceBody(true);
-                                                                                                                                  replaceName(n);
+                                                                                                                                                                                        replaceName(n);
       break;
     default:
       jj_la1[32] = jj_gen;
       ;
     }
-                                                                                                                                                     {if (true) return productionEndTerminal("EnumConstant","-","-","Replacement","Default",first,token);}
+                                                                                                                                                                                                           {if (true) return productionEndTerminal("EnumConstant","{<IDENTIFIER>}","{<IDENTIFIER>}","Replacement","LineBased",first,token);}
     throw new Error("Missing return statement in function");
   }
 
@@ -6793,6 +6794,11 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
     return false;
   }
 
+  final private boolean jj_3R_467() {
+    if (jj_3R_405()) return true;
+    return false;
+  }
+
   final private boolean jj_3R_422() {
     if (jj_scan_token(ASSIGN)) return true;
     if (jj_3R_80()) return true;
@@ -7046,6 +7052,11 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
     return false;
   }
 
+  final private boolean jj_3R_466() {
+    if (jj_3R_84()) return true;
+    return false;
+  }
+
   final private boolean jj_3R_302() {
     if (jj_scan_token(FOR)) return true;
     if (jj_scan_token(LPAREN)) return true;
@@ -7127,11 +7138,6 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
 
   final private boolean jj_3R_153() {
     if (jj_3R_151()) return true;
-    return false;
-  }
-
-  final private boolean jj_3R_467() {
-    if (jj_3R_405()) return true;
     return false;
   }
 
@@ -7336,11 +7342,6 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
     return false;
   }
 
-  final private boolean jj_3R_466() {
-    if (jj_3R_84()) return true;
-    return false;
-  }
-
   final private boolean jj_3R_377() {
     Token xsp;
     xsp = jj_scanpos;
@@ -7493,6 +7494,12 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
     return false;
   }
 
+  final private boolean jj_3_7() {
+    if (jj_scan_token(COMMA)) return true;
+    if (jj_3R_73()) return true;
+    return false;
+  }
+
   final private boolean jj_3R_417() {
     if (jj_3R_72()) return true;
     if (jj_3R_432()) return true;
@@ -7536,12 +7543,6 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
     xsp = jj_scanpos;
     if (jj_3R_430()) jj_scanpos = xsp;
     if (jj_scan_token(RBRACE)) return true;
-    return false;
-  }
-
-  final private boolean jj_3_7() {
-    if (jj_scan_token(COMMA)) return true;
-    if (jj_3R_73()) return true;
     return false;
   }
 
