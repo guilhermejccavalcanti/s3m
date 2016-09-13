@@ -445,8 +445,11 @@ ClassOrInterfaceDeclaration:
 		[ LOOK_AHEAD(2) <SEMICOLON> ]
 ;
 
+@FSTTerminal(merge="LineBased")
 ClassOrInterface: 
-			"class"<NONE> | "interface"<NONE>
+			"class"<NONE> :: ClassOrInterface
+			| 
+			"interface"<NONE> :: ClassOrInterface
 ;
 
 @FSTTerminal(merge="LineBased")

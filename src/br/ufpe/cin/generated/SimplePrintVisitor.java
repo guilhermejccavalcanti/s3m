@@ -166,6 +166,14 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 		if (nonTerminal.getType().equals("EnumConstants")) {
 			printFeatures(nonTerminal,true);
 			Iterator<FSTNode> listElements = getChildren(nonTerminal, "EnumConstant").iterator();
+			
+			//fix commas
+			List<FSTNode> copy = new ArrayList<FSTNode>();
+			List<FSTNode> nonempty = new ArrayList<FSTNode>();
+			while (listElements.hasNext())copy.add(listElements.next());
+			for(FSTNode n:copy)if(!((FSTTerminal)n).getBody().isEmpty())nonempty.add(n);
+			listElements = nonempty.iterator();
+			
 			if (listElements.hasNext()) {
 				listElements.next().accept(this);
 			}
@@ -394,14 +402,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 		if (type.equals("TypeArgument2") && expectedType.equals("TypeArgument")) return true;
 		if (type.equals("StatementExpression2") && expectedType.equals("StatementExpression")) return true;
 		if (type.equals("RelationalOp1") && expectedType.equals("RelationalOp")) return true;
-		if (type.equals("ClassOrInterface2") && expectedType.equals("ClassOrInterface")) return true;
 		if (type.equals("AnnotationInnerFieldDecl") && expectedType.equals("AnnotationTypeMemberDeclaration")) return true;
 		if (type.equals("UnaryOp2") && expectedType.equals("UnaryOp")) return true;
 		if (type.equals("StatementExpression1") && expectedType.equals("StatementExpression")) return true;
 		if (type.equals("TypeArgument1") && expectedType.equals("TypeArgument")) return true;
 		if (type.equals("ClassOrInterfaceDecl") && expectedType.equals("TypeDeclaration")) return true;
 		if (type.equals("RelationalOp2") && expectedType.equals("RelationalOp")) return true;
-		if (type.equals("ClassOrInterface1") && expectedType.equals("ClassOrInterface")) return true;
 		if (type.equals("Modifier1") && expectedType.equals("Modifier")) return true;
 		if (type.equals("StatementExpressionAssignment1") && expectedType.equals("StatementExpressionAssignment")) return true;
 		if (type.equals("Literal1") && expectedType.equals("Literal")) return true;

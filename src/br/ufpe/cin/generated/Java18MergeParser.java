@@ -469,11 +469,11 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case CLASS:
       jj_consume_token(CLASS);
-                  {if (true) return productionEndTerminal("ClassOrInterface1","-","-","Replacement","Default",first,token);}
+                  {if (true) return productionEndTerminal("ClassOrInterface","-","-","Replacement","LineBased",first,token);}
       break;
     case INTERFACE:
       jj_consume_token(INTERFACE);
-                      {if (true) return productionEndTerminal("ClassOrInterface2","-","-","Replacement","Default",first,token);}
+                      {if (true) return productionEndTerminal("ClassOrInterface","-","-","Replacement","LineBased",first,token);}
       break;
     default:
       jj_la1[21] = jj_gen;

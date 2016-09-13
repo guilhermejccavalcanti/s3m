@@ -429,9 +429,9 @@ FSTInfo ClassOrInterfaceDeclaration(boolean inTerminal) : { Token first=null,t;F
 
 FSTInfo ClassOrInterface(boolean inTerminal) : { Token first=null,t;FSTInfo n; 
 } { {first=getToken(1); productionStart(inTerminal); } (
-	"class"  {return productionEndTerminal("ClassOrInterface1","-","-","Replacement","Default",first,token);}
+	"class"  {return productionEndTerminal("ClassOrInterface","-","-","Replacement","LineBased",first,token);}
  |
-	"interface"  {return productionEndTerminal("ClassOrInterface2","-","-","Replacement","Default",first,token);}
+	"interface"  {return productionEndTerminal("ClassOrInterface","-","-","Replacement","LineBased",first,token);}
 
  )  }
 
