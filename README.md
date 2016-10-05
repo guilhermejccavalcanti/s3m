@@ -20,20 +20,20 @@ Use the jar from the /binary folder.
 
 * Merging 3 files:
 
-   `java -jar jFSTMerge.jar -f mine base theirs -o output`
+   `java -jar pathto/jFSTMerge.jar -f mine base theirs -o output`
 
 Where *mine*, *base*, *theirs* and *output* are filepaths.
 The attribute -o is optional, if omitted, *theirs* will be used as output file.
 
 * Merging 3 directories:
 
-   `java -jar jFSTMerge.jar -d mine base theirs -o output`
+   `java -jar pathto/jFSTMerge.jar -d mine base theirs -o output`
  
 * For integration with git type the two commands bellow:
 
    `git config --global merge.tool jfstmerge`
    
-   `git config --global mergetool.jfstmerge.cmd 'java -jar jFSTMerge.jar -f \"$LOCAL\" \"$BASE\" \"$REMOTE\" -o \"$MERGED\"'`
+   `git config --global mergetool.jfstmerge.cmd 'java -jar pathto/jFSTMerge.jar -f \"$LOCAL\" \"$BASE\" \"$REMOTE\" -o \"$MERGED\"'`
 
 Where *mine*, *base*, *theirs* and *output* are directory paths.
-The attribute -o is optional, if omitted, "theirs" will be used as output directory.
+The attribute -o is optional, if omitted, *theirs* will be used as output directory.
