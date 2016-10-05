@@ -38,7 +38,7 @@ For integration with git type the two commands bellow:
    
    `git config --global mergetool.jfstmerge.cmd 'java -jar pathto/jFSTMerge.jar -f \"$LOCAL\" \"$BASE\" \"$REMOTE\" -o \"$MERGED\"'`
 
-Then, after the "git merge" command detect conflicts, call the tool with:
+Then, after the "git merge" command detects conflicts, call the tool with:
 
    `git mergetool -tool=jfstmerge`
 
