@@ -29,11 +29,12 @@ The attribute -o is optional, if omitted, *theirs* will be used as output file.
 
    `java -jar pathto/jFSTMerge.jar -d mine base theirs -o output`
  
+Where *mine*, *base*, *theirs* and *output* are directory paths.
+The attribute -o is optional, if omitted, *theirs* will be used as output directory.
+
 * For integration with git type the two commands bellow:
 
    `git config --global merge.tool jfstmerge`
    
    `git config --global mergetool.jfstmerge.cmd 'java -jar pathto/jFSTMerge.jar -f \"$LOCAL\" \"$BASE\" \"$REMOTE\" -o \"$MERGED\"'`
 
-Where *mine*, *base*, *theirs* and *output* are directory paths.
-The attribute -o is optional, if omitted, *theirs* will be used as output directory.
