@@ -18,6 +18,7 @@ import br.ufpe.cin.files.FilesTuple;
 import br.ufpe.cin.logging.LoggerFactory;
 import br.ufpe.cin.mergers.SemistructuredMerge;
 import br.ufpe.cin.mergers.TextualMerge;
+import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.MergeScenario;
 import br.ufpe.cin.printers.Prettyprinter;
@@ -38,6 +39,8 @@ public class JFSTMerge {
 	//log of activities
 	private static final Logger LOGGER = LoggerFactory.make();
 
+	private static int conflictState = 0;
+	
 	//command line options
 	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
 	List<String> filespath = new ArrayList<String>();
@@ -48,7 +51,10 @@ public class JFSTMerge {
 	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
 			+ "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
-
+	
+	@Parameter(names = "-g", description = "Command to identify that the tool is being used as a git merge driver.")
+	public static boolean isGit = false;
+	
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -137,6 +143,19 @@ public class JFSTMerge {
 		}
 		return filesTuple;
 	}
+	
+	private int checkConflictState(MergeContext context)
+	{
+		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
+		if(conflictList.size() > 0)
+		{
+			return -1;
+		}
+		else
+		{
+			return 0;
+		}
+	}
 
 	/**
 	 * Three-way semistructured merge of the given .java files.
@@ -162,6 +181,7 @@ public class JFSTMerge {
 				//run unstructured merge first is necessary due to future steps.
 				context.unstructuredOutput 	= TextualMerge.merge(left, base, right, false);		
 				context.semistructuredOutput= SemistructuredMerge.merge(left, base, right,context);
+				conflictState = checkConflictState(context);
 
 			} catch(TextualMergeException tme){ //textual merge must work even when semistructured not, so this exception precedes others
 				System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
@@ -172,6 +192,7 @@ public class JFSTMerge {
 				//in case of any error during the merging process, merge with unstructured merge //log it
 				LOGGER.log(Level.WARNING,"",sme);
 				context.semistructuredOutput=context.unstructuredOutput;
+				conflictState = checkConflictState(context);
 			}
 		}
 
@@ -195,41 +216,14 @@ public class JFSTMerge {
 		}
 
 		System.out.println("Merge files finished.");
-
+		
 		return context;
 	}
 
 	public static void main(String[] args) {
 		JFSTMerge merger = new JFSTMerge();
 		merger.run(args);
-
-		/*				try {
-			List<String> listRevisions = new ArrayList<>();
-			BufferedReader reader;
-			reader = Files.newBufferedReader(Paths.get("C:\\tstfstmerge\\all.revisions"));
-			listRevisions = reader.lines().collect(Collectors.toList());
-			long t0 = System.currentTimeMillis();
-			for(String r : listRevisions){
-				new JFSTMerge().mergeRevisions(r);
-			}
-			long tf = System.currentTimeMillis();
-			System.out.println((tf - t0)/1000);
-		} catch (Exception e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}*/
-
-		//new JFSTMerge().mergeRevisions("C:\\tstfstmerge\\java_orientdb\\rev_ededb_3b3c3\\rev_ededb-3b3c3.revisions");
-		//new JFSTMerge().mergeRevisions("E:\\Mestrado\\FPFNAnalysis\\projects\\cassandra\\revisions\\rev_751e5_a946e\\rev_751e5-a946e.revisions");
-		//new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\exemplos jfstmerge\\testenum\\rev.revisions");
-		//new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme\\Desktop\\exemplos jfstmerge\\testimport\\rev.revisions");
-
-		/*		new JFSTMerge().mergeFiles(
-				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_left_28db5\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java"), 
-				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_base_448cc\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java"),
-				new File("C:\\tstfstmerge\\java_ogplatform\\rev_28db5_41a62\\rev_right_41a62\\src\\com\\opengamma\\financial\\analytics\\ircurve\\MarketInstrumentImpliedYieldCurveFunction.java")
-				,null);*/
-
+		System.exit(conflictState);
 	}
 
 	private void run(String[] args) {
@@ -249,4 +243,6 @@ public class JFSTMerge {
 			commandLineOptions.usage();
 		}
 	}
+	
+	
 }

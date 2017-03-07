@@ -6,6 +6,7 @@ import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.generated.Java18MergeParser;
 import cide.gparser.OffsetCharStream;
 import cide.gparser.ParseException;
@@ -33,9 +34,16 @@ public class JParser {
 	 */
 	public FSTNode parse(File javaFile) throws ParseException, UnsupportedEncodingException, FileNotFoundException, TokenMgrError {
 		FSTFeatureNode generatedAst = new FSTFeatureNode("");//root node
-		if(isValidFile(javaFile)){
+		if(JFSTMerge.isGit)
+		{
 			System.out.println("Parsing: " + javaFile.getAbsolutePath());
-			//Java18MergeParser parser = new Java18MergeParser(new OffsetCharStream(new FileInputStream(javaFile)));
+			Java18MergeParser parser = new Java18MergeParser(new OffsetCharStream(new InputStreamReader(new FileInputStream(javaFile),"UTF8")));
+			parser.CompilationUnit(false);
+			generatedAst.addChild(new FSTNonTerminal("Java-File", javaFile.getName()));
+			generatedAst.addChild(parser.getRoot());
+		}
+		else if(isValidFile(javaFile)){
+			System.out.println("Parsing: " + javaFile.getAbsolutePath());
 			Java18MergeParser parser = new Java18MergeParser(new OffsetCharStream(new InputStreamReader(new FileInputStream(javaFile),"UTF8")));
 			parser.CompilationUnit(false);
 			generatedAst.addChild(new FSTNonTerminal("Java-File", javaFile.getName()));
