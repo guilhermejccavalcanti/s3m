@@ -149,7 +149,7 @@ public class JFSTMerge {
 		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
 		if(conflictList.size() > 0)
 		{
-			return -1;
+			return 1;
 		}
 		else
 		{
@@ -190,7 +190,6 @@ public class JFSTMerge {
 
 			} catch(SemistructuredMergeException sme){
 				//in case of any error during the merging process, merge with unstructured merge //log it
-				System.err.println("An error in the semistructured merge occurred. See "+LoggerFactory.logfile+" file for more details.\nThe files were merged with unstructured merge");
 				LOGGER.log(Level.WARNING,"",sme);
 				context.semistructuredOutput=context.unstructuredOutput;
 				conflictState = checkConflictState(context);
