@@ -34,21 +34,14 @@ public class JParser {
 	 */
 	public FSTNode parse(File javaFile) throws ParseException, UnsupportedEncodingException, FileNotFoundException, TokenMgrError {
 		FSTFeatureNode generatedAst = new FSTFeatureNode("");//root node
-		if(JFSTMerge.isGit)
-		{
+		if(isValidFile(javaFile)){
 			System.out.println("Parsing: " + javaFile.getAbsolutePath());
 			Java18MergeParser parser = new Java18MergeParser(new OffsetCharStream(new InputStreamReader(new FileInputStream(javaFile),"UTF8")));
 			parser.CompilationUnit(false);
 			generatedAst.addChild(new FSTNonTerminal("Java-File", javaFile.getName()));
 			generatedAst.addChild(parser.getRoot());
 		}
-		else if(isValidFile(javaFile)){
-			System.out.println("Parsing: " + javaFile.getAbsolutePath());
-			Java18MergeParser parser = new Java18MergeParser(new OffsetCharStream(new InputStreamReader(new FileInputStream(javaFile),"UTF8")));
-			parser.CompilationUnit(false);
-			generatedAst.addChild(new FSTNonTerminal("Java-File", javaFile.getName()));
-			generatedAst.addChild(parser.getRoot());
-		} 
+		
 		return generatedAst;
 	}
 
@@ -56,9 +49,24 @@ public class JParser {
 	 * Checks if the given file is adequate for parsing.
 	 * @param file to be parsed
 	 * @return true if the file is appropriated, or false
+	 * @throws FileNotFoundException 
+	 * @throws ParseException 
 	 */
-	private boolean isValidFile(File file) {
-		return file != null && file.exists() && isJavaFile(file);
+	private boolean isValidFile(File file) throws FileNotFoundException, ParseException 
+	{
+		if(file == null)
+		{
+			throw new FileNotFoundException("There is no file specified in the command");	
+		}
+		else if (!file.exists())
+		{
+			throw new FileNotFoundException("The file " + file.getName() + " doesn't exist in the desired path");
+		}
+		else if (!JFSTMerge.isGit && !isJavaFile(file))
+		{
+			throw new ParseException("The file" + file.getName() + " is not a .java file, have you forgot to add the -g option to your command?");
+		}	
+		return  file != null && file.exists() && (isJavaFile(file) || JFSTMerge.isGit);
 	}
 
 	/**

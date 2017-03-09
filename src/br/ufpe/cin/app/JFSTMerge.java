@@ -38,7 +38,7 @@ public class JFSTMerge {
 
 	//log of activities
 	private static final Logger LOGGER = LoggerFactory.make();
-
+	
 	private static int conflictState = 0;
 	
 	//command line options
@@ -190,6 +190,7 @@ public class JFSTMerge {
 
 			} catch(SemistructuredMergeException sme){
 				//in case of any error during the merging process, merge with unstructured merge //log it
+				System.err.println("An error in the semistructured merge occurred. See "+LoggerFactory.logfile+" file for more details.\nThe files were merged with unstructured merge");
 				LOGGER.log(Level.WARNING,"",sme);
 				context.semistructuredOutput=context.unstructuredOutput;
 				conflictState = checkConflictState(context);
