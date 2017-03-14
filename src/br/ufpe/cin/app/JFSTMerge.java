@@ -38,7 +38,7 @@ public class JFSTMerge {
 
 	//log of activities
 	private static final Logger LOGGER = LoggerFactory.make();
-
+	
 	private static int conflictState = 0;
 	
 	//command line options
@@ -149,7 +149,7 @@ public class JFSTMerge {
 		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
 		if(conflictList.size() > 0)
 		{
-			return -1;
+			return 1;
 		}
 		else
 		{
