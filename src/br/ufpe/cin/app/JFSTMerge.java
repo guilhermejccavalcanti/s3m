@@ -38,9 +38,10 @@ public class JFSTMerge {
 
 	//log of activities
 	private static final Logger LOGGER = LoggerFactory.make();
-	
+
+	//flag used by git to detect conflicts
 	private static int conflictState = 0;
-	
+
 	//command line options
 	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
 	List<String> filespath = new ArrayList<String>();
@@ -51,10 +52,10 @@ public class JFSTMerge {
 	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
 			+ "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
-	
+
 	@Parameter(names = "-g", description = "Command to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
-	
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -143,19 +144,6 @@ public class JFSTMerge {
 		}
 		return filesTuple;
 	}
-	
-	private int checkConflictState(MergeContext context)
-	{
-		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
-		if(conflictList.size() > 0)
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
 
 	/**
 	 * Three-way semistructured merge of the given .java files.
@@ -216,7 +204,7 @@ public class JFSTMerge {
 		}
 
 		System.out.println("Merge files finished.");
-		
+
 		return context;
 	}
 
@@ -243,6 +231,13 @@ public class JFSTMerge {
 			commandLineOptions.usage();
 		}
 	}
-	
-	
+
+	private int checkConflictState(MergeContext context){
+		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
+		if(conflictList.size() > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 }
