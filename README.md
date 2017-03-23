@@ -19,7 +19,7 @@ Installation
 Execute the jar from the /installer folder.
 After installed, the tool is automatically integrated with git, with no need for futher configurations.
 That is, every time you call the "git merge" command, the tool will be executed.
-You can also use the tool standlone as described bellow.
+You can also use the tool standalone as described bellow.
 
 Usage
 -------------
