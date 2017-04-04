@@ -38,9 +38,9 @@ public class JFSTMerge {
 
 	//log of activities
 	private static final Logger LOGGER = LoggerFactory.make();
-	
+
 	private static int conflictState = 0;
-	
+
 	//command line options
 	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
 	List<String> filespath = new ArrayList<String>();
@@ -51,10 +51,10 @@ public class JFSTMerge {
 	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
 			+ "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
-	
+
 	@Parameter(names = "-g", description = "Command to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
-	
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -143,7 +143,7 @@ public class JFSTMerge {
 		}
 		return filesTuple;
 	}
-	
+
 	private int checkConflictState(MergeContext context)
 	{
 		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
@@ -167,12 +167,13 @@ public class JFSTMerge {
 	 */
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath){
 		FilesManager.validateFiles(left, base, right);		
-		System.out.println("MERGING FILES: \n" 
-				+ ((left != null)?left.getAbsolutePath() :"<empty left>") + "\n"
-				+ ((base != null)?base.getAbsolutePath() :"<empty base>") + "\n"
-				+ ((right!= null)?right.getAbsolutePath():"<empty right>")
-				);
-
+		if(!this.isGit){
+			System.out.println("MERGING FILES: \n" 
+					+ ((left != null)?left.getAbsolutePath() :"<empty left>") + "\n"
+					+ ((base != null)?base.getAbsolutePath() :"<empty base>") + "\n"
+					+ ((right!= null)?right.getAbsolutePath():"<empty right>")
+					);
+		}
 		MergeContext context = new MergeContext(left,base,right,outputFilePath);
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files
@@ -195,17 +196,17 @@ public class JFSTMerge {
 				conflictState = checkConflictState(context);
 			}
 		}
-
-		//printing the resulting merged code
-		try {
-			Prettyprinter.printOnScreenMergedCode(context);
-			Prettyprinter.generateMergedFile(context, outputFilePath);
-		} catch (PrintException pe) {
-			System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
-			LOGGER.log(Level.SEVERE,"",pe);
-			System.exit(-1);
+		if(!this.isGit){
+			//printing the resulting merged code
+			try {
+				Prettyprinter.printOnScreenMergedCode(context);
+				Prettyprinter.generateMergedFile(context, outputFilePath);
+			} catch (PrintException pe) {
+				System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+				LOGGER.log(Level.SEVERE,"",pe);
+				System.exit(-1);
+			}
 		}
-
 		//computing statistics
 		try{
 			Statistics.compute(context);
@@ -216,7 +217,7 @@ public class JFSTMerge {
 		}
 
 		System.out.println("Merge files finished.");
-		
+
 		return context;
 	}
 
@@ -243,6 +244,6 @@ public class JFSTMerge {
 			commandLineOptions.usage();
 		}
 	}
-	
-	
+
+
 }
