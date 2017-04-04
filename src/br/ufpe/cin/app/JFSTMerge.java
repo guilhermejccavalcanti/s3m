@@ -39,7 +39,9 @@ public class JFSTMerge {
 	//log of activities
 	private static final Logger LOGGER = LoggerFactory.make();
 
-	private static int conflictState = 0;
+
+	//flag used by git to detect conflicts
+  private static int conflictState = 0;
 
 	//command line options
 	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
@@ -144,19 +146,6 @@ public class JFSTMerge {
 		return filesTuple;
 	}
 
-	private int checkConflictState(MergeContext context)
-	{
-		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
-		if(conflictList.size() > 0)
-		{
-			return 1;
-		}
-		else
-		{
-			return 0;
-		}
-	}
-
 	/**
 	 * Three-way semistructured merge of the given .java files.
 	 * @param left (mine) version of the file, or <b>null</b> in case of intentional empty file. 
@@ -244,6 +233,14 @@ public class JFSTMerge {
 			commandLineOptions.usage();
 		}
 	}
-
+  
+	private int checkConflictState(MergeContext context){
+		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
+		if(conflictList.size() > 0) {
+			return 1;
+		} else {
+			return 0;
+		}
+	}
 
 }
