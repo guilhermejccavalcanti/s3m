@@ -24,7 +24,6 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * Represents semistructured merge. Semistrucutred merge is based on the concept
  * of <i>superimposition</i> of ASTs. Superimposition merges trees recursively,
  * beginning from the root, based on structural and nominal similarities.
- * 
  * @author Guilherme
  */
 public final class SemistructuredMerge {
@@ -34,13 +33,10 @@ public final class SemistructuredMerge {
 
 	/**
 	 * Three-way semistructured merge of three given files.
-	 * 
 	 * @param left
 	 * @param base
 	 * @param right
-	 * @param context
-	 *            an empty MergeContext to store relevant information of the
-	 *            merging process.
+	 * @param context an empty MergeContext to store relevant information of the merging process.
 	 * @return string representing the merge result.
 	 * @throws SemistructuredMergeException
 	 * @throws TextualMergeException
@@ -55,7 +51,6 @@ public final class SemistructuredMerge {
 			FSTNode rightTree = parser.parse(right);
 
 			// merging
-			// context = merge(leftTree,baseTree,rightTree);
 			context.join(merge(leftTree, baseTree, rightTree));
 
 			// handling special kinds of conflicts
@@ -65,8 +60,7 @@ public final class SemistructuredMerge {
 			throw new SemistructuredMergeException(ExceptionUtils.getCauseMessage(ex), context);
 		}
 
-		// during the parsing process, code indentation is typically lost, so we
-		// reindent the code
+		// during the parsing process, code indentation is typically lost, so we reindent the code
 		return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
 	}
 
@@ -83,8 +77,8 @@ public final class SemistructuredMerge {
 	 */
 	private static MergeContext merge(FSTNode left, FSTNode base, FSTNode right) throws TextualMergeException {
 		// indexes are necessary to a proper matching between nodes
-		left.index = 0;
-		base.index = 1;
+		left.index 	= 0;
+		base.index 	= 1;
 		right.index = 2;
 
 		MergeContext context = new MergeContext();
@@ -99,18 +93,14 @@ public final class SemistructuredMerge {
 	/**
 	 * Superimposes two given ASTs.
 	 * 
-	 * @param nodeA
-	 *            representing the first tree
-	 * @param nodeB
-	 *            representing the second tree
-	 * @param parent
-	 *            node to be superimposed in (can be null)
+	 * @param nodeArepresenting the first tree
+	 * @param nodeB representing the second tree
+	 * @param parent node to be superimposed in (can be null)
 	 * @param context
 	 * @param isProcessingBaseTree
 	 * @return superimposed tree
 	 */
-	private static FSTNode superimpose(FSTNode nodeA, FSTNode nodeB, FSTNonTerminal parent, MergeContext context,
-			boolean isProcessingBaseTree) {
+	private static FSTNode superimpose(FSTNode nodeA, FSTNode nodeB, FSTNonTerminal parent, MergeContext context, boolean isProcessingBaseTree) {
 		if (nodeA.compatibleWith(nodeB)) {
 			FSTNode composed = nodeA.getShallowClone();
 			composed.index = nodeB.index;
@@ -121,13 +111,9 @@ public final class SemistructuredMerge {
 				FSTNonTerminal nonterminalB = (FSTNonTerminal) nodeB;
 				FSTNonTerminal nonterminalComposed = (FSTNonTerminal) composed;
 
-				for (FSTNode childB : nonterminalB.getChildren()) { // nodes
-																	// from base
-																	// or right
+				for (FSTNode childB : nonterminalB.getChildren()) { 	// nodes from base or right
 					FSTNode childA = nonterminalA.getCompatibleChild(childB);
-					if (childA == null) { // means that a base node was deleted
-											// by left, or that a right node was
-											// added
+					if (childA == null) { 								// means that a base node was deleted by left, or that a right node was added
 						FSTNode cloneB = childB.getDeepClone();
 						if (childB.index == -1)
 							childB.index = nodeB.index;
@@ -136,20 +122,13 @@ public final class SemistructuredMerge {
 						// if(!context.deletedBaseNodes.contains(cloneB) &&
 						// !isProcessingBaseTree){ //TODO: needs more testing,
 						// managing removals
-						nonterminalComposed.addChild(cloneB);// cloneB must be
-																// removed
-																// afterwards if
-																// it is a base
-																// node
+						nonterminalComposed.addChild(cloneB);			// cloneB must be removed afterwards if it is a base node
 						// }
 
 						if (isProcessingBaseTree) {
-							context.deletedBaseNodes.add(cloneB); // base nodes
-																	// deleted
-																	// by left
+							context.deletedBaseNodes.add(cloneB); 		// base nodes deleted by left
 						} else {
-							context.addedRightNodes.add(cloneB); // nodes added
-																	// by right
+							context.addedRightNodes.add(cloneB); 		// nodes added by right
 						}
 					} else {
 						if (childA.index == -1)
@@ -160,13 +139,9 @@ public final class SemistructuredMerge {
 								superimpose(childA, childB, nonterminalComposed, context, isProcessingBaseTree));
 					}
 				}
-				for (FSTNode childA : nonterminalA.getChildren()) { // nodes
-																	// from
-																	// left,
-																	// leftBase
+				for (FSTNode childA : nonterminalA.getChildren()) { 	// nodes from left, leftBase
 					FSTNode childB = nonterminalB.getCompatibleChild(childA);
-					if (childB == null) { // is a new node from left, or a
-											// deleted base node in right
+					if (childB == null) { 								// is a new node from left, or a deleted base node in right
 						FSTNode cloneA = childA.getDeepClone();
 						if (childA.index == -1)
 							childA.index = nodeA.index;
@@ -180,53 +155,19 @@ public final class SemistructuredMerge {
 						 * left }
 						 */
 
-						// only if is a new left node =~ it is not a base node
-						nonterminalComposed.addChild(cloneA);
+						nonterminalComposed.addChild(cloneA);			 // only if is a new left node =~ it is not a base node
 
-						if (context.deletedBaseNodes.contains(childA)) { // this
-																			// is
-																			// only
-																			// possible
-																			// when
-																			// processing
-																			// right
-																			// nodes
-																			// because
-																			// this
-																			// is
-																			// a
-																			// base
-																			// node
-																			// not
-																			// present
-																			// either
-																			// in
-																			// left
-																			// and
-																			// right
+						if (context.deletedBaseNodes.contains(childA)) { // this is only possible when processing right nodes because this is a base node not present either in left and right
 							context.deletedBaseNodes.remove(childA);
 							context.deletedBaseNodes.add(cloneA);
 						} else {
 							if (!context.addedLeftNodes.contains(cloneA)) {
-								context.addedLeftNodes.add(cloneA); // node
-																	// added by
-																	// left in
-																	// relation
-																	// to right
+								context.addedLeftNodes.add(cloneA); 	// node added by left in relation to right
 							}
 						}
 					} else {
 						if (!isProcessingBaseTree) {
-							context.deletedBaseNodes.remove(childA); // node
-																		// common
-																		// to
-																		// right
-																		// and
-																		// base
-																		// but
-																		// not
-																		// to
-																		// left
+							context.deletedBaseNodes.remove(childA); 	// node common to right and base but not to left
 						}
 					}
 				}
@@ -253,18 +194,9 @@ public final class SemistructuredMerge {
 	 * After superimposition, the content of a matched node is the content of
 	 * those that originated him (left,base,right) So, this methods indicates
 	 * the origin (left,base or right) in node's body content.
-	 * 
 	 * @return node's body content marked
 	 */
-	private static String markContributions(String bodyA, String bodyB, boolean firstPass, int indexA, int indexB) { // #PAREI
-																														// AQUI,
-																														// indexB
-																														// �
-																														// necess�rio?
-																														// pra
-																														// que
-																														// serve
-																														// index
+	private static String markContributions(String bodyA, String bodyB, boolean firstPass, int indexA, int indexB) { 
 		if (bodyA.contains(SEMANTIC_MERGE_MARKER)) {
 			return bodyA + " " + bodyB;
 		} else {
@@ -286,7 +218,6 @@ public final class SemistructuredMerge {
 	/**
 	 * After superimposition, base nodes supposed to be removed might remain.
 	 * This method removes these nodes from the merged tree.
-	 * 
 	 * @param mergedTree
 	 * @param context
 	 */
@@ -318,9 +249,7 @@ public final class SemistructuredMerge {
 	 * methods' body. We use the tags from the method
 	 * {@link #markContributions(String, String, boolean, int, int)} to guide
 	 * this process.
-	 * 
-	 * @param node
-	 *            to be merged
+	 * @param node to be merged
 	 * @throws TextualMergeException
 	 */
 	private static void mergeMatchedContent(FSTNode node, MergeContext context) throws TextualMergeException {
@@ -351,7 +280,6 @@ public final class SemistructuredMerge {
 
 	/**
 	 * Verifies if a node was deleted/renamed in one of the revisions
-	 * 
 	 * @param node
 	 * @param context
 	 * @param leftContent
@@ -377,7 +305,6 @@ public final class SemistructuredMerge {
 	/**
 	 * Verifies if a node was edited in only one of the revisions (left, or
 	 * right), and fills the given merge context with this information.
-	 * 
 	 * @param node
 	 * @param context
 	 * @param leftContent

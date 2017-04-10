@@ -7,6 +7,8 @@ import java.io.PrintWriter;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 
+import org.apache.commons.io.FileUtils;
+
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.PrintException;
 
@@ -19,10 +21,14 @@ public class LoggerStatistics {
 			//logging
 			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmm").format(Calendar.getInstance().getTime());
 			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			String logentry	 = timeStamp+","+msg+"\n";
 			logpath = logpath + "jfstmerge.statistics";
-			PrintWriter pw = new PrintWriter(new FileOutputStream(new File(logpath), true), true); 
+
+			FileUtils.write(new File(logpath), logentry, true);
+			
+			/*PrintWriter pw = new PrintWriter(new FileOutputStream(new File(logpath), true), true); 
 			pw.append(timeStamp+","+msg+"\n");
-			pw.close();
+			pw.close();*/
 		}catch(Exception e){
 			throw new PrintException(ExceptionUtils.getCauseMessage(e));
 		}
