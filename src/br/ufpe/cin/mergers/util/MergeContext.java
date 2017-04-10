@@ -27,10 +27,8 @@ public class MergeContext {
 	public List<Pair<String,FSTNode>> deletedLeftNodes = new ArrayList<Pair<String,FSTNode>>();
 	public List<Pair<String,FSTNode>> deletedRightNodes= new ArrayList<Pair<String,FSTNode>>();
 
-
 	public List<FSTNode> editedLeftNodes = new ArrayList<FSTNode>(); 
 	public List<FSTNode> editedRightNodes= new ArrayList<FSTNode>();
-	
 
 	public FSTNode superImposedTree;
 	public String semistructuredOutput;
@@ -40,6 +38,7 @@ public class MergeContext {
 	public int renamingConflicts = 0;
 	public int typeAmbiguityErrorsConflicts = 0;
 	public int deletionConflicts = 0;
+	public int initializationBlocksConflicts = 0;
 	
 	public MergeContext(){
 	}
@@ -67,10 +66,12 @@ public class MergeContext {
 		this.deletedRightNodes.addAll(otherContext.deletedRightNodes);
 
 		this.superImposedTree = otherContext.superImposedTree;
-		this.renamingConflicts+=otherContext.renamingConflicts;
-		this.newElementReferencingEditedOneConflicts+=otherContext.newElementReferencingEditedOneConflicts;
-		this.typeAmbiguityErrorsConflicts+=otherContext.typeAmbiguityErrorsConflicts;
-		this.deletionConflicts+=otherContext.deletionConflicts;
+		
+/*		this.renamingConflicts	+=	otherContext.renamingConflicts;
+		this.newElementReferencingEditedOneConflicts	+=	otherContext.newElementReferencingEditedOneConflicts;
+		this.typeAmbiguityErrorsConflicts	+=	otherContext.typeAmbiguityErrorsConflicts;
+		this.deletionConflicts	+=	otherContext.deletionConflicts;
+		this.initializationBlocksConflicts	+= otherContext.initializationBlocksConflicts;*/
 		
 		return this;
 	}

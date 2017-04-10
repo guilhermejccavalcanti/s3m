@@ -41,8 +41,7 @@ public final class SemistructuredMerge {
 	 * @throws SemistructuredMergeException
 	 * @throws TextualMergeException
 	 */
-	public static String merge(File left, File base, File right, MergeContext context)
-			throws SemistructuredMergeException, TextualMergeException {
+	public static String merge(File left, File base, File right, MergeContext context)	throws SemistructuredMergeException, TextualMergeException {
 		try {
 			// parsing the files to be merged
 			JParser parser = new JParser();
@@ -66,13 +65,9 @@ public final class SemistructuredMerge {
 
 	/**
 	 * Merges the AST representation of previous given java files.
-	 * 
-	 * @param left
-	 *            tree
-	 * @param base
-	 *            tree
-	 * @param right
-	 *            tree
+	 * @param left tree
+	 * @param base tree
+	 * @param right tree
 	 * @throws TextualMergeException
 	 */
 	private static MergeContext merge(FSTNode left, FSTNode base, FSTNode right) throws TextualMergeException {

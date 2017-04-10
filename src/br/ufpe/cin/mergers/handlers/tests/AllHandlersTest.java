@@ -8,6 +8,7 @@ import org.junit.runners.Suite.SuiteClasses;
 @SuiteClasses({
 	NewElementReferencingEditedOneHandlerTest.class,
 	TypeAmbiguityErrorHandlerTest.class,
-	RenamingOrDeletionConflictsHandlerTest.class
+	RenamingOrDeletionConflictsHandlerTest.class,
+	InitializationBlocksHandlerTest.class
 })
 public class AllHandlersTest {}
