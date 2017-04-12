@@ -35,13 +35,15 @@ public class JParser {
 	public FSTNode parse(File javaFile) throws ParseException, UnsupportedEncodingException, FileNotFoundException, TokenMgrError {
 		FSTFeatureNode generatedAst = new FSTFeatureNode("");//root node
 		if(isValidFile(javaFile)){
-			System.out.println("Parsing: " + javaFile.getAbsolutePath());
+			if(!JFSTMerge.isGit){
+				System.out.println("Parsing: " + javaFile.getAbsolutePath());
+			}
 			Java18MergeParser parser = new Java18MergeParser(new OffsetCharStream(new InputStreamReader(new FileInputStream(javaFile),"UTF8")));
 			parser.CompilationUnit(false);
 			generatedAst.addChild(new FSTNonTerminal("Java-File", javaFile.getName()));
 			generatedAst.addChild(parser.getRoot());
 		}
-		
+
 		return generatedAst;
 	}
 
@@ -54,7 +56,7 @@ public class JParser {
 	 */
 	private boolean isValidFile(File file) throws FileNotFoundException, ParseException 
 	{
-		if(file == null)
+		/*		if(file == null)
 		{
 			throw new FileNotFoundException("There is no file specified in the command");	
 		}
@@ -65,7 +67,7 @@ public class JParser {
 		else if (!JFSTMerge.isGit && !isJavaFile(file))
 		{
 			throw new ParseException("The file" + file.getName() + " is not a .java file, have you forgot to add the -g option to your command?");
-		}	
+		}	*/
 		return  file != null && file.exists() && (isJavaFile(file) || JFSTMerge.isGit);
 	}
 

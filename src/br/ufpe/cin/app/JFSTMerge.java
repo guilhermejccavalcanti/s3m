@@ -155,11 +155,13 @@ public class JFSTMerge {
 	 */
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath){
 		FilesManager.validateFiles(left, base, right);		
-		System.out.println("MERGING FILES: \n" 
-				+ ((left != null)?left.getAbsolutePath() :"<empty left>") + "\n"
-				+ ((base != null)?base.getAbsolutePath() :"<empty base>") + "\n"
-				+ ((right!= null)?right.getAbsolutePath():"<empty right>")
-				);
+		if(!isGit){
+			System.out.println("MERGING FILES: \n" 
+					+ ((left != null)?left.getAbsolutePath() :"<empty left>") + "\n"
+					+ ((base != null)?base.getAbsolutePath() :"<empty base>") + "\n"
+					+ ((right!= null)?right.getAbsolutePath():"<empty right>")
+					);
+		}
 
 		MergeContext context = new MergeContext(left,base,right,outputFilePath);
 
@@ -186,7 +188,9 @@ public class JFSTMerge {
 
 		//printing the resulting merged code
 		try {
-			Prettyprinter.printOnScreenMergedCode(context);
+			if(!isGit){
+				Prettyprinter.printOnScreenMergedCode(context);
+			}
 			Prettyprinter.generateMergedFile(context, outputFilePath);
 		} catch (PrintException pe) {
 			System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
