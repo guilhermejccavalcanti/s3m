@@ -43,7 +43,6 @@ public class JParser {
 			generatedAst.addChild(new FSTNonTerminal("Java-File", javaFile.getName()));
 			generatedAst.addChild(parser.getRoot());
 		}
-
 		return generatedAst;
 	}
 
@@ -56,19 +55,13 @@ public class JParser {
 	 */
 	private boolean isValidFile(File file) throws FileNotFoundException, ParseException 
 	{
-		/*		if(file == null)
-		{
-			throw new FileNotFoundException("There is no file specified in the command");	
+		if(file != null && (isJavaFile(file) || JFSTMerge.isGit)){
+			return true;
+		} else if(file != null && !isJavaFile(file)){
+			throw new ParseException("The file " + file.getName() + " is not a valid .java file.");
+		} else {
+			return false;
 		}
-		else if (!file.exists())
-		{
-			throw new FileNotFoundException("The file " + file.getName() + " doesn't exist in the desired path");
-		}
-		else if (!JFSTMerge.isGit && !isJavaFile(file))
-		{
-			throw new ParseException("The file" + file.getName() + " is not a .java file, have you forgot to add the -g option to your command?");
-		}	*/
-		return  file != null && file.exists() && (isJavaFile(file) || JFSTMerge.isGit);
 	}
 
 	/**

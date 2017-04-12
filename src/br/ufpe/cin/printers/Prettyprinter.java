@@ -72,7 +72,7 @@ public final class Prettyprinter {
 				writeSucceed = FilesManager.writeContent(unstructuredOutputFilePath, unstructuredMergeOutputContent);
 			}
 			if(!writeSucceed){
-				throw new PrintException("Unable to generate merged output file!");
+				throw new PrintException("Unable to manage merged output file!");
 			}
 		}
 	}
