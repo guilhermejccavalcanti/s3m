@@ -35,7 +35,8 @@ public class JParser {
 	public FSTNode parse(File javaFile) throws ParseException, UnsupportedEncodingException, FileNotFoundException, TokenMgrError {
 		FSTFeatureNode generatedAst = new FSTFeatureNode("");//root node
 		if(isValidFile(javaFile)){
-			System.out.println("Parsing: " + javaFile.getAbsolutePath());
+			if(!JFSTMerge.isGit)
+				System.out.println("Parsing: " + javaFile.getAbsolutePath());
 			Java18MergeParser parser = new Java18MergeParser(new OffsetCharStream(new InputStreamReader(new FileInputStream(javaFile),"UTF8")));
 			parser.CompilationUnit(false);
 			generatedAst.addChild(new FSTNonTerminal("Java-File", javaFile.getName()));

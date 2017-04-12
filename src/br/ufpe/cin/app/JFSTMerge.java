@@ -39,8 +39,9 @@ public class JFSTMerge {
 	//log of activities
 	private static final Logger LOGGER = LoggerFactory.make();
 
+
 	//flag used by git to detect conflicts
-	private static int conflictState = 0;
+  private static int conflictState = 0;
 
 	//command line options
 	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
@@ -155,12 +156,13 @@ public class JFSTMerge {
 	 */
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath){
 		FilesManager.validateFiles(left, base, right);		
-		System.out.println("MERGING FILES: \n" 
-				+ ((left != null)?left.getAbsolutePath() :"<empty left>") + "\n"
-				+ ((base != null)?base.getAbsolutePath() :"<empty base>") + "\n"
-				+ ((right!= null)?right.getAbsolutePath():"<empty right>")
-				);
-
+		if(!this.isGit){
+			System.out.println("MERGING FILES: \n" 
+					+ ((left != null)?left.getAbsolutePath() :"<empty left>") + "\n"
+					+ ((base != null)?base.getAbsolutePath() :"<empty base>") + "\n"
+					+ ((right!= null)?right.getAbsolutePath():"<empty right>")
+					);
+		}
 		MergeContext context = new MergeContext(left,base,right,outputFilePath);
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files
@@ -183,17 +185,17 @@ public class JFSTMerge {
 				conflictState = checkConflictState(context);
 			}
 		}
-
-		//printing the resulting merged code
-		try {
-			Prettyprinter.printOnScreenMergedCode(context);
-			Prettyprinter.generateMergedFile(context, outputFilePath);
-		} catch (PrintException pe) {
-			System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
-			LOGGER.log(Level.SEVERE,"",pe);
-			System.exit(-1);
+		if(!this.isGit){
+			//printing the resulting merged code
+			try {
+				Prettyprinter.printOnScreenMergedCode(context);
+				Prettyprinter.generateMergedFile(context, outputFilePath);
+			} catch (PrintException pe) {
+				System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+				LOGGER.log(Level.SEVERE,"",pe);
+				System.exit(-1);
+			}
 		}
-
 		//computing statistics
 		try{
 			Statistics.compute(context);
@@ -231,7 +233,7 @@ public class JFSTMerge {
 			commandLineOptions.usage();
 		}
 	}
-
+  
 	private int checkConflictState(MergeContext context){
 		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
 		if(conflictList.size() > 0) {
@@ -240,4 +242,5 @@ public class JFSTMerge {
 			return 0;
 		}
 	}
+
 }
