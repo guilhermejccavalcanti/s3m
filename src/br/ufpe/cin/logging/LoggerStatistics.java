@@ -7,12 +7,14 @@ import java.io.PrintWriter;
 import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-
 import javax.crypto.Cipher;
 import javax.crypto.NoSuchPaddingException;
 
 import br.ufpe.cin.crypto.CryptoUtils;
 import br.ufpe.cin.exceptions.CryptoException;
+import org.apache.commons.io.FileUtils;
+
+
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.PrintException;
 
@@ -24,6 +26,7 @@ public class LoggerStatistics {
 			//logging
 			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmm").format(Calendar.getInstance().getTime());
 			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			String logentry	 = timeStamp+","+msg+"\n";
 			logpath = logpath + "jfstmerge.statistics";
 			File statisticsLog = new File(logpath);
 			CryptoUtils.decrypt(statisticsLog, statisticsLog);
@@ -32,6 +35,8 @@ public class LoggerStatistics {
 			pw.append(timeStamp+","+msg+"\n");
 			pw.close();
 			CryptoUtils.encrypt(statisticsLog, statisticsLog);
+    	FileUtils.write(new File(logpath), logentry, true);
+
 		}catch(Exception e){
 			throw new PrintException(ExceptionUtils.getCauseMessage(e));
 		}

@@ -3,6 +3,7 @@ package br.ufpe.cin.printers;
 import java.io.File;
 import java.util.List;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.PrintException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.files.FilesTuple;
@@ -65,13 +66,13 @@ public final class Prettyprinter {
 			String semistructuredOutputFilePath 	= outputFilePath;
 			String semistructuredMergeOutputContent = context.semistructuredOutput;
 			boolean writeSucceed = FilesManager.writeContent(semistructuredOutputFilePath, semistructuredMergeOutputContent);
-			if(writeSucceed){
+			if(writeSucceed && !JFSTMerge.isGit){
 				String unstructuredOutputFilePath  		= outputFilePath +".merge"; 
 				String unstructuredMergeOutputContent 	= context.unstructuredOutput;
 				writeSucceed = FilesManager.writeContent(unstructuredOutputFilePath, unstructuredMergeOutputContent);
 			}
 			if(!writeSucceed){
-				throw new PrintException("Unable to generate merged output file!");
+				throw new PrintException("Unable to manage merged output file!");
 			}
 		}
 	}

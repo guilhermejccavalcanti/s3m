@@ -1,7 +1,10 @@
 package br.ufpe.cin.mergers.handlers;
 
+import java.util.List;
 import java.util.LinkedList;
+import java.util.stream.Collectors;
 
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.printers.Prettyprinter;
 import de.ovgu.cide.fstgen.ast.FSTNode;
@@ -14,11 +17,13 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  */
 final public class ConflictsHandler {
 
-	public static void handle(MergeContext context){
+	public static void handle(MergeContext context) throws TextualMergeException{
 		context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
+		
 		findAndDetectTypeAmbiguityErrors(context);
 		findAndDetectNewElementReferencingEditedOne(context);
 		findAndResolveRenamingOrDeletionConflicts(context);
+		findAndDetectInitializationBlocks(context);
 	}
 
 	private static void findAndDetectTypeAmbiguityErrors(MergeContext context) {
@@ -53,4 +58,20 @@ final public class ConflictsHandler {
 		//invoking the specific handler for renaming and deletion conflicts
 		RenamingOrDeletionConflictsHandler.handle(context);
 	}
+	
+	private static void findAndDetectInitializationBlocks(MergeContext context) throws TextualMergeException {
+		List<FSTNode> leftInitlBlocks = context.addedLeftNodes.stream()
+				.filter(p -> p.getType().equals("InitializerDecl"))
+				.collect(Collectors.toList());
+		List<FSTNode> rightInitlBlocks= context.addedRightNodes.stream()
+				.filter(p -> p.getType().equals("InitializerDecl"))
+				.collect(Collectors.toList());
+		List<FSTNode> baseInitlBlocks = context.deletedBaseNodes.stream()
+				.filter(p -> p.getType().equals("InitializerDecl"))
+				.collect(Collectors.toList());
+		
+		//invoking the specific handler for initialization blocks
+		InitializationBlocksHandler.handle(context, leftInitlBlocks, baseInitlBlocks, rightInitlBlocks);		
+	}
+
 }

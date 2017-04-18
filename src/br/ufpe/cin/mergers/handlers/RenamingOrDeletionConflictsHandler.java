@@ -3,7 +3,6 @@ package br.ufpe.cin.mergers.handlers;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import br.ufpe.cin.files.FilesManager;
@@ -33,7 +32,7 @@ public final class RenamingOrDeletionConflictsHandler {
 					for(FSTNode newNode : context.addedLeftNodes){ // a possible renamed node is seem as "new" node due to superimposition
 						if(isValidNode(newNode)){
 							String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
-							double similarity  	  		   = computeNodesContentSimilarity(baseContent, possibleRenamingContent);
+							double similarity  	  		   = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
 							if(similarity >= 0.7){ //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
 								Pair<Double,String> tp = Pair.of(similarity, possibleRenamingContent);
 								similarNodes.add(tp);
@@ -62,7 +61,7 @@ public final class RenamingOrDeletionConflictsHandler {
 					for(FSTNode newNode : context.addedRightNodes){ // a possible renamed node is seem as "new" node due to superimposition
 						if(isValidNode(newNode)){
 							String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
-							double similarity  	  		   = computeNodesContentSimilarity(baseContent, possibleRenamingContent);
+							double similarity  	  		   = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
 							if(similarity >= 0.7){ //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
 								Pair<Double,String> tp = Pair.of(similarity, possibleRenamingContent);
 								similarNodes.add(tp);
@@ -81,32 +80,6 @@ public final class RenamingOrDeletionConflictsHandler {
 				}
 			}
 		}
-	}
-
-	/**
-	 * Verifies if the content of two nodes matches based on the Levenshtein distance.
-	 * The Levenshtein distance between two strings is defined as the minimum number of edits needed to transform 
-	 * one string into the other, with the allowable edit operations being insertion, deletion, or substitution 
-	 * of a single character. 
-	 * @param previousNodeContent
-	 * @param newNodeContent
-	 * @return level of similarity up to 1.0
-	 */
-	private static double computeNodesContentSimilarity(String previousNodeContent,String newNodeContent) {
-		@SuppressWarnings("unused")
-		String longer = previousNodeContent, shorter = newNodeContent;
-		if (previousNodeContent.length() < newNodeContent.length()) { // longer should always have greater length
-			longer = newNodeContent; 
-			shorter= previousNodeContent;
-		}
-		int longerLength = longer.length();
-		if (longerLength == 0) {
-			return 1.0; /* both strings are zero length */ 
-		}
-
-		int levenshteinDistance = StringUtils.getLevenshteinDistance(previousNodeContent, newNodeContent);
-		return ((longerLength - levenshteinDistance)/(double) longerLength);
-
 	}
 
 	private static String getMostSimilarContent(List<Pair<Double, String>> similarNodes) {

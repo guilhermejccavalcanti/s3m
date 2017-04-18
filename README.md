@@ -16,9 +16,9 @@ This project uses Gradle to manage all dependencies and versioning.
 
 Installation
 -------------
-Execute the jar from the /installer folder.
+Double click on the jar from the /installer folder.
 After installed, the tool is automatically integrated with git, with no need for futher configurations.
-That is, every time you call the "git merge" command, the tool will be executed.
+It means that every time you call the "git merge" command, the tool will be executed.
 You can also use the tool standalone as described bellow.
 
 Usage

@@ -80,8 +80,7 @@ public final class TypeAmbiguityErrorHandler {
 		String right=(context.getRight()!=null)?FilesManager.readFileContent(context.getRight()):"";
 		if(rightImportedMember.equals("*;")){
 			GoogleTextDiffMatchPatch differ = new GoogleTextDiffMatchPatch();
-			List<Diff> differences;
-			differences = (!base.equals(""))?differ.diffMainAtLineLevel(base,right):differ.diffMainAtLineLevel(left,right);
+			List<Diff> differences = (!base.equals(""))?differ.diffMainAtLineLevel(base,right):differ.diffMainAtLineLevel(left,right);
 			List<String> rightContributions = differ.diffText2Insertions(differences);
 			String membername = leftImportedMember.substring(0,leftImportedMember.length()-1);
 			for(String ctrb : rightContributions){
@@ -93,8 +92,7 @@ public final class TypeAmbiguityErrorHandler {
 			}
 		} else {
 			GoogleTextDiffMatchPatch differ = new GoogleTextDiffMatchPatch();
-			List<Diff> differences;
-			differences = (!base.equals(""))?differ.diffMainAtLineLevel(base,left):differ.diffMainAtLineLevel(right,left);
+			List<Diff> differences = (!base.equals(""))?differ.diffMainAtLineLevel(base,left):differ.diffMainAtLineLevel(right,left);
 			List<String> leftContributions = differ.diffText2Insertions(differences);
 			String membername = rightImportedMember.substring(0,rightImportedMember.length()-1);
 			for(String ctrb : leftContributions){
@@ -105,7 +103,6 @@ public final class TypeAmbiguityErrorHandler {
 		}
 		return false;
 	}
-
 
 	/**
 	 * Give two import statements, verifies if there is a compilation type ambiguity error.

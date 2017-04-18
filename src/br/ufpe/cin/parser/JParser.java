@@ -33,6 +33,7 @@ public class JParser {
 	 * @throws FileNotFoundException
 	 * @throws UnsupportedEncodingException
 	 */
+
 	public FSTNode parse(File javaFile)
 			throws ParseException, UnsupportedEncodingException, FileNotFoundException, TokenMgrError {
 		FSTFeatureNode generatedAst = new FSTFeatureNode("");// root node
@@ -45,7 +46,6 @@ public class JParser {
 			generatedAst.addChild(new FSTNonTerminal("Java-File", javaFile.getName()));
 			generatedAst.addChild(parser.getRoot());
 		}
-
 		return generatedAst;
 	}
 
@@ -58,6 +58,7 @@ public class JParser {
 	 * @throws FileNotFoundException
 	 * @throws ParseException
 	 */
+
 	private boolean isValidFile(File file) throws FileNotFoundException, ParseException {
 		if (file == null) {
 			throw new FileNotFoundException("There is no file specified in the command");
