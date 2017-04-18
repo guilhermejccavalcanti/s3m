@@ -2,8 +2,11 @@ package br.ufpe.cin.app;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
@@ -27,6 +30,9 @@ import br.ufpe.cin.statistics.Statistics;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import javax.crypto.Cipher;
+import javax.crypto.KeyGenerator;
+import javax.crypto.SecretKey;
 
 /**
  * Main class, responsible for performing <i>semistructured</i> merge in java files.
@@ -196,17 +202,18 @@ public class JFSTMerge {
 				conflictState = checkConflictState(context);
 			}
 		}
-		if(!this.isGit){
-			//printing the resulting merged code
-			try {
+
+		//printing the resulting merged code
+		try {
+			//if(!this.isGit)
 				Prettyprinter.printOnScreenMergedCode(context);
-				Prettyprinter.generateMergedFile(context, outputFilePath);
-			} catch (PrintException pe) {
-				System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
-				LOGGER.log(Level.SEVERE,"",pe);
-				System.exit(-1);
-			}
+			Prettyprinter.generateMergedFile(context, outputFilePath);
+		} catch (PrintException pe) {
+			System.err.println("An error occurred. See "+LoggerFactory.logfile+" file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			LOGGER.log(Level.SEVERE,"",pe);
+			System.exit(-1);
 		}
+
 		//computing statistics
 		try{
 			Statistics.compute(context);
@@ -221,9 +228,11 @@ public class JFSTMerge {
 		return context;
 	}
 
+
 	public static void main(String[] args) {
 		JFSTMerge merger = new JFSTMerge();
 		merger.run(args);
+		//createStringHash(new File(LoggerFactory.logfile));
 		System.exit(conflictState);
 	}
 
