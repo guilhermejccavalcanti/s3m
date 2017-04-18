@@ -64,13 +64,15 @@ public class LoggerStatistics {
 	/**
 	 * When log's size reaches 20 megabytes,a new empty log is started, and the previous one is backup.
 	 * @param logpath
+	 * @throws CryptoException 
 	 */
-	private static void manageLogBuffer(String logpath) {
+	private static void manageLogBuffer(String logpath) throws CryptoException {
 		File log = new File(logpath);
 		if(log.exists()){
 			long logSizeMB = log.length() / (1024 * 1024);
 			if(logSizeMB > 20){
 				File newLog = new File(logpath+System.currentTimeMillis());
+				CryptoUtils.encrypt(newLog, newLog);
 				log.renameTo(newLog);
 			}
 		}
