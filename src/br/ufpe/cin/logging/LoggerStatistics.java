@@ -34,8 +34,8 @@ public class LoggerStatistics {
 			PrintWriter pw = new PrintWriter(new FileOutputStream(statisticsLog, true), true); 
 			pw.append(timeStamp+","+msg+"\n");
 			pw.close();
+			FileUtils.write(new File(logpath), logentry, true);
 			CryptoUtils.encrypt(statisticsLog, statisticsLog);
-    	FileUtils.write(new File(logpath), logentry, true);
 
 		}catch(Exception e){
 			throw new PrintException(ExceptionUtils.getCauseMessage(e));
@@ -72,7 +72,6 @@ public class LoggerStatistics {
 			long logSizeMB = log.length() / (1024 * 1024);
 			if(logSizeMB > 20){
 				File newLog = new File(logpath+System.currentTimeMillis());
-				CryptoUtils.encrypt(newLog, newLog);
 				log.renameTo(newLog);
 			}
 		}
