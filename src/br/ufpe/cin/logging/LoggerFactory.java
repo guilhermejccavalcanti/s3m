@@ -14,7 +14,7 @@ import java.util.logging.XMLFormatter;
 public class LoggerFactory {
 	
 	public static String logfile = "";
-
+	
 	/**
 	 * Creates and configures a logger.
 	 * @return configured Logger
@@ -33,7 +33,6 @@ public class LoggerFactory {
 			new File(logpath).mkdirs(); //assuring that the directories exists
 			logpath = logpath + "jfstmerge.log";
 			logfile = logpath;
-
 			manageLogBuffer(logpath);
 
 			FileHandler fileHandler = new FileHandler(logpath,true);
@@ -70,4 +69,5 @@ public class LoggerFactory {
 			}
 		}
 	}
+	
 }
