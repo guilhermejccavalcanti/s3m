@@ -7,6 +7,7 @@ import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
 
 import br.ufpe.cin.app.JFSTMerge;
+import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.generated.Java18MergeParser;
 import cide.gparser.OffsetCharStream;
 import cide.gparser.ParseException;
@@ -32,7 +33,7 @@ public class JParser {
 	 * @throws FileNotFoundException 
 	 * @throws UnsupportedEncodingException 
 	 */
-	public FSTNode parse(File javaFile) throws ParseException, UnsupportedEncodingException, FileNotFoundException, TokenMgrError {
+	public FSTNode parse(File javaFile) throws FileNotFoundException, UnsupportedEncodingException, ParseException, TokenMgrError  {
 		FSTFeatureNode generatedAst = new FSTFeatureNode("");//root node
 		if(isValidFile(javaFile)){
 			if(!JFSTMerge.isGit){
@@ -55,7 +56,9 @@ public class JParser {
 	 */
 	private boolean isValidFile(File file) throws FileNotFoundException, ParseException 
 	{
-		if(file != null && (isJavaFile(file) || JFSTMerge.isGit)){
+		if(FilesManager.readFileContent(file).isEmpty()){
+			throw new FileNotFoundException();
+		} else if(file != null && (isJavaFile(file) || JFSTMerge.isGit)){
 			return true;
 		} else if(file != null && !isJavaFile(file)){
 			throw new ParseException("The file " + file.getName() + " is not a valid .java file.");
@@ -63,6 +66,7 @@ public class JParser {
 			return false;
 		}
 	}
+	
 
 	/**
 	 * Checks if a given file is a .java file.

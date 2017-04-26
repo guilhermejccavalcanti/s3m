@@ -1,20 +1,14 @@
 package br.ufpe.cin.logging;
 
 import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.PrintWriter;
-import java.security.NoSuchAlgorithmException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
+
+import org.apache.commons.io.FileUtils;
 
 import br.ufpe.cin.crypto.CryptoUtils;
 import br.ufpe.cin.exceptions.CryptoException;
-import org.apache.commons.io.FileUtils;
-
-
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.PrintException;
 
@@ -23,19 +17,21 @@ public class LoggerStatistics {
 	public static void log(String msg) throws PrintException{
 		try{
 			initializeLogger();
+			
 			//logging
 			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmm").format(Calendar.getInstance().getTime());
 			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
 			String logentry	 = timeStamp+","+msg+"\n";
 			logpath = logpath + "jfstmerge.statistics";
 			File statisticsLog = new File(logpath);
-			CryptoUtils.decrypt(statisticsLog, statisticsLog);
+		
+			//UNCOMMENT ONLY WITH THE CRYPTO KEY
+			//CryptoUtils.decrypt(statisticsLog, statisticsLog);
 			
-			PrintWriter pw = new PrintWriter(new FileOutputStream(statisticsLog, true), true); 
-			pw.append(timeStamp+","+msg+"\n");
-			pw.close();
-			FileUtils.write(new File(logpath), logentry, true);
-			CryptoUtils.encrypt(statisticsLog, statisticsLog);
+			FileUtils.write(statisticsLog, logentry, true);
+			
+			//UNCOMMENT ONLY WITH THE CRYPTO KEY
+			//CryptoUtils.encrypt(statisticsLog, statisticsLog);
 
 		}catch(Exception e){
 			throw new PrintException(ExceptionUtils.getCauseMessage(e));
@@ -46,18 +42,18 @@ public class LoggerStatistics {
 		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
 		new File(logpath).mkdirs(); //assuring that the directories exists	
 		logpath = logpath + "jfstmerge.statistics";
+		
 		manageLogBuffer(logpath);
 
-		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,unmergeconfs,unmergeloc";
+		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc\n";
 
 		//reading the log file to see if it is not empty neither contains the header
 		if(!new File(logpath).exists()){
 			File statisticsLog = new File(logpath);
-			PrintWriter pw = new PrintWriter(new FileOutputStream(statisticsLog, true), true); 
-			pw.append(header+"\n");
-			pw.close();
-			CryptoUtils.encrypt(statisticsLog, statisticsLog);
-			
+			FileUtils.write(statisticsLog, header, true);
+
+			//UNCOMMENT ONLY WITH THE CRYPTO KEY
+			//CryptoUtils.encrypt(statisticsLog, statisticsLog);
 		}
 	}
 

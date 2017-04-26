@@ -575,5 +575,21 @@ public final class FilesManager {
 		int levenshteinDistance = StringUtils.getLevenshteinDistance(first, second);
 		return ((longerLength - levenshteinDistance)/(double) longerLength);
 	}
+	
+	@SuppressWarnings("unused")
+	private static String undoReplaceConflictMarkers(String indentedCode) {
+		// dummy code for identation purposes
+		indentedCode=indentedCode.replaceAll("int mmmm;", "<<<<<<< MINE");
+		indentedCode=indentedCode.replaceAll("int bbbb;", "=======");
+		indentedCode=indentedCode.replaceAll("int yyyy;", ">>>>>>> YOURS");
+		return indentedCode;
+	}
 
+	@SuppressWarnings("unused")
+	private static String replaceConflictMarkers(String sourceCode) {
+		sourceCode = sourceCode.replaceAll("<<<<<<< MINE", "int mmmm;");
+		sourceCode = sourceCode.replaceAll("=======", "int bbbb;");
+		sourceCode = sourceCode.replaceAll(">>>>>>> YOURS", "int yyyy;");
+		return sourceCode;
+	}
 }
