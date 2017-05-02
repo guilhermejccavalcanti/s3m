@@ -11,38 +11,43 @@ import br.ufpe.cin.crypto.CryptoUtils;
 import br.ufpe.cin.exceptions.CryptoException;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.PrintException;
+import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.util.MergeContext;
 
 public class LoggerStatistics {
-	
-	public static void log(String msg) throws PrintException{
+
+	public static void log(String msg, MergeContext context) throws PrintException{
 		try{
 			initializeLogger();
-			
+
 			//logging
-			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmm").format(Calendar.getInstance().getTime());
+			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
 			String logentry	 = timeStamp+","+msg+"\n";
 			logpath = logpath + "jfstmerge.statistics";
 			File statisticsLog = new File(logpath);
-		
+
 			//UNCOMMENT ONLY WITH THE CRYPTO KEY
 			//CryptoUtils.decrypt(statisticsLog, statisticsLog);
-			
+
 			FileUtils.write(statisticsLog, logentry, true);
-			
+
 			//UNCOMMENT ONLY WITH THE CRYPTO KEY
 			//CryptoUtils.encrypt(statisticsLog, statisticsLog);
+			
+			//logging merged files for further analysis
+			logFiles(timeStamp,context);
 
 		}catch(Exception e){
 			throw new PrintException(ExceptionUtils.getCauseMessage(e));
 		}
 	}
-	
+
 	private static void initializeLogger() throws IOException, CryptoException {
 		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
 		new File(logpath).mkdirs(); //assuring that the directories exists	
 		logpath = logpath + "jfstmerge.statistics";
-		
+
 		manageLogBuffer(logpath);
 
 		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc\n";
@@ -58,7 +63,7 @@ public class LoggerStatistics {
 	}
 
 	/**
-	 * When log's size reaches 20 megabytes,a new empty log is started, and the previous one is backup.
+	 * When log's size reaches 10 megabytes,a new empty log is started, and the previous one is backup.
 	 * @param logpath
 	 * @throws CryptoException 
 	 */
@@ -66,10 +71,57 @@ public class LoggerStatistics {
 		File log = new File(logpath);
 		if(log.exists()){
 			long logSizeMB = log.length() / (1024 * 1024);
-			if(logSizeMB > 20){
+			if(logSizeMB > 10){
 				File newLog = new File(logpath+System.currentTimeMillis());
 				log.renameTo(newLog);
 			}
 		}
+	}
+
+	private static void logFiles(String timeStamp, MergeContext context) throws IOException, CryptoException {
+		//initialization
+		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+		new File(logpath).mkdirs(); //assuring that the directories exists	
+		logpath = logpath + "jfstmerge.files";
+		manageLogBuffer(logpath);
+		File logfiles = new File(logpath);
+		
+		if(!logfiles.exists()){
+			logfiles.createNewFile();
+			
+			//UNCOMMENT ONLY WITH THE CRYPTO KEY
+			//CryptoUtils.encrypt(logfiles, logfiles);
+		}
+
+		//UNCOMMENT ONLY WITH THE CRYPTO KEY
+		//CryptoUtils.decrypt(logfiles, logfiles);
+		
+		//writing source code content
+		//left
+		String leftcontent = FilesManager.readFileContent(context.getLeft());
+		if(!leftcontent.isEmpty()){
+			FileUtils.write(logfiles, timeStamp+","+context.getLeft().getAbsolutePath()+"\n", true);
+			FileUtils.write(logfiles, leftcontent + "\n", true);
+			FileUtils.write(logfiles, "!@#$%\n", true); //separator
+		}
+
+		//base
+		String basecontent = FilesManager.readFileContent(context.getBase());
+		if(!basecontent.isEmpty()){
+			FileUtils.write(logfiles, timeStamp+","+context.getBase().getAbsolutePath()+"\n", true);
+			FileUtils.write(logfiles, basecontent + "\n", true);
+			FileUtils.write(logfiles, "!@#$%\n", true); 
+		}
+
+		//right
+		String rightcontent = FilesManager.readFileContent(context.getRight());
+		if(!rightcontent.isEmpty()){
+			FileUtils.write(logfiles, timeStamp+","+context.getRight().getAbsolutePath()+"\n", true);
+			FileUtils.write(logfiles, rightcontent + "\n", true);
+			FileUtils.write(logfiles, "!@#$%\n", true); 
+		}
+		
+		//UNCOMMENT ONLY WITH THE CRYPTO KEY
+		//CryptoUtils.encrypt(logfiles, logfiles);
 	}
 }

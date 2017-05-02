@@ -46,8 +46,7 @@ public final class Statistics {
 				+ "," + context.initializationBlocksConflicts
 				+ "," + unstructuredNumberOfConflicts 
 				+ "," + unstructuredMergeConflictsLOC;
-		LoggerStatistics.log(loggermsg);
-
+		LoggerStatistics.log(loggermsg,context);
 	}
 	
 	private static int computeNumberOfConflicts(List<MergeConflict> listofconflicts) {
