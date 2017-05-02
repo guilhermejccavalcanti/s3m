@@ -71,7 +71,7 @@ public class LoggerStatistics {
 		File log = new File(logpath);
 		if(log.exists()){
 			long logSizeMB = log.length() / (1024 * 1024);
-			if(logSizeMB > 10){
+			if(logSizeMB >= 1){
 				File newLog = new File(logpath+System.currentTimeMillis());
 				log.renameTo(newLog);
 			}
