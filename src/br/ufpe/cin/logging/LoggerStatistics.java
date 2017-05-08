@@ -7,7 +7,6 @@ import java.util.Calendar;
 
 import org.apache.commons.io.FileUtils;
 
-import br.ufpe.cin.crypto.CryptoUtils;
 import br.ufpe.cin.exceptions.CryptoException;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.PrintException;
@@ -34,7 +33,7 @@ public class LoggerStatistics {
 
 			//UNCOMMENT ONLY WITH THE CRYPTO KEY
 			//CryptoUtils.encrypt(statisticsLog, statisticsLog);
-			
+
 			//logging merged files for further analysis
 			logFiles(timeStamp,context);
 
@@ -50,7 +49,7 @@ public class LoggerStatistics {
 
 		manageLogBuffer(logpath);
 
-		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc\n";
+		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime\n";
 
 		//reading the log file to see if it is not empty neither contains the header
 		if(!new File(logpath).exists()){
@@ -71,7 +70,7 @@ public class LoggerStatistics {
 		File log = new File(logpath);
 		if(log.exists()){
 			long logSizeMB = log.length() / (1024 * 1024);
-			if(logSizeMB >= 1){
+			if(logSizeMB >= 10){
 				File newLog = new File(logpath+System.currentTimeMillis());
 				log.renameTo(newLog);
 			}
@@ -85,17 +84,17 @@ public class LoggerStatistics {
 		logpath = logpath + "jfstmerge.files";
 		manageLogBuffer(logpath);
 		File logfiles = new File(logpath);
-		
+
 		if(!logfiles.exists()){
 			logfiles.createNewFile();
-			
+
 			//UNCOMMENT ONLY WITH THE CRYPTO KEY
 			//CryptoUtils.encrypt(logfiles, logfiles);
 		}
 
 		//UNCOMMENT ONLY WITH THE CRYPTO KEY
 		//CryptoUtils.decrypt(logfiles, logfiles);
-		
+
 		//writing source code content
 		//left
 		String leftcontent = FilesManager.readFileContent(context.getLeft());
@@ -120,8 +119,23 @@ public class LoggerStatistics {
 			FileUtils.write(logfiles, rightcontent + "\n", true);
 			FileUtils.write(logfiles, "!@#$%\n", true); 
 		}
-		
+
 		//UNCOMMENT ONLY WITH THE CRYPTO KEY
 		//CryptoUtils.encrypt(logfiles, logfiles);
+	}
+
+	public static void logScenario(String loggermsg) throws IOException {
+		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+		new File(logpath).mkdirs(); //assuring that the directories exists	
+		logpath = logpath + "jfstmerge.scenarios";
+
+		//reading the log file to see if it is not empty neither contains the header
+		String header = "revision,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime\n";
+		File statisticsLog = new File(logpath);
+		if(!statisticsLog.exists()){
+			FileUtils.write(statisticsLog, header, true);
+		}
+		
+		FileUtils.write(statisticsLog, loggermsg, true);
 	}
 }

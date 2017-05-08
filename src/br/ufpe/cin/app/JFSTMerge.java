@@ -85,7 +85,10 @@ public class JFSTMerge {
 
 				//using the name of the revisions directories as revisions identifiers
 				scenario = new MergeScenario(revisionsPath, listRevisions.get(0), listRevisions.get(1), listRevisions.get(2), mergedTuples);
-
+				
+				//statistics
+				Statistics.compute(scenario);
+				
 				//printing the resulting merged codes
 				Prettyprinter.generateMergedScenario(scenario);
 			}
@@ -149,10 +152,15 @@ public class JFSTMerge {
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
+			long t0 = System.currentTimeMillis();
 			try {
 				//running unstructured merge first is necessary due to future steps.
 				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
+				context.unstructuredMergeTime = System.currentTimeMillis() - t0;
+				
 				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);
+				context.semistructuredMergeTime = System.currentTimeMillis() - t0;
+				
 				conflictState = checkConflictState(context);
 			} catch (TextualMergeException tme) { //textual merge must work even when semistructured not, so this exception precedes others
 				System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
@@ -161,6 +169,8 @@ public class JFSTMerge {
 			} catch (SemistructuredMergeException sme) {
 				LOGGER.log(Level.WARNING, "", sme);
 				context.semistructuredOutput = context.unstructuredOutput;
+				context.semistructuredMergeTime = System.currentTimeMillis() - t0;
+
 				conflictState = checkConflictState(context);
 			}
 		}
@@ -190,9 +200,11 @@ public class JFSTMerge {
 	}
 
 	public static void main(String[] args) {
-		JFSTMerge merger = new JFSTMerge();
+/*		JFSTMerge merger = new JFSTMerge();
 		merger.run(args);
-		System.exit(conflictState);
+		System.exit(conflictState);*/
+		
+		new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme Cavalcanti\\Desktop\\Recentes\\rev_0f1fc3c_c5645e1\\rev_0f1fc3c-c5645e1.revisions");
 	}
 
 
