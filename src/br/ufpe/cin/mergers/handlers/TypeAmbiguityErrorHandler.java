@@ -11,6 +11,7 @@ import br.ufpe.cin.files.GoogleTextDiffMatchPatch.Diff;
 import br.ufpe.cin.mergers.util.JavaCompiler;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.Source;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
@@ -34,17 +35,19 @@ public final class TypeAmbiguityErrorHandler {
 		if(!leftImportStatementsNodes.isEmpty() && !rightImportStatementsNodes.isEmpty()){
 			List<MergeConflict> unstructuredMergeConflicts = FilesManager.extractMergeConflicts(context.unstructuredOutput);
 			JavaCompiler compiler = new JavaCompiler();
-			compiler.compile(context);	//compiling source code
+			compiler.compile(context, Source.SEMISTRUCTURED);	//compiling source code
 			while(!leftImportStatementsNodes.isEmpty()){
 				FSTNode leftImportStatementNode = ((FSTTerminal)leftImportStatementsNodes.poll());
 				String leftImportStatement 		= ((FSTTerminal) leftImportStatementNode).getBody();
 				for(FSTNode rightImportStatementNode : rightImportStatementsNodes){
+					
 					//getting the imported member
 					String rightImportStatement = ((FSTTerminal)rightImportStatementNode).getBody(); 
 					String[] aux = rightImportStatement.split("\\.");
 					String rightImportedMember = aux[aux.length-1];
 					aux = leftImportStatement.split("\\.");
 					String leftImportedMember  = aux[aux.length-1];
+					
 					//possible compilation type ambiguity error: p.* vs q.* or p.Z vs. q.Z	
 					if( (rightImportedMember.equals("*;") && leftImportedMember.equals("*;")) ||
 							(rightImportedMember.equals(leftImportedMember))){
@@ -55,6 +58,7 @@ public final class TypeAmbiguityErrorHandler {
 						generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
 					}*/
 					}
+					
 					//possible behaviorial type ambiguity error: p.Z vs. q.*
 					else if(rightImportedMember.equals("*;") || leftImportedMember.equals("*;")) {	
 						if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){

@@ -24,6 +24,7 @@ final public class ConflictsHandler {
 		findAndDetectNewElementReferencingEditedOne(context);
 		findAndResolveRenamingOrDeletionConflicts(context);
 		findAndDetectInitializationBlocks(context);
+		findAndAccountDuplicatedDeclarationErrors(context);
 	}
 
 	private static void findAndDetectTypeAmbiguityErrors(MergeContext context) {
@@ -73,5 +74,9 @@ final public class ConflictsHandler {
 		//invoking the specific handler for initialization blocks
 		InitializationBlocksHandler.handle(context, leftInitlBlocks, baseInitlBlocks, rightInitlBlocks);		
 	}
-
+	
+	private static void findAndAccountDuplicatedDeclarationErrors(MergeContext context) {
+		//invoking the specific handler for duplicated declaration errors
+		DuplicatedDeclarationHandler.handle(context);
+	}
 }

@@ -11,6 +11,8 @@ public class MergeConflict {
 	public String base;
 	public String right;
 	public String body;
+	public int startLOC;
+	public int endLOC;
 
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent) {
 		this.left  = leftConflictingContent;
@@ -22,6 +24,18 @@ public class MergeConflict {
 				    ">>>>>>> YOURS";
 	}
 	
+	public MergeConflict(String leftConflictingContent,	String rightConflictingContent, int startLOC, int endLOC) {
+		this.left  = leftConflictingContent;
+		this.right = rightConflictingContent;
+		this.body  ="<<<<<<< MINE\n"+
+				    leftConflictingContent+
+				    "=======\n"+
+				    rightConflictingContent+
+				    ">>>>>>> YOURS";
+		this.startLOC = startLOC;
+		this.endLOC = endLOC;
+	}
+	
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent, String message) {
 		this.left  = leftConflictingContent;
 		this.right = rightConflictingContent;
@@ -31,7 +45,6 @@ public class MergeConflict {
 				    rightConflictingContent+
 				    ">>>>>>> YOURS";
 	}
-	
 	
 	public boolean contains(String leftPattern, String rightPattern){
 		if(leftPattern.isEmpty() || rightPattern.isEmpty()){

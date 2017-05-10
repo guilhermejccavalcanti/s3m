@@ -159,7 +159,7 @@ public class JFSTMerge {
 				context.unstructuredMergeTime = System.currentTimeMillis() - t0;
 				
 				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);
-				context.semistructuredMergeTime = System.currentTimeMillis() - t0;
+				context.semistructuredMergeTime = context.semistructuredMergeTime + (System.currentTimeMillis() - t0);
 				
 				conflictState = checkConflictState(context);
 			} catch (TextualMergeException tme) { //textual merge must work even when semistructured not, so this exception precedes others
@@ -204,7 +204,7 @@ public class JFSTMerge {
 		merger.run(args);
 		System.exit(conflictState);*/
 		
-		new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme Cavalcanti\\Desktop\\Recentes\\rev_0f1fc3c_c5645e1\\rev_0f1fc3c-c5645e1.revisions");
+		new JFSTMerge().mergeRevisions("C:\\Users\\Guilherme Cavalcanti\\Desktop\\Recentes\\dpprevision\\rev.revisions");
 	}
 
 

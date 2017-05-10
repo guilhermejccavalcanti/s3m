@@ -46,6 +46,8 @@ public class MergeContext {
 	public int unstructuredNumberOfConflicts   = 0;
 	public int semistructuredMergeConflictsLOC = 0;
 	public int unstructuredMergeConflictsLOC   = 0;
+	public int duplicatedDeclarationErrors	   = 0;
+	
 	
 	public MergeContext(){
 	}
