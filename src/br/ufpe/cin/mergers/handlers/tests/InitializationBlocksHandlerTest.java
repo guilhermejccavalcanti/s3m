@@ -25,20 +25,20 @@ public class InitializationBlocksHandlerTest {
 		});
 		System.setOut(hideStream);
 	}
-	
-	@Test
-	public void testInitializationBlocksInThreeVersions() {
-		MergeContext ctx = 	new JFSTMerge().mergeFiles(
-				new File("testfiles/initlblocksthreeversions/left/Test.java"), 
-				new File("testfiles/initlblocksthreeversions/base/Test.java"), 
-				new File("testfiles/initlblocksthreeversions/right/Test.java"),
-				null);
-		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
-		
-		assertTrue(mergeResult.contains("<<<<<<<MINE_name=\"Left\";=======_name=\"Right\";>>>>>>>YOURS"));
-		assertTrue(ctx.initializationBlocksConflicts == 1);
-	}
-	
+//	
+//	@Test
+//	public void testInitializationBlocksInThreeVersions() {
+//		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+//				new File("testfiles/initlblocksthreeversions/left/Test.java"), 
+//				new File("testfiles/initlblocksthreeversions/base/Test.java"), 
+//				new File("testfiles/initlblocksthreeversions/right/Test.java"),
+//				null);
+//		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+//		
+//		assertTrue(mergeResult.contains("<<<<<<<MINE_name=\"Left\";=======_name=\"Right\";>>>>>>>YOURS"));
+//		assertTrue(ctx.initializationBlocksConflicts == 1);
+//	}
+//	
 	@Test
 	public void testInitializationBlocksNoBase() {
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(

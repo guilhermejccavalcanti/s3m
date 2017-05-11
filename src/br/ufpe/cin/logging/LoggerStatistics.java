@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
@@ -11,11 +12,13 @@ import br.ufpe.cin.exceptions.CryptoException;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.PrintException;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.Source;
 
 public class LoggerStatistics {
 
-	public static void log(String msg, MergeContext context) throws PrintException{
+	public static void logContext(String msg, MergeContext context) throws PrintException{
 		try{
 			initializeLogger();
 
@@ -42,37 +45,43 @@ public class LoggerStatistics {
 		}
 	}
 
-	private static void initializeLogger() throws IOException, CryptoException {
+	public static void logScenario(String loggermsg) throws IOException {
 		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
 		new File(logpath).mkdirs(); //assuring that the directories exists	
-		logpath = logpath + "jfstmerge.statistics";
-
-		manageLogBuffer(logpath);
-
-		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime\n";
+		logpath = logpath + "jfstmerge.statistics.scenarios";
 
 		//reading the log file to see if it is not empty neither contains the header
-		if(!new File(logpath).exists()){
-			File statisticsLog = new File(logpath);
+		String header = "revision,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,duplicateddeclarationerrors,equalconfs\n";
+		File statisticsLog = new File(logpath);
+		if(!statisticsLog.exists()){
 			FileUtils.write(statisticsLog, header, true);
-
-			//UNCOMMENT ONLY WITH THE CRYPTO KEY
-			//CryptoUtils.encrypt(statisticsLog, statisticsLog);
 		}
+
+		FileUtils.write(statisticsLog, loggermsg, true);
 	}
 
-	/**
-	 * When log's size reaches 10 megabytes,a new empty log is started, and the previous one is backup.
-	 * @param logpath
-	 * @throws CryptoException 
-	 */
-	private static void manageLogBuffer(String logpath) throws CryptoException {
-		File log = new File(logpath);
-		if(log.exists()){
-			long logSizeMB = log.length() / (1024 * 1024);
-			if(logSizeMB >= 10){
-				File newLog = new File(logpath+System.currentTimeMillis());
-				log.renameTo(newLog);
+	public static void logConflicts(List<MergeConflict> conflicts, Source source) throws IOException {
+		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+		new File(logpath).mkdirs(); //assuring that the directories exists	
+		for(MergeConflict mc : conflicts){
+			String origin =  ((mc.leftOriginFile != null) ? mc.leftOriginFile.getAbsolutePath() : "<empty left>") 
+					+ ";" + ((mc.baseOriginFile != null) ? mc.baseOriginFile.getAbsolutePath() : "<empty base>") 
+					+ ";" + ((mc.rightOriginFile != null) ? mc.rightOriginFile.getAbsolutePath() : "<empty right>");
+			if(source == null){
+				File f = new File(logpath + "conflicts.equals");
+				FileUtils.write(f,(origin+'\n'+mc.body+'\n'),true);
+				break;
+			}else {
+				switch (source) {
+				case UNSTRUCTURED:
+					File f = new File(logpath + "conflicts.unstructured");
+					FileUtils.write(f,(origin+'\n'+mc.body+'\n'),true);
+					break;
+				case SEMISTRUCTURED:
+					f = new File(logpath + "conflicts.semistructured");
+					FileUtils.write(f,(origin+'\n'+mc.body+'\n'),true);
+					break;
+				}
 			}
 		}
 	}
@@ -124,18 +133,40 @@ public class LoggerStatistics {
 		//CryptoUtils.encrypt(logfiles, logfiles);
 	}
 
-	public static void logScenario(String loggermsg) throws IOException {
+
+	private static void initializeLogger() throws IOException, CryptoException {
 		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
 		new File(logpath).mkdirs(); //assuring that the directories exists	
-		logpath = logpath + "jfstmerge.scenarios";
+		logpath = logpath + "jfstmerge.statistics";
+
+		manageLogBuffer(logpath);
+
+		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,duplicateddeclarationerrors,equalconfs\n";
 
 		//reading the log file to see if it is not empty neither contains the header
-		String header = "revision,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime\n";
-		File statisticsLog = new File(logpath);
-		if(!statisticsLog.exists()){
+		if(!new File(logpath).exists()){
+			File statisticsLog = new File(logpath);
 			FileUtils.write(statisticsLog, header, true);
+
+			//UNCOMMENT ONLY WITH THE CRYPTO KEY
+			//CryptoUtils.encrypt(statisticsLog, statisticsLog);
 		}
-		
-		FileUtils.write(statisticsLog, loggermsg, true);
 	}
+
+	/**
+	 * When log's size reaches 10 megabytes,a new empty log is started, and the previous one is backup.
+	 * @param logpath
+	 * @throws CryptoException 
+	 */
+	private static void manageLogBuffer(String logpath) throws CryptoException {
+		File log = new File(logpath);
+		if(log.exists()){
+			long logSizeMB = log.length() / (1024 * 1024);
+			if(logSizeMB >= 10){
+				File newLog = new File(logpath+System.currentTimeMillis());
+				log.renameTo(newLog);
+			}
+		}
+	}
+
 }

@@ -22,7 +22,7 @@ public final class DuplicatedDeclarationHandler {
 	public static void handle(MergeContext context){
 		int duplicatedDeclarationErrors = 0;
 		
-		long t0 = System.currentTimeMillis();
+		long t0 = System.nanoTime();
 
 		//1. compile unstructured merge output
 		JavaCompiler compiler = new JavaCompiler();
@@ -44,7 +44,7 @@ public final class DuplicatedDeclarationHandler {
 		}
 		
 		//excluding handler execution time to not bias peformance evaluation as it is not required to original semistructured merge time
-		long tf = System.currentTimeMillis();
+		long tf = System.nanoTime();
 		long tt = tf-t0;
 		context.semistructuredMergeTime -= tt;
 

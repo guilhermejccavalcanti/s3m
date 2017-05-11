@@ -10,7 +10,7 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
 
 /**
  * Encapsulates pertinent information of the merging process. A context
- * is necessary to handle specific conflicts that simple
+ * is also necessary to handle specific conflicts that simple
  * superimposition of trees is not able to address. 
  * @author Guilherme
  */
@@ -47,6 +47,7 @@ public class MergeContext {
 	public int semistructuredMergeConflictsLOC = 0;
 	public int unstructuredMergeConflictsLOC   = 0;
 	public int duplicatedDeclarationErrors	   = 0;
+	public int equalConflicts = 0;
 	
 	
 	public MergeContext(){
