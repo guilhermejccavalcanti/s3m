@@ -56,7 +56,10 @@ public final class SemistructuredMerge {
 			ConflictsHandler.handle(context);
 
 		} catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex) {
-			throw new SemistructuredMergeException(ExceptionUtils.getCauseMessage(ex), context);
+			String message = ExceptionUtils.getCauseMessage(ex);
+			if(ex instanceof FileNotFoundException) //FileNotFoundException does not support custom messages
+				message = "The merged file was deleted in one version.";
+			throw new SemistructuredMergeException(message, context);
 		}
 
 		// during the parsing process, code indentation is typically lost, so we reindent the code
@@ -130,8 +133,8 @@ public final class SemistructuredMerge {
 							childA.index = nodeA.index;
 						if (childB.index == -1)
 							childB.index = nodeB.index;
-						nonterminalComposed.addChild(
-								superimpose(childA, childB, nonterminalComposed, context, isProcessingBaseTree));
+
+						nonterminalComposed.addChild(superimpose(childA, childB, nonterminalComposed, context, isProcessingBaseTree));
 					}
 				}
 				for (FSTNode childA : nonterminalA.getChildren()) { 	// nodes from left, leftBase
@@ -168,15 +171,13 @@ public final class SemistructuredMerge {
 				}
 				return nonterminalComposed;
 
-			} else if (nodeA instanceof FSTTerminal && nodeB instanceof FSTTerminal
-					&& parent instanceof FSTNonTerminal) {
+			} else if (nodeA instanceof FSTTerminal && nodeB instanceof FSTTerminal	&& parent instanceof FSTNonTerminal) {
 				FSTTerminal terminalA = (FSTTerminal) nodeA;
 				FSTTerminal terminalB = (FSTTerminal) nodeB;
 				FSTTerminal terminalComposed = (FSTTerminal) composed;
 
 				if (!terminalA.getMergingMechanism().equals("Default")) {
-					terminalComposed.setBody(markContributions(terminalA.getBody(), terminalB.getBody(),
-							isProcessingBaseTree, terminalA.index, terminalB.index));
+					terminalComposed.setBody(markContributions(terminalA.getBody(), terminalB.getBody(),isProcessingBaseTree, terminalA.index, terminalB.index));
 				}
 				return terminalComposed;
 			}
@@ -196,15 +197,12 @@ public final class SemistructuredMerge {
 			return bodyA + " " + bodyB;
 		} else {
 			if (firstPass) {
-				return SEMANTIC_MERGE_MARKER + " " + bodyA + " " + MERGE_SEPARATOR + " " + bodyB + " "
-						+ MERGE_SEPARATOR;
+				return SEMANTIC_MERGE_MARKER + " " + bodyA + " " + MERGE_SEPARATOR + " " + bodyB + " "	+ MERGE_SEPARATOR;
 			} else {
 				if (indexA == 0) {
-					return SEMANTIC_MERGE_MARKER + " " + bodyA + " " + MERGE_SEPARATOR + " " + MERGE_SEPARATOR + " "
-							+ bodyB;
+					return SEMANTIC_MERGE_MARKER + " " + bodyA + " " + MERGE_SEPARATOR + " " + MERGE_SEPARATOR + " "+ bodyB;
 				} else {
-					return SEMANTIC_MERGE_MARKER + " " + MERGE_SEPARATOR + " " + bodyA + " " + MERGE_SEPARATOR + " "
-							+ bodyB;
+					return SEMANTIC_MERGE_MARKER + " " + MERGE_SEPARATOR + " " + bodyA + " " + MERGE_SEPARATOR + " "+ bodyB;
 				}
 			}
 		}
@@ -256,8 +254,7 @@ public final class SemistructuredMerge {
 				String body = ((FSTTerminal) node).getBody() + " ";
 				String[] splittedBodyContent = body.split(SemistructuredMerge.MERGE_SEPARATOR);
 
-				String leftContent = splittedBodyContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "")
-						.trim();
+				String leftContent = splittedBodyContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "").trim();
 				String baseContent = splittedBodyContent[1].trim();
 				String rightContent = splittedBodyContent[2].trim();
 
@@ -281,8 +278,7 @@ public final class SemistructuredMerge {
 	 * @param baseContent
 	 * @param rightContent
 	 */
-	private static void identifyPossibleNodesDeletionOrRenamings(FSTNode node, MergeContext context, String leftContent,
-			String baseContent, String rightContent) {
+	private static void identifyPossibleNodesDeletionOrRenamings(FSTNode node, MergeContext context, String leftContent,String baseContent, String rightContent) {
 		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
 		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
 		String rightContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);
@@ -306,8 +302,7 @@ public final class SemistructuredMerge {
 	 * @param baseContent
 	 * @param rightContent
 	 */
-	private static void identifyNodesEditedInOnlyOneVersion(FSTNode node, MergeContext context, String leftContent,
-			String baseContent, String rightContent) {
+	private static void identifyNodesEditedInOnlyOneVersion(FSTNode node, MergeContext context, String leftContent,	String baseContent, String rightContent) {
 		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
 		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
 		String rightContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);

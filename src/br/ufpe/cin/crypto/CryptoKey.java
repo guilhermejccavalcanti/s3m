@@ -1,7 +1,5 @@
 package br.ufpe.cin.crypto;
 
-import java.io.UnsupportedEncodingException;
-import java.math.BigInteger;
 import java.util.Base64;
 
 import javax.crypto.SecretKey;

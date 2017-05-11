@@ -497,6 +497,7 @@ EnumConstant:
         ( Annotation )* <IDENTIFIER> [ Arguments ] [ ClassOrInterfaceBody ]
 ;
 
+@FSTTerminal(name="TypeParameters", merge="LineBased")
 TypeParameters:   
 		"<" (TypeParameter)? ("," TypeParameter )* ">"
 ;
@@ -1396,11 +1397,14 @@ AnnotationTypeDeclaration:
         "@" "interface" Id AnnotationTypeBody
 ;
 
+
+@FSTInline
 AnnotationTypeBody:    
 		"{" ( AnnotationTypeMemberDeclaration )* "}"
 ;
 
 AnnotationTypeMemberDeclaration:
+		@FSTTerminal(name="{<IDENTIFIER>}", merge="LineBased")
 		LOOK_AHEAD("Modifiers() Type() <IDENTIFIER> \"(\"")
 		Modifiers Type <IDENTIFIER> "(" ")" [ DefaultValue ] ";" 
 		|

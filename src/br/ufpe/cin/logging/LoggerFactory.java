@@ -56,14 +56,14 @@ public class LoggerFactory {
 	}
 
 	/**
-	 * When log's size reaches 20 megabytes,a new empty log is started, and the previous one is backup.
+	 * When log's size reaches 10 megabytes,a new empty log is started, and the previous one is backup.
 	 * @param logpath
 	 */
 	private static void manageLogBuffer(String logpath) {
 		File log = new File(logpath);
 		if(log.exists()){
 			long logSizeMB = log.length() / (1024 * 1024);
-			if(logSizeMB > 20){
+			if(logSizeMB >= 10){
 				File newLog = new File(logpath+System.currentTimeMillis());
 				log.renameTo(newLog);
 			}

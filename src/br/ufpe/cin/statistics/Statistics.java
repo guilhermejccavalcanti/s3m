@@ -2,12 +2,8 @@ package br.ufpe.cin.statistics;
 
 import java.io.BufferedReader;
 import java.io.StringReader;
-import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.stream.Collectors;
-
-import javax.crypto.Cipher;
-import javax.crypto.NoSuchPaddingException;
 
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.logging.LoggerStatistics;
@@ -36,7 +32,6 @@ public final class Statistics {
 		int semistructuredMergeConflictsLOC = computeConflictsLOC(semistructuredMergeConflicts);
 		int unstructuredMergeConflictsLOC   = computeConflictsLOC(unstructuredMergeConflits);
 
-
 		//logging
 		String filesMerged = ((context.getLeft() != null)?context.getLeft().getAbsolutePath() :"<empty left>") + "#" +
 				((context.getBase() != null)?context.getBase().getAbsolutePath() :"<empty base>") + "#" +
@@ -48,10 +43,10 @@ public final class Statistics {
 				+ "," + context.deletionConflicts
 				+ "," + context.typeAmbiguityErrorsConflicts
 				+ "," + context.newElementReferencingEditedOneConflicts
+				+ "," + context.initializationBlocksConflicts
 				+ "," + unstructuredNumberOfConflicts 
 				+ "," + unstructuredMergeConflictsLOC;
-		LoggerStatistics.log(loggermsg);
-
+		LoggerStatistics.log(loggermsg,context);
 	}
 	
 	private static int computeNumberOfConflicts(List<MergeConflict> listofconflicts) {
