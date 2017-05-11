@@ -26,6 +26,7 @@ import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import javax.crypto.Cipher;
@@ -51,9 +52,7 @@ public class JFSTMerge {
 
     @Parameter(names = "-d", arity = 3, description = "Directories to be merged (mine, base, yours)")
     List<String> directoriespath = new ArrayList<String>();
-
-    ;
-
+    
     @Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, " + "then it will use \"yours\" as the destination for the merge. ")
     String outputpath = "";
 
@@ -191,6 +190,29 @@ public class JFSTMerge {
         //createStringHash(new File(LoggerFactory.logfile));
         System.exit(conflictState);
     }
+    
+    private void s3mDiff()
+    {
+    	try 
+    	{
+			ProcessBuilder builder = new ProcessBuilder("git diff", "--no-ext-diff", filespath.get(1), filespath.get(4));
+			builder.redirectErrorStream(true);
+			Process process = builder.start();
+			BufferedReader bf = new BufferedReader(new InputStreamReader(process.getInputStream()));
+	        String line; 
+	        while (true) {
+	            line = bf.readLine();
+	            if (line == null) { break; }
+	            System.out.println(line);
+	        }
+	        System.exit(0);
+		} 
+    	catch (IOException e) 
+    	{
+			
+			e.printStackTrace();
+		}
+    }
 
     private void run(String[] args) {
         JCommander commandLineOptions = new JCommander(this);
@@ -198,7 +220,14 @@ public class JFSTMerge {
             commandLineOptions.parse(args);
             CommandLineValidator.validateCommandLineOptions(this);
             if (!filespath.isEmpty()) {
-                mergeFiles(new File(filespath.get(0)), new File(filespath.get(1)), new File(filespath.get(2)), outputpath);
+            	if(filespath.size() > 3)
+            	{
+            		s3mDiff();
+            	}
+            	else
+            	{
+            		mergeFiles(new File(filespath.get(0)), new File(filespath.get(1)), new File(filespath.get(2)), outputpath);
+            	}
             } else if (!directoriespath.isEmpty()) {
                 mergeDirectories(directoriespath.get(0), directoriespath.get(1), directoriespath.get(2), outputpath);
             }

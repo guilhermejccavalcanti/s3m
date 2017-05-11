@@ -26,3 +26,7 @@ gradle-app.setting
 .settings
 .classpath
 .project
+
+### Crypto Key ###
+
+src/br/ufpe/cin/crypto/CryptoKey.java
