@@ -25,13 +25,7 @@ import br.ufpe.cin.statistics.Statistics;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-import java.io.IOException;
 import java.io.InputStreamReader;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
-import javax.crypto.Cipher;
-import javax.crypto.KeyGenerator;
-import javax.crypto.SecretKey;
 
 /**
  * Main class, responsible for performing <i>semistructured</i> merge in java files.
@@ -52,7 +46,7 @@ public class JFSTMerge {
 
     @Parameter(names = "-d", arity = 3, description = "Directories to be merged (mine, base, yours)")
     List<String> directoriespath = new ArrayList<String>();
-    
+
     @Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, " + "then it will use \"yours\" as the destination for the merge. ")
     String outputpath = "";
 
@@ -90,6 +84,7 @@ public class JFSTMerge {
                 Prettyprinter.generateMergedScenario(scenario);
             }
         } catch (Exception e) {
+            e.printStackTrace();
             System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
             LOGGER.log(Level.SEVERE, "", e);
             System.exit(-1);
@@ -106,7 +101,6 @@ public class JFSTMerge {
 	 * @return merged files tuples
 	 */
     public List<FilesTuple> mergeDirectories(String leftDirPath, String baseDirPath, String rightDirPath, String outputDirPath) {
-        //		long t0 = System.currentTimeMillis();
         List<FilesTuple> filesTuple = FilesManager.fillFilesTuples(leftDirPath, baseDirPath, rightDirPath, outputDirPath, new ArrayList<String>());
         for (FilesTuple tuple : filesTuple) {
             File left = tuple.getLeftFile();
@@ -139,14 +133,14 @@ public class JFSTMerge {
 	 */
     public MergeContext mergeFiles(File left, File base, File right, String outputFilePath) {
         FilesManager.validateFiles(left, base, right);
-        if (!this.isGit) {
+        if (!isGit) {
             System.out.println("MERGING FILES: \n" + ((left != null) ? left.getAbsolutePath() : "<empty left>") + "\n" + ((base != null) ? base.getAbsolutePath() : "<empty base>") + "\n" + ((right != null) ? right.getAbsolutePath() : "<empty right>"));
         }
         MergeContext context = new MergeContext(left, base, right, outputFilePath);
-        //there is no need to call specific merge algorithms in equal or consistenly changes files
+        //there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
         if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
             try {
-                //run unstructured merge first is necessary due to future steps.
+                //running unstructured merge first is necessary due to future steps.
                 context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
                 context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);
                 conflictState = checkConflictState(context);
@@ -164,8 +158,9 @@ public class JFSTMerge {
         }
         //printing the resulting merged code
         try {
-            //if(!this.isGit)
-            Prettyprinter.printOnScreenMergedCode(context);
+            if (!isGit) {
+                Prettyprinter.printOnScreenMergedCode(context);
+            }
             Prettyprinter.generateMergedFile(context, outputFilePath);
         } catch (PrintException pe) {
             System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
@@ -187,31 +182,7 @@ public class JFSTMerge {
     public static void main(String[] args) {
         JFSTMerge merger = new JFSTMerge();
         merger.run(args);
-        //createStringHash(new File(LoggerFactory.logfile));
         System.exit(conflictState);
-    }
-    
-    private void s3mDiff()
-    {
-    	try 
-    	{
-			ProcessBuilder builder = new ProcessBuilder("git diff", "--no-ext-diff", filespath.get(1), filespath.get(4));
-			builder.redirectErrorStream(true);
-			Process process = builder.start();
-			BufferedReader bf = new BufferedReader(new InputStreamReader(process.getInputStream()));
-	        String line; 
-	        while (true) {
-	            line = bf.readLine();
-	            if (line == null) { break; }
-	            System.out.println(line);
-	        }
-	        System.exit(0);
-		} 
-    	catch (IOException e) 
-    	{
-			
-			e.printStackTrace();
-		}
     }
 
     private void run(String[] args) {
@@ -220,14 +191,11 @@ public class JFSTMerge {
             commandLineOptions.parse(args);
             CommandLineValidator.validateCommandLineOptions(this);
             if (!filespath.isEmpty()) {
-            	if(filespath.size() > 3)
-            	{
-            		s3mDiff();
-            	}
-            	else
-            	{
-            		mergeFiles(new File(filespath.get(0)), new File(filespath.get(1)), new File(filespath.get(2)), outputpath);
-            	}
+                if (filespath.size() > 3) {
+                    s3mDiff();
+                } else {
+                    mergeFiles(new File(filespath.get(0)), new File(filespath.get(1)), new File(filespath.get(2)), outputpath);
+                }
             } else if (!directoriespath.isEmpty()) {
                 mergeDirectories(directoriespath.get(0), directoriespath.get(1), directoriespath.get(2), outputpath);
             }
@@ -244,6 +212,26 @@ public class JFSTMerge {
             return 1;
         } else {
             return 0;
+        }
+    }
+
+    private void s3mDiff() {
+        try {
+            ProcessBuilder builder = new ProcessBuilder("git diff", "--no-ext-diff", filespath.get(1), filespath.get(4));
+            builder.redirectErrorStream(true);
+            Process process = builder.start();
+            BufferedReader bf = new BufferedReader(new InputStreamReader(process.getInputStream()));
+            String line;
+            while (true) {
+                line = bf.readLine();
+                if (line == null) {
+                    break;
+                }
+                System.out.println(line);
+            }
+            System.exit(0);
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 

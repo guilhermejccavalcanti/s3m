@@ -8,6 +8,10 @@
 
 import rx.util.functions.Action1;
 
+public @interface Test {
+    String lastModifiedBy() default  "none";
+}
+
 @Incubating
 public enum DuplicatesStrategy implements A, B {
     INCLUDE,
