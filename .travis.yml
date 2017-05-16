@@ -11,6 +11,8 @@ before_install:
 - bash gitconfiguration.sh
 - cd ..
 - cd shelltests
+- git config --global user.email "dfm2@cin.ufpe.br"
+- git config --global user.name "Daniel Maida" 
 script:
 - bash semistructuredMergeTest.sh
 - bash branchDiffTest.sh 
