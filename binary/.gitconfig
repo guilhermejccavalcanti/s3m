@@ -1,0 +1,6 @@
+[core]
+    attributesfile = ~/.gitattributes
+[merge "s3m"]
+    name = assert_conflict_states
+    driver = java -jar s3m.jar -f %A %O %B -o %A -g
+

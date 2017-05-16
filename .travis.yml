@@ -7,5 +7,10 @@ notifications:
    - guiganister@gmail.com
   on_success: always
 before_install:
-- sudo apt-get install git
-script: gradle check
+- cd binary
+- bash gitconfiguration.sh
+- cd ..
+- cd shelltests
+script:
+- bash semistructuredMergeTest.sh
+- bash branchDiffTest.sh 
