@@ -2,6 +2,8 @@ package br.ufpe.cin.logging;
 
 import java.io.File;
 import java.io.IOException;
+import java.nio.file.Files;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.List;
@@ -39,6 +41,7 @@ public class LoggerStatistics {
 
 			//logging merged files for further analysis
 			logFiles(timeStamp,context);
+			logSummary();
 
 		}catch(Exception e){
 			throw new PrintException(ExceptionUtils.getCauseMessage(e));
@@ -47,7 +50,7 @@ public class LoggerStatistics {
 
 	public static void logScenario(String loggermsg) throws IOException {
 		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-		new File(logpath).mkdirs(); //assuring that the directories exists	
+		new File(logpath).mkdirs(); //ensuring that the directories exists	
 		logpath = logpath + "jfstmerge.statistics.scenarios";
 
 		//reading the log file to see if it is not empty neither contains the header
@@ -62,7 +65,7 @@ public class LoggerStatistics {
 
 	public static void logConflicts(List<MergeConflict> conflicts, Source source) throws IOException {
 		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-		new File(logpath).mkdirs(); //assuring that the directories exists	
+		new File(logpath).mkdirs(); //ensuring that the directories exists	
 		for(MergeConflict mc : conflicts){
 			String origin =  ((mc.leftOriginFile != null) ? mc.leftOriginFile.getAbsolutePath() : "<empty left>") 
 					+ ";" + ((mc.baseOriginFile != null) ? mc.baseOriginFile.getAbsolutePath() : "<empty base>") 
@@ -86,10 +89,82 @@ public class LoggerStatistics {
 		}
 	}
 
+	@SuppressWarnings("unused")
+	private static void logSummary() throws IOException, CryptoException {
+		//retrieving statistics
+		String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+		new File(logpath).mkdirs(); //ensuring that the directories exists	
+		File statistics = new File(logpath+ "jfstmerge.statistics");
+		if(statistics.exists()){
+			int ssmergeconfs = 0;
+			int ssmergeloc = 0;
+			int ssmergerenamingconfs = 0;
+			int ssmergedeletionconfs = 0;
+			int ssmergetaeconfs = 0;
+			int ssmergenereoconfs = 0;
+			int ssmergeinitlblocksconfs = 0;
+			int unmergeconfs = 0;
+			int unmergeloc = 0;
+			long unmergetime = 0;
+			long ssmergetime = 0;
+			int duplicateddeclarationerrors = 0;
+			int equalconfs = 0;
+			
+			//UNCOMMENT ONLY WITH THE CRYPTO KEY
+			//CryptoUtils.decrypt(statistics, statistics);
+			List<String> lines = Files.readAllLines(statistics.toPath());
+			for(int i = 1; i <lines.size(); i++){
+				String[] columns = lines.get(i).split(",");
+				
+				ssmergeconfs += Integer.valueOf(columns[2]);
+				ssmergeloc += Integer.valueOf(columns[3]);
+				ssmergerenamingconfs += Integer.valueOf(columns[4]);
+				ssmergedeletionconfs += Integer.valueOf(columns[5]);
+				ssmergetaeconfs += Integer.valueOf(columns[6]);
+				ssmergenereoconfs += Integer.valueOf(columns[7]);
+				ssmergeinitlblocksconfs += Integer.valueOf(columns[8]);
+				unmergeconfs += Integer.valueOf(columns[9]);
+				unmergeloc += Integer.valueOf(columns[10]);
+				unmergetime += Long.parseLong(columns[11]);
+				ssmergetime += Long.parseLong((columns[12]));
+				duplicateddeclarationerrors += Integer.valueOf(columns[13]);
+				equalconfs += Integer.valueOf(columns[14]);
+
+			}
+			//UNCOMMENT ONLY WITH THE CRYPTO KEY
+			//CryptoUtils.encrypt(statistics, statistics);
+			
+			//summarizing retrieved statistics
+			int X = lines.size()-1;
+			int Y = (unmergeconfs - ssmergeconfs) + duplicateddeclarationerrors - (ssmergetaeconfs + ssmergenereoconfs + ssmergeinitlblocksconfs);Y=(Y>0)?Y:0;
+			int Z = duplicateddeclarationerrors;
+			int A = ssmergerenamingconfs;
+			int B = unmergeconfs - equalconfs - Y;B=(B>0)?B:0;
+			double M = ((double)ssmergetime / 1000000000);
+			double N = ((double)unmergetime / 1000000000);
+			
+			StringBuilder summary = new StringBuilder();
+			summary.append("s3m was invoked in " +X+ " JAVA files so far.\n");
+			summary.append("In these files, you avoided at least " +Y+" false positives and at least "+Z+" false negatives in relation to unstructured merge.\n");
+			summary.append("On the other hand, you had at most " +A+ " extra false positives and " +B+ " extra false negatives.\n");
+			summary.append("s3m reported "+ssmergeconfs+" conflicts, totalizing " +ssmergeloc+ " LOC, compared to "+unmergeconfs+" conflicts and " +unmergeloc+ " LOC from unstructured merge, where " +equalconfs+ " conflicts are equal.\n");
+			summary.append("Finally, s3m took " + (new DecimalFormat("#.##").format(M))+" seconds, and unstructured merge " + (new DecimalFormat("#.##").format(N)) + " seconds to merge all these files.");
+			summary.append("\n\n\n");
+			summary.append("LAST TIME UPDATED: " + (new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime())));
+			
+			//print summary
+			File fsummary = new File(logpath+ "jfstmerge.summary");
+			if(!fsummary.exists()){
+				fsummary.createNewFile();
+			}
+			FileUtils.write(fsummary, summary.toString(),false);
+		}
+	}
+
 	private static void logFiles(String timeStamp, MergeContext context) throws IOException, CryptoException {
 		//initialization
 		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-		new File(logpath).mkdirs(); //assuring that the directories exists	
+		new File(logpath).mkdirs(); //ensuring that the directories exists	
 		logpath = logpath + "jfstmerge.files";
 		manageLogBuffer(logpath);
 		File logfiles = new File(logpath);
@@ -136,7 +211,7 @@ public class LoggerStatistics {
 
 	private static void initializeLogger() throws IOException, CryptoException {
 		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-		new File(logpath).mkdirs(); //assuring that the directories exists	
+		new File(logpath).mkdirs(); //ensuring that the directories exists	
 		logpath = logpath + "jfstmerge.statistics";
 
 		manageLogBuffer(logpath);

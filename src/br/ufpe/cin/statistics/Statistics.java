@@ -41,7 +41,6 @@ public final class Statistics {
 
 		context.equalConflicts = computeEqualConflicts(unstructuredMergeConflits,semistructuredMergeConflicts);
 
-		//logging
 		String filesMerged = ((context.getLeft() != null)?context.getLeft().getAbsolutePath() :"<empty left>") + "#" +
 				((context.getBase() != null)?context.getBase().getAbsolutePath() :"<empty base>") + "#" +
 				((context.getRight()!= null)?context.getRight().getAbsolutePath():"<empty right>");
