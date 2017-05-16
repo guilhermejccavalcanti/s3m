@@ -6,3 +6,4 @@ notifications:
   recipients:
    - guiganister@gmail.com
   on_success: always
+script: gradle check
