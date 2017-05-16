@@ -4,7 +4,7 @@ jdk:
 notifications:
  email:
   recipients:
-   - guiganister@gmail.com
+   - dfm2@cin.ufpe.br
   on_success: always
 before_install:
 - cd binary
@@ -14,7 +14,7 @@ before_install:
 - git config --global user.email "dfm2@cin.ufpe.br"
 - git config --global user.name "Daniel Maida" 
 - sudo apt-get install shunit2
-script:
 - cd shelltests
+script:
 - shunit2 s3mGitTests.sh
-- cd ..
+- gradle check
