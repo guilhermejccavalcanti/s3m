@@ -13,6 +13,8 @@ before_install:
 - cd shelltests
 - git config --global user.email "dfm2@cin.ufpe.br"
 - git config --global user.name "Daniel Maida" 
+- sudo apt-get install shunit2
 script:
-- bash semistructuredMergeTest.sh
-- bash branchDiffTest.sh 
+- cd shelltests
+- shunit2 s3mGitTests.sh
+- cd ..
