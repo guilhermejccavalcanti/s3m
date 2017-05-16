@@ -14,7 +14,6 @@ before_install:
 - git config --global user.email "dfm2@cin.ufpe.br"
 - git config --global user.name "Daniel Maida" 
 - sudo apt-get install shunit2
-- cd shelltests
 script:
 - shunit2 s3mGitTests.sh
 - gradle check
