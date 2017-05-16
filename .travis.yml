@@ -16,4 +16,4 @@ before_install:
 - sudo apt-get install shunit2
 script:
 - shunit2 s3mGitTests.sh
-- gradle check
+- cd .. && gradle check
