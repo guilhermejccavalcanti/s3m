@@ -4,19 +4,19 @@ jdk:
 notifications:
  email:
   recipients:
-    - guiganister@gmail.com
+   - guiganister@gmail.com
   on_success: always
-  before_install:
-    - cd testfiles
-    - cd shelltests
-    - cd config
-    - bash gitconfiguration.sh
-    - cd ..
-    - git config --global user.email "gjcc@cin.ufpe.br"
-    - git config --global user.name "Guilherme Cavalcanti" 
-    - sudo apt-get install shunit2
-  script:
-    - shunit2 s3mGitTests.sh
-    - cd ..
-    - cd ..
-    - gradle check
+before_install:
+- cd testfiles
+- cd shelltests
+- cd config
+- bash gitconfiguration.sh
+- cd ..
+- git config --global user.email "gjcc@cin.ufpe.br"
+- git config --global user.name "Guilherme Cavalcanti" 
+- sudo apt-get install shunit2
+script:
+- shunit2 s3mGitTests.sh
+- cd ..
+- cd ..
+- gradle check
