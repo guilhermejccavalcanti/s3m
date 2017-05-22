@@ -32,8 +32,7 @@ public class DuplicatedDeclarationErrorsHandlerTest {
 				new File("testfiles/duplicationsnoconflict/base/Test.java"), 
 				new File("testfiles/duplicationsnoconflict/right/Test.java"),
 				null);
-		assertTrue(ctx.duplicatedDeclarationErrors==0);
-		//assertTrue(ctx.duplicatedDeclarationErrors==1);
+		assertTrue(ctx.duplicatedDeclarationErrors==1);
 	}
 	
 	@Test
