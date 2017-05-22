@@ -6,6 +6,3 @@ notifications:
   recipients:
    - guiganister@gmail.com
   on_success: always
-before_install:
-- gradle check
-
