@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import br.ufpe.cin.crypto.CryptoUtils;
 import br.ufpe.cin.exceptions.CryptoException;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.PrintException;
@@ -31,13 +32,11 @@ public class LoggerStatistics {
 			logpath = logpath + "jfstmerge.statistics";
 			File statisticsLog = new File(logpath);
 
-			//UNCOMMENT ONLY WITH THE CRYPTO KEY
-			//CryptoUtils.decrypt(statisticsLog, statisticsLog);
+			CryptoUtils.decrypt(statisticsLog, statisticsLog);
 
 			FileUtils.write(statisticsLog, logentry, true);
 
-			//UNCOMMENT ONLY WITH THE CRYPTO KEY
-			//CryptoUtils.encrypt(statisticsLog, statisticsLog);
+			CryptoUtils.encrypt(statisticsLog, statisticsLog);
 
 			//logging merged files for further analysis
 			logFiles(timeStamp,context);
@@ -109,13 +108,12 @@ public class LoggerStatistics {
 			long ssmergetime = 0;
 			int duplicateddeclarationerrors = 0;
 			int equalconfs = 0;
-			
-			//UNCOMMENT ONLY WITH THE CRYPTO KEY
-			//CryptoUtils.decrypt(statistics, statistics);
+
+			CryptoUtils.decrypt(statistics, statistics);
 			List<String> lines = Files.readAllLines(statistics.toPath());
 			for(int i = 1; i <lines.size(); i++){
 				String[] columns = lines.get(i).split(",");
-				
+
 				ssmergeconfs += Integer.valueOf(columns[2]);
 				ssmergeloc += Integer.valueOf(columns[3]);
 				ssmergerenamingconfs += Integer.valueOf(columns[4]);
@@ -131,9 +129,8 @@ public class LoggerStatistics {
 				equalconfs += Integer.valueOf(columns[14]);
 
 			}
-			//UNCOMMENT ONLY WITH THE CRYPTO KEY
-			//CryptoUtils.encrypt(statistics, statistics);
-			
+			CryptoUtils.encrypt(statistics, statistics);
+
 			//summarizing retrieved statistics
 			int X = lines.size()-1;
 			int Y = (unmergeconfs - ssmergeconfs) + duplicateddeclarationerrors - (ssmergetaeconfs + ssmergenereoconfs + ssmergeinitlblocksconfs);Y=(Y>0)?Y:0;
@@ -142,7 +139,7 @@ public class LoggerStatistics {
 			int B = unmergeconfs - equalconfs - Y;B=(B>0)?B:0;
 			double M = ((double)ssmergetime / 1000000000);
 			double N = ((double)unmergetime / 1000000000);
-			
+
 			StringBuilder summary = new StringBuilder();
 			summary.append("s3m was invoked in " +X+ " JAVA files so far.\n");
 			summary.append("In these files, you avoided at least " +Y+" false positives and at least "+Z+" false negatives in relation to unstructured merge.\n");
@@ -151,7 +148,7 @@ public class LoggerStatistics {
 			summary.append("Finally, s3m took " + (new DecimalFormat("#.##").format(M))+" seconds, and unstructured merge " + (new DecimalFormat("#.##").format(N)) + " seconds to merge all these files.");
 			summary.append("\n\n\n");
 			summary.append("LAST TIME UPDATED: " + (new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime())));
-			
+
 			//print summary
 			File fsummary = new File(logpath+ "jfstmerge.summary");
 			if(!fsummary.exists()){
@@ -172,12 +169,9 @@ public class LoggerStatistics {
 		if(!logfiles.exists()){
 			logfiles.createNewFile();
 
-			//UNCOMMENT ONLY WITH THE CRYPTO KEY
-			//CryptoUtils.encrypt(logfiles, logfiles);
+			CryptoUtils.encrypt(logfiles, logfiles);
 		}
-
-		//UNCOMMENT ONLY WITH THE CRYPTO KEY
-		//CryptoUtils.decrypt(logfiles, logfiles);
+		CryptoUtils.decrypt(logfiles, logfiles);
 
 		//writing source code content
 		//left
@@ -204,8 +198,7 @@ public class LoggerStatistics {
 			FileUtils.write(logfiles, "!@#$%\n", true); 
 		}
 
-		//UNCOMMENT ONLY WITH THE CRYPTO KEY
-		//CryptoUtils.encrypt(logfiles, logfiles);
+		CryptoUtils.encrypt(logfiles, logfiles);
 	}
 
 
@@ -223,8 +216,7 @@ public class LoggerStatistics {
 			File statisticsLog = new File(logpath);
 			FileUtils.write(statisticsLog, header, true);
 
-			//UNCOMMENT ONLY WITH THE CRYPTO KEY
-			//CryptoUtils.encrypt(statisticsLog, statisticsLog);
+			CryptoUtils.encrypt(statisticsLog, statisticsLog);
 		}
 	}
 
