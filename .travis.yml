@@ -7,6 +7,7 @@ notifications:
    - guiganister@gmail.com
   on_success: always
 before_install:
+- gradle check
 - cd testfiles
 - cd shelltests
 - cd config
