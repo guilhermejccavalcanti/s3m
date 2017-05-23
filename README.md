@@ -21,7 +21,7 @@ After installed, the tool is automatically integrated with git, with no need for
 It means that every time you call the `git merge` command, the tool will be executed.
 You can also use the tool standalone as described bellow.
 
-* in case double-click does not work, install with the command `java -jar`
+ps.: in case double-click does not work, install with the command `java -jar`
 
 Usage
 -------------
