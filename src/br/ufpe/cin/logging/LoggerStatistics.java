@@ -14,7 +14,6 @@ import br.ufpe.cin.crypto.CryptoUtils;
 import br.ufpe.cin.exceptions.CryptoException;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.PrintException;
-import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.Source;
@@ -144,7 +143,7 @@ public class LoggerStatistics {
 			summary.append("s3m was invoked in " +X+ " JAVA files so far.\n");
 			summary.append("In these files, you avoided at least " +Y+" false positives and at least "+Z+" false negatives in relation to unstructured merge.\n");
 			summary.append("On the other hand, you had at most " +A+ " extra false positives and " +B+ " extra false negatives.\n");
-			summary.append("s3m reported "+ssmergeconfs+" conflicts, totalizing " +ssmergeloc+ " LOC, compared to "+unmergeconfs+" conflicts and " +unmergeloc+ " LOC from unstructured merge, where " +equalconfs+ " conflicts are equal.\n");
+			summary.append("s3m reported "+ssmergeconfs+" conflicts, totalizing " +ssmergeloc+ " conflicting LOC, compared to "+unmergeconfs+" conflicts and " +unmergeloc+ " conflicting LOC from unstructured merge, where " +equalconfs+ " conflicts are equal.\n");
 			summary.append("Finally, s3m took " + (new DecimalFormat("#.##").format(M))+" seconds, and unstructured merge " + (new DecimalFormat("#.##").format(N)) + " seconds to merge all these files.");
 			summary.append("\n\n\n");
 			summary.append("LAST TIME UPDATED: " + (new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime())));
@@ -175,7 +174,7 @@ public class LoggerStatistics {
 
 		//writing source code content
 		//left
-		String leftcontent = FilesManager.readFileContent(context.getLeft());
+		String leftcontent = context.getLeftContent();
 		if(!leftcontent.isEmpty()){
 			FileUtils.write(logfiles, timeStamp+","+context.getLeft().getAbsolutePath()+"\n", true);
 			FileUtils.write(logfiles, leftcontent + "\n", true);
@@ -183,7 +182,7 @@ public class LoggerStatistics {
 		}
 
 		//base
-		String basecontent = FilesManager.readFileContent(context.getBase());
+		String basecontent = context.getBaseContent();
 		if(!basecontent.isEmpty()){
 			FileUtils.write(logfiles, timeStamp+","+context.getBase().getAbsolutePath()+"\n", true);
 			FileUtils.write(logfiles, basecontent + "\n", true);
@@ -191,7 +190,7 @@ public class LoggerStatistics {
 		}
 
 		//right
-		String rightcontent = FilesManager.readFileContent(context.getRight());
+		String rightcontent = context.getRightContent();
 		if(!rightcontent.isEmpty()){
 			FileUtils.write(logfiles, timeStamp+","+context.getRight().getAbsolutePath()+"\n", true);
 			FileUtils.write(logfiles, rightcontent + "\n", true);

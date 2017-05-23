@@ -6,6 +6,7 @@ import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 
+import br.ufpe.cin.files.FilesManager;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 
 /**
@@ -19,6 +20,10 @@ public class MergeContext {
 	File right;
 	File left;
 	String outputFilePath;
+	
+	String baseContent = "";
+	String leftContent = "";
+	String rightContent= "";
 	
 	public List<FSTNode> addedLeftNodes = new ArrayList<FSTNode>();
 	public List<FSTNode> addedRightNodes= new ArrayList<FSTNode>();
@@ -58,6 +63,10 @@ public class MergeContext {
 		this.base = base;
 		this.right= right;
 		this.outputFilePath = outputFilePath;
+		
+		this.leftContent = FilesManager.readFileContent(this.left);
+		this.baseContent = FilesManager.readFileContent(this.base);
+		this.rightContent= FilesManager.readFileContent(this.right);
 	}
 
 	/**
@@ -108,5 +117,29 @@ public class MergeContext {
 
 	public void setLeft(File left) {
 		this.left = left;
+	}
+
+	public String getBaseContent() {
+		return baseContent;
+	}
+
+	public void setBaseContent(String baseContent) {
+		this.baseContent = baseContent;
+	}
+
+	public String getLeftContent() {
+		return leftContent;
+	}
+
+	public void setLeftContent(String leftContent) {
+		this.leftContent = leftContent;
+	}
+
+	public String getRightContent() {
+		return rightContent;
+	}
+
+	public void setRightContent(String rightContent) {
+		this.rightContent = rightContent;
 	}
 }

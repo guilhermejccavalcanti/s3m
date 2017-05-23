@@ -77,8 +77,8 @@ public final class Statistics {
 		int initializationBlocksConflicts = 0;
 		int unstructuredNumberOfConflicts = 0;
 		int unstructuredMergeConflictsLOC = 0;
-		int unstructuredMergeTime = 0;
-		int semistructuredMergeTime	= 0;
+		long unstructuredMergeTime = 0;
+		long semistructuredMergeTime	= 0;
 		int duplicatedDeclarationErrors = 0;
 		int equalConflicts = 0;
 
@@ -148,7 +148,7 @@ public final class Statistics {
 			for(MergeConflict mcssm : semistructuredMergeConflicts){
 				String txtbody = FilesManager.getStringContentIntoSingleLineNoSpacing(mctxt.left + mctxt.right);
 				String ssmbody = FilesManager.getStringContentIntoSingleLineNoSpacing(mcssm.left + mcssm.right);
-				if(txtbody.equals(ssmbody)) equalconfs++;
+				if(txtbody.equals(ssmbody)){ equalconfs++;break;}
 			}
 		}
 		return equalconfs;

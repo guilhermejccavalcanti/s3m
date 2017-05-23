@@ -46,7 +46,7 @@ public final class DuplicatedDeclarationHandler {
 		//excluding handler execution time to not bias peformance evaluation as it is not required to original semistructured merge time
 		long tf = System.nanoTime();
 		long tt = tf-t0;
-		context.semistructuredMergeTime -= tt;
+		context.semistructuredMergeTime = context.semistructuredMergeTime - tt;
 
 		context.duplicatedDeclarationErrors = duplicatedDeclarationErrors;
 	}
