@@ -4,7 +4,7 @@ import java.io.File;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import java.util.logging.XMLFormatter;
+import java.util.logging.SimpleFormatter;
 
 
 /**
@@ -38,7 +38,8 @@ public class LoggerFactory {
 			FileHandler fileHandler = new FileHandler(logpath,true);
 
 			//setting formatter to the handler
-			fileHandler.setFormatter(new XMLFormatter());
+			fileHandler.setFormatter(new SimpleFormatter());
+			fileHandler.setEncoding("UTF-16");
 
 			//setting Level to ALL
 			fileHandler.setLevel(Level.ALL);

@@ -20,20 +20,33 @@ import br.ufpe.cin.files.FilesManager;
  * @author Guilherme
  */
 public class JavaCompiler {
-	
+
 	public List<IProblem> compilationProblems = new ArrayList<IProblem>();
-	
+
 	/**
 	 * Compile the semistructured java code of a given MergeContext.
 	 * @param context containing the semistructured java code.
 	 * @return CompilationUnit representing the compiled code.
 	 */
 	@SuppressWarnings({ "rawtypes", "unchecked" })
-	public CompilationUnit compile(MergeContext context){
+	public CompilationUnit compile(MergeContext context, Source source){
 		String unitName 		= generateUnitName(context);
 		String[] sources 		= findResources(context,"java");
 		String[] classpaths 	= findResources(context,"jar");
-		CompilationUnit cunit	= compile(unitName,context.semistructuredOutput,sources,classpaths);
+		
+		CompilationUnit cunit;
+		switch (source) {
+		case UNSTRUCTURED:
+			cunit = compile(unitName,context.unstructuredOutput,sources,classpaths);
+			break;
+		case SEMISTRUCTURED:
+			cunit = compile(unitName,context.semistructuredOutput,sources,classpaths);
+			break;
+		default:
+			cunit = compile(unitName,context.semistructuredOutput,sources,classpaths);
+			break;
+		}
+		
 		this.compilationProblems= new ArrayList(Arrays.asList(cunit.getProblems()));
 		return cunit;
 	}

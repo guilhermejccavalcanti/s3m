@@ -6,13 +6,19 @@ sourceSets {
             srcDir 'src'
         }
       }
+	  
+	test {
+        java {
+            srcDirs = ["src/br/ufpe/cin/mergers/handlers/tests"]
+        }
+    }
 }
 
 repositories {
 	mavenCentral()
 }
 
-// most of the jar libraries are available in the /dependencies folder, not in a remote repository
+// most of the jar libraries is available in the /dependencies folder, not in a remote repository
 dependencies {
 	compile fileTree(dir: 'dependencies', include: ['*.jar'])
 	testCompile 'junit:junit:4.12'

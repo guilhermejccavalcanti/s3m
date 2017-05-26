@@ -72,7 +72,6 @@ public class JFSTMerge {
 				throw new Exception("Invalid .revisions file!");
 			//merging the identified directories
 			if (!listRevisions.isEmpty()) {
-				LOGGER.log(Level.INFO, "MERGING SCENARIO: " + revisionsPath);
 				System.out.println("MERGING REVISIONS: \n" + listRevisions.get(0) + "\n" + listRevisions.get(1) + "\n" + listRevisions.get(2));
 				String revisionFileFolder = (new File(revisionsPath)).getParent();
 				String leftDir = revisionFileFolder + File.separator + listRevisions.get(0);
@@ -81,6 +80,10 @@ public class JFSTMerge {
 				List<FilesTuple> mergedTuples = mergeDirectories(leftDir, baseDir, rightDir, null);
 				//using the name of the revisions directories as revisions identifiers
 				scenario = new MergeScenario(revisionsPath, listRevisions.get(0), listRevisions.get(1), listRevisions.get(2), mergedTuples);
+
+				//statistics
+				Statistics.compute(scenario);
+
 				//printing the resulting merged codes
 				Prettyprinter.generateMergedScenario(scenario);
 			}
@@ -140,10 +143,15 @@ public class JFSTMerge {
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
+			long t0 = System.nanoTime();
 			try {
 				//running unstructured merge first is necessary due to future steps.
 				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
+				context.unstructuredMergeTime = System.nanoTime() - t0;
+
 				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);
+				context.semistructuredMergeTime = context.semistructuredMergeTime + (System.nanoTime() - t0);
+
 				conflictState = checkConflictState(context);
 			} catch (//textual merge must work even when semistructured not, so this exception precedes others
 					TextualMergeException //textual merge must work even when semistructured not, so this exception precedes others
@@ -154,6 +162,8 @@ public class JFSTMerge {
 			} catch (SemistructuredMergeException sme) {
 				LOGGER.log(Level.WARNING, "", sme);
 				context.semistructuredOutput = context.unstructuredOutput;
+				context.semistructuredMergeTime = System.nanoTime() - t0;
+
 				conflictState = checkConflictState(context);
 			}
 		}
