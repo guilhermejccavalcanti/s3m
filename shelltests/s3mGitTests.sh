@@ -89,6 +89,41 @@ testWorkingDiff()
     rm -rf repo
 }
 
-
+testInvalidLogFileWorkaround()
+{
+    cd $HOME
+    rm -rf .jfstmerge
+    rm -rf repo
+    mkdir .jfstmerge
+    mkdir repo
+    cd .jfstmerge
+    touch jfstmerge.statistics
+    cd ..
+    cd repo
+    git init
+    cp ../exemplo/base.java .
+    git add .
+    git commit -m "base"
+    git checkout -b left
+    rm base.java
+    cp ../exemplo/left.java base.java
+    git add .
+    git commit -m "left"
+    git checkout master
+    git checkout -b right
+    rm base.java
+    cp ../exemplo/right.java base.java
+    git add .
+    git commit -m "right"
+    git checkout master
+    git merge left
+    git merge right
+    cd ..
+    cd .jfstmerge
+    CRYPTO_WORKED=$(ls | grep -c "defect")
+    assertTrue "[ $CRYPTO_WORKED -gt 0 ]"
+    cd .. 
+    rm -rf repo
+}
 
 
