@@ -97,9 +97,6 @@ testInvalidLogFileWorkaround()
     cd $HOME
     rm -rf repo
     mkdir repo
-    cd .jfstmerge
-    touch jfstmerge.statistics
-    cd ..
     cd repo
     git init
     cp ../exemplo/base.java .
