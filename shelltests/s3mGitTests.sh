@@ -1,7 +1,6 @@
 #! /bin/sh
 # file: s3mGitTests.sh
 
-
 # Test to know if s3m semistructured merge is working and detecting conflicts
 testSemistructuredMerge()
 {
@@ -92,6 +91,7 @@ testWorkingDiff()
 #Test to know if invalid or malicious log files are crashing the tool
 testInvalidLogFileWorkaround()
 {
+    rm -rf $HOME/.jfstmerge
     cp -r exemplo/ $HOME/
     cp -r .jfstmerge/ $HOME/
     cd $HOME
@@ -126,5 +126,4 @@ testInvalidLogFileWorkaround()
     cd .. 
     rm -rf repo
 }
-
 
