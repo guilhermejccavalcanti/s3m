@@ -89,12 +89,13 @@ testWorkingDiff()
     rm -rf repo
 }
 
+#Test to know if invalid or malicious log files are crashing the tool
 testInvalidLogFileWorkaround()
 {
+    cp -r exemplo/ $HOME/
+    cp -r .jfstmerge/ $HOME/
     cd $HOME
-    rm -rf .jfstmerge
     rm -rf repo
-    mkdir .jfstmerge
     mkdir repo
     cd .jfstmerge
     touch jfstmerge.statistics
