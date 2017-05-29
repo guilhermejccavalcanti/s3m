@@ -5,6 +5,7 @@
 testSemistructuredMerge()
 {
     cp -r exemplo/ $HOME/
+    cp -r exemplotxt/ $HOME/
     cd $HOME
     rm -rf repo
     mkdir repo
