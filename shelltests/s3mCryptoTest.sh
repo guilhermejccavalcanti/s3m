@@ -1,8 +1,8 @@
 #! /bin/sh
 # file: s3mCryptoTest.sh
 
-#Test to know if invalid or malicious log files are crashing the tool
-testInvalidLogFileWorkaround()
+# Test to know if invalid or malicious log files are crashing the tool
+testCryptoIssueAvoidance()
 {
     rm -rf $HOME/.jfstmerge
     cp -r exemplo/ $HOME/
