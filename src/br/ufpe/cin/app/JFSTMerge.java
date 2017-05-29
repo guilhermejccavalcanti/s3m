@@ -2,6 +2,7 @@ package br.ufpe.cin.app;
 
 import java.io.BufferedReader;
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -9,7 +10,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
 import br.ufpe.cin.exceptions.PrintException;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
@@ -23,10 +23,10 @@ import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.MergeScenario;
 import br.ufpe.cin.printers.Prettyprinter;
 import br.ufpe.cin.statistics.Statistics;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import java.io.InputStreamReader;
 
 /**
  * Main class, responsible for performing <i>semistructured</i> merge in java files.
@@ -39,7 +39,6 @@ public class JFSTMerge {
 	//log of activities
 	private static final Logger LOGGER = LoggerFactory.make();
 
-	//indicator of conflicting merge
 	private static int conflictState = 0;
 
 	//command line options
@@ -71,7 +70,6 @@ public class JFSTMerge {
 			listRevisions = reader.lines().collect(Collectors.toList());
 			if (listRevisions.size() != 3)
 				throw new Exception("Invalid .revisions file!");
-
 			//merging the identified directories
 			if (!listRevisions.isEmpty()) {
 				System.out.println("MERGING REVISIONS: \n" + listRevisions.get(0) + "\n" + listRevisions.get(1) + "\n" + listRevisions.get(2));
@@ -79,9 +77,7 @@ public class JFSTMerge {
 				String leftDir = revisionFileFolder + File.separator + listRevisions.get(0);
 				String baseDir = revisionFileFolder + File.separator + listRevisions.get(1);
 				String rightDir = revisionFileFolder + File.separator + listRevisions.get(2);
-
 				List<FilesTuple> mergedTuples = mergeDirectories(leftDir, baseDir, rightDir, null);
-
 				//using the name of the revisions directories as revisions identifiers
 				scenario = new MergeScenario(revisionsPath, listRevisions.get(0), listRevisions.get(1), listRevisions.get(2), mergedTuples);
 
@@ -114,11 +110,9 @@ public class JFSTMerge {
 			File left = tuple.getLeftFile();
 			File base = tuple.getBaseFile();
 			File right = tuple.getRightFile();
-
 			//merging the file tuple
 			MergeContext context = mergeFiles(left, base, right, null);
 			tuple.setContext(context);
-
 			//printing the resulting merged code
 			if (outputDirPath != null) {
 				try {
@@ -146,9 +140,7 @@ public class JFSTMerge {
 		if (!isGit) {
 			System.out.println("MERGING FILES: \n" + ((left != null) ? left.getAbsolutePath() : "<empty left>") + "\n" + ((base != null) ? base.getAbsolutePath() : "<empty base>") + "\n" + ((right != null) ? right.getAbsolutePath() : "<empty right>"));
 		}
-
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
-
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
 			long t0 = System.nanoTime();
@@ -161,7 +153,9 @@ public class JFSTMerge {
 				context.semistructuredMergeTime = context.semistructuredMergeTime + (System.nanoTime() - t0);
 
 				conflictState = checkConflictState(context);
-			} catch (TextualMergeException tme) { //textual merge must work even when semistructured not, so this exception precedes others
+			} catch (//textual merge must work even when semistructured not, so this exception precedes others
+					TextualMergeException //textual merge must work even when semistructured not, so this exception precedes others
+					tme) {
 				System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 				LOGGER.log(Level.SEVERE, "", tme);
 				System.exit(-1);
@@ -173,10 +167,9 @@ public class JFSTMerge {
 				conflictState = checkConflictState(context);
 			}
 		}
-
 		//printing the resulting merged code
 		try {
-			if(!isGit){
+			if (!isGit) {
 				Prettyprinter.printOnScreenMergedCode(context);
 			}
 			Prettyprinter.generateMergedFile(context, outputFilePath);
@@ -185,7 +178,6 @@ public class JFSTMerge {
 			LOGGER.log(Level.SEVERE, "", pe);
 			System.exit(-1);
 		}
-
 		//computing statistics
 		try {
 			Statistics.compute(context);
@@ -203,8 +195,6 @@ public class JFSTMerge {
 		merger.run(args);
 		System.exit(conflictState);
 	}
-
-
 
 	private void run(String[] args) {
 		JCommander commandLineOptions = new JCommander(this);
@@ -231,4 +221,8 @@ public class JFSTMerge {
 			return 0;
 		}
 	}
+
+
+
+	;
 }
