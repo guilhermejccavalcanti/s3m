@@ -120,7 +120,5 @@ testInvalidLogFileWorkaround()
     cd .jfstmerge
     CRYPTO_WORKED=$(ls | grep -c "defect")
     assertTrue "[ $CRYPTO_WORKED -gt 0 ]"
-    cd .. 
-    rm -rf repo
 }
 
