@@ -2,8 +2,7 @@
 # file: s3mCryptoTest.sh
 
 # Test to know if invalid or malicious log files are crashing the tool
-testCryptoIssueAvoidance()
-{
+testCryptoIssueAvoidance() {
     rm -rf $HOME/.jfstmerge
     cp -r exemplo/ $HOME/
     cp -r .jfstmerge/ $HOME/
@@ -34,3 +33,6 @@ testCryptoIssueAvoidance()
     CRYPTO_WORKED=$(ls | grep -c "defect")
     assertTrue "[ $CRYPTO_WORKED -gt 0 ]"
 }
+
+# Execute shunit2 to run the tests
+. shunit2-2.1.6/src/shunit2
