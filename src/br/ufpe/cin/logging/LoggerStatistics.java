@@ -20,7 +20,8 @@ import br.ufpe.cin.mergers.util.Source;
 
 public class LoggerStatistics {
 
-	public static int recursionCounter = 0;
+	//variable to avoid infinite recursion when trying to fix cryptographic issues 
+	public static int numberOfCriptographyFixAttempts = 0;
 
 	public static void logContext(String msg, MergeContext context) throws PrintException{
 		try{
@@ -54,9 +55,9 @@ public class LoggerStatistics {
 				File log_defect = new File(logpath+"_defect"+System.currentTimeMillis());
 				log.renameTo(log_defect);
 			}
-			if(recursionCounter < 1)
+			if(numberOfCriptographyFixAttempts < 1)
 			{
-				recursionCounter++;
+				numberOfCriptographyFixAttempts++;
 				logContext(msg,context);
 			}
 		}
@@ -186,9 +187,9 @@ public class LoggerStatistics {
 				File log_defect = new File(logpath+"_defect"+System.currentTimeMillis());
 				log.renameTo(log_defect);
 			}
-			if(recursionCounter < 1)
+			if(numberOfCriptographyFixAttempts < 1)
 			{
-				recursionCounter++;
+				numberOfCriptographyFixAttempts++;
 				logSummary();
 			}
 		}
@@ -240,7 +241,7 @@ public class LoggerStatistics {
 		catch (CryptoException c)
 		{
 			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-			logpath = logpath + "jfstmerge.statistics";
+			logpath = logpath + "jfstmerge.files";
 			File log = new File(logpath);
 			if (log.exists())
 			{
@@ -248,9 +249,9 @@ public class LoggerStatistics {
 				log.renameTo(log_defect);
 			}
 
-			if(recursionCounter < 1)
+			if(numberOfCriptographyFixAttempts < 1)
 			{
-				recursionCounter++;
+				numberOfCriptographyFixAttempts++;
 				logFiles(timeStamp,context);
 			}
 		}
