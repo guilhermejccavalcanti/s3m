@@ -63,32 +63,24 @@ public class CryptoUtils {
 				| InvalidKeyException | BadPaddingException
 				| IllegalBlockSizeException | IOException | InvalidAlgorithmParameterException ex) 
 		{
-			try 
-			{
-				Files.delete(Paths.get(input.getAbsolutePath()));
-				ex.printStackTrace();
-			} 
-			catch (IOException e) 
-			{
-				throw new CryptoException("Error deleting the invalid encrypted file", e);
-			}
+			
 			throw new CryptoException("Error encrypting/decrypting file", ex);
 		}
 	}
 
-	@SuppressWarnings("static-access")
-	public static void main(String[] args) {
-		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-		File f1 = new File(logpath + "jfstmerge.files");
-		File f2 = new File(logpath + "jfstmerge.statistics");
-		try {
-			new CryptoUtils().decrypt(f1, f1);
-			new CryptoUtils().decrypt(f2, f2);
-
-			//			new CryptoUtils().encrypt(f1, f1);
-			//			new CryptoUtils().encrypt(f2, f2);
-		} catch (CryptoException e) {
-			e.printStackTrace();
-		}
-	}
+//	@SuppressWarnings("static-access")
+//	public static void main(String[] args) {
+//		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+//		File f1 = new File(logpath + "jfstmerge.files");
+//		File f2 = new File(logpath + "jfstmerge.statistics");
+//		try {
+//			new CryptoUtils().decrypt(f1, f1);
+//			new CryptoUtils().decrypt(f2, f2);
+//
+//			//			new CryptoUtils().encrypt(f1, f1);
+//			//			new CryptoUtils().encrypt(f2, f2);
+//		} catch (CryptoException e) {
+//			e.printStackTrace();
+//		}
+//	}
 }

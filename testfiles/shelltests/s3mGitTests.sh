@@ -5,6 +5,10 @@
 # Test to know if s3m semistructured merge is working and detecting conflicts
 testSemistructuredMerge()
 {
+    cp -r exemplo/ $HOME/
+    cp -r exemplotxt/ $HOME/
+    cd $HOME
+    rm -rf repo
     mkdir repo
     cd repo
     git init
@@ -89,6 +93,40 @@ testWorkingDiff()
     rm -rf repo
 }
 
+# Test to know if invalid or malicious log files are crashing the tool
+testCryptoIssueAvoidance() 
+{   
+    rm -rf .jfstmerge
+    mkdir .jfstmerge
+    cp exemplo/jfstmerge.statistics .jfstmerge/
+    rm -rf repo
+    mkdir repo
+    cd repo
+    git init
+    cp ../exemplo/base.java .
+    git add .
+    git commit -m "base"
+    git checkout -b left
+    rm base.java
+    cp ../exemplo/left.java base.java
+    git add .
+    git commit -m "left"
+    git checkout master
+    git checkout -b right
+    rm base.java
+    cp ../exemplo/right.java base.java
+    git add .
+    git commit -m "right"
+    git checkout master
+    git merge left
+    git merge right
+    cd ..
+    cd .jfstmerge
+    CRYPTO_WORKED=$(ls | grep -c "defect")
+    assertTrue "[ $CRYPTO_WORKED -eq 1 ]"
+    cd .. 
+    rm -rf repo
+}
 
 
 

@@ -20,6 +20,8 @@ import br.ufpe.cin.mergers.util.Source;
 
 public class LoggerStatistics {
 
+	public static int recursionCounter = 0;
+
 	public static void logContext(String msg, MergeContext context) throws PrintException{
 		try{
 			initializeLogger();
@@ -41,7 +43,24 @@ public class LoggerStatistics {
 			logFiles(timeStamp,context);
 			logSummary();
 
-		}catch(Exception e){
+		}
+		catch (CryptoException c)
+		{
+			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			logpath = logpath + "jfstmerge.statistics";
+			File log = new File(logpath);
+			if (log.exists())
+			{
+				File log_defect = new File(logpath+"_defect"+System.currentTimeMillis());
+				log.renameTo(log_defect);
+			}
+			if(recursionCounter < 1)
+			{
+				recursionCounter++;
+				logContext(msg,context);
+			}
+		}
+		catch(Exception e){
 			throw new PrintException(ExceptionUtils.getCauseMessage(e));
 		}
 	}
@@ -88,116 +107,153 @@ public class LoggerStatistics {
 	}
 
 	@SuppressWarnings("unused")
-	private static void logSummary() throws IOException, CryptoException {
-		//retrieving statistics
-		String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-		new File(logpath).mkdirs(); //ensuring that the directories exists	
-		File statistics = new File(logpath+ "jfstmerge.statistics");
-		if(statistics.exists()){
-			int ssmergeconfs = 0;
-			int ssmergeloc = 0;
-			int ssmergerenamingconfs = 0;
-			int ssmergedeletionconfs = 0;
-			int ssmergetaeconfs = 0;
-			int ssmergenereoconfs = 0;
-			int ssmergeinitlblocksconfs = 0;
-			int unmergeconfs = 0;
-			int unmergeloc = 0;
-			long unmergetime = 0;
-			long ssmergetime = 0;
-			int duplicateddeclarationerrors = 0;
-			int equalconfs = 0;
+	private static void logSummary() throws IOException{
+		try{
+			//retrieving statistics
+			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			new File(logpath).mkdirs(); //ensuring that the directories exists	
+			File statistics = new File(logpath+ "jfstmerge.statistics");
+			if(statistics.exists()){
+				int ssmergeconfs = 0;
+				int ssmergeloc = 0;
+				int ssmergerenamingconfs = 0;
+				int ssmergedeletionconfs = 0;
+				int ssmergetaeconfs = 0;
+				int ssmergenereoconfs = 0;
+				int ssmergeinitlblocksconfs = 0;
+				int unmergeconfs = 0;
+				int unmergeloc = 0;
+				long unmergetime = 0;
+				long ssmergetime = 0;
+				int duplicateddeclarationerrors = 0;
+				int equalconfs = 0;
 
-			CryptoUtils.decrypt(statistics, statistics);
-			List<String> lines = Files.readAllLines(statistics.toPath());
-			for(int i = 1; i <lines.size(); i++){
-				String[] columns = lines.get(i).split(",");
+				CryptoUtils.decrypt(statistics, statistics);
+				List<String> lines = Files.readAllLines(statistics.toPath());
+				for(int i = 1; i <lines.size(); i++){
+					String[] columns = lines.get(i).split(",");
 
-				ssmergeconfs += Integer.valueOf(columns[2]);
-				ssmergeloc += Integer.valueOf(columns[3]);
-				ssmergerenamingconfs += Integer.valueOf(columns[4]);
-				ssmergedeletionconfs += Integer.valueOf(columns[5]);
-				ssmergetaeconfs += Integer.valueOf(columns[6]);
-				ssmergenereoconfs += Integer.valueOf(columns[7]);
-				ssmergeinitlblocksconfs += Integer.valueOf(columns[8]);
-				unmergeconfs += Integer.valueOf(columns[9]);
-				unmergeloc += Integer.valueOf(columns[10]);
-				unmergetime += Long.parseLong(columns[11]);
-				ssmergetime += Long.parseLong((columns[12]));
-				duplicateddeclarationerrors += Integer.valueOf(columns[13]);
-				equalconfs += Integer.valueOf(columns[14]);
+					ssmergeconfs += Integer.valueOf(columns[2]);
+					ssmergeloc += Integer.valueOf(columns[3]);
+					ssmergerenamingconfs += Integer.valueOf(columns[4]);
+					ssmergedeletionconfs += Integer.valueOf(columns[5]);
+					ssmergetaeconfs += Integer.valueOf(columns[6]);
+					ssmergenereoconfs += Integer.valueOf(columns[7]);
+					ssmergeinitlblocksconfs += Integer.valueOf(columns[8]);
+					unmergeconfs += Integer.valueOf(columns[9]);
+					unmergeloc += Integer.valueOf(columns[10]);
+					unmergetime += Long.parseLong(columns[11]);
+					ssmergetime += Long.parseLong((columns[12]));
+					duplicateddeclarationerrors += Integer.valueOf(columns[13]);
+					equalconfs += Integer.valueOf(columns[14]);
 
+				}
+				CryptoUtils.encrypt(statistics, statistics);
+
+				//summarizing retrieved statistics
+				int X = lines.size()-1;
+				int Y = (unmergeconfs - ssmergeconfs) + duplicateddeclarationerrors - (ssmergetaeconfs + ssmergenereoconfs + ssmergeinitlblocksconfs);Y=(Y>0)?Y:0;
+				int Z = duplicateddeclarationerrors;
+				int A = ssmergerenamingconfs;
+				int B = unmergeconfs - equalconfs - Y;B=(B>0)?B:0;
+				double M = ((double)ssmergetime / 1000000000);
+				double N = ((double)unmergetime / 1000000000);
+
+				StringBuilder summary = new StringBuilder();
+				summary.append("s3m was invoked in " +X+ " JAVA files so far.\n");
+				summary.append("In these files, you avoided at least " +Y+" false positives and at least "+Z+" false negatives in relation to unstructured merge.\n");
+				summary.append("On the other hand, you had at most " +A+ " extra false positives and " +B+ " extra false negatives.\n");
+				summary.append("s3m reported "+ssmergeconfs+" conflicts, totalizing " +ssmergeloc+ " conflicting LOC, compared to "+unmergeconfs+" conflicts and " +unmergeloc+ " conflicting LOC from unstructured merge, where " +equalconfs+ " conflicts are equal.\n");
+				summary.append("Finally, s3m took " + (new DecimalFormat("#.##").format(M))+" seconds, and unstructured merge " + (new DecimalFormat("#.##").format(N)) + " seconds to merge all these files.");
+				summary.append("\n\n\n");
+				summary.append("LAST TIME UPDATED: " + (new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime())));
+
+				//print summary
+				File fsummary = new File(logpath+ "jfstmerge.summary");
+				if(!fsummary.exists()){
+					fsummary.createNewFile();
+				}
+				FileUtils.write(fsummary, summary.toString(),false);
 			}
-			CryptoUtils.encrypt(statistics, statistics);
-
-			//summarizing retrieved statistics
-			int X = lines.size()-1;
-			int Y = (unmergeconfs - ssmergeconfs) + duplicateddeclarationerrors - (ssmergetaeconfs + ssmergenereoconfs + ssmergeinitlblocksconfs);Y=(Y>0)?Y:0;
-			int Z = duplicateddeclarationerrors;
-			int A = ssmergerenamingconfs;
-			int B = unmergeconfs - equalconfs - Y;B=(B>0)?B:0;
-			double M = ((double)ssmergetime / 1000000000);
-			double N = ((double)unmergetime / 1000000000);
-
-			StringBuilder summary = new StringBuilder();
-			summary.append("s3m was invoked in " +X+ " JAVA files so far.\n");
-			summary.append("In these files, you avoided at least " +Y+" false positives and at least "+Z+" false negatives in relation to unstructured merge.\n");
-			summary.append("On the other hand, you had at most " +A+ " extra false positives and " +B+ " extra false negatives.\n");
-			summary.append("s3m reported "+ssmergeconfs+" conflicts, totalizing " +ssmergeloc+ " conflicting LOC, compared to "+unmergeconfs+" conflicts and " +unmergeloc+ " conflicting LOC from unstructured merge, where " +equalconfs+ " conflicts are equal.\n");
-			summary.append("Finally, s3m took " + (new DecimalFormat("#.##").format(M))+" seconds, and unstructured merge " + (new DecimalFormat("#.##").format(N)) + " seconds to merge all these files.");
-			summary.append("\n\n\n");
-			summary.append("LAST TIME UPDATED: " + (new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime())));
-
-			//print summary
-			File fsummary = new File(logpath+ "jfstmerge.summary");
-			if(!fsummary.exists()){
-				fsummary.createNewFile();
+		}
+		catch(CryptoException c)
+		{
+			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			logpath = logpath + "jfstmerge.statistics";
+			File log = new File(logpath);
+			if (log.exists())
+			{
+				File log_defect = new File(logpath+"_defect"+System.currentTimeMillis());
+				log.renameTo(log_defect);
 			}
-			FileUtils.write(fsummary, summary.toString(),false);
+			if(recursionCounter < 1)
+			{
+				recursionCounter++;
+				logSummary();
+			}
 		}
 	}
 
-	private static void logFiles(String timeStamp, MergeContext context) throws IOException, CryptoException {
-		//initialization
-		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-		new File(logpath).mkdirs(); //ensuring that the directories exists	
-		logpath = logpath + "jfstmerge.files";
-		manageLogBuffer(logpath);
-		File logfiles = new File(logpath);
+	private static void logFiles(String timeStamp, MergeContext context) throws IOException {
+		try{
+			//initialization
+			String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			new File(logpath).mkdirs(); //ensuring that the directories exists	
+			logpath = logpath + "jfstmerge.files";
+			manageLogBuffer(logpath);
+			File logfiles = new File(logpath);
 
-		if(!logfiles.exists()){
-			logfiles.createNewFile();
+			if(!logfiles.exists()){
+				logfiles.createNewFile();
+
+				CryptoUtils.encrypt(logfiles, logfiles);
+			}
+			CryptoUtils.decrypt(logfiles, logfiles);
+
+			//writing source code content
+			//left
+			String leftcontent = context.getLeftContent();
+			if(!leftcontent.isEmpty()){
+				FileUtils.write(logfiles, timeStamp+","+context.getLeft().getAbsolutePath()+"\n", true);
+				FileUtils.write(logfiles, leftcontent + "\n", true);
+				FileUtils.write(logfiles, "!@#$%\n", true); //separator
+			}
+
+			//base
+			String basecontent = context.getBaseContent();
+			if(!basecontent.isEmpty()){
+				FileUtils.write(logfiles, timeStamp+","+context.getBase().getAbsolutePath()+"\n", true);
+				FileUtils.write(logfiles, basecontent + "\n", true);
+				FileUtils.write(logfiles, "!@#$%\n", true); 
+			}
+
+			//right
+			String rightcontent = context.getRightContent();
+			if(!rightcontent.isEmpty()){
+				FileUtils.write(logfiles, timeStamp+","+context.getRight().getAbsolutePath()+"\n", true);
+				FileUtils.write(logfiles, rightcontent + "\n", true);
+				FileUtils.write(logfiles, "!@#$%\n", true); 
+			}
 
 			CryptoUtils.encrypt(logfiles, logfiles);
 		}
-		CryptoUtils.decrypt(logfiles, logfiles);
+		catch (CryptoException c)
+		{
+			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			logpath = logpath + "jfstmerge.statistics";
+			File log = new File(logpath);
+			if (log.exists())
+			{
+				File log_defect = new File(logpath+"_defect"+System.currentTimeMillis());
+				log.renameTo(log_defect);
+			}
 
-		//writing source code content
-		//left
-		String leftcontent = context.getLeftContent();
-		if(!leftcontent.isEmpty()){
-			FileUtils.write(logfiles, timeStamp+","+context.getLeft().getAbsolutePath()+"\n", true);
-			FileUtils.write(logfiles, leftcontent + "\n", true);
-			FileUtils.write(logfiles, "!@#$%\n", true); //separator
+			if(recursionCounter < 1)
+			{
+				recursionCounter++;
+				logFiles(timeStamp,context);
+			}
 		}
-
-		//base
-		String basecontent = context.getBaseContent();
-		if(!basecontent.isEmpty()){
-			FileUtils.write(logfiles, timeStamp+","+context.getBase().getAbsolutePath()+"\n", true);
-			FileUtils.write(logfiles, basecontent + "\n", true);
-			FileUtils.write(logfiles, "!@#$%\n", true); 
-		}
-
-		//right
-		String rightcontent = context.getRightContent();
-		if(!rightcontent.isEmpty()){
-			FileUtils.write(logfiles, timeStamp+","+context.getRight().getAbsolutePath()+"\n", true);
-			FileUtils.write(logfiles, rightcontent + "\n", true);
-			FileUtils.write(logfiles, "!@#$%\n", true); 
-		}
-
-		CryptoUtils.encrypt(logfiles, logfiles);
 	}
 
 
