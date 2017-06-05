@@ -17,7 +17,8 @@ This project uses Gradle to manage all dependencies and versioning.
 Installation
 -------------
 Double-click on the jar from the [/installer](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/installer]) folder.
-In case double-click does not work, install with the command `java -jar s3mInstaller.jar`
+In case double-click does not work, install with the command 
+`java -jar s3mInstaller.jar`
 
 Usage
 -------------
