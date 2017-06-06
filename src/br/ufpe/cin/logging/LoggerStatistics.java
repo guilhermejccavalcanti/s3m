@@ -54,6 +54,7 @@ public class LoggerStatistics {
 			{
 				File log_defect = new File(logpath+"_defect"+System.currentTimeMillis());
 				log.renameTo(log_defect);
+
 			}
 			if(numberOfCriptographyFixAttempts < 1)
 			{
@@ -248,7 +249,6 @@ public class LoggerStatistics {
 				File log_defect = new File(logpath+"_defect"+System.currentTimeMillis());
 				log.renameTo(log_defect);
 			}
-
 			if(numberOfCriptographyFixAttempts < 1)
 			{
 				numberOfCriptographyFixAttempts++;

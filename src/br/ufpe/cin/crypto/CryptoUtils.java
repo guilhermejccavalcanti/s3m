@@ -37,6 +37,8 @@ public class CryptoUtils {
 
 	private static void doCrypto(int cipherMode, File input, File output) throws CryptoException
 	{
+		FileInputStream inputStream = null;
+		FileOutputStream outputStream = null;
 		try
 		{
 
@@ -46,13 +48,13 @@ public class CryptoUtils {
 			IvParameterSpec ivParams = new IvParameterSpec(iv);
 			cipher.init(cipherMode, SECRETKEY, ivParams);
 
-			FileInputStream inputStream = new FileInputStream(input);
+			inputStream = new FileInputStream(input);
 			byte [] inputBytes = new byte[(int) input.length()];
 			inputStream.read(inputBytes);
 
 			byte [] outputBytes = cipher.doFinal(inputBytes);
 
-			FileOutputStream outputStream = new FileOutputStream(output,false);
+			outputStream = new FileOutputStream(output,false);
 			outputStream.write(outputBytes);
 
 			inputStream.close();
@@ -65,6 +67,14 @@ public class CryptoUtils {
 		{
 			
 			throw new CryptoException("Error encrypting/decrypting file", ex);
+		}
+		finally{
+			try {
+				if(null!= inputStream)inputStream.close();
+				if(null!= outputStream)outputStream.close();
+			} catch (IOException e) {
+				throw new CryptoException("Error encrypting/decrypting file", e);
+			}
 		}
 	}
 
