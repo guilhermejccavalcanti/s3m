@@ -35,6 +35,30 @@ public class CryptoUtils {
 		doCrypto(Cipher.DECRYPT_MODE,inputFile, outputFile);
 	}
 
+	//method to encrypt strings if required in future
+	public static String encryptString(String input) throws CryptoException
+	{
+		try
+		{
+			Cipher cipher = Cipher.getInstance(TRANSFORMATION);
+			byte[] iv = new byte[cipher.getBlockSize()];
+	
+			IvParameterSpec ivParams = new IvParameterSpec(iv);
+			cipher.init(Cipher.ENCRYPT_MODE, SECRETKEY, ivParams);
+			
+			byte[] encrypted=cipher.doFinal(input.getBytes());
+			return new String(encrypted);
+			
+		} 
+		catch(NoSuchPaddingException | NoSuchAlgorithmException
+				| InvalidKeyException | BadPaddingException
+				| IllegalBlockSizeException | InvalidAlgorithmParameterException ex)
+		{
+			throw new CryptoException("Error encrypting/decrypting file", ex);
+
+		}
+	}
+	
 	private static void doCrypto(int cipherMode, File input, File output) throws CryptoException
 	{
 		FileInputStream inputStream = null;

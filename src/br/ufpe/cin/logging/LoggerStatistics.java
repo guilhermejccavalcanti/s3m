@@ -33,13 +33,11 @@ public class LoggerStatistics {
 			String logentry	 = timeStamp+","+msg+"\n";
 			logpath = logpath + "jfstmerge.statistics";
 			File statisticsLog = new File(logpath);
-
+			
 			CryptoUtils.decrypt(statisticsLog, statisticsLog);
-
+			
 			FileUtils.write(statisticsLog, logentry, true);
-
-			CryptoUtils.encrypt(statisticsLog, statisticsLog);
-
+			
 			//logging merged files for further analysis
 			logFiles(timeStamp,context);
 			logSummary();
@@ -130,7 +128,6 @@ public class LoggerStatistics {
 				int duplicateddeclarationerrors = 0;
 				int equalconfs = 0;
 
-				CryptoUtils.decrypt(statistics, statistics);
 				List<String> lines = Files.readAllLines(statistics.toPath());
 				for(int i = 1; i <lines.size(); i++){
 					String[] columns = lines.get(i).split(",");
@@ -175,6 +172,7 @@ public class LoggerStatistics {
 				if(!fsummary.exists()){
 					fsummary.createNewFile();
 				}
+				
 				FileUtils.write(fsummary, summary.toString(),false);
 			}
 		}
@@ -207,15 +205,14 @@ public class LoggerStatistics {
 
 			if(!logfiles.exists()){
 				logfiles.createNewFile();
-
-				CryptoUtils.encrypt(logfiles, logfiles);
 			}
-			CryptoUtils.decrypt(logfiles, logfiles);
+			
 
 			//writing source code content
 			//left
 			String leftcontent = context.getLeftContent();
 			if(!leftcontent.isEmpty()){
+
 				FileUtils.write(logfiles, timeStamp+","+context.getLeft().getAbsolutePath()+"\n", true);
 				FileUtils.write(logfiles, leftcontent + "\n", true);
 				FileUtils.write(logfiles, "!@#$%\n", true); //separator
@@ -224,6 +221,7 @@ public class LoggerStatistics {
 			//base
 			String basecontent = context.getBaseContent();
 			if(!basecontent.isEmpty()){
+
 				FileUtils.write(logfiles, timeStamp+","+context.getBase().getAbsolutePath()+"\n", true);
 				FileUtils.write(logfiles, basecontent + "\n", true);
 				FileUtils.write(logfiles, "!@#$%\n", true); 
@@ -232,12 +230,11 @@ public class LoggerStatistics {
 			//right
 			String rightcontent = context.getRightContent();
 			if(!rightcontent.isEmpty()){
+
 				FileUtils.write(logfiles, timeStamp+","+context.getRight().getAbsolutePath()+"\n", true);
 				FileUtils.write(logfiles, rightcontent + "\n", true);
 				FileUtils.write(logfiles, "!@#$%\n", true); 
 			}
-
-			CryptoUtils.encrypt(logfiles, logfiles);
 		}
 		catch (CryptoException c)
 		{
@@ -271,7 +268,6 @@ public class LoggerStatistics {
 		if(!new File(logpath).exists()){
 			File statisticsLog = new File(logpath);
 			FileUtils.write(statisticsLog, header, true);
-
 			CryptoUtils.encrypt(statisticsLog, statisticsLog);
 		}
 	}
@@ -285,7 +281,7 @@ public class LoggerStatistics {
 		File log = new File(logpath);
 		if(log.exists()){
 			long logSizeMB = log.length() / (1024 * 1024);
-			if(logSizeMB >= 10){
+			if(logSizeMB >= 4){
 				File newLog = new File(logpath+System.currentTimeMillis());
 				log.renameTo(newLog);
 			}
