@@ -71,7 +71,8 @@ public class LoggerStatistics {
 		logpath = logpath + "jfstmerge.statistics.scenarios";
 
 		//reading the log file to see if it is not empty neither contains the header
-		String header = "revision,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,duplicateddeclarationerrors,equalconfs\n";
+		String header = "revision,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,"
+				+ "ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,duplicateddeclarationerrors,equalconfs\n";
 		File statisticsLog = new File(logpath);
 		if(!statisticsLog.exists()){
 			FileUtils.write(statisticsLog, header, true);
@@ -205,9 +206,11 @@ public class LoggerStatistics {
 
 			if(!logfiles.exists()){
 				logfiles.createNewFile();
+				CryptoUtils.encrypt(logfiles, logfiles);
 			}
 			
-
+			CryptoUtils.decrypt(logfiles, logfiles); 
+			
 			//writing source code content
 			//left
 			String leftcontent = context.getLeftContent();
@@ -235,6 +238,8 @@ public class LoggerStatistics {
 				FileUtils.write(logfiles, rightcontent + "\n", true);
 				FileUtils.write(logfiles, "!@#$%\n", true); 
 			}
+			
+			CryptoUtils.encrypt(logfiles, logfiles); 
 		}
 		catch (CryptoException c)
 		{
@@ -262,7 +267,8 @@ public class LoggerStatistics {
 
 		manageLogBuffer(logpath);
 
-		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,duplicateddeclarationerrors,equalconfs\n";
+		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,"
+				+ "ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,duplicateddeclarationerrors,equalconfs\n";
 
 		//reading the log file to see if it is not empty neither contains the header
 		if(!new File(logpath).exists()){
