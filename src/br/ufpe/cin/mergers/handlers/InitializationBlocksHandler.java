@@ -23,51 +23,57 @@ public class InitializationBlocksHandler {
 	public static void handle(MergeContext context,	List<FSTNode> leftInitlBlocks, List<FSTNode> baseInitlBlocks, List<FSTNode> rightInitlBlocks) throws TextualMergeException {
 		List<Triple> matchedInitlBlocks = new ArrayList<Triple>();
 
-		//1. find similar left and right nodes to a base node
-		for(FSTNode baseBlock : baseInitlBlocks){
-			//search similar node in left and remove from the list of left nodes
-			FSTNode leftSimilarBlock = leftInitlBlocks.stream()                        
-					.filter(leftBlock -> areSimilarBlocks(baseBlock, leftBlock))       
-					.findFirst()                                      
-					.orElse(null);
-			leftInitlBlocks = leftInitlBlocks.stream()
-					.filter(leftBlock -> !leftSimilarBlock.equals(leftBlock))
-					.collect(Collectors.toList());
+		//1. when there is only a single block, this is the match
+		if(leftInitlBlocks.size()==1 && rightInitlBlocks.size()==1 && baseInitlBlocks.size()==1){
+			Triple matched 	   = new Triple(leftInitlBlocks.get(0), baseInitlBlocks.get(0), rightInitlBlocks.get(0));
+			matchedInitlBlocks.add(matched);
+		} else {
+			//2. find similar left and right nodes to a base node
+			for(FSTNode baseBlock : baseInitlBlocks){
+				//search similar node in left and remove from the list of left nodes
+				FSTNode leftSimilarBlock = leftInitlBlocks.stream()                        
+						.filter(leftBlock -> areSimilarBlocks(baseBlock, leftBlock))       
+						.findFirst()                                      
+						.orElse(null);
+				leftInitlBlocks = leftInitlBlocks.stream()
+						.filter(leftBlock -> !leftSimilarBlock.equals(leftBlock))
+						.collect(Collectors.toList());
 
-			//search similar node in right and remove from the list of right nodes
-			FSTNode rightSimilarBlock= rightInitlBlocks.stream()
-					.filter(rightBlock -> areSimilarBlocks(baseBlock, rightBlock))
-					.findFirst()
-					.orElse(null);
-			rightInitlBlocks = rightInitlBlocks.stream()
-					.filter(rightBlock -> !rightSimilarBlock.equals(rightBlock))
-					.collect(Collectors.toList());
+				//search similar node in right and remove from the list of right nodes
+				FSTNode rightSimilarBlock= rightInitlBlocks.stream()
+						.filter(rightBlock -> areSimilarBlocks(baseBlock, rightBlock))
+						.findFirst()
+						.orElse(null);
+				rightInitlBlocks = rightInitlBlocks.stream()
+						.filter(rightBlock -> !rightSimilarBlock.equals(rightBlock))
+						.collect(Collectors.toList());
 
-			//only when there similar (left and right) nodes we proceed
-			if(rightSimilarBlock != null && leftSimilarBlock != null){ 
-				Triple matched 	   = new Triple(leftSimilarBlock, baseBlock, rightSimilarBlock);
-				matchedInitlBlocks.add(matched);
+				//only when there similar (left and right) nodes we proceed
+				if(rightSimilarBlock != null && leftSimilarBlock != null){ 
+					Triple matched 	   = new Triple(leftSimilarBlock, baseBlock, rightSimilarBlock);
+					matchedInitlBlocks.add(matched);
+				}
+			}
+
+			//3. in cases there is no base similar, but still left and right might be similar
+			for(FSTNode leftBlock : leftInitlBlocks){
+				//search similar node in right and remove from the list of right nodes
+				FSTNode rightSimilarBlock= rightInitlBlocks.stream()
+						.filter(rightBlock -> areSimilarBlocks(leftBlock, rightBlock))
+						.findFirst()
+						.orElse(null);
+				rightInitlBlocks = rightInitlBlocks.stream()
+						.filter(rightBlock -> !rightSimilarBlock.equals(rightBlock))
+						.collect(Collectors.toList());
+
+				if(rightSimilarBlock  != null){
+					Triple matched 	   = new Triple(leftBlock, null, rightSimilarBlock);
+					matchedInitlBlocks.add(matched);
+				}
 			}
 		}
 
-		//2. in cases there is no base similar, but still left and right might be similar
-		for(FSTNode leftBlock : leftInitlBlocks){
-			//search similar node in right and remove from the list of right nodes
-			FSTNode rightSimilarBlock= rightInitlBlocks.stream()
-					.filter(rightBlock -> areSimilarBlocks(leftBlock, rightBlock))
-					.findFirst()
-					.orElse(null);
-			rightInitlBlocks = rightInitlBlocks.stream()
-					.filter(rightBlock -> !rightSimilarBlock.equals(rightBlock))
-					.collect(Collectors.toList());
-
-			if(rightSimilarBlock  != null){
-				Triple matched 	   = new Triple(leftBlock, null, rightSimilarBlock);
-				matchedInitlBlocks.add(matched);
-			}
-		}
-
-		//3. merge the matched triples
+		//4. merge the matched triples
 		for(Triple tp : matchedInitlBlocks){
 			String leftcontent = (tp.left!=null)?((FSTTerminal) tp.left).getBody() : "";
 			String basecontent = (tp.base!=null)?((FSTTerminal) tp.base).getBody() : "";
@@ -75,7 +81,7 @@ public class InitializationBlocksHandler {
 
 			String mergedContent = TextualMerge.merge(leftcontent, basecontent, rightcontent, true);
 
-			//4. updating merged AST
+			//5. updating merged AST
 			if(tp.left != null && tp.right != null){
 				FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftcontent , mergedContent);
 				FilesManager.findAndDeleteASTNode(context.superImposedTree, rightcontent);
