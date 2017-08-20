@@ -10,6 +10,7 @@ import org.junit.runners.Suite.SuiteClasses;
 	TypeAmbiguityErrorHandlerTest.class,
 	RenamingOrDeletionConflictsHandlerTest.class,
 	InitializationBlocksHandlerTest.class,
-	DuplicatedDeclarationErrorsHandlerTest.class
+	DuplicatedDeclarationErrorsHandlerTest.class,
+	DeletionsHandlerTest.class
 })
 public class AllHandlersTest {}

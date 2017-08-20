@@ -22,8 +22,8 @@ public final class RenamingOrDeletionConflictsHandler {
 
 	public static void handle(MergeContext context) {
 		//possible renamings or deletions in left
-		if(!context.deletedLeftNodes.isEmpty() || !context.deletedRightNodes.isEmpty()){
-			for(Pair<String,FSTNode> tuple: context.deletedLeftNodes){
+		if(!context.possibleRenamedLeftNodes.isEmpty() || !context.possibleRenamedRightNodes.isEmpty()){
+			for(Pair<String,FSTNode> tuple: context.possibleRenamedLeftNodes){
 				List<Pair<Double,String>> similarNodes = new ArrayList<Pair<Double,String>>(); //list of possible nodes renaming a previous one
 				if(nodeHasConflict(tuple.getRight())){
 					String baseContent = tuple.getLeft();
@@ -52,7 +52,7 @@ public final class RenamingOrDeletionConflictsHandler {
 			}
 
 			//possible renamings or deletions in right
-			for(Pair<String,FSTNode> tuple: context.deletedRightNodes){
+			for(Pair<String,FSTNode> tuple: context.possibleRenamedRightNodes){
 				List<Pair<Double,String>> similarNodes = new ArrayList<Pair<Double,String>>(); //list of possible nodes renaming a previous one
 				if(nodeHasConflict(tuple.getRight())){
 					String baseContent = tuple.getLeft();

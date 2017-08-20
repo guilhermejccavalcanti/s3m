@@ -24,6 +24,7 @@ final public class ConflictsHandler {
 		findAndDetectNewElementReferencingEditedOne(context);
 		findAndResolveRenamingOrDeletionConflicts(context);
 		findAndDetectInitializationBlocks(context);
+		findAndDetectDeletionsOfHighLevelElements(context);
 		findAndAccountDuplicatedDeclarationErrors(context);
 	}
 
@@ -78,5 +79,10 @@ final public class ConflictsHandler {
 	private static void findAndAccountDuplicatedDeclarationErrors(MergeContext context) {
 		//invoking the specific handler for duplicated declaration errors
 		DuplicatedDeclarationHandler.handle(context);
+	}
+	
+	private static void findAndDetectDeletionsOfHighLevelElements(MergeContext context) {
+		//invoking the specific handler for high level deletions (classes, inner classes, etc.)
+		DeletionsHandler.handle(context);
 	}
 }

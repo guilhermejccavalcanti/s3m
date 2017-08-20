@@ -80,11 +80,18 @@ public final class SemistructuredMerge {
 		right.index = 2;
 
 		MergeContext context = new MergeContext();
+		context.leftTree  = left;
+		context.baseTree  = base;
+		context.rightTree = right;
+		
 		FSTNode mergeLeftBase = superimpose(left, base, null, context, true);
 		FSTNode mergeLeftBaseRight = superimpose(mergeLeftBase, right, null, context, false);
+		
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
 		mergeMatchedContent(mergeLeftBaseRight, context);
+		
 		context.superImposedTree = mergeLeftBaseRight;
+		
 		return context;
 	}
 
@@ -109,7 +116,10 @@ public final class SemistructuredMerge {
 				FSTNonTerminal nonterminalB = (FSTNonTerminal) nodeB;
 				FSTNonTerminal nonterminalComposed = (FSTNonTerminal) composed;
 
-				for (FSTNode childB : nonterminalB.getChildren()) { 	// nodes from base or right
+				/*
+				 * nodes from base or right
+				 */
+				for (FSTNode childB : nonterminalB.getChildren()) { 	
 					FSTNode childA = nonterminalA.getCompatibleChild(childB);
 					if (childA == null) { 								// means that a base node was deleted by left, or that a right node was added
 						FSTNode cloneB = childB.getDeepClone();
@@ -117,14 +127,11 @@ public final class SemistructuredMerge {
 							childB.index = nodeB.index;
 						cloneB.index = childB.index;
 
-						// if(!context.deletedBaseNodes.contains(cloneB) &&
-						// !isProcessingBaseTree){ //TODO: needs more testing,
-						// managing removals
 						nonterminalComposed.addChild(cloneB);			// cloneB must be removed afterwards if it is a base node
-						// }
 
 						if (isProcessingBaseTree) {
 							context.deletedBaseNodes.add(cloneB); 		// base nodes deleted by left
+							context.nodesDeletedByLeft.add(cloneB);
 						} else {
 							context.addedRightNodes.add(cloneB); 		// nodes added by right
 						}
@@ -133,11 +140,19 @@ public final class SemistructuredMerge {
 							childA.index = nodeA.index;
 						if (childB.index == -1)
 							childB.index = nodeB.index;
+						
+						if(!isProcessingBaseTree && context.addedLeftNodes.contains(childA)){ //duplications
+							context.addedRightNodes.add(childB); 		
+						}
 
 						nonterminalComposed.addChild(superimpose(childA, childB, nonterminalComposed, context, isProcessingBaseTree));
 					}
 				}
-				for (FSTNode childA : nonterminalA.getChildren()) { 	// nodes from left, leftBase
+
+				/*
+				 * nodes from left or leftBase
+				 */
+				for (FSTNode childA : nonterminalA.getChildren()) { 	
 					FSTNode childB = nonterminalB.getCompatibleChild(childA);
 					if (childB == null) { 								// is a new node from left, or a deleted base node in right
 						FSTNode cloneA = childA.getDeepClone();
@@ -145,23 +160,17 @@ public final class SemistructuredMerge {
 							childA.index = nodeA.index;
 						cloneA.index = childA.index;
 
-						/*
-						 * if(isProcessingBaseTree &&
-						 * !context.addedLeftNodes.contains(cloneA)){ //is a new
-						 * left node in relation to base
-						 * context.addedLeftNodes.add(cloneA); //node added by
-						 * left }
-						 */
-
 						nonterminalComposed.addChild(cloneA);			 // only if is a new left node =~ it is not a base node
 
 						if (context.deletedBaseNodes.contains(childA)) { // this is only possible when processing right nodes because this is a base node not present either in left and right
 							context.deletedBaseNodes.remove(childA);
 							context.deletedBaseNodes.add(cloneA);
+						}
+
+						if(isProcessingBaseTree){ //node added by left in relation to base
+							context.addedLeftNodes.add(cloneA);
 						} else {
-							if (!context.addedLeftNodes.contains(cloneA)) {
-								context.addedLeftNodes.add(cloneA); 	// node added by left in relation to right
-							}
+							context.nodesDeletedByRight.add(cloneA);
 						}
 					} else {
 						if (!isProcessingBaseTree) {
@@ -285,10 +294,10 @@ public final class SemistructuredMerge {
 		if (!baseContenttrim.isEmpty()) {
 			if (!baseContenttrim.equals(leftContenttrim) && rightContenttrim.isEmpty()) {
 				Pair<String, FSTNode> tuple = Pair.of(baseContent, node);
-				context.deletedRightNodes.add(tuple);
+				context.possibleRenamedRightNodes.add(tuple);
 			} else if (!baseContenttrim.equals(rightContenttrim) && leftContenttrim.isEmpty()) {
 				Pair<String, FSTNode> tuple = Pair.of(baseContent, node);
-				context.deletedLeftNodes.add(tuple);
+				context.possibleRenamedLeftNodes.add(tuple);
 			}
 		}
 	}

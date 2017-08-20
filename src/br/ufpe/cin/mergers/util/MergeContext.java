@@ -29,12 +29,19 @@ public class MergeContext {
 	public List<FSTNode> addedRightNodes= new ArrayList<FSTNode>();
 	
 	public List<FSTNode> deletedBaseNodes = new ArrayList<FSTNode>();
-	public List<Pair<String,FSTNode>> deletedLeftNodes = new ArrayList<Pair<String,FSTNode>>();
-	public List<Pair<String,FSTNode>> deletedRightNodes= new ArrayList<Pair<String,FSTNode>>();
+	public List<FSTNode> nodesDeletedByLeft = new ArrayList<FSTNode>(); 
+	public List<FSTNode> nodesDeletedByRight= new ArrayList<FSTNode>();
+
+	public List<Pair<String,FSTNode>> possibleRenamedLeftNodes = new ArrayList<Pair<String,FSTNode>>();
+	public List<Pair<String,FSTNode>> possibleRenamedRightNodes= new ArrayList<Pair<String,FSTNode>>();
 
 	public List<FSTNode> editedLeftNodes = new ArrayList<FSTNode>(); 
 	public List<FSTNode> editedRightNodes= new ArrayList<FSTNode>();
+	
 
+	public FSTNode leftTree;
+	public FSTNode baseTree;
+	public FSTNode rightTree;
 	public FSTNode superImposedTree;
 	public String semistructuredOutput;
 	public String unstructuredOutput;
@@ -81,9 +88,16 @@ public class MergeContext {
 		this.editedRightNodes.addAll(otherContext.editedRightNodes);
 		
 		this.deletedBaseNodes. addAll(otherContext.deletedBaseNodes);
-		this.deletedLeftNodes. addAll(otherContext.deletedLeftNodes);
-		this.deletedRightNodes.addAll(otherContext.deletedRightNodes);
+		this.nodesDeletedByLeft. addAll(otherContext.nodesDeletedByLeft);
+		this.nodesDeletedByRight. addAll(otherContext.nodesDeletedByRight);
 
+		
+		this.possibleRenamedLeftNodes. addAll(otherContext.possibleRenamedLeftNodes);
+		this.possibleRenamedRightNodes.addAll(otherContext.possibleRenamedRightNodes);
+
+		this.leftTree = otherContext.leftTree;
+		this.baseTree = otherContext.baseTree;
+		this.rightTree = otherContext.rightTree;
 		this.superImposedTree = otherContext.superImposedTree;
 		
 /*		this.renamingConflicts	+=	otherContext.renamingConflicts;

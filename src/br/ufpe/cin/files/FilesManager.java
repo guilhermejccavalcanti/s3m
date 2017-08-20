@@ -383,7 +383,7 @@ public final class FilesManager {
 				endLOC = lineCounter;
 				MergeConflict mergeConflict = new MergeConflict(leftConflictingContent,rightConflictingContent,startLOC,endLOC);
 				mergeConflicts.add(mergeConflict);
-				
+
 				//reseting the flags
 				isConflictOpen	= false;
 				isLeftContent   = false;
@@ -450,6 +450,31 @@ public final class FilesManager {
 			}
 		}
 		return false;
+	}
+
+	/**
+	 * Returns the compatible node of <i>source</i> with <i>id</i>, or null if there isn't.
+	 * @param source
+	 * @param id
+	 */
+	public static FSTNode findNodeByID (FSTNode source, String id){
+		if(source instanceof FSTNonTerminal){
+			for (FSTNode child : ((FSTNonTerminal)source).getChildren()) {
+				FSTNode result = findNodeByID(child, id);
+				if(result!=null){
+					return result;
+				}
+			}
+		} else {
+			if(source instanceof FSTTerminal){
+				if(source.getType().equals("Id")){
+					if(((FSTTerminal) source).getBody().equals(id)){
+						return source;
+					}
+				}
+			}
+		}
+		return null;
 	}
 
 	/**
@@ -560,7 +585,7 @@ public final class FilesManager {
 		}
 		return result;
 	}
-	
+
 	/**
 	 * Compute the similarity between two given strings based on the <i>Levenshtein Distance</i>.
 	 * @param first
@@ -582,7 +607,7 @@ public final class FilesManager {
 		int levenshteinDistance = StringUtils.getLevenshteinDistance(first, second);
 		return ((longerLength - levenshteinDistance)/(double) longerLength);
 	}
-	
+
 	@SuppressWarnings("unused")
 	private static String undoReplaceConflictMarkers(String indentedCode) {
 		// dummy code for identation purposes

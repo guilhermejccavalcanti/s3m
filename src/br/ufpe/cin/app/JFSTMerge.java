@@ -202,6 +202,12 @@ public class JFSTMerge {
 		JFSTMerge merger = new JFSTMerge();
 		merger.run(args);
 		System.exit(conflictState);
+
+		/*		new JFSTMerge().mergeFiles(
+				new File("C:/Users/Guilherme/Desktop/Recentes/exemplo2/left.java"),
+				new File("C:/Users/Guilherme/Desktop/Recentes/exemplo2/base.java"),
+				new File("C:/Users/Guilherme/Desktop/Recentes/exemplo2/right.java"),
+				null);*/
 	}
 
 
