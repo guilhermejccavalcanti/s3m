@@ -27,55 +27,56 @@ public class RenamingOrDeletionConflictsHandlerTest {
 	}
 	
 	@Test
-	public void testRenamingInLeft() {
+	public void testConflictingRenamingInLeft() {
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
-				new File("testfiles/renaminginleft/left/Test.java"), 
-				new File("testfiles/renaminginleft/base/Test.java"), 
-				new File("testfiles/renaminginleft/right/Test.java"),
+				new File("testfiles/renamingmethodleftconf/left.java"), 
+				new File("testfiles/renamingmethodleftconf/base.java"), 
+				new File("testfiles/renamingmethodleftconf/right.java"),
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(mergeResult.contains("<<<<<<<MINEintsum(inta,intb){returna+b;}=======(cause:possiblerenaming)intdoMath(inta,intb){returna*b;}>>>>>>>YOURS"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEpublicvoidm(){inta;}=======(cause:possiblerenaming)publicvoidn(){}>>>>>>>YOURS"));
 		assertTrue(ctx.renamingConflicts == 1);
 	}
 
 	@Test
-	public void testRenamingInRight() {
+	public void testConflictingRenamingInRight() {
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
-				new File("testfiles/renaminginright/left/Test.java"), 
-				new File("testfiles/renaminginright/base/Test.java"), 
-				new File("testfiles/renaminginright/right/Test.java"),
+				new File("testfiles/renamingmethodrightconf/left.java"), 
+				new File("testfiles/renamingmethodrightconf/base.java"), 
+				new File("testfiles/renamingmethodrightconf/right.java"),
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(mergeResult.contains("<<<<<<<MINEintdoMath(inta,intb){returna*b;}=======(cause:possiblerenaming)intsum(inta,intb){returna+b;}>>>>>>>YOURS"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEpublicvoidm(){inta;}=======(cause:possiblerenaming)publicvoidn(){}>>>>>>>YOURS"));
 		assertTrue(ctx.renamingConflicts == 1);
 	}
 	
 	@Test
-	public void testDeletionInLeft() {
+	public void testNoConflictingRenamingInLeft() {
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
-				new File("testfiles/deletioninleft/left/Test.java"), 
-				new File("testfiles/deletioninleft/base/Test.java"), 
-				new File("testfiles/deletioninleft/right/Test.java"),
+				new File("testfiles/renamingmethodleftnoconf/left.java"), 
+				new File("testfiles/renamingmethodleftnoconf/base.java"), 
+				new File("testfiles/renamingmethodleftnoconf/right.java"),
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(!mergeResult.contains("<<<<<<<MINE"));
-		assertTrue(ctx.deletionConflicts == 1);
+		assertTrue(!mergeResult.contains("(cause:possiblerenaming)"));
+		assertTrue(ctx.renamingConflicts == 0);
 	}
 
 	@Test
-	public void testDeletionInRight() {
+	public void testNoConflictingRenamingInRight() {
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
-				new File("testfiles/deletioninright/left/Test.java"), 
-				new File("testfiles/deletioninright/base/Test.java"), 
-				new File("testfiles/deletioninright/right/Test.java"),
+				new File("testfiles/renamingmethodrightnoconf/left.java"), 
+				new File("testfiles/renamingmethodrightnoconf/base.java"), 
+				new File("testfiles/renamingmethodrightnoconf/right.java"),
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(!mergeResult.contains(">>>>>>>YOURS"));
-		assertTrue(ctx.deletionConflicts == 1);
+		assertTrue(!mergeResult.contains("(cause:possiblerenaming)"));
+		assertTrue(ctx.renamingConflicts == 0);
 	}
+	
 
 }

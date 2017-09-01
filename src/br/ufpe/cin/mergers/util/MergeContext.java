@@ -53,7 +53,7 @@ public class MergeContext {
 	public int deletionConflicts = 0;
 	public int initializationBlocksConflicts = 0;
 	public long semistructuredMergeTime = 0;
-	public long unstructuredMergeTime = 0;
+	public long unstructuredMergeTime 	= 0;
 	public int semistructuredNumberOfConflicts = 0;
 	public int unstructuredNumberOfConflicts   = 0;
 	public int semistructuredMergeConflictsLOC = 0;
