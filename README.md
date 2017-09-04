@@ -58,3 +58,27 @@ Then, after the "git merge" command detects conflicts, call the tool with:
 
    `git mergetool -tool=jfstmerge`
 -->
+
+Testing
+-------------
+
+We provide standalone tests in the [/testfiles/shelltests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/testfiles/shelltests) folder in addition to a few [JUnit tests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/src/br/ufpe/cin/mergers/handlers/tests).
+To run theses tests, you will need the shunit2 framework installed:
+
+* On Mac:
+1.Install the homebrew packet manager
+2. Run the command  `brew install shunit2 `
+
+* On Linux:
+1. `sudo apt-get install shunit2`
+
+* On Windows:
+1. Install a Linux [enviroment](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) , and follow the Linux instructions above.
+
+To execute the tests, follow the instructions bellow:
+1. Go to the tesfiles/shelltests directory inside the jFSTMerge project folder
+2. Open the terminal
+3. Run the command `shunit2 test_you_want_to_execute.sh`
+4. Take a look at the output in the terminal to see the result of your tests
+
+The files "example", "exampletxt" and "big"  should be copied to your $HOME directory during the execution of the tests (you can delete them manually if you want after the execution of the tests).
