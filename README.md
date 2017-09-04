@@ -66,7 +66,7 @@ We provide standalone tests in the [/testfiles/shelltests](https://github.com/gu
 To run theses tests, you will need the shunit2 framework installed:
 
 * On Mac:
-1.Install the homebrew packet manager
+1. Install the homebrew packet manager
 2. Run the command  `brew install shunit2 `
 
 * On Linux:
