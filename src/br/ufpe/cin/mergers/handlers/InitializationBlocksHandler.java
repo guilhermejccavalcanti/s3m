@@ -30,23 +30,27 @@ public class InitializationBlocksHandler {
 		} else {
 			//2. find similar left and right nodes to a base node
 			for(FSTNode baseBlock : baseInitlBlocks){
-				//search similar node in left and remove from the list of left nodes
+				//search similar node in left, and remove from the list of left nodes for the next iteration
 				FSTNode leftSimilarBlock = leftInitlBlocks.stream()                        
 						.filter(leftBlock -> areSimilarBlocks(baseBlock, leftBlock))       
 						.findFirst()                                      
 						.orElse(null);
-				leftInitlBlocks = leftInitlBlocks.stream()
-						.filter(leftBlock -> !leftSimilarBlock.equals(leftBlock))
-						.collect(Collectors.toList());
+				if(leftSimilarBlock != null){
+					leftInitlBlocks = leftInitlBlocks.stream()
+							.filter(leftBlock -> !leftSimilarBlock.equals(leftBlock))
+							.collect(Collectors.toList());
+				}
 
-				//search similar node in right and remove from the list of right nodes
+				//search similar node in right, and remove from the list of right nodes for the next iteration
 				FSTNode rightSimilarBlock= rightInitlBlocks.stream()
 						.filter(rightBlock -> areSimilarBlocks(baseBlock, rightBlock))
 						.findFirst()
 						.orElse(null);
-				rightInitlBlocks = rightInitlBlocks.stream()
-						.filter(rightBlock -> !rightSimilarBlock.equals(rightBlock))
-						.collect(Collectors.toList());
+				if(rightSimilarBlock != null){
+					rightInitlBlocks = rightInitlBlocks.stream()
+							.filter(rightBlock -> !rightSimilarBlock.equals(rightBlock))
+							.collect(Collectors.toList());
+				}
 
 				//only when there similar (left and right) nodes we proceed
 				if(rightSimilarBlock != null && leftSimilarBlock != null){ 
@@ -57,14 +61,16 @@ public class InitializationBlocksHandler {
 
 			//3. in cases there is no base similar, but still left and right might be similar
 			for(FSTNode leftBlock : leftInitlBlocks){
-				//search similar node in right and remove from the list of right nodes
+				//search similar node in right, and remove from the list of right nodes  for the next iteration
 				FSTNode rightSimilarBlock= rightInitlBlocks.stream()
 						.filter(rightBlock -> areSimilarBlocks(leftBlock, rightBlock))
 						.findFirst()
 						.orElse(null);
-				rightInitlBlocks = rightInitlBlocks.stream()
-						.filter(rightBlock -> !rightSimilarBlock.equals(rightBlock))
-						.collect(Collectors.toList());
+				if(rightSimilarBlock != null){
+					rightInitlBlocks = rightInitlBlocks.stream()
+							.filter(rightBlock -> !rightSimilarBlock.equals(rightBlock))
+							.collect(Collectors.toList());
+				}
 
 				if(rightSimilarBlock  != null){
 					Triple matched 	   = new Triple(leftBlock, null, rightSimilarBlock);

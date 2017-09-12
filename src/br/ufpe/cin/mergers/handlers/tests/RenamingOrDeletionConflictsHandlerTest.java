@@ -35,7 +35,7 @@ public class RenamingOrDeletionConflictsHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(mergeResult.contains("<<<<<<<MINEpublicvoidm(){inta;}=======(cause:possiblerenaming)publicvoidn(){}>>>>>>>YOURS"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEpublicvoidm(){inta;}=======publicvoidn(){}>>>>>>>YOURS"));
 		assertTrue(ctx.renamingConflicts == 1);
 	}
 
@@ -48,7 +48,7 @@ public class RenamingOrDeletionConflictsHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(mergeResult.contains("<<<<<<<MINEpublicvoidm(){inta;}=======(cause:possiblerenaming)publicvoidn(){}>>>>>>>YOURS"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEpublicvoidm(){inta;}=======publicvoidn(){}>>>>>>>YOURS"));
 		assertTrue(ctx.renamingConflicts == 1);
 	}
 	

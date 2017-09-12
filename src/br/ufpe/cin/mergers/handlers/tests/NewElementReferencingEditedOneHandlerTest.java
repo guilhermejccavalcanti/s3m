@@ -35,7 +35,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINEinta=15;=======(cause:possiblereferencebetweenelements)intm(){returna+15;}>>>>>>>YOURS"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEinta=15;=======intm(){returna+15;}>>>>>>>YOURS"));
 		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
 
 	}
@@ -50,7 +50,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINEstaticintm(){return15;}=======(cause:possiblereferencebetweenelements)inta=m();>>>>>>>YOURS"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEstaticintm(){return15;}=======inta=m();>>>>>>>YOURS"));
 		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
 	}
 	
@@ -63,7 +63,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINEinta=15;=======(cause:possiblereferencebetweenelements)intb=a+20;>>>>>>>YOURS"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEinta=15;=======intb=a+20;>>>>>>>YOURS"));
 		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
 	}
 	
@@ -77,7 +77,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINEstaticStringm(){return\"insidemethodmedited\";}=======(cause:possiblereferencebetweenelements)voidn(){if(m().equals(\"something...\")){System.out.println(\"insidemethodn\");}}>>>>>>>YOURS"));
+		assertTrue(mergeResult.contains("<<<<<<<MINEstaticStringm(){return\"insidemethodmedited\";}=======voidn(){if(m().equals(\"something...\")){System.out.println(\"insidemethodn\");}}>>>>>>>YOURS"));
 		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
 	}
 }

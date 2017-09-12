@@ -110,7 +110,7 @@ public final class NewElementReferencingEditedOneHandler {
 	 */
 	private static void generateConflictWithAddedAndEditedElements(MergeContext context, String editedElementContent,String addedElementContent) {
 		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(editedElementContent+'\n', addedElementContent+'\n', "(cause: possible reference between elements)");
+		MergeConflict newConflict = new MergeConflict(editedElementContent+'\n', addedElementContent+'\n');
 		//second put the conflict in one of the nodes containing the import statements, and deletes the other node containing the orther import statement
 		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, editedElementContent, newConflict.body);
 		FilesManager.findAndDeleteASTNode(context.superImposedTree, addedElementContent);
