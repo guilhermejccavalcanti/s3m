@@ -52,8 +52,11 @@ public class JFSTMerge {
 	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, " + "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
 
-	@Parameter(names = "-g", description = "Command to identify that the tool is being used as a git merge driver.")
+	@Parameter(names = "-g", description = "Parameter to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
+
+	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation.",arity = 1)
+	public static boolean isCryptographed = true;
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -63,6 +66,9 @@ public class JFSTMerge {
 	 * @param revisionsPath file path
 	 */
 	public MergeScenario mergeRevisions(String revisionsPath) {
+		//disabling cryptography for performance improvement
+		isCryptographed = false;
+
 		MergeScenario scenario = null;
 		try {
 			//reading the .revisions file line by line to get revisions directories
@@ -204,10 +210,10 @@ public class JFSTMerge {
 		System.exit(conflictState);
 
 		/*		new JFSTMerge().mergeFiles(
-						new File("C:/Users/Guilherme/Desktop/test/projects/sisbol/revisions/rev_0533511_8d296b5/rev_left_0533511/sisbol-core/src/main/java/br/mil/eb/cds/sisbol/boletim/util/Messages.java"),
-						new File("C:/Users/Guilherme/Desktop/test/projects/sisbol/revisions/rev_0533511_8d296b5/rev_base_7004707/sisbol-core/src/main/java/br/mil/eb/cds/sisbol/boletim/util/Messages.java"),
-						new File("C:/Users/Guilherme/Desktop/test/projects/sisbol/revisions/rev_0533511_8d296b5/rev_right_8d296b5/sisbol-core/src/main/java/br/mil/eb/cds/sisbol/boletim/util/Messages.java"),
-						null);*/
+				new File("C:/Users/Guilherme/Desktop/merge/left.java"),
+				new File("C:/Users/Guilherme/Desktop/merge/base.java"),
+				new File("C:/Users/Guilherme/Desktop/merge/right.java"),
+				null);*/
 
 		/*		try {
 			List<String> listRevisions = new ArrayList<>();

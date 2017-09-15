@@ -10,6 +10,7 @@ import java.util.List;
 
 import org.apache.commons.io.FileUtils;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.crypto.CryptoUtils;
 import br.ufpe.cin.exceptions.CryptoException;
 import br.ufpe.cin.exceptions.ExceptionUtils;
@@ -23,6 +24,25 @@ public class LoggerStatistics {
 	//variable to avoid infinite recursion when trying to fix cryptographic issues 
 	public static int numberOfCriptographyFixAttempts = 0;
 
+	static{ //managing enable/disable of cryptography
+		if(!JFSTMerge.isCryptographed){
+			try {
+				String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+				
+				logpath = logpath + "jfstmerge.statistics";
+				File file = new File(logpath);
+				CryptoUtils.decrypt(file, file);
+				
+				logpath = logpath + "jfstmerge.files";
+				file = new File(logpath);
+				CryptoUtils.decrypt(file, file);
+
+			} catch (CryptoException e) {
+				// the files were already decrypted, no need for further action
+			}
+		}
+	}
+
 	public static void logContext(String msg, MergeContext context) throws PrintException{
 		try{
 			initializeLogger();
@@ -33,11 +53,13 @@ public class LoggerStatistics {
 			String logentry	 = timeStamp+","+msg+"\n";
 			logpath = logpath + "jfstmerge.statistics";
 			File statisticsLog = new File(logpath);
-			
-			CryptoUtils.decrypt(statisticsLog, statisticsLog);
-			
+
+			if(JFSTMerge.isCryptographed){
+				CryptoUtils.decrypt(statisticsLog, statisticsLog);
+			}
+
 			FileUtils.write(statisticsLog, logentry, true);
-			
+
 			//logging merged files for further analysis
 			logFiles(timeStamp,context);
 			logSummary();
@@ -148,7 +170,10 @@ public class LoggerStatistics {
 					equalconfs += Integer.valueOf(columns[14]);
 
 				}
-				CryptoUtils.encrypt(statistics, statistics);
+
+				if(JFSTMerge.isCryptographed){
+					CryptoUtils.encrypt(statistics, statistics);
+				}
 
 				//summarizing retrieved statistics
 				int X = lines.size()-1;
@@ -173,7 +198,7 @@ public class LoggerStatistics {
 				if(!fsummary.exists()){
 					fsummary.createNewFile();
 				}
-				
+
 				FileUtils.write(fsummary, summary.toString(),false);
 			}
 		}
@@ -206,11 +231,16 @@ public class LoggerStatistics {
 
 			if(!logfiles.exists()){
 				logfiles.createNewFile();
-				CryptoUtils.encrypt(logfiles, logfiles);
+
+				if(JFSTMerge.isCryptographed){
+					CryptoUtils.encrypt(logfiles, logfiles);
+				}
 			}
-			
-			CryptoUtils.decrypt(logfiles, logfiles); 
-			
+
+			if(JFSTMerge.isCryptographed){
+				CryptoUtils.decrypt(logfiles, logfiles); 
+			}
+
 			//writing source code content
 			//left
 			String leftcontent = context.getLeftContent();
@@ -238,7 +268,7 @@ public class LoggerStatistics {
 				FileUtils.write(logfiles, rightcontent + "\n", true);
 				FileUtils.write(logfiles, "!@#$%\n", true); 
 			}
-			
+
 			CryptoUtils.encrypt(logfiles, logfiles); 
 		}
 		catch (CryptoException c)
@@ -274,7 +304,10 @@ public class LoggerStatistics {
 		if(!new File(logpath).exists()){
 			File statisticsLog = new File(logpath);
 			FileUtils.write(statisticsLog, header, true);
-			CryptoUtils.encrypt(statisticsLog, statisticsLog);
+
+			if(JFSTMerge.isCryptographed){
+				CryptoUtils.encrypt(statisticsLog, statisticsLog);
+			}
 		}
 	}
 
