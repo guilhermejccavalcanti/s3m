@@ -28,11 +28,11 @@ public class LoggerStatistics {
 		if(!JFSTMerge.isCryptographed){
 			try {
 				String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-				
+
 				logpath = logpath + "jfstmerge.statistics";
 				File file = new File(logpath);
 				CryptoUtils.decrypt(file, file);
-				
+
 				logpath = logpath + "jfstmerge.files";
 				file = new File(logpath);
 				CryptoUtils.decrypt(file, file);
@@ -152,23 +152,27 @@ public class LoggerStatistics {
 				int equalconfs = 0;
 
 				List<String> lines = Files.readAllLines(statistics.toPath());
+				int nonJava = 0;
 				for(int i = 1; i <lines.size(); i++){
-					String[] columns = lines.get(i).split(",");
+					if(lines.get(i).toLowerCase().contains(".java")){ //summary only for java files
+						String[] columns = lines.get(i).split(",");
 
-					ssmergeconfs += Integer.valueOf(columns[2]);
-					ssmergeloc += Integer.valueOf(columns[3]);
-					ssmergerenamingconfs += Integer.valueOf(columns[4]);
-					ssmergedeletionconfs += Integer.valueOf(columns[5]);
-					ssmergetaeconfs += Integer.valueOf(columns[6]);
-					ssmergenereoconfs += Integer.valueOf(columns[7]);
-					ssmergeinitlblocksconfs += Integer.valueOf(columns[8]);
-					unmergeconfs += Integer.valueOf(columns[9]);
-					unmergeloc += Integer.valueOf(columns[10]);
-					unmergetime += Long.parseLong(columns[11]);
-					ssmergetime += Long.parseLong((columns[12]));
-					duplicateddeclarationerrors += Integer.valueOf(columns[13]);
-					equalconfs += Integer.valueOf(columns[14]);
-
+						ssmergeconfs += Integer.valueOf(columns[2]);
+						ssmergeloc += Integer.valueOf(columns[3]);
+						ssmergerenamingconfs += Integer.valueOf(columns[4]);
+						ssmergedeletionconfs += Integer.valueOf(columns[5]);
+						ssmergetaeconfs += Integer.valueOf(columns[6]);
+						ssmergenereoconfs += Integer.valueOf(columns[7]);
+						ssmergeinitlblocksconfs += Integer.valueOf(columns[8]);
+						unmergeconfs += Integer.valueOf(columns[9]);
+						unmergeloc += Integer.valueOf(columns[10]);
+						unmergetime += Long.parseLong(columns[11]);
+						ssmergetime += Long.parseLong((columns[12]));
+						duplicateddeclarationerrors += Integer.valueOf(columns[13]);
+						equalconfs += Integer.valueOf(columns[14]);
+					} else {
+						nonJava++;
+					}
 				}
 
 				if(JFSTMerge.isCryptographed){
@@ -176,7 +180,7 @@ public class LoggerStatistics {
 				}
 
 				//summarizing retrieved statistics
-				int X = lines.size()-1;
+				int X = lines.size() -nonJava -1;
 				int Y = (unmergeconfs - ssmergeconfs) + duplicateddeclarationerrors - (ssmergetaeconfs + ssmergenereoconfs + ssmergeinitlblocksconfs);Y=(Y>0)?Y:0;
 				int Z = duplicateddeclarationerrors;
 				int A = ssmergerenamingconfs;
