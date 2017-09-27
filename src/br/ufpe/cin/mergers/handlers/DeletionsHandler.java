@@ -10,7 +10,9 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * Removing inner declarations (high-level elements, FSTNonTerminal nodes) challenges superimposition. 
  * For instance, left removed an inner classe, while right edited it.
  * This handler updates merged tree based on information of the deleted nodes and remaining nodes.
- *  
+ * In particular, it updates the merged tree with information of the edited version. For instance, 
+ * in the example of left deleting a inner classe while right edited it. The merged code will have
+ * the innerclasse definition from right.
  * @author Guilherme
  */
 public class DeletionsHandler {
@@ -57,7 +59,9 @@ public class DeletionsHandler {
 				} else {
 					if(childA instanceof FSTTerminal){
 						((FSTTerminal) childA).setBody(((FSTTerminal) childB).getBody());
-					}
+					} else {
+				          updateMergedTree(childA, childB);
+			        }
 				}
 			}
 		}

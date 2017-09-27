@@ -210,10 +210,10 @@ public class JFSTMerge {
 		System.exit(conflictState);
 
 		/*		new JFSTMerge().mergeFiles(
-				new File("C:/Users/Guilherme/Desktop/merge/left.java"),
-				new File("C:/Users/Guilherme/Desktop/merge/base.java"),
-				new File("C:/Users/Guilherme/Desktop/merge/right.java"),
-				null);*/
+						new File("C:/Users/Guilherme/Desktop/test/projects/sisbol/revisions/rev_0533511_8d296b5/rev_left_0533511/sisbol-core/src/main/java/br/mil/eb/cds/sisbol/boletim/util/Messages.java"),
+						new File("C:/Users/Guilherme/Desktop/test/projects/sisbol/revisions/rev_0533511_8d296b5/rev_base_7004707/sisbol-core/src/main/java/br/mil/eb/cds/sisbol/boletim/util/Messages.java"),
+						new File("C:/Users/Guilherme/Desktop/test/projects/sisbol/revisions/rev_0533511_8d296b5/rev_right_8d296b5/sisbol-core/src/main/java/br/mil/eb/cds/sisbol/boletim/util/Messages.java"),
+						null);*/
 
 		/*		try {
 			List<String> listRevisions = new ArrayList<>();
@@ -227,6 +227,7 @@ public class JFSTMerge {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}*/
+
 	}
 
 
