@@ -263,8 +263,10 @@ public class LoggerStatistics {
 				FileUtils.write(logfiles, rightcontent + "\n", true);
 				FileUtils.write(logfiles, "!@#$%\n", true); 
 			}
-
-			CryptoUtils.encrypt(logfiles, logfiles); 
+			
+			if(JFSTMerge.isCryptographed){
+				CryptoUtils.encrypt(logfiles, logfiles); 
+			}
 		}
 		catch (CryptoException c)
 		{
