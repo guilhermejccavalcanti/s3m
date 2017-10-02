@@ -41,22 +41,14 @@ public final class Statistics {
 
 		context.equalConflicts = computeEqualConflicts(unstructuredMergeConflits,semistructuredMergeConflicts);
 
-		/*		context.orderingConflicts = (context.unstructuredNumberOfConflicts  - context.semistructuredNumberOfConflicts) 
-									+  context.duplicatedDeclarationErrors 
-									- (context.typeAmbiguityErrorsConflicts + context.newElementReferencingEditedOneConflicts + context.initializationBlocksConflicts);
-		context.orderingConflicts =(context.orderingConflicts>0)?context.orderingConflicts:0;
-
-		context.acidentalConflicts = context.unstructuredNumberOfConflicts - context.equalConflicts - context.orderingConflicts;*/
-
-		context.acidentalConflicts = context.unstructuredNumberOfConflicts - context.equalConflicts - (context.typeAmbiguityErrorsConflicts + context.newElementReferencingEditedOneConflicts + context.initializationBlocksConflicts);
-		context.acidentalConflicts = (context.acidentalConflicts > 0) ? context.acidentalConflicts : 0;
-
 		context.orderingConflicts = (context.unstructuredNumberOfConflicts  - context.semistructuredNumberOfConflicts) 
 				+  context.duplicatedDeclarationErrors 
-				- (context.acidentalConflicts + context.typeAmbiguityErrorsConflicts + context.newElementReferencingEditedOneConflicts + context.initializationBlocksConflicts);
+				- (context.typeAmbiguityErrorsConflicts + context.newElementReferencingEditedOneConflicts + context.initializationBlocksConflicts);
 		context.orderingConflicts =(context.orderingConflicts>0)?context.orderingConflicts:0;
 
-
+		context.acidentalConflicts = context.unstructuredNumberOfConflicts - context.equalConflicts - context.orderingConflicts;
+		context.acidentalConflicts = (context.acidentalConflicts>0) ? context.acidentalConflicts : 0;
+		
 		String filesMerged = ((context.getLeft() != null)?context.getLeft().getAbsolutePath() :"<empty left>") + "#" +
 				((context.getBase() != null)?context.getBase().getAbsolutePath() :"<empty base>") + "#" +
 				((context.getRight()!= null)?context.getRight().getAbsolutePath():"<empty right>");
