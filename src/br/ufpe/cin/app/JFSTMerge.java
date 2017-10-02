@@ -55,8 +55,11 @@ public class JFSTMerge {
 	@Parameter(names = "-g", description = "Parameter to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
 
-	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation.",arity = 1)
+	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).",arity = 1)
 	public static boolean isCryptographed = true;
+	
+	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
+	public static boolean logFiles = true;
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -229,8 +232,6 @@ public class JFSTMerge {
 		}*/
 
 	}
-
-
 
 	private void run(String[] args) {
 		JCommander commandLineOptions = new JCommander(this);
