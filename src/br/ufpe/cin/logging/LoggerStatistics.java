@@ -302,7 +302,7 @@ public class LoggerStatistics {
 		//manageLogBuffer(logpath);
 
 		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,"
-				+ "ssmergeinitlblocksconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,unmergeduplicateddeclarationerrors,"
+				+ "ssmergeinitlblocksconfs,ssmergeacidentalconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,unmergeduplicateddeclarationerrors,"
 				+ "unmergeorderingconfs,equalconfs\n";
 
 		//reading the log file to see if it is not empty neither contains the header
