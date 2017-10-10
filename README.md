@@ -98,7 +98,7 @@ To run theses tests, you will need the shunit2 framework installed:
 1. `sudo apt-get install shunit2`
 
 * On Windows:
-1. Install a Linux [enviroment](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) , and follow the Linux instructions above.
+1. Install a Linux [enviroment](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) , and follow the manual instalation [instructions](https://github.com/guilhermejccavalcanti/jFSTMerge#manual-installation) above on the Linux enviroment.
 
 To execute the tests, follow the instructions bellow:
 1. Go to the tesfiles/shelltests directory inside the jFSTMerge project folder
