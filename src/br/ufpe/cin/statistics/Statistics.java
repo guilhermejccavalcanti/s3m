@@ -48,7 +48,7 @@ public final class Statistics {
 
 		context.acidentalConflicts = context.unstructuredNumberOfConflicts - context.equalConflicts - context.orderingConflicts;
 		context.acidentalConflicts = (context.acidentalConflicts>0) ? context.acidentalConflicts : 0;
-		
+
 		String filesMerged = ((context.getLeft() != null)?context.getLeft().getAbsolutePath() :"<empty left>") + "#" +
 				((context.getBase() != null)?context.getBase().getAbsolutePath() :"<empty base>") + "#" +
 				((context.getRight()!= null)?context.getRight().getAbsolutePath():"<empty right>");
@@ -219,23 +219,21 @@ public final class Statistics {
 		LoggerStatistics.logConflicts(differentSemistructuredMergeConflicts,Source.SEMISTRUCTURED);
 	}
 
-
 	private static boolean areEquivalentConflicts(MergeConflict confa, MergeConflict confb) {
-		/*	
 		String bodya = FilesManager.getStringContentIntoSingleLineNoSpacing(confa.left + confa.right);
 		String bodyb = FilesManager.getStringContentIntoSingleLineNoSpacing(confb.left + confb.right);
 		if(bodya.equals(bodyb)){
 			return true;
 		}
-		 */
 
-		String bodylefta = FilesManager.getStringContentIntoSingleLineNoSpacing(confa.left);
+		/*		String bodylefta = FilesManager.getStringContentIntoSingleLineNoSpacing(confa.left);
 		String bodyleftb = FilesManager.getStringContentIntoSingleLineNoSpacing(confb.left);
 		String bodyrighta = FilesManager.getStringContentIntoSingleLineNoSpacing(confa.right);
 		String bodyrightb = FilesManager.getStringContentIntoSingleLineNoSpacing(confb.right);
 		if((bodylefta.contains(bodyleftb) || bodyleftb.contains(bodylefta))	&& (bodyrighta.contains(bodyrightb) || bodyrightb.contains(bodyrighta))){
 			return true;
-		}
+		}*/
+
 		return false;
 	}
 

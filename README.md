@@ -12,18 +12,38 @@ Contact Guilherme Cavalcanti &lt;<gjcc@cin.ufpe.br>&gt;.
 
 Compilation
 -----------
-This project uses Gradle to manage all dependencies and versioning. 
+This project uses Gradle to manage all dependencies and versioning. JAVA 8 is required.
 
 
 #### Troubleshooting
 
-If you face error while trying to build the project with gradle, just delete the lines from 10 to 13 of this [file](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/build.gradle) 
+If you face error while trying to build the project with gradle, just delete the lines from 10 to 13 of this [file](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/build.gradle) .
 
 Installation
 -------------
+#### Requisites
+
+The instalation intregates the tool with GIT version control system. So, GIT must be installed and configured. Otherwise, you can run the tool [standalone](https://github.com/guilhermejccavalcanti/jFSTMerge#running-standalone).
+
+#### Automatic installation
 Double-click on the jar from the [/installer](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/installer) folder.
 In case double-click does not work, install with the command 
 `java -jar s3mInstaller.jar`
+
+#### Manual installation
+1. Copy the [binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/jFSTMerge.jar) file to your `$HOME` folder
+2. Add the following lines to your `.gitconfig` file (typically localized in the `$HOME` folder)
+	```
+    [core]
+		attributesfile = ~/.gitattributes
+	[merge "s3m"]
+		name = semi_structured_3_way_merge_tool_for_java
+		driver = java  -jar "\"$HOME/jFSTMerge.jar\"" -f %A %O %B -o %A -g
+    ```
+3. Add the following line to your `.gitattributes` file (also localized in the `$HOME` folder)
+	
+    `*.java merge=s3m`
+    
 
 Usage
 -------------

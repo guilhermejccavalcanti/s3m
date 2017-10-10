@@ -187,7 +187,7 @@ public class LoggerStatistics {
 				//int FP_UN = (unmergeconfs - ssmergeconfs) + duplicateddeclarationerrors - (ssmergetaeconfs + ssmergenereoconfs + ssmergeinitlblocksconfs);FP_UN=(FP_UN>0)?FP_UN:0;
 				int FP_UN = unmergeorderingconfs;
 				int FN_UN = duplicateddeclarationerrors;
-				int FP_SS = ssmergerenamingconfs;
+				int FP_SS = ssmergerenamingconfs; //actually they are common renaming conflicts, not additional false positives
 				int FN_SS = (ssmergetaeconfs + ssmergenereoconfs + ssmergeinitlblocksconfs) + ssmergeacidentalconfs;
 				double M = ((double)ssmergetime / 1000000000);
 				double N = ((double)unmergetime / 1000000000);
@@ -351,14 +351,9 @@ public class LoggerStatistics {
 		}
 
 		summary.append("Conversely,");
-		if(FP_SS > 0 && FN_SS > 0){
-			summary.append(" you had at most " +FP_SS+ " extra false positive(s),");
-			summary.append(" and at most " +FN_SS+ " potential extra false negative(s).");
-		} else if(FP_SS == 0 && FN_SS == 0) {
+		if(FN_SS == 0) {
 			summary.append(" you had no extra false positives, nor potential extra false negatives.");
-		} else if(FP_SS > 0 && FN_SS == 0) {
-			summary.append(" you had at most " +FP_SS+ " extra false positive(s), but no potential extra false negatives.");
-		} else if(FP_SS == 0 && FN_SS > 0) {
+		} else if(FN_SS > 0) {
 			summary.append(" you had no extra false positives, but you had at most "+FN_SS+" potential extra false negative(s).");
 		}
 
@@ -379,12 +374,8 @@ public class LoggerStatistics {
 			summary.append("these numbers represent no difference in terms of number of reported conflicts.\n");
 		}
 
-		if(FP_UN != FP_SS){
-			if(FP_UN > FP_SS) {
-				summary.append("A reduction of " + String.format("%.2f",((double)((FP_UN - FP_SS)/(double)FP_UN))*100,2) +"% in the number of false positives.\n");
-			} else if(FP_SS > FP_UN){
-				summary.append("No reduction of false positives.\n");
-			}
+		if(FP_UN > 0){
+			summary.append("A reduction of " + String.format("%.2f",((double)((FP_UN - 0)/(double)FP_UN))*100,2) +"% in the number of false positives.\n");
 		} else {
 			summary.append("No difference in terms of false positives.\n");
 		}
