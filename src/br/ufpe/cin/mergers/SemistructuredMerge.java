@@ -3,6 +3,7 @@ package br.ufpe.cin.mergers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -152,15 +153,21 @@ public final class SemistructuredMerge {
 				/*
 				 * nodes from left or leftBase
 				 */
-				for (FSTNode childA : nonterminalA.getChildren()) { 	
+				List<FSTNode> nonterminalAChildren = nonterminalA.getChildren();
+				
+				for (int i = 0; i < nonterminalAChildren.size(); i++) {
+					FSTNode childA = nonterminalAChildren.get(i);
 					FSTNode childB = nonterminalB.getCompatibleChild(childA);
+					
 					if (childB == null) { 								// is a new node from left, or a deleted base node in right
 						FSTNode cloneA = childA.getDeepClone();
 						if (childA.index == -1)
 							childA.index = nodeA.index;
 						cloneA.index = childA.index;
 
-						nonterminalComposed.addChild(cloneA);			 // only if is a new left node =~ it is not a base node
+						FSTNode childALeftNeighbour = getLeftNeighbourNode(nonterminalAChildren, i);
+						FSTNode childARightNeighbour = getRightNeighbourNode(nonterminalAChildren, i);
+						addNodeToNonTerminalNearNeighbour(cloneA, childALeftNeighbour, childARightNeighbour, nonterminalComposed);
 
 						if (context.deletedBaseNodes.contains(childA)) { // this is only possible when processing right nodes because this is a base node not present either in left and right
 							context.deletedBaseNodes.remove(childA);
@@ -322,5 +329,80 @@ public final class SemistructuredMerge {
 				context.editedLeftNodes.add(node);
 			}
 		}
+	}
+	
+	/**
+	 * Gets the node which comes before a given node (indexed by nodeIndex) in a given list of nodes
+	 * If the node is the first element in the list, it returns null
+	 * @param nodes
+	 * @param nodeIndex
+	 * @return node's left neighbour or null
+	 */
+	private static FSTNode getLeftNeighbourNode(List<FSTNode> nodes, int nodeIndex) {
+		boolean nodeHasLeftNeighbour = nodeIndex > 0;
+		FSTNode leftNeighbour = null;
+		
+		if (nodeHasLeftNeighbour) {
+			leftNeighbour = nodes.get(nodeIndex - 1);
+		}
+		
+		return leftNeighbour;
+	}
+	
+	/**
+	 * Gets the node which comes after a given node (indexed by nodeIndex) in a given list of nodes
+	 * If the node is the last element in the list, it returns null
+	 * @param nodes
+	 * @param nodeIndex
+	 * @return node's right neighbour or null
+	 */
+	private static FSTNode getRightNeighbourNode(List<FSTNode> nodes, int nodeIndex) {
+		boolean nodeHasRightNeighbour = nodeIndex < nodes.size() - 1;
+		FSTNode rightNeighbour = null;
+		
+		if (nodeHasRightNeighbour) {
+			rightNeighbour = nodes.get(nodeIndex + 1);
+		}
+		
+		return rightNeighbour;
+	}
+	
+	/**
+	 * Inserts a node into a non-terminal node by first trying to find a neighbour which was already inserted so the node
+	 * can be inserted near such neighbour.
+	 * In case a neighbour node is not one of non-terminal node's children, it just adds the node at the end of list.
+	 * @param node
+	 * @param leftNeighbour
+	 * @param rightNeighbour
+	 * @param nonTerminal
+	 */
+	private static void addNodeToNonTerminalNearNeighbour(FSTNode node, FSTNode leftNeighbour, FSTNode rightNeighbour, FSTNonTerminal nonTerminal) {
+		boolean hasFoundNeighbour = false;
+
+		if (leftNeighbour != null) {
+			int leftNeighbourIndex = findChildNodeIndex(nonTerminal, leftNeighbour);
+			
+			if (leftNeighbourIndex != -1) { // left neighbour found in nonTerminal
+				nonTerminal.addChild(node, leftNeighbourIndex + 1); // add node after left neighbour
+				hasFoundNeighbour = true;
+			}
+		}
+		
+		if (!hasFoundNeighbour && rightNeighbour != null) {
+			int rightSiblingIndex = findChildNodeIndex(nonTerminal, rightNeighbour);
+			
+			if (rightSiblingIndex != -1) { // right neighbour found in nonTerminal
+				nonTerminal.addChild(node, rightSiblingIndex); // add node before right neighbour
+				hasFoundNeighbour = true;
+			}
+		}
+		
+		if (!hasFoundNeighbour) {
+			nonTerminal.addChild(node); // add node at the end
+		}
+	}
+	
+	private static int findChildNodeIndex(FSTNonTerminal parentNode, FSTNode node) {
+		return parentNode.getChildren().indexOf(node);
 	}
 }

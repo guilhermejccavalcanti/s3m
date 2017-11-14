@@ -5,8 +5,9 @@
 # Test to know if s3m semistructured merge is working and detecting conflicts
 testSemistructuredMerge()
 {
-    cp -r exemplo/ $HOME/
-    cp -r exemplotxt/ $HOME/
+    cp -r exemplo $HOME/
+    cp -r exemplotxt $HOME/
+    cp -r exemplonodereordering $HOME/
     cd $HOME
     rm -rf repo
     mkdir repo
@@ -128,5 +129,32 @@ testCryptoIssueAvoidance()
     rm -rf repo
 }
 
-
+#Test to know if reordering of nodes in superimposition, putting neighbours together, works
+testNodeReordering()
+{
+    rm -rf repo
+    mkdir repo
+    cd repo
+    git init
+    cp ../exemplonodereordering/base.java .
+    git add .
+    git commit -m "base"
+    git checkout -b left
+    rm base.java
+    cp ../exemplonodereordering/left.java base.java
+    git add .
+    git commit -m "left"
+    git checkout master
+    git checkout -b right
+    rm base.java
+    cp ../exemplonodereordering/right.java base.java
+    git add .
+    git commit -m "right"
+    git checkout master
+    git merge left
+    git merge right
+    INTERNAL_CLASSES_AND_INTERFACES=$(cat base.java | sed -n 's/.*[class|interface] \([^ \t\n]*\)/\1/p' | tr -d ' ' | tr -d '\n' | tr -d '{')
+    assertEquals 'ABCI' "$INTERNAL_CLASSES_AND_INTERFACES"
+    cd .. 
+}
 
