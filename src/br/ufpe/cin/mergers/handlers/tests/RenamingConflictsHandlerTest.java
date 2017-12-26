@@ -13,7 +13,7 @@ import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeContext;
 
-public class RenamingOrDeletionConflictsHandlerTest {
+public class RenamingConflictsHandlerTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -76,6 +76,19 @@ public class RenamingOrDeletionConflictsHandlerTest {
 		
 		assertTrue(!mergeResult.contains("(cause:possiblerenaming)"));
 		assertTrue(ctx.renamingConflicts == 0);
+	}
+	
+	@Test
+	public void testConflictingRenamingMutual() {
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/renamingmutual/left.java"), 
+				new File("testfiles/renamingmutual/base.java"), 
+				new File("testfiles/renamingmutual/right.java"),
+				null);
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+		
+		assertTrue(mergeResult.contains("<<<<<<<MINEintsum(inta,intb){returna+b;}=======intmySum(inta,intb){returna+b;}>>>>>>>YOURS"));
+		assertTrue(ctx.renamingConflicts == 1);
 	}
 	
 

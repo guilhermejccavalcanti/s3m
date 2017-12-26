@@ -19,9 +19,45 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * @author Guilherme
  *
  */
-public final class RenamingOrDeletionConflictsHandler {
+public final class RenamingConflictsHandler {
 
 	public static void handle(MergeContext context) {
+		//when both developers rename the same method/constructor
+		handleMutualRenamings(context);
+
+		//when one of the developers rename a method/constructor
+		handleSingleRenamings(context);
+	}
+
+	private static void handleMutualRenamings(MergeContext context) {
+		if(!context.addedLeftNodes.isEmpty() && !context.addedRightNodes.isEmpty()){
+			List<FSTNode> leftNewMethodsOrConstructors  = context.addedLeftNodes.stream().filter(m -> isValidNode(m)).collect(Collectors.toList());
+			List<FSTNode> rightNewMethodsOrConstructors= context.addedRightNodes.stream().filter(m -> isValidNode(m)).collect(Collectors.toList());
+			for(FSTNode left : leftNewMethodsOrConstructors){
+				for(FSTNode right : rightNewMethodsOrConstructors){
+					String leftBody = ((FSTTerminal)left).getBody();
+					leftBody = FilesManager.getStringContentIntoSingleLineNoSpacing(leftBody);
+					leftBody = removeSignature(leftBody);
+
+					String rightBody = ((FSTTerminal)right).getBody();
+					rightBody = FilesManager.getStringContentIntoSingleLineNoSpacing(rightBody);
+					rightBody = removeSignature(rightBody);
+
+					if(leftBody.equals(rightBody)){//the methods have the same body, ignoring their signature
+						generateMutualRenamingConflict(context, ((FSTTerminal)left).getBody(), ((FSTTerminal)left).getBody(), ((FSTTerminal)right).getBody());
+						break;
+					}
+				}
+			}
+		}
+	}
+
+	private static String removeSignature(String string) {
+		string = string.replaceFirst("^.*(?=(\\{))", "");
+		return string;
+	}
+
+	private static void handleSingleRenamings(MergeContext context) {
 		//possible renamings or deletions in left
 		if(!context.possibleRenamedLeftNodes.isEmpty() || !context.possibleRenamedRightNodes.isEmpty()){
 			for(Pair<String,FSTNode> tuple: context.possibleRenamedLeftNodes){
@@ -130,7 +166,7 @@ public final class RenamingOrDeletionConflictsHandler {
 			secondContent= firstContent;
 			firstContent = aux;
 		}
-		
+
 		//statistics
 		if(firstContent.isEmpty() || secondContent.isEmpty()){
 			context.deletionConflicts++;
@@ -148,6 +184,18 @@ public final class RenamingOrDeletionConflictsHandler {
 			FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
 
 		}
+	}
+
+	private static void generateMutualRenamingConflict(MergeContext context,String currentNodeContent, String firstContent,String secondContent) {
+		//statistics
+		context.renamingConflicts++;
+
+		//first creates a conflict 
+		MergeConflict newConflict = new MergeConflict(firstContent+'\n', secondContent+'\n');
+	
+		//second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
+		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.body);
+		FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
 	}
 
 	/*	pure similarity-based handler (it works)
@@ -214,5 +262,10 @@ public final class RenamingOrDeletionConflictsHandler {
 		}
 	}
 	 */
+	public static void main(String[] args) {
+		String s = "intsum(inta,intb){returna+b;}";
+		removeSignature(s);
+		System.out.println(s);
 
+	}
 }
