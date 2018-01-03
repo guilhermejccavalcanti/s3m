@@ -1,4 +1,4 @@
-package br.ufpe.cin.mergers.handlers.tests;
+package br.ufpe.cin.tests;
 
 import static org.junit.Assert.assertTrue;
 

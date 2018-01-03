@@ -1,4 +1,4 @@
-package br.ufpe.cin.mergers.handlers.tests;
+package br.ufpe.cin.tests;
 
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;

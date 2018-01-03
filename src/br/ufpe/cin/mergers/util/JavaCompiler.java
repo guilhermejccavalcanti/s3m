@@ -82,6 +82,16 @@ public class JavaCompiler {
 
 		return (CompilationUnit)parser.createAST(null);
 	}
+	
+	/**
+	 * Compiles a given java source code.
+	 * @param javaSource
+	 * @param unitName being compiled
+	 * @return CompilationUnit representing the compiled code.
+	 */
+	public CompilationUnit compile(String javaSource){
+		return compile("UnitName", javaSource, new String[]{}, new String[]{});
+	}
 
 	/**
 	 * Gets the name of the compilation unit that would hypothetically contains the source string to be compiled. Defaults to none (null). 

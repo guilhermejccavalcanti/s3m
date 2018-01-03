@@ -17,6 +17,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
+import br.ufpe.cin.generated.SimplePrintVisitor;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 
@@ -623,5 +624,15 @@ public final class FilesManager {
 		sourceCode = sourceCode.replaceAll("=======", "int bbbb;");
 		sourceCode = sourceCode.replaceAll(">>>>>>> YOURS", "int yyyy;");
 		return sourceCode;
+	}
+	
+	/**
+	 * Pretty print of a given non-terminal node.
+	 * @param node
+	 */
+	public static String prettyPrint(FSTNonTerminal node) {
+		SimplePrintVisitor visitor = new SimplePrintVisitor();
+		visitor.visit(node);
+		return visitor.getResult().replaceAll(("  "), " ");
 	}
 }

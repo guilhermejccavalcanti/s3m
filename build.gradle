@@ -9,7 +9,7 @@ sourceSets {
 	  
 	test {
         java {
-            srcDirs = ["src/br/ufpe/cin/mergers/handlers/tests"]
+            srcDirs = ["src/br/ufpe/cin/tests"]
         }
     }
 }
