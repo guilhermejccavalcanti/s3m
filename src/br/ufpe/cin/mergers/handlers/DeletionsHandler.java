@@ -28,6 +28,8 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * @author Guilherme
  */
 public class DeletionsHandler {
+	
+	private final static double DEFAULT_SIMILARITY_THRESHOLD = 0.9;
 
 	public static void handle(MergeContext context) {
 		normalizeDeletions(context);
@@ -136,15 +138,19 @@ public class DeletionsHandler {
 		}
 	}
 
-	private static boolean hasChanges(FSTNode deletedNode,FSTNonTerminal declarationInSource) {
-		return !(hasSameShape(declarationInSource,deletedNode) && hasSimilarContent(declarationInSource,deletedNode));
+	private static boolean hasChanges(FSTNode deletedNode, FSTNonTerminal declarationInSource) {
+		return !(hasSameShape(declarationInSource, deletedNode) && hasSimilarContent(declarationInSource, deletedNode, 1));
 	}
 
 	private static boolean hasSimilarContent(FSTNode candidate, FSTNode deletedNode) {
+		return hasSimilarContent(candidate, deletedNode, DEFAULT_SIMILARITY_THRESHOLD);
+	}
+
+	private static boolean hasSimilarContent(FSTNode candidate, FSTNode deletedNode, double similarityThreshold) {
 		String printRenamedCandidate = FilesManager.getStringContentIntoSingleLineNoSpacing(FilesManager.prettyPrint((FSTNonTerminal) candidate));
 		String printDeletedNode = FilesManager.getStringContentIntoSingleLineNoSpacing(FilesManager.prettyPrint((FSTNonTerminal) deletedNode));
 		double similarity = FilesManager.computeStringSimilarity(printRenamedCandidate, printDeletedNode);
-		return similarity >= 0.9;
+		return similarity >= similarityThreshold;
 	}
 
 	private static boolean hasSameShape(FSTNode renamingCadidate, FSTNode deletedNode) {
