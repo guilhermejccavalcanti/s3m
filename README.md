@@ -87,7 +87,7 @@ Then, after the "git merge" command detects conflicts, call the tool with:
 Testing
 -------------
 
-We provide standalone tests in the [/testfiles/shelltests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/testfiles/shelltests) folder in addition to a few [JUnit tests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/src/br/ufpe/cin/mergers/handlers/tests).
+We provide standalone tests in the [/testfiles/shelltests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/testfiles/shelltests) folder in addition to a few [JUnit tests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/src/br/ufpe/cin/tests).
 To run theses tests, you will need the shunit2 framework installed:
 
 * On Mac:
