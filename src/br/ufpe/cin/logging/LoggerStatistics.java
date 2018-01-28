@@ -96,7 +96,7 @@ public class LoggerStatistics {
 		logpath = logpath + "jfstmerge.statistics.scenarios";
 
 		//reading the log file to see if it is not empty neither contains the header
-		String header = "revision,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,"
+		String header = "revision,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergeinnerdeletionconfs,ssmergetaeconfs,ssmergenereoconfs,"
 				+ "ssmergeinitlblocksconfs,ssmergeacidentalconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,unmergeduplicateddeclarationerrors,"
 				+ "unmergeorderingconfs,equalconfs\n";
 		File statisticsLog = new File(logpath);
@@ -165,17 +165,17 @@ public class LoggerStatistics {
 					ssmergeloc 	 += Integer.valueOf(columns[3]);
 					ssmergerenamingconfs += Integer.valueOf(columns[4]);
 					ssmergedeletionconfs += Integer.valueOf(columns[5]);
-					ssmergetaeconfs   += Integer.valueOf(columns[6]);
-					ssmergenereoconfs += Integer.valueOf(columns[7]);
-					ssmergeinitlblocksconfs += Integer.valueOf(columns[8]);
-					ssmergeacidentalconfs 	+= Integer.valueOf(columns[9]);
-					unmergeconfs += Integer.valueOf(columns[10]);
-					unmergeloc 	 += Integer.valueOf(columns[11]);
-					unmergetime  += Long.parseLong(columns[12]);
-					ssmergetime  += Long.parseLong((columns[13]));
-					duplicateddeclarationerrors += Integer.valueOf(columns[14]);
-					unmergeorderingconfs += Integer.valueOf(columns[15]);
-					equalconfs 	 += Integer.valueOf(columns[16]);
+					ssmergetaeconfs   += Integer.valueOf(columns[7]);
+					ssmergenereoconfs += Integer.valueOf(columns[8]);
+					ssmergeinitlblocksconfs += Integer.valueOf(columns[9]);
+					ssmergeacidentalconfs 	+= Integer.valueOf(columns[10]);
+					unmergeconfs += Integer.valueOf(columns[11]);
+					unmergeloc 	 += Integer.valueOf(columns[12]);
+					unmergetime  += Long.parseLong(columns[13]);
+					ssmergetime  += Long.parseLong((columns[14]));
+					duplicateddeclarationerrors += Integer.valueOf(columns[15]);
+					unmergeorderingconfs += Integer.valueOf(columns[16]);
+					equalconfs 	 += Integer.valueOf(columns[17]);
 				}
 
 				if(JFSTMerge.isCryptographed){
@@ -301,7 +301,7 @@ public class LoggerStatistics {
 
 		//manageLogBuffer(logpath);
 
-		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergetaeconfs,ssmergenereoconfs,"
+		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergeinnerdeletionconfs,ssmergetaeconfs,ssmergenereoconfs,"
 				+ "ssmergeinitlblocksconfs,ssmergeacidentalconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,unmergeduplicateddeclarationerrors,"
 				+ "unmergeorderingconfs,equalconfs\n";
 
@@ -337,17 +337,17 @@ public class LoggerStatistics {
 			int JAVA_FILES, int FP_UN, int FN_UN, int FP_SS, int FN_SS,
 			double M, double N) {
 		StringBuilder summary = new StringBuilder();
-		summary.append("s3m was invoked in " +JAVA_FILES+ " JAVA files so far.\n");
+		summary.append("S3M was invoked in " +JAVA_FILES+ " JAVA files so far.\n");
 
 		if(FP_UN > 0 && FN_UN > 0){
 			summary.append("In these files, you avoided at least " +FP_UN+ " false positive(s),");
 			summary.append(" and at least "+FN_UN+" false negative(s) in relation to unstructured merge.\n");
 		} else if(FP_UN == 0 && FN_UN == 0){
-			summary.append("In these files, s3m did not find any occurrence of unstructured merge false positives and false negatives.\n");
+			summary.append("In these files, S3M did not find any occurrence of unstructured merge false positives and false negatives.\n");
 		} else if(FP_UN > 0 && FN_UN == 0){
-			summary.append("In these files, you avoided at least " +FP_UN+" false positive(s), and s3m did not find any occurrence of unstructured merge false negatives.\n");
+			summary.append("In these files, you avoided at least " +FP_UN+" false positive(s), and S3M did not find any occurrence of unstructured merge false negatives.\n");
 		} else if(FP_UN == 0 && FN_UN > 0){
-			summary.append("In these files, s3m did not find any occurrence of unstructured merge false positives, but you avoided at least "+FN_UN+" false negative(s) in relation to unstructured merge.\n");
+			summary.append("In these files, S3M did not find any occurrence of unstructured merge false positives, but you avoided at least "+FN_UN+" false negative(s) in relation to unstructured merge.\n");
 		}
 
 		summary.append("Conversely,");
@@ -357,7 +357,7 @@ public class LoggerStatistics {
 			summary.append(" you had no extra false positives, but you had at most "+FN_SS+" potential extra false negative(s).");
 		}
 
-		summary.append("\n\ns3m reported "+ssmergeconfs+" conflicts, totaling " +ssmergeloc+ " conflicting LOC,");
+		summary.append("\n\nS3M reported "+ssmergeconfs+" conflicts, totaling " +ssmergeloc+ " conflicting LOC,");
 		summary.append(" compared to "+unmergeconfs+" conflicts and " +unmergeloc+ " conflicting LOC from unstructured merge.");
 		/*		if(equalconfs >0){
 			summary.append("\nWith " +equalconfs+ " similar conflict(s) between the tools.");
@@ -366,9 +366,9 @@ public class LoggerStatistics {
 		summary.append("\n\nAltogether, ");
 		if(ssmergeconfs != unmergeconfs){
 			if(ssmergeconfs < unmergeconfs){
-				summary.append("these numbers represent a reduction of " + String.format("%.2f",((double)((unmergeconfs - ssmergeconfs)/(double)unmergeconfs))*100) +"% in the number of conflicts by s3m.\n");
+				summary.append("these numbers represent a reduction of " + String.format("%.2f",((double)((unmergeconfs - ssmergeconfs)/(double)unmergeconfs))*100) +"% in the number of conflicts by S3M.\n");
 			} else if(ssmergeconfs > unmergeconfs){
-				summary.append("these numbers represent no reduction of conflicts by s3m.\n");
+				summary.append("these numbers represent no reduction of conflicts by S3M.\n");
 			}
 		} else {
 			summary.append("these numbers represent no difference in terms of number of reported conflicts.\n");
@@ -391,7 +391,7 @@ public class LoggerStatistics {
 		}
 
 
-		summary.append("\n\nFinally, s3m took " + (new DecimalFormat("#.##").format(M))+" seconds, and unstructured merge " + (new DecimalFormat("#.##").format(N)) + " seconds to merge all these files.");
+		summary.append("\n\nFinally, S3M took " + (new DecimalFormat("#.##").format(M))+" seconds, and unstructured merge " + (new DecimalFormat("#.##").format(N)) + " seconds to merge all these files.");
 
 		summary.append("\n\n\n");
 		summary.append("LAST TIME UPDATED: " + (new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime())));

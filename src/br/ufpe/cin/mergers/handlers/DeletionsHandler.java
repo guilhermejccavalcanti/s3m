@@ -133,7 +133,7 @@ public class DeletionsHandler {
 					FSTNonTerminal declarationInSource = correspondingInSource.getParent();
 					//conflict only if there are editions to the original element
 					if(hasChanges(deletedNode, declarationInSource)){ 
-						generateNonTerminalConflict(source, identifier, isLeftDeletion,	parent, index);
+						generateNonTerminalConflict(source, identifier, isLeftDeletion,	parent, index, context);
 					}
 				}
 			}
@@ -185,7 +185,7 @@ public class DeletionsHandler {
 
 	private static void generateNonTerminalConflict(FSTNode source,
 			String identifier, boolean isLeftDeletion, FSTNonTerminal parent,
-			int index) {
+			int index, MergeContext context) {
 		/*This is a workaround as there is no comprehensive way to create a conflict for a non-terminal node.
 			We pretty print the non-terminal node and create a terminal node representation instead.*/
 		FSTNode correspondingInSource = FilesManager.findNodeByID(source, identifier);
@@ -200,6 +200,7 @@ public class DeletionsHandler {
 			}
 			FSTTerminal terminal = new FSTTerminal(declarationInSource.getType(), identifier, newConflict.body, "");
 			parent.addChild(terminal, index);
+			context.innerDeletionConflicts++;
 		}
 	}
 

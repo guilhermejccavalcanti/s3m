@@ -50,6 +50,8 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{voidm(){}intb;}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
+
 	}
 	
 	@Test
@@ -63,6 +65,7 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{voidm(){}intb;}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
 	}
 	
 	@Test
@@ -76,6 +79,7 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{classA{doublea;doubleb;}classB{doublea;}publicstaticvoidmain(String[]args){newA();}}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
 	}
 	
 	@Test
@@ -89,6 +93,7 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{classB{doublea;doubleb;}}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
 	}
 	
 	@Test
@@ -102,6 +107,8 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{<<<<<<<MINE=======classA{doublea;doubleb;}>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==1);
+
 	}
 	
 	@Test
@@ -115,6 +122,8 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{classB{doublea;}inta;}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
+
 	}
 	
 	@Test
@@ -128,6 +137,7 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{classB{doublea;doubleb;}inta;}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
 	}
 
 	@Test
@@ -141,6 +151,7 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{classA{doublea;doubleb;}publicstaticvoidmain(String[]args){newA();}classB{doublea;}}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
 	}
 	
 	@Test
@@ -154,6 +165,7 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{classB{doublea;doubleb;}}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
 	}
 	
 	@Test
@@ -167,6 +179,7 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{<<<<<<<MINEclassA{doublea;doubleb;}=======>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==1);
 	}
 	
 	@Test
@@ -180,6 +193,8 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{inta;classB{doublea;}}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
+
 	}
 	
 	@Test
@@ -193,5 +208,6 @@ public class DeletionsHandlerTest {
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
 				.equals("packagecom.example;publicclassTest{inta;classB{doublea;doubleb;}}")
 				);
+		assertTrue(ctx.innerDeletionConflicts==0);
 	}
 }

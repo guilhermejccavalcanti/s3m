@@ -51,6 +51,7 @@ public class MergeContext {
 	public int renamingConflicts = 0;
 	public int typeAmbiguityErrorsConflicts = 0;
 	public int deletionConflicts = 0;
+	public int innerDeletionConflicts = 0;
 	public int initializationBlocksConflicts = 0;
 	public int acidentalConflicts = 0;
 	public long semistructuredMergeTime = 0;

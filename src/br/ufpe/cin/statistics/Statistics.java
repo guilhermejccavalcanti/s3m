@@ -57,6 +57,7 @@ public final class Statistics {
 				+ "," + context.semistructuredMergeConflictsLOC
 				+ "," + context.renamingConflicts
 				+ "," + context.deletionConflicts
+				+ "," + context.innerDeletionConflicts
 				+ "," + context.typeAmbiguityErrorsConflicts
 				+ "," + context.newElementReferencingEditedOneConflicts
 				+ "," + context.initializationBlocksConflicts
@@ -84,6 +85,7 @@ public final class Statistics {
 		int semistructuredMergeConflictsLOC = 0;
 		int renamingConflicts = 0;
 		int deletionConflicts = 0;
+		int innerDeletionConflicts = 0;
 		int typeAmbiguityErrorsConflicts = 0;
 		int newElementReferencingEditedOneConflicts = 0;
 		int initializationBlocksConflicts = 0;
@@ -102,6 +104,7 @@ public final class Statistics {
 			semistructuredMergeConflictsLOC += context.semistructuredMergeConflictsLOC;
 			renamingConflicts += context.renamingConflicts;
 			deletionConflicts += context.deletionConflicts;
+			innerDeletionConflicts += context.innerDeletionConflicts;
 			typeAmbiguityErrorsConflicts += context.typeAmbiguityErrorsConflicts;
 			newElementReferencingEditedOneConflicts += context.newElementReferencingEditedOneConflicts;
 			initializationBlocksConflicts += context.initializationBlocksConflicts;
@@ -120,6 +123,7 @@ public final class Statistics {
 				+ "," + semistructuredMergeConflictsLOC
 				+ "," + renamingConflicts
 				+ "," + deletionConflicts
+				+ "," + innerDeletionConflicts
 				+ "," + typeAmbiguityErrorsConflicts
 				+ "," + newElementReferencingEditedOneConflicts
 				+ "," + initializationBlocksConflicts
