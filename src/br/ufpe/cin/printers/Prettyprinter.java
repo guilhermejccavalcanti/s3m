@@ -85,7 +85,7 @@ public final class Prettyprinter {
 	 */
 	public static void generateMergedTuple(FilesTuple tuple) throws PrintException {
 		String outputDirPath = tuple.getOutputpath();
-		if(outputDirPath != null){
+		if(outputDirPath != null && tuple.getContext()!=null){
 			String fileNameExample;
 			if(tuple.getBaseFile()!=null){
 				fileNameExample = tuple.getBaseFile().getName();

@@ -56,7 +56,7 @@ public class JFSTMerge {
 	public static boolean isGit = false;
 
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).",arity = 1)
-	public static boolean isCryptographed = false;
+	public static boolean isCryptographed = true;
 	
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
