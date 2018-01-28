@@ -28,7 +28,7 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * @author Guilherme
  */
 public class DeletionsHandler {
-	
+
 	private final static double DEFAULT_SIMILARITY_THRESHOLD = 0.9;
 
 	public static void handle(MergeContext context) {
@@ -110,29 +110,31 @@ public class DeletionsHandler {
 	private static void joinDeclarations(MergeContext context, FSTNode source, FSTNode deletedNode, String identifier, boolean isLeftDeletion) {
 		//1. remove original declaration from merged code
 		FSTNonTerminal declarationInMerged = delete(context, identifier);
-		int index = declarationInMerged.index;
-		FSTNonTerminal parent = declarationInMerged.getParent();
+		if(declarationInMerged != null){
+			int index = declarationInMerged.index;
+			FSTNonTerminal parent = declarationInMerged.getParent();
 
-		//2. update the content of the renamed node, if there is one
-		List<FSTNode> candidates = (isLeftDeletion)? context.addedLeftNodes : context.addedRightNodes;
-		boolean conflict = true;
-		for(FSTNode renamingCandidate : candidates){
-			if(renamingCandidate instanceof FSTNonTerminal){
-				if(hasSameShape(renamingCandidate,deletedNode) && hasSimilarContent(renamingCandidate,deletedNode) 
-						&& !hasNewInstance(context,((FSTTerminal) getId(renamingCandidate)).getBody(),!isLeftDeletion)){
-					joinContent(source, identifier, parent, index,renamingCandidate);
-					conflict = false;
-					break;
+			//2. update the content of the renamed node, if there is one
+			List<FSTNode> candidates = (isLeftDeletion)? context.addedLeftNodes : context.addedRightNodes;
+			boolean conflict = true;
+			for(FSTNode renamingCandidate : candidates){
+				if(renamingCandidate instanceof FSTNonTerminal){
+					if(hasSameShape(renamingCandidate,deletedNode) && hasSimilarContent(renamingCandidate,deletedNode) 
+							&& !hasNewInstance(context,((FSTTerminal) getId(renamingCandidate)).getBody(),!isLeftDeletion)){
+						joinContent(source, identifier, parent, index,renamingCandidate);
+						conflict = false;
+						break;
+					}
 				}
 			}
-		}
-		if(conflict){
-			FSTNode correspondingInSource = FilesManager.findNodeByID(source, identifier);
-			if(correspondingInSource!=null){
-				FSTNonTerminal declarationInSource = correspondingInSource.getParent();
-				//conflict only if there are editions to the original element
-				if(hasChanges(deletedNode, declarationInSource)){ 
-					generateNonTerminalConflict(source, identifier, isLeftDeletion,	parent, index);
+			if(conflict){
+				FSTNode correspondingInSource = FilesManager.findNodeByID(source, identifier);
+				if(correspondingInSource!=null){
+					FSTNonTerminal declarationInSource = correspondingInSource.getParent();
+					//conflict only if there are editions to the original element
+					if(hasChanges(deletedNode, declarationInSource)){ 
+						generateNonTerminalConflict(source, identifier, isLeftDeletion,	parent, index);
+					}
 				}
 			}
 		}
@@ -158,15 +160,18 @@ public class DeletionsHandler {
 		String typesB = getTypes(deletedNode);
 		return typesA.equals(typesB);
 	}
-	
+
 	private static FSTNonTerminal delete(MergeContext context, String identifier){
 		FSTNode correspondingInMerged = FilesManager.findNodeByID(context.superImposedTree, identifier);
-		FSTNonTerminal declarationInMerged = correspondingInMerged.getParent();
-		FSTNonTerminal parent = declarationInMerged.getParent();
-		parent.removeChild(declarationInMerged);
-		return declarationInMerged;
+		if(correspondingInMerged!=null){
+			FSTNonTerminal declarationInMerged = correspondingInMerged.getParent();
+			FSTNonTerminal parent = declarationInMerged.getParent();
+			parent.removeChild(declarationInMerged);
+			return declarationInMerged;
+		}
+		return null;
 	}
-	
+
 
 	private static String getTypes(FSTNode node) {
 		String types = node.getType();
