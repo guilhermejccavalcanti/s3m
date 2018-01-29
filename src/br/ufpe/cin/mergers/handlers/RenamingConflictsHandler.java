@@ -35,17 +35,19 @@ public final class RenamingConflictsHandler {
 			List<FSTNode> rightNewMethodsOrConstructors= context.addedRightNodes.stream().filter(m -> isValidNode(m)).collect(Collectors.toList());
 			for(FSTNode left : leftNewMethodsOrConstructors){
 				for(FSTNode right : rightNewMethodsOrConstructors){
-					String leftBody = ((FSTTerminal)left).getBody();
-					leftBody = FilesManager.getStringContentIntoSingleLineNoSpacing(leftBody);
-					leftBody = removeSignature(leftBody);
+					if(!left.getName().equals(right.getName())){ //only if the two declarations have different signatures
+						String leftBody = ((FSTTerminal)left).getBody();
+						leftBody = FilesManager.getStringContentIntoSingleLineNoSpacing(leftBody);
+						leftBody = removeSignature(leftBody);
 
-					String rightBody = ((FSTTerminal)right).getBody();
-					rightBody = FilesManager.getStringContentIntoSingleLineNoSpacing(rightBody);
-					rightBody = removeSignature(rightBody);
+						String rightBody = ((FSTTerminal)right).getBody();
+						rightBody = FilesManager.getStringContentIntoSingleLineNoSpacing(rightBody);
+						rightBody = removeSignature(rightBody);
 
-					if(leftBody.equals(rightBody)){//the methods have the same body, ignoring their signature
-						generateMutualRenamingConflict(context, ((FSTTerminal)left).getBody(), ((FSTTerminal)left).getBody(), ((FSTTerminal)right).getBody());
-						break;
+						if(leftBody.equals(rightBody)){//the methods have the same body, ignoring their signature
+							generateMutualRenamingConflict(context, ((FSTTerminal)left).getBody(), ((FSTTerminal)left).getBody(), ((FSTTerminal)right).getBody());
+							break;
+						}
 					}
 				}
 			}
@@ -192,7 +194,7 @@ public final class RenamingConflictsHandler {
 
 		//first creates a conflict 
 		MergeConflict newConflict = new MergeConflict(firstContent+'\n', secondContent+'\n');
-	
+
 		//second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
 		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.body);
 		FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
