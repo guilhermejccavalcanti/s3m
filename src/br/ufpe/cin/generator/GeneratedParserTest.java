@@ -5,11 +5,17 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.InvocationTargetException;
+import java.util.List;
 
+import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.printers.Prettyprinter;
 import cide.gparser.CharStream;
 import cide.gparser.OffsetCharStream;
 import de.ovgu.cide.fstgen.ast.AbstractFSTParser;
 import de.ovgu.cide.fstgen.ast.AbstractFSTPrintVisitor;
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
+import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 public class GeneratedParserTest {
 
@@ -35,12 +41,12 @@ public class GeneratedParserTest {
 
 		// System.out.println(args[0]);
 		// System.out.println(args[1]);
-		// System.out.println(args[2]);	
-		
+		// System.out.println(args[2]);
+
 		String parserClassName = args[0];
 		String mainProduction = args[1];
-		String targetFileName = args[2]; 
-		
+		String targetFileName = args[2];
+
 		Class.forName("de.ovgu.cide.fstgen.ast.AbstractFSTParser");
 
 		File inputFile = new File(targetFileName);
@@ -76,9 +82,9 @@ public class GeneratedParserTest {
 			InvocationTargetException, NoSuchMethodException,
 			FileNotFoundException, InterruptedException {
 
-		//time to refresh folders' content
+		// time to refresh folders' content
 		Thread.sleep(2000);
-		
+
 		Class.forName("de.ovgu.cide.fstgen.ast.AbstractFSTParser");
 
 		File inputFile = new File(targetFileName);
@@ -89,22 +95,55 @@ public class GeneratedParserTest {
 				inputFile));
 
 		Class<?> parserClass = Class.forName(parserClassName);
-		Constructor<?> parserConstructor = parserClass
-				.getConstructor(CharStream.class);
-		AbstractFSTParser parser = (AbstractFSTParser) parserConstructor
-				.newInstance(input);
-		parserClass.getMethod(mainProduction, boolean.class).invoke(parser,
-				new Boolean(false));
+		Constructor<?> parserConstructor = parserClass.getConstructor(CharStream.class);
+		AbstractFSTParser parser = (AbstractFSTParser) parserConstructor.newInstance(input);
+		parserClass.getMethod(mainProduction, boolean.class).invoke(parser,	new Boolean(false));
 
 		System.out.println(parser.getRoot().printFST(0));
 
-		String pkg = parserClassName.substring(0,
-				parserClassName.lastIndexOf("."));
+		String pkg = parserClassName.substring(0,parserClassName.lastIndexOf("."));
 		Class<?> printerClass = Class.forName(pkg + ".SimplePrintVisitor");
-		AbstractFSTPrintVisitor printer = (AbstractFSTPrintVisitor) printerClass
-				.newInstance();
+		AbstractFSTPrintVisitor printer = (AbstractFSTPrintVisitor) printerClass.newInstance();
 		parser.getRoot().accept(printer);
+		
 		System.out.println(printer.getResult());
 	}
 
+	public void pruneTree(FSTNode node) {
+		if (node instanceof FSTNonTerminal) {
+			if (node.getType().equals("Expression")) {
+				pruneExpressions((FSTNonTerminal) node);
+			} else {
+				for (FSTNode child : ((FSTNonTerminal) node).getChildren()) {
+					pruneTree(child);
+				}
+			}
+		} else {
+			return;
+		}
+	}
+
+	private void pruneExpressions(FSTNonTerminal expression) {
+		FSTNode rexp = findRelevantExpression(expression);
+		if (rexp != null) {
+			rexp.setParent(expression);
+			expression.getChildren().set(0, rexp);
+		}
+	}
+
+	private FSTNode findRelevantExpression(FSTNonTerminal expression) {
+		for (FSTNode subexpression : expression.getChildren()) {
+			if (subexpression instanceof FSTNonTerminal) {
+				if (((FSTNonTerminal) subexpression).getChildren().size() != 1) {
+					pruneTree(subexpression);
+					return subexpression;
+				} else {
+					return findRelevantExpression((FSTNonTerminal) subexpression);
+				}
+			} else {
+				return subexpression;
+			}
+		}
+		return null;
+	}
 }

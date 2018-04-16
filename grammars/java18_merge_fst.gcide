@@ -369,7 +369,7 @@ PackageDeclaration:
 		( Annotation )* <PACKAGE> Name ";" @!
 ;
 
-@FSTTerminal(name="{Name}{ImportPackage}",merge="LineBased")
+@FSTTerminal(name="{Name}{ImportPackage}")
 ImportDeclaration:  
         <IMPORT> [ "static" <NONE>] Name [ ImportPackage ] ";" @!
 ;
@@ -379,7 +379,7 @@ ImportPackage:
 		<NONE> "." "*" 
 ;
 
-@FSTTerminal(merge="LineBased")
+@FSTTerminal()
 Modifiers:
 		( LOOK_AHEAD(2) Modifier )*
 ;
@@ -424,11 +424,11 @@ TypeDeclaration:
 		@FSTTerminal(name="{AUTO}")	
 		";"<NONE> :: EmptyTypeDecl
 		|	
-		@FSTNonTerminal(name="{Id}")
-		LOOK_AHEAD("Modifiers() \"@\" \"interface\"") Modifiers AnnotationTypeDeclaration ::  AnnotationTypeDecl
+		@FSTNonTerminal(name="{AnnotationTypeDeclaration}")
+		LOOK_AHEAD("Modifiers() \"@\" \"interface\"") Modifiers @~ AnnotationTypeDeclaration ::  AnnotationTypeDecl
 		|
 		@FSTNonTerminal(name="{Id}")
-		LOOK_AHEAD("Modifiers() \"enum\"") Modifiers EnumDeclaration :: EnumDecl
+		LOOK_AHEAD("Modifiers() \"enum\"") Modifiers @~ EnumDeclaration :: EnumDecl
 		|
 		@FSTNonTerminal(name="{Id}")
 		Modifiers ClassOrInterfaceDeclaration :: ClassOrInterfaceDecl
@@ -445,19 +445,19 @@ ClassOrInterfaceDeclaration:
 		[ LOOK_AHEAD(2) <SEMICOLON> ]
 ;
 
-@FSTTerminal(merge="LineBased")
+@FSTTerminal()
 ClassOrInterface: 
 			"class"<NONE> :: ClassOrInterface
 			| 
 			"interface"<NONE> :: ClassOrInterface
 ;
 
-@FSTTerminal(merge="LineBased")
+@FSTTerminal(name="ExtndList")
 ExtendsList:
        "extends" &LI ClassOrInterfaceTypeAnnotation ( "," &LI ClassOrInterfaceTypeAnnotation )*
 ;
 
-@FSTTerminal(name="ImplList", merge="LineBased")
+@FSTTerminal(name="ImplList")
 ImplementsList:  
 		"implements" &LI ClassOrInterfaceTypeAnnotation ( "," &LI ClassOrInterfaceTypeAnnotation )*
 ;
@@ -484,7 +484,7 @@ EnumBody:
 
 @FSTNonTerminal()
 EnumBodyInternal: 
-		";" ( ClassOrInterfaceBodyDeclaration )* 
+		";" @+ @! ( ClassOrInterfaceBodyDeclaration )* @- @!
 ;
 
 @FSTNonTerminal()
@@ -492,9 +492,9 @@ EnumConstants:
 		&LI EnumConstant ( LOOK_AHEAD(2) "," &LI EnumConstant )* 
 ;
 
-@FSTTerminal(name="{<IDENTIFIER>}",merge="LineBased")
+@FSTNonTerminal(name="{Id}")
 EnumConstant: 
-        ( Annotation )* <IDENTIFIER> [ Arguments ] [ ClassOrInterfaceBody ]
+        ( Annotation )* Id [ Arguments ] [ ClassOrInterfaceBody ]
 ;
 
 @FSTTerminal(name="TypeParameters", merge="LineBased")
@@ -503,16 +503,16 @@ TypeParameters:
 ;
 
 TypeParameter:
-		( Annotation )* <IDENTIFIER> [ TypeBound ]       
+		( Annotation )* Id [ TypeBound ]       
 ;
 
 TypeBound:   
 		"extends" ClassOrInterfaceType ( "&" ClassOrInterfaceType )*       
 ;
 
-@FSTInline
+@FSTNonTerminal()
 ClassOrInterfaceBody:
-		"{" @+ @! ( ClassOrInterfaceBodyDeclaration @!)* @- @! "}"
+		"{" @+ @! ( ClassOrInterfaceBodyDeclaration)* @- @! "}"
 ;
 
 ClassOrInterfaceBodyDeclaration:
@@ -526,20 +526,21 @@ ClassOrInterfaceBodyDeclaration:
 		|
 		@FSTNonTerminal(name="{Id}")
 		LOOK_AHEAD("Modifiers() \"enum\"")
-		Modifiers EnumDeclaration :: InnerEnumDecl
+		Modifiers @~ EnumDeclaration :: InnerEnumDecl
 		|
-		@FSTTerminal(name="{ConstructorDeclaration}", merge="LineBased")
-		LOOK_AHEAD("Modifiers() [ TypeParameters() ] <IDENTIFIER> \"(\"")
+		@FSTNonTerminal(name="{ConstructorDeclaration}")
+		LOOK_AHEAD("Modifiers() [ TypeParameters() ] Id() \"(\"")
 		Modifiers ConstructorDeclaration :: ConstructorDecl
 		|
-		@FSTTerminal(name="{FieldDeclaration}", merge="SemanticConflict")
-		LOOK_AHEAD( " Modifiers() Type() <IDENTIFIER> ( \"[\" \"]\" )* ( \",\" | \"=\" | \";\" ) ")
+		@FSTNonTerminal(name="{FieldDeclaration}")
+		LOOK_AHEAD( " Modifiers() Type() Id() ( \"[\" \"]\" )* ( \",\" | \"=\" | \";\" ) ")
 		Modifiers FieldDeclaration :: FieldDecl
 		|
+		@FSTNonTerminal(name="{AnnotationTypeDeclaration}")
 		LOOK_AHEAD("Modifiers() \"@\" \"interface\"")
-		Modifiers AnnotationTypeDeclaration :: InnerAnnotationTypeDecl
+		Modifiers @~ AnnotationTypeDeclaration :: InnerAnnotationTypeDecl
 		|
-		@FSTTerminal(name="{MethodDeclaration}", merge="LineBased")
+		@FSTNonTerminal(name="{MethodDeclaration}")
 		LOOK_AHEAD(2)
 		Modifiers MethodDeclaration :: MethodDecl
 		|
@@ -548,53 +549,61 @@ ClassOrInterfaceBodyDeclaration:
 ;
 
 @FSTExportName("{VariableDeclarator}")
+@FSTNonTerminal()
 FieldDeclaration:  
-		Type VariableDeclarator ("," VariableDeclarator)* ";"
+		Type &LI VariableDeclarator ("," &LI VariableDeclarator)* ";"
 ;
 
-@FSTExportName("{VariableDeclaratorId}")
+@FSTNonTerminal(name="{VariableDeclaratorId}")
 VariableDeclarator:
 		VariableDeclaratorId [ "=" VariableInitializer ]
 ;
 
-@FSTExportName("{<IDENTIFIER>}")
+@FSTExportName("{Id}")
 VariableDeclaratorId:  
-		LOOK_AHEAD(2) <IDENTIFIER> "." <THIS> 
+		LOOK_AHEAD(2) Id "." <THIS> 
 		| 
 		<THIS>
         |
-		<IDENTIFIER> ( "[" "]" <NONE> )*
+		Id ( "[" "]" <NONE> )*
 ;
 
+@FSTNonTerminal()
 VariableInitializer:   
-		ArrayInitializer
+		ArrayInitializer :: VariableInitializerArray
 		|
-		Expression
+		Expression :: VariableInitializerExpression
 ;
 
 ArrayInitializer:
 		"{" [ ArrayInitializerInternal ] [ "," <NONE> ] "}"
 ;
 
+@FSTNonTerminal()
 ArrayInitializerInternal:
 		VariableInitializer ( LOOK_AHEAD(2) "," VariableInitializer )*
 ;
 
 @FSTExportName("{MethodDeclarator}")
+@FSTNonTerminal()
 MethodDeclaration:   
 		[ TypeParameters ]
 		ResultType
-		MethodDeclarator [ "throws" NameList ]
+		MethodDeclarator [@~ "throws" NameList ]
 		MethodDeclarationBody
 ;
 
+@FSTNonTerminal()
 MethodDeclarationBody: 
-		Block | ";"<NONE>
+		Block :: MethodDeclarationBodyBlock
+        | 
+        ";"<NONE> :: MethodDeclarationBodyNone
 ; 
 
-@FSTExportName("{<IDENTIFIER>}({FormalParameters})")
+@FSTExportName("{Id}({FormalParameters})")
+@FSTTerminal(name="{Id}({FormalParameters})")
 MethodDeclarator:
-		<IDENTIFIER> FormalParameters ( "[" "]" <NONE>)*
+		Id FormalParameters ( "[" "]" <NONE>)*
 ;
 
 @FSTExportName("{FormalParametersInternal}")
@@ -620,23 +629,33 @@ FinalOrAnnotation:
 		"final" <NONE> | Annotation
 ;
 
-@FSTInline @FSTExportName("{<IDENTIFIER>}({FormalParameters})")
+@FSTExportName("{ConstructorDeclarator})")
+@FSTNonTerminal()
 ConstructorDeclaration:
 		[ LOOK_AHEAD("Annotation()") Annotation ]
 		[ TypeParameters]
-		<IDENTIFIER> FormalParameters [ "throws" NameList ]
-		"{"
-		[ LOOK_AHEAD("ExplicitConstructorInvocation()") ExplicitConstructorInvocation ]
+		ConstructorDeclarator [@~ "throws" NameList ]
+		"{" @+!
+		[ LOOK_AHEAD("ExplicitConstructorInvocation()")  ExplicitConstructorInvocation ]
 		( BlockStatement )*
-"}"
+		 @- "}"
+;
+
+@FSTExportName("{Id}({FormalParameters})")
+@FSTTerminal(name="{Id}({FormalParameters})")
+ConstructorDeclarator:
+		Id FormalParameters
 ;
 
 ExplicitConstructorInvocation:
-		LOOK_AHEAD("\"this\" Arguments() \";\"") "this" Arguments ";" @!
+        @FSTNonTerminal()
+		LOOK_AHEAD("\"this\" Arguments() \";\"") "this" Arguments ";" @! :: ExplicitConstructorInvocationThisArguments
 		|
-		LOOK_AHEAD("TypeArguments() \"this\" Arguments() \";\"") TypeArguments "this" Arguments ";" @!
+        @FSTNonTerminal()
+		LOOK_AHEAD("TypeArguments() \"this\" Arguments() \";\"") TypeArguments "this" Arguments ";" @! :: ExplicitConstructorInvocationThisTypeArguments
 		|
-		[LOOK_AHEAD("PrimaryExpression() \".\"") PrimaryExpression "." ] [ TypeArguments ] "super" Arguments ";"	
+        @FSTNonTerminal()
+		[LOOK_AHEAD("PrimaryExpression() \".\"") PrimaryExpression "." ] [ TypeArguments ] "super" Arguments ";" @! :: ExplicitConstructorInvocationSuper
 ;
 
 Initializer:  
@@ -659,18 +678,18 @@ ReferenceType:
 
 @FSTTerminal(name="{TOSTRING}")
 ClassOrInterfaceType:
-		<IDENTIFIER> [ LOOK_AHEAD(2) TypeArguments ]
+		Id [ LOOK_AHEAD(2) TypeArguments ]
 		( LOOK_AHEAD(2) ClassOrInterfaceTypeInternal)*
 ;
 
 ClassOrInterfaceTypeInternal:
-		"." <IDENTIFIER> [ LOOK_AHEAD(2) TypeArguments]
+		"." Id [ LOOK_AHEAD(2) TypeArguments]
 ;
 
 TypeArguments: 
          <DIAMOND>   
         |
-        "<" TypeArgument ( "," TypeArgument )* ">"
+        "<" &LI TypeArgument ( ","  &LI TypeArgument )* ">"
 ;
 
 TypeArgument:
@@ -709,10 +728,10 @@ ResultType:
 		Type
 ;
 
-@FSTExportName("{<IDENTIFIER>}^.")
+@FSTExportName("{Id}^.")
 Name:
-        <IDENTIFIER>
-        (LOOK_AHEAD(2) "." <IDENTIFIER> )*
+        Id
+        (LOOK_AHEAD(2) "." Id )*
 ;
 
 NameList:
@@ -727,12 +746,13 @@ NameListAnnotation:
  * Expression syntax follows.
  */
 
+@FSTNonTerminal()
 Expression:  
 			  ConditionalExpression
-			  [ LOOK_AHEAD(2) AssignExp]
+			  [ LOOK_AHEAD(2) AssignmentExpression]
 ;
-
-AssignExp:
+@FSTNonTerminal()
+AssignmentExpression:
 			AssignmentOperator Expression
 ;
 
@@ -740,41 +760,54 @@ AssignmentOperator:
   "=" <NONE> | "*=" <NONE> | "/=" <NONE> | "%=" <NONE> | "+=" <NONE> | "-=" <NONE>| "<<=" <NONE> | ">>=" <NONE> | ">>>=" <NONE> | "&=" <NONE> | "^=" <NONE> | "|=" <NONE>
 ;
 
+@FSTNonTerminal()
 ConditionalExpression:   
 			LOOK_AHEAD("ConditionalOrExpression() \"?\"") 
-			ConditionalExpressionFull{Expression}
+			ShortIf{Expression}
 			|
 			ConditionalOrExpression
 ;
 
-ConditionalExpressionFull:
-			ConditionalOrExpression "?" Expression! ":" Expression 
+@FSTNonTerminal()
+ShortIf:
+			ShortIfInternal ":" Expression 
 ;
 
+@FSTNonTerminal()
+ShortIfInternal:
+			ConditionalOrExpression "?" Expression!
+;
+
+@FSTNonTerminal()
 ConditionalOrExpression:
-			ConditionalAndExpression ( LOOK_AHEAD(2) "||" ConditionalAndExpression)*
+			&LI ConditionalAndExpression ( LOOK_AHEAD(2) "||" &LI ConditionalAndExpression)*
 ;
 
+@FSTNonTerminal()
 ConditionalAndExpression:  
-			InclusiveOrExpression ( LOOK_AHEAD(2) "&&" InclusiveOrExpression )*
+			&LI InclusiveOrExpression ( LOOK_AHEAD(2) "&&" &LI InclusiveOrExpression )*
 ;
 
+@FSTNonTerminal()
 InclusiveOrExpression:
-			ExclusiveOrExpression ( LOOK_AHEAD(2) "|" ExclusiveOrExpression )*
+			&LI ExclusiveOrExpression ( LOOK_AHEAD(2) "|" &LI ExclusiveOrExpression )*
 ;
 
+@FSTNonTerminal()
 ExclusiveOrExpression:    
-			AndExpression ( LOOK_AHEAD(2) "^" AndExpression )*
+			&LI AndExpression ( LOOK_AHEAD(2) "^" &LI AndExpression )*
 ;
 
+@FSTNonTerminal()
 AndExpression:   
-			EqualityExpression ( LOOK_AHEAD(2) "&" EqualityExpression )*
+			&LI EqualityExpression ( LOOK_AHEAD(2) "&" &LI EqualityExpression )*
 ;
 
+@FSTNonTerminal()
 EqualityExpression: 
 			InstanceOfExpression ( LOOK_AHEAD(2) EqualityExpressionInternal )*
 ;
-
+@FSTNonTerminal()
 EqualityExpressionInternal: 
 			EqualityOp InstanceOfExpression
 ;
@@ -784,14 +817,17 @@ EqualityOp:
 ;
 
 
+@FSTNonTerminal()
 InstanceOfExpression:
 			RelationalExpression [ LOOK_AHEAD(2) "instanceof" Type ]
 ;
 
+@FSTNonTerminal()
 RelationalExpression:
 			ShiftExpression ( LOOK_AHEAD(2) RelationalExpressionInternal )*
 ;
 
+@FSTNonTerminal()
 RelationalExpressionInternal:
 			RelationalOp ShiftExpression
 ;
@@ -800,10 +836,12 @@ RelationalOp:
 			"<"<NONE> | ">"<NONE> | "<=" <NONE>| ">="<NONE>
 ;
 
+@FSTNonTerminal()
 ShiftExpression:
 			AdditiveExpression ( LOOK_AHEAD(2) ShiftExpressionInternal )*
 ;
 
+@FSTNonTerminal()
 ShiftExpressionInternal:
 			ShiftOp AdditiveExpression
 ;
@@ -815,10 +853,12 @@ ShiftOp:
 			| LL(2) ">" ">" <NONE>		
 ;
 
+@FSTNonTerminal()
 AdditiveExpression:
 			MultiplicativeExpression ( LOOK_AHEAD(2) AdditiveExpressionInternal )*
 ;
 
+@FSTNonTerminal()
 AdditiveExpressionInternal:
 			AdditiveOp MultiplicativeExpression
 ;
@@ -827,10 +867,12 @@ AdditiveOp:
 			"+" <NONE> | "-" <NONE>
 ;
 
+@FSTNonTerminal()
 MultiplicativeExpression:
 			UnaryExpression ( LOOK_AHEAD(2) MultiplicativeExpressionInternal )*
 ;
 
+@FSTNonTerminal()
 MultiplicativeExpressionInternal:
 			MultiplicativeOp UnaryExpression
 ;
@@ -840,31 +882,32 @@ MultiplicativeOp:
 ;
 
 
+@FSTNonTerminal()
 UnaryExpression: 
-			AdditiveOp UnaryExpression
+			AdditiveOp UnaryExpression :: UnaryExpressionAdditive
 			|
-			PreIncrementExpression
+			PreIncrementExpression  :: UnaryPreIncrement
 			| 
-			PreDecrementExpression
+			PreDecrementExpression  :: UnaryPreDecrement
 			| 
-			UnaryExpressionNotPlusMinus
+			UnaryExpressionNotPlusMinus  :: UnaryExpNotPlusMinus
 ;
-
+@FSTNonTerminal()
 PreIncrementExpression:
 			"++" PrimaryExpression
 ;
-
+@FSTNonTerminal()
 PreDecrementExpression:
 			"--" PrimaryExpression
 ;
-
+@FSTNonTerminal()
 UnaryExpressionNotPlusMinus:
-			UnaryOp UnaryExpression
+			UnaryOp UnaryExpression :: UnaryExpressionNotPlusMinusUnaryOp
 			|
-			LOOK_AHEAD( "CastLOOK_AHEAD()" )
-			CastExpression
+			LOOK_AHEAD( "CastLOOK_AHEAD()" ) 
+			CastExpression :: UnaryExpressionNotPlusMinusCastExpression
 			|
-			PostfixExpression
+			PostfixExpression :: UnaryExpressionNotPlusMinusPostfixExpression
 ;
 
 UnaryOp:	
@@ -887,7 +930,7 @@ CastLOOK_AHEADOp:
 		Literal
 ;
 
-
+@FSTNonTerminal()
 PostfixExpression:
         PrimaryExpression [ LOOK_AHEAD(2) PostfixOp ]
 ;
@@ -896,6 +939,7 @@ PostfixOp:
 		"++" <NONE> | "--" <NONE>
 ;
 
+@FSTNonTerminal()
 CastExpression:
 		LOOK_AHEAD("\"(\" (Annotation())* Type() \")\"")
 		"(" (Annotation)* Type ")" UnaryExpression
@@ -905,12 +949,13 @@ CastExpression:
 		"(" (Annotation)* Type ")" UnaryExpressionNotPlusMinus
 ;
 
+@FSTNonTerminal()
 PrimaryExpression:
         PrimaryPrefix  ( LOOK_AHEAD(2) PrimarySuffix )*
 ;
 
 MemberSelector:
-		"." TypeArguments <IDENTIFIER>
+		"." TypeArguments Id
 		| 
 		MethodReference
 ;
@@ -920,93 +965,94 @@ MethodReference:
 ;
 
 NewOrIdentifier:
-		"new"  | <IDENTIFIER> 
+		"new"  | Id 
 ;
 
-/*
-PrimaryPrefix:
-		Literal
-		|
-		"this" <NONE>
-		|
-		"super" "." <IDENTIFIER>
-		|
-		LOOK_AHEAD( "ClassOrInterfaceType() \".\" <IDENTIFIER>" )
-		ClassOrInterfaceType "." <IDENTIFIER>
-		|
-		LOOK_AHEAD(" ClassOrInterfaceType() \".\" \"super\" \".\" <IDENTIFIER> ")
-		ClassOrInterfaceType "." "super" "." <IDENTIFIER>
-		|
-		"(" Expression ")"
-		|
-		AllocationExpression
-		|
-		LOOK_AHEAD(" ResultType() \".\" \"class\" ")
-		ResultType "." "class"
-		|
-		Name
-;
-*/
 
 PrimaryPrefix:
+		@FSTTerminal()
 		Literal
 		| 
+		@FSTTerminal()
 		LOOK_AHEAD(2) "this" <NONE>
 		| 
+		@FSTTerminal()
 		"super"  <NONE>
 		| 
+		@FSTNonTerminal()
 		LOOK_AHEAD(" \"(\" \")\" \"->\" ") LambdaExpression
 		| 
-		LOOK_AHEAD(" <IDENTIFIER> \"->\" ") LambdaExpression
+		@FSTNonTerminal()
+		LOOK_AHEAD(" Id() \"->\" ") LambdaExpression
 		| 
+		@FSTNonTerminal()
 		LOOK_AHEAD(" \"(\" VariableDeclaratorId() \")\" \"->\" ") LambdaExpression
 		| 
+		@FSTNonTerminal()
 		LOOK_AHEAD(" \"(\" VariableDeclaratorId() \",\" VariableDeclaratorId() [\",\" VariableDeclaratorId()] \")\" \"->\" ") LambdaExpression
 		| 
+		@FSTNonTerminal()
 		LOOK_AHEAD(" \"(\" FormalParameter() \")\" \"->\" ") LambdaExpression
 		| 
+		@FSTNonTerminal()
 		LOOK_AHEAD(" \"(\" FormalParameter() \",\" FormalParameter() [\",\" FormalParameter() ] \")\" \"->\" ") LambdaExpression
 		| 
+		@FSTNonTerminal()
 		LOOK_AHEAD(" LambdaExpression() ") LambdaExpression
 		| 
+		@FSTNonTerminal()
 		LOOK_AHEAD(3) "(" Expression ")"
 		| 
+		@FSTNonTerminal()
 		AllocationExpression
 		| 
+		@FSTTerminal()
 		LOOK_AHEAD(" ResultType() \".\" \"class\" ") ResultType "." "class"
 		| 
+		@FSTTerminal()
 		LOOK_AHEAD(" Name() \"::\" ") Name
 		| 
+		@FSTNonTerminal()
 		LOOK_AHEAD(" ReferenceType() MethodReference() ") ReferenceType MethodReference
 		| 
+		@FSTTerminal()
 		Name
 ;
 
+@FSTNonTerminal()
 LambdaExpression:
 		VariableDeclaratorId "->" ExpressionOrBlock
 		| 
 		LOOK_AHEAD(3) FormalParameters "->" ExpressionOrBlock
 		| 
-		LOOK_AHEAD(3) "(" VariableDeclaratorId ( "," VariableDeclaratorId )* ")" "->" ExpressionOrBlock
+		LOOK_AHEAD(3) "(" &LI VariableDeclaratorId ( "," &LI VariableDeclaratorId )* ")" "->" ExpressionOrBlock
 ;
 
+@FSTNonTerminal()
 ExpressionOrBlock:
 		Expression | Block 
 ;
 
 PrimarySuffix:
+		@FSTTerminal()
 		LOOK_AHEAD(2) "." "this" <NONE>
 		|
+		@FSTTerminal()
 		LOOK_AHEAD(2) "." "super" <NONE>
 		|
+		@FSTNonTerminal()
 		LOOK_AHEAD(2) "." AllocationExpression
 		|
+		@FSTNonTerminal()
 		LOOK_AHEAD(3) MemberSelector
 		|
+		@FSTNonTerminal()
 		"[" Expression "]"
 		|
-		"." <IDENTIFIER>
+		@FSTTerminal()
+		"." Id
 		|
+		@FSTNonTerminal()
 		Arguments
 ;
 
@@ -1034,34 +1080,35 @@ NullLiteral:
 		"null" <NONE>
 ;
 
+@FSTNonTerminal()
 Arguments:
         "(" [ ArgumentList ] ")"
 ;
-
+@FSTNonTerminal()
 ArgumentList:
-        Expression ( "," Expression )*
+        &LI Expression ( "," &LI  Expression )*
 ;
-
+@FSTNonTerminal()
 AllocationExpression:   
-		LOOK_AHEAD(3) "new" (Annotation)* PrimitiveType ArrayDimsAndInits 
+		LOOK_AHEAD(3) @~ "new" (Annotation)* PrimitiveType ArrayDimsAndInits :: AllocationExpressionArray
 		|
-		"new" (Annotation)* ClassOrInterfaceType [ TypeArguments ] AllocationExpressionInit
+		@~ "new" (Annotation)* ClassOrInterfaceType [ TypeArguments ] AllocationExpressionInit :: AllocationExpressionType
 ;
-
+@FSTNonTerminal()
 AllocationExpressionInit:
-		ArrayDimsAndInits 
+		ArrayDimsAndInits :: AllocationExpressionInitArrayDimsAndInits
 		|
-		Arguments [ ClassOrInterfaceBody ]
+		Arguments [ ClassOrInterfaceBody ] :: AllocationExpressionInitArguments
 ;
 
-
+@FSTNonTerminal()
 ArrayDimsAndInits:    
 		LOOK_AHEAD(2)
 		( LOOK_AHEAD(2) ArrayDims )+ ( LOOK_AHEAD(2) "[" "]" <NONE>)*
 		|
 		( "[" "]" <NONE>)+ ArrayInitializer
 ;
-
+@FSTNonTerminal()
 ArrayDims:
 		"["  Expression "]"
 ;
@@ -1070,122 +1117,141 @@ ArrayDims:
  * Statement syntax follows.
  */
 
+
 Statement:
-		LOOK_AHEAD(2)
-		LabeledStatement
+		@FSTNonTerminal()
+		LOOK_AHEAD(2) LabeledStatement :: LabeledStmt
 		|
-		AssertStatement @!
+		@FSTNonTerminal()
+		AssertStatement :: AssertStmt
 		|
-		Block
+		@FSTNonTerminal()
+		Block :: BlockStmt
 		|
-		EmptyStatement
+		@FSTTerminal()
+		EmptyStatement :: EmptyStmt
 		|
-		StatementExpression ";" @!
+		@FSTNonTerminal()
+		StatementExpression ";" :: StatementExp
 		|
-		SwitchStatement @!
+		@FSTNonTerminal()
+		SwitchStatement :: SwitchStmt
 		|
-		IfStatement{Statement} @!
+		@FSTNonTerminal()
+		IfStatement :: IfStmt
 		|
-		WhileStatement{Statement} @!
+		@FSTNonTerminal()
+		WhileStatement :: WhileStmt
 		|
-		DoStatement{Statement} @!
+		@FSTNonTerminal()
+		DoStatement :: DoStmt
 		|
-		ForStatement{Statement} @!
+		@FSTNonTerminal()
+		ForStatement :: ForStmt
 		|
-		BreakStatement @!
+		@FSTTerminal()
+		BreakStatement :: BreakStmt
 		|
-		ContinueStatement @!
+		@FSTTerminal()
+		ContinueStatement :: ContinueStmt
 		|
-		ReturnStatement @!
+		@FSTNonTerminal()
+		ReturnStatement :: ReturnStmt
 		|
-		ThrowStatement @!
+		@FSTNonTerminal()
+		ThrowStatement :: ThrowStmt
 		|
-		SynchronizedStatement{Statement} @!
+		@FSTNonTerminal()
+		SynchronizedStatement :: SynchronizedStmt
 		|
-		TryStatement{Statement} @!
+		@FSTNonTerminal()
+		TryStatement :: TryStmt
 ;
 
+@FSTNonTerminal()
 AssertStatement:
-        "assert" Expression [ ":" Expression ] ";"
+        "assert" &LI Expression [ ":" &LI Expression ] ";"
 ;
 
+@FSTNonTerminal()
 LabeledStatement:    
-		<IDENTIFIER> ":" Statement
+		Id ":" Statement
 ;
 
+@FSTNonTerminal()
 Block:
-        "{" @+  @! ( BlockStatement )* @- @!"}" 
+        "{" ( BlockStatement )* "}" 
 ;
 
+@FSTNonTerminal()
 BlockStatement:
-		[LOOK_AHEAD(2) Annotation] BlockStatementInternal
+		@! @+ [LOOK_AHEAD(2) Annotation] BlockStatementInternal @- @!
 ;
 
+@FSTNonTerminal()
 BlockStatementInternal:
 		LOOK_AHEAD("[Annotation()] [FinalOrAbstract()] \"class\"") 
-		[Annotation] ClassOrInterfaceDeclaration
+		[Annotation] ClassOrInterfaceDeclaration :: BlockClassOrInterfaceDecl
 		|
-		LOOK_AHEAD(" Modifiers() (FinalOrAnnotation())* Type() <IDENTIFIER>")
-		LocalVariableDeclaration ";"
+		LOOK_AHEAD(" Modifiers() (FinalOrAnnotation())* Type() Id()")
+		LocalVariableDeclaration ";" :: BlockLocalVariableDecl
 		|
-		LOOK_AHEAD(2) AssertStatement
+		LOOK_AHEAD(3) AssertStatement :: BlockAssertStmt
 		|
-		LOOK_AHEAD(3) Statement
+		LOOK_AHEAD(3) Statement :: InnerBlockStmt
 ;
 
 FinalOrAbstract:
 	<FINAL> <NONE> | <ABSTRACT> <NONE>
 ;
 
+@FSTNonTerminal()
 LocalVariableDeclaration:
-		[LOOK_AHEAD(2) Annotation] Modifiers (FinalOrAnnotation)* Type VariableDeclarator
-		( "," VariableDeclarator )*
+		[LOOK_AHEAD(2) Annotation] Modifiers (FinalOrAnnotation)* Type  &LI VariableDeclarator ( "," &LI VariableDeclarator )*
 ;
 
 EmptyStatement:
 		";" <NONE>
 ;
 
+@FSTNonTerminal()
 StatementExpression:
-		PreIncrementExpression
+		PreIncrementExpression :: PreIncrementStmtExp
 		|
-		PreDecrementExpression
+		PreDecrementExpression ::  PreDecrementStmtExp
 		|
 		/*LOOK_AHEAD( "PrimaryExpression() PostfixOp()" ) PostfixExpression
 		|*/
-		PrimaryExpression [ StatementExpressionAssignment ]
+		PrimaryExpression [ StatementExpressionAssignment ] :: AssignmentStmtExp
 ;
 
 StatementExpressionAssignment:
-            "++" <NONE>
+			@FSTTerminal()
+            "++" <NONE> :: Increment
           |
-            "--" <NONE>
+			@FSTTerminal()
+            "--" <NONE> :: Decrement
           |
-            AssignmentOperator Expression
+			@FSTNonTerminal()
+            AssignmentOperator Expression :: Assignment
 ;
 
+@FSTNonTerminal()
 SwitchStatement:    
-		"switch" "(" Expression ")" "{" @+ @!
-		( SwitchStatementLabel )*
-		@- @! "}"
+		"switch" "(" Expression ")" "{" @! @+ ( SwitchStatementLabel )* @- @! "}"
 ;
 
+@FSTNonTerminal()
 SwitchStatementLabel:
 		SwitchLabel ( LOOK_AHEAD(2) BlockStatement )* 
 ;
 
-/*SwitchLabel:
-		LOOK_AHEAD(3) "case" Expression ":"
-		|
-		"case" EnumConstantName ":"
-		|
-		"default" ":" <NONE>
-;*/
-
 SwitchLabel:
-		"case" Expression ":"
+		@FSTNonTerminal()
+		"case" Expression ":" :: CaseSwitchExp
 		|
-		"default" ":" <NONE>
+		@FSTTerminal()
+		"default" ":" <NONE> :: DefaultSwitch
 ;
 
 
@@ -1193,106 +1259,102 @@ EnumConstantName:
 		<IDENTIFIER>
 ;
 
+@FSTNonTerminal()
 IfStatement:    
-        "if" "(" Expression ")" @! @+ Statement! [ LOOK_AHEAD(1) "else" @! @+ Statement @- ]
+        "if" "(" Expression ")" Statement! [ LOOK_AHEAD(1) IfStatementInternal]
 ;
 
+@FSTNonTerminal()
+IfStatementInternal:
+	"else" @~ Statement
+;
+
+@FSTNonTerminal()
 WhileStatement:
-		"while" "(" Expression ")" @! @+ Statement! @-
+		"while" "(" Expression ")" Statement!
 ;
 
+@FSTNonTerminal()
 DoStatement:  
-        "do" @! @+ Statement! @- "while" "(" Expression ")" ";"
+        "do" Statement! "while" "(" Expression ")" ";"
 ;
 
+@FSTNonTerminal()
 ForStatement:
-		"for" "(" ForStatementInternal ")" @! @+ Statement! @-
+		"for" "(" ForStatementInternal ")" Statement!
 ;
 
+@FSTNonTerminal()
 ForStatementInternal:
-		LOOK_AHEAD("[Annotation()][\"final\"] Type() <IDENTIFIER> \":\"")
-		[LOOK_AHEAD(2) Annotation] ["final" <NONE>] Type <IDENTIFIER> ":" Expression
+		LOOK_AHEAD("[Annotation()][\"final\"] Type() Id() \":\"")
+		[LOOK_AHEAD(2) Annotation] ["final" <NONE>] Type Id ":" Expression :: ForEach
 		|
-		[ ForInit ] ";" [ Expression ] ";" [ ForUpdate ]
+		[ ForInit ] ";" [ Expression ] ";" [ ForUpdate ] :: ForTraditional
 ;
 
 VariableModifier:
 		[LOOK_AHEAD(2) Annotation] ["final" <NONE>]   
 ;
 
+@FSTNonTerminal()
 ForInit:
-		LOOK_AHEAD(" [ \"final\" ] Type() <IDENTIFIER> ")
+		LOOK_AHEAD(" [ \"final\" ] Type() Id() ")
 		LocalVariableDeclaration 
 		|
 		StatementExpressionList 
 ;
 
+@FSTNonTerminal()
 StatementExpressionList:
-        StatementExpression ( "," StatementExpression )*
+        &LI StatementExpression ( "," &LI StatementExpression )*
 ;
 
+@FSTNonTerminal()
 ForUpdate:
         StatementExpressionList
 ;
 
+@FSTNonTerminal()
 BreakStatement:
-		"break" [ <IDENTIFIER> ] ";"
+		"break" [ Id ] ";"
 ;
 
+@FSTNonTerminal()
 ContinueStatement:
-		"continue" [ <IDENTIFIER> ] ";"
+		"continue" [ Id ] ";"
 ;
 
+@FSTNonTerminal()
 ReturnStatement:
         "return" [ Expression ] ";"
 ;
 
+@FSTNonTerminal()
 ThrowStatement:
 		"throw" Expression ";"
 ;
 
+@FSTNonTerminal()
 SynchronizedStatement:
-        <SYNCHRONIZED> "(" Expression ")" Block!
+       "synchronized" "(" Expression ")" Statement!
 ;
 
-/*
+@FSTNonTerminal()
 TryStatement:
-        "try" 
-		[TryStatementInit]
-        Block!
-        ( CatchBlock )*
-        [ "finally" Block ]
+		"try" (ResourceSpecification)? Block! (LOOK_AHEAD(2) CatchStatement @!)* [LOOK_AHEAD(2) FinallyStatement ]
 ;
 
-TryStatementInit:
-		"(" LocalVariableDeclaration (LOOK_AHEAD(2) ";" LocalVariableDeclaration)* [";" <NONE>] ")"
-;
-
-CatchBlock:
-		"catch" "(" CatchBlockInternal ")" Block
-;
-
-CatchBlockInternal:
-		LOOK_AHEAD(3) FormalParameter 
-		|
-		ClassOrInterfaceType (LOOK_AHEAD(2) "|" ClassOrInterfaceType)+ VariableDeclaratorId
-;
-*/
-
-TryStatement:
-		"try" (ResourceSpecification)? Block!
-		( CatchStatement )*
-		[ FinallyStatement ]
-;
-
+@FSTNonTerminal()
 ResourceSpecification:
 		"(" Resources (LOOK_AHEAD(2) ";" <NONE>)? ")"	
 ;
 
+@FSTNonTerminal()
 Resources:
-		Resource (LOOK_AHEAD(2) ";" Resource)*
+		&LI Resource (LOOK_AHEAD(2) ";" &LI Resource)*
 ;
 
+@FSTNonTerminal()
 Resource:
 		( FinalOrAnnotation )*
 		Type
@@ -1301,24 +1363,21 @@ Resource:
 		Expression
 ;
 
-/*CatchStatement:
-		"catch"
-		"(" FormalParameter ")"
-		Block
-;*/
-
+@FSTNonTerminal()
 CatchStatement:
-		"catch" "(" CatchBlockInternal ")" Block
+		"catch" "(" CatchBlockInternal ")" Statement!
 ;
 
+@FSTNonTerminal()
 CatchBlockInternal:
-		LOOK_AHEAD(3) FormalParameter 
+		LOOK_AHEAD(3) FormalParameter  :: SingleCatching
 		|
-		ClassOrInterfaceType (LOOK_AHEAD(2) "|" ClassOrInterfaceType)+ VariableDeclaratorId
+		&LI ClassOrInterfaceType (LOOK_AHEAD(2) "|" &LI ClassOrInterfaceType)+ VariableDeclaratorId :: MultipleCatching
 ;
 
+@FSTNonTerminal()
 FinallyStatement:
-		"finally" Block
+		"finally" Statement!
 ;
 
 /* We use productions to match >>>, >> and > so that we can keep the
@@ -1341,7 +1400,7 @@ RSIGNEDSHIFT:
 /* Annotation syntax follows. */
 
 Annotation:
-		LOOK_AHEAD( "\"@\" Name() \"(\" ( <IDENTIFIER> \"=\" | \")\" )")
+		LOOK_AHEAD( "\"@\" Name() \"(\" ( Id() \"=\" | \")\" )")
 		NormalAnnotation
 		|
 		LOOK_AHEAD("\"@\" Name() \"(\"")
@@ -1367,16 +1426,17 @@ MemberValuePairs:
 ;
 
 MemberValuePair:    
-		<IDENTIFIER> "=" MemberValue
+		Id "=" MemberValue
 ;
 
+@FSTNonTerminal()
 MemberValue:
 		LOOK_AHEAD(2)
-		Annotation      
+		Annotation  :: MemberValueAnnotation
 		|
-		MemberValueArrayInitializer
+		MemberValueArrayInitializer :: MemberValueArrayInitl
 		|
-		ConditionalExpression
+		ConditionalExpression :: MemberValueConditionalExp
 ;
 
 MemberValueArrayInitializer:    
@@ -1392,7 +1452,8 @@ MemberValueList:
 ;
 
 /* Annotation Types. */
-@FSTInline
+@FSTNonTerminal()
+@FSTExportName("{Id}")
 AnnotationTypeDeclaration: 
         "@" "interface" Id AnnotationTypeBody
 ;
@@ -1400,13 +1461,13 @@ AnnotationTypeDeclaration:
 
 @FSTInline
 AnnotationTypeBody:    
-		"{" ( AnnotationTypeMemberDeclaration )* "}"
+		"{" ( AnnotationTypeMemberDeclaration )* @! "}"
 ;
 
 AnnotationTypeMemberDeclaration:
-		@FSTTerminal(name="{<IDENTIFIER>}", merge="LineBased")
-		LOOK_AHEAD("Modifiers() Type() <IDENTIFIER> \"(\"")
-		Modifiers Type <IDENTIFIER> "(" ")" [ DefaultValue ] ";" 
+		@FSTNonTerminal(name="{Id}")
+		LOOK_AHEAD("Modifiers() Type() Id() \"(\"")
+		Modifiers Type Id "(" ")" [ DefaultValue ] ";" 
 		|
 		@FSTNonTerminal(name="{Id}")
 		LOOK_AHEAD("Modifiers() ClassOrInterface()")
@@ -1414,18 +1475,19 @@ AnnotationTypeMemberDeclaration:
 		|
 		@FSTNonTerminal(name="{Id}")
 		LOOK_AHEAD("Modifiers() \"enum\"")
-		Modifiers EnumDeclaration :: AnnotationInnerEnumDecl
+		Modifiers @~ EnumDeclaration :: AnnotationInnerEnumDecl
 		|
+     	@FSTNonTerminal(name="{AnnotationTypeDeclaration}")
 		LOOK_AHEAD("Modifiers() \"@\" \"interface\"")
-		Modifiers  AnnotationTypeDeclaration :: AnnotationInnerTypeDecl
+		Modifiers @~ AnnotationTypeDeclaration :: AnnotationInnerTypeDecl
 		|
-		@FSTTerminal(name="{FieldDeclaration}", merge="SemanticConflict")
+		@FSTNonTerminal(name="{FieldDeclaration}")
 		Modifiers FieldDeclaration :: AnnotationInnerFieldDecl 
 		|
 		@FSTTerminal(name="{AUTO}")
 		";" <NONE> :: AnnoationEmptyDecl
 ;
-
+@FSTNonTerminal()
 DefaultValue:    
         "default" MemberValue
 ;

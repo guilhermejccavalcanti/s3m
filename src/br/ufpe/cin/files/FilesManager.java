@@ -225,76 +225,8 @@ public final class FilesManager {
 		try{
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8);
 			content = reader.lines().collect(Collectors.joining("\n"));
-		}catch(Exception e){
-			//System.err.println(e.getMessage());
-		}
+		}catch(Exception e){}
 		return content;
-	}
-
-	/**
-	 * Given a main list of files path, searches for corresponding files in other two given files path list.
-	 * @param firstVariantDir root directory 
-	 * @param mainDir root directory
-	 * @param secondVariantDir root directory
-	 * @param listOfTuplesToBeFilled 
-	 * @param filesPathFromMainVariant 
-	 * @param filesPathFromFirstVariant
-	 * @param filesPathFromSecondVariant
-	 */
-	private static void searchCorrespondingFiles(String firstVariantDir, String mainDir,
-			String secondVariantDir, List<FilesTuple> listOfTuplesToBeFilled,
-			LinkedList<String> filesPathFromFirstVariant,
-			LinkedList<String> filesPathFromMainVariant,
-			LinkedList<String> filesPathFromSecondVariant,
-			boolean isFirstVariantDriven,
-			boolean isMainVariantDriven,
-			boolean isSecondVariantDriven) {
-
-		while(!filesPathFromMainVariant.isEmpty()){
-			String baseFilePath = filesPathFromMainVariant.poll();
-			String correspondingFirstVariantFilePath = replaceFilePath(baseFilePath,mainDir,firstVariantDir);
-			String correspondingSecondVariantFilePath = replaceFilePath(baseFilePath,mainDir,secondVariantDir);
-
-			File firstVariantFile = new File(correspondingFirstVariantFilePath);
-			File baseFile = new File(baseFilePath);
-			File secondVariantFile = new File(correspondingSecondVariantFilePath);
-
-			if(!firstVariantFile.exists())firstVariantFile = null;
-			if(!baseFile.exists())baseFile = null;
-			if(!secondVariantFile.exists())secondVariantFile = null;
-
-			//to fill the tuples parameters accordingly
-			if(isFirstVariantDriven){
-				FilesTuple tuple = new FilesTuple(baseFile, firstVariantFile, secondVariantFile);
-				listOfTuplesToBeFilled.add(tuple);
-			} else if(isMainVariantDriven){
-				FilesTuple tuple = new FilesTuple(firstVariantFile, baseFile, secondVariantFile);
-				listOfTuplesToBeFilled.add(tuple);
-			} else if(isSecondVariantDriven){
-				FilesTuple tuple = new FilesTuple(firstVariantFile, secondVariantFile, baseFile);
-				listOfTuplesToBeFilled.add(tuple);
-			}
-
-			if(filesPathFromFirstVariant.contains(correspondingFirstVariantFilePath)){
-				filesPathFromFirstVariant.remove(correspondingFirstVariantFilePath);
-			}
-			if(filesPathFromSecondVariant.contains(correspondingSecondVariantFilePath)){
-				filesPathFromSecondVariant.remove(correspondingSecondVariantFilePath);
-			}
-		}
-	}
-
-	/**
-	 * Replace files paths.
-	 * @param filePath
-	 * @param oldPattern
-	 * @param newPattern
-	 * @return replaced path
-	 */
-	private static String replaceFilePath(String filePath, String oldPattern, String newPattern){
-		String result = (filePath.replace(oldPattern, newPattern));
-		return result;
-
 	}
 
 	/**
@@ -537,7 +469,7 @@ public final class FilesManager {
 	public static String indentCode(String sourceCode){
 		String indentedCode = sourceCode;
 		try{
-			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes()), StandardCharsets.UTF_8.displayName());
+			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes()), StandardCharsets.UTF_8);
 			indentedCode = indenter.toString();
 		} catch (Exception e){} //in case of any errors, returns the non-indented sourceCode
 		return indentedCode;
@@ -570,17 +502,17 @@ public final class FilesManager {
 		//comparing files content
 		if(basecontentrim.equals(leftcontenttrim)){
 			//result is right
-			context.semistructuredOutput = rightcontent;
+			context.structuredOutput = rightcontent;
 			context.unstructuredOutput = rightcontent;
 			result = false;
 		} else if(basecontentrim.equals(rightcontenttrim)){
 			//result is left
-			context.semistructuredOutput = leftcontent;
+			context.structuredOutput = leftcontent;
 			context.unstructuredOutput = leftcontent;
 			result = false;
 		} else if(leftcontenttrim.equals(rightcontenttrim)){
 			//result is both left or right
-			context.semistructuredOutput = leftcontent;
+			context.structuredOutput = leftcontent;
 			context.unstructuredOutput = leftcontent;
 			result = false;
 		}
@@ -609,6 +541,16 @@ public final class FilesManager {
 		return ((longerLength - levenshteinDistance)/(double) longerLength);
 	}
 
+	/**
+	 * Pretty print of a given non-terminal node.
+	 * @param node
+	 */
+	public static String prettyPrint(FSTNonTerminal node) {
+		SimplePrintVisitor visitor = new SimplePrintVisitor();
+		visitor.visit(node);
+		return visitor.getResult().replaceAll(("  "), " ");
+	}
+
 	@SuppressWarnings("unused")
 	private static String undoReplaceConflictMarkers(String indentedCode) {
 		// dummy code for identation purposes
@@ -627,12 +569,68 @@ public final class FilesManager {
 	}
 	
 	/**
-	 * Pretty print of a given non-terminal node.
-	 * @param node
+	 * Given a main list of files path, searches for corresponding files in other two given files path list.
+	 * @param firstVariantDir root directory 
+	 * @param mainDir root directory
+	 * @param secondVariantDir root directory
+	 * @param listOfTuplesToBeFilled 
+	 * @param filesPathFromMainVariant 
+	 * @param filesPathFromFirstVariant
+	 * @param filesPathFromSecondVariant
 	 */
-	public static String prettyPrint(FSTNonTerminal node) {
-		SimplePrintVisitor visitor = new SimplePrintVisitor();
-		visitor.visit(node);
-		return visitor.getResult().replaceAll(("  "), " ");
+	private static void searchCorrespondingFiles(String firstVariantDir, String mainDir,
+			String secondVariantDir, List<FilesTuple> listOfTuplesToBeFilled,
+			LinkedList<String> filesPathFromFirstVariant,
+			LinkedList<String> filesPathFromMainVariant,
+			LinkedList<String> filesPathFromSecondVariant,
+			boolean isFirstVariantDriven,
+			boolean isMainVariantDriven,
+			boolean isSecondVariantDriven) {
+	
+		while(!filesPathFromMainVariant.isEmpty()){
+			String baseFilePath = filesPathFromMainVariant.poll();
+			String correspondingFirstVariantFilePath = replaceFilePath(baseFilePath,mainDir,firstVariantDir);
+			String correspondingSecondVariantFilePath = replaceFilePath(baseFilePath,mainDir,secondVariantDir);
+	
+			File firstVariantFile = new File(correspondingFirstVariantFilePath);
+			File baseFile = new File(baseFilePath);
+			File secondVariantFile = new File(correspondingSecondVariantFilePath);
+	
+			if(!firstVariantFile.exists())firstVariantFile = null;
+			if(!baseFile.exists())baseFile = null;
+			if(!secondVariantFile.exists())secondVariantFile = null;
+	
+			//to fill the tuples parameters accordingly
+			if(isFirstVariantDriven){
+				FilesTuple tuple = new FilesTuple(baseFile, firstVariantFile, secondVariantFile);
+				listOfTuplesToBeFilled.add(tuple);
+			} else if(isMainVariantDriven){
+				FilesTuple tuple = new FilesTuple(firstVariantFile, baseFile, secondVariantFile);
+				listOfTuplesToBeFilled.add(tuple);
+			} else if(isSecondVariantDriven){
+				FilesTuple tuple = new FilesTuple(firstVariantFile, secondVariantFile, baseFile);
+				listOfTuplesToBeFilled.add(tuple);
+			}
+	
+			if(filesPathFromFirstVariant.contains(correspondingFirstVariantFilePath)){
+				filesPathFromFirstVariant.remove(correspondingFirstVariantFilePath);
+			}
+			if(filesPathFromSecondVariant.contains(correspondingSecondVariantFilePath)){
+				filesPathFromSecondVariant.remove(correspondingSecondVariantFilePath);
+			}
+		}
+	}
+
+	/**
+	 * Replace files paths.
+	 * @param filePath
+	 * @param oldPattern
+	 * @param newPattern
+	 * @return replaced path
+	 */
+	private static String replaceFilePath(String filePath, String oldPattern, String newPattern){
+		String result = (filePath.replace(oldPattern, newPattern));
+		return result;
+	
 	}
 }

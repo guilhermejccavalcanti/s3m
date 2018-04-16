@@ -30,44 +30,27 @@ public final class Statistics {
 	 * @throws Exception 
 	 */
 	public static void compute(MergeContext context) throws Exception{
-		List<MergeConflict> semistructuredMergeConflicts  = FilesManager.extractMergeConflicts(context.semistructuredOutput);
+		List<MergeConflict> structuredMergeConflicts  = FilesManager.extractMergeConflicts(context.structuredOutput);
 		List<MergeConflict> unstructuredMergeConflits	  = FilesManager.extractMergeConflicts(context.unstructuredOutput);
 
-		context.semistructuredNumberOfConflicts = computeNumberOfConflicts(semistructuredMergeConflicts);
+		context.structuredNumberOfConflicts = computeNumberOfConflicts(structuredMergeConflicts);
 		context.unstructuredNumberOfConflicts   = computeNumberOfConflicts(unstructuredMergeConflits);
 
-		context.semistructuredMergeConflictsLOC = computeConflictsLOC(semistructuredMergeConflicts);
+		context.structuredMergeConflictsLOC = computeConflictsLOC(structuredMergeConflicts);
 		context.unstructuredMergeConflictsLOC   = computeConflictsLOC(unstructuredMergeConflits);
 
-		context.equalConflicts = computeEqualConflicts(unstructuredMergeConflits,semistructuredMergeConflicts);
-
-		context.orderingConflicts = (context.unstructuredNumberOfConflicts  - context.semistructuredNumberOfConflicts) 
-				+  context.duplicatedDeclarationErrors 
-				- (context.typeAmbiguityErrorsConflicts + context.newElementReferencingEditedOneConflicts + context.initializationBlocksConflicts);
-		context.orderingConflicts =(context.orderingConflicts>0)?context.orderingConflicts:0;
-
-		context.acidentalConflicts = context.unstructuredNumberOfConflicts - context.equalConflicts - context.orderingConflicts;
-		context.acidentalConflicts = (context.acidentalConflicts>0) ? context.acidentalConflicts : 0;
+		context.equalConflicts = computeEqualConflicts(unstructuredMergeConflits,structuredMergeConflicts);
 
 		String filesMerged = ((context.getLeft() != null)?context.getLeft().getAbsolutePath() :"<empty left>") + "#" +
 				((context.getBase() != null)?context.getBase().getAbsolutePath() :"<empty base>") + "#" +
 				((context.getRight()!= null)?context.getRight().getAbsolutePath():"<empty right>");
 		String loggermsg = filesMerged 
-				+ "," + context.semistructuredNumberOfConflicts 
-				+ "," + context.semistructuredMergeConflictsLOC
-				+ "," + context.renamingConflicts
-				+ "," + context.deletionConflicts
-				+ "," + context.innerDeletionConflicts
-				+ "," + context.typeAmbiguityErrorsConflicts
-				+ "," + context.newElementReferencingEditedOneConflicts
-				+ "," + context.initializationBlocksConflicts
-				+ "," + context.acidentalConflicts
+				+ "," + context.structuredNumberOfConflicts 
+				+ "," + context.structuredMergeConflictsLOC
 				+ "," + context.unstructuredNumberOfConflicts 
 				+ "," + context.unstructuredMergeConflictsLOC
 				+ "," + context.unstructuredMergeTime
-				+ "," + context.semistructuredMergeTime	
-				+ "," + context.duplicatedDeclarationErrors
-				+ "," + context.orderingConflicts
+				+ "," + context.structuredMergeTime	
 				+ "," + context.equalConflicts;
 
 		computeDifferentConflicts(context);		
@@ -81,59 +64,32 @@ public final class Statistics {
 	 * @param scenario
 	 */
 	public static void compute(MergeScenario scenario) throws Exception{
-		int semistructuredNumberOfConflicts = 0; 
-		int semistructuredMergeConflictsLOC = 0;
-		int renamingConflicts = 0;
-		int deletionConflicts = 0;
-		int innerDeletionConflicts = 0;
-		int typeAmbiguityErrorsConflicts = 0;
-		int newElementReferencingEditedOneConflicts = 0;
-		int initializationBlocksConflicts = 0;
-		int acidentalConflicts = 0;
+		int structuredNumberOfConflicts = 0; 
+		int structuredMergeConflictsLOC = 0;
 		int unstructuredNumberOfConflicts = 0;
 		int unstructuredMergeConflictsLOC = 0;
 		long unstructuredMergeTime = 0;
-		long semistructuredMergeTime	= 0;
-		int duplicatedDeclarationErrors = 0;
-		int orderingConflicts = 0;
+		long structuredMergeTime	= 0;
 		int equalConflicts 	  = 0;
 
 		for(FilesTuple tuple : scenario.getTuples()){
 			MergeContext context = tuple.getContext();
-			semistructuredNumberOfConflicts += context.semistructuredNumberOfConflicts;
-			semistructuredMergeConflictsLOC += context.semistructuredMergeConflictsLOC;
-			renamingConflicts += context.renamingConflicts;
-			deletionConflicts += context.deletionConflicts;
-			innerDeletionConflicts += context.innerDeletionConflicts;
-			typeAmbiguityErrorsConflicts += context.typeAmbiguityErrorsConflicts;
-			newElementReferencingEditedOneConflicts += context.newElementReferencingEditedOneConflicts;
-			initializationBlocksConflicts += context.initializationBlocksConflicts;
-			acidentalConflicts += context.acidentalConflicts;
+			structuredNumberOfConflicts += context.structuredNumberOfConflicts;
+			structuredMergeConflictsLOC += context.structuredMergeConflictsLOC;
 			unstructuredNumberOfConflicts += context.unstructuredNumberOfConflicts;
 			unstructuredMergeConflictsLOC += context.unstructuredMergeConflictsLOC;
 			unstructuredMergeTime 	+= context.unstructuredMergeTime;
-			semistructuredMergeTime += context.semistructuredMergeTime;
-			duplicatedDeclarationErrors += context.duplicatedDeclarationErrors;
-			orderingConflicts += context.orderingConflicts;
+			structuredMergeTime += context.structuredMergeTime;
 			equalConflicts 	  += context.equalConflicts;
 		}
 
 		String loggermsg = scenario.getRevisionsFilePath() 
-				+ "," + semistructuredNumberOfConflicts 
-				+ "," + semistructuredMergeConflictsLOC
-				+ "," + renamingConflicts
-				+ "," + deletionConflicts
-				+ "," + innerDeletionConflicts
-				+ "," + typeAmbiguityErrorsConflicts
-				+ "," + newElementReferencingEditedOneConflicts
-				+ "," + initializationBlocksConflicts
-				+ "," + acidentalConflicts
+				+ "," + structuredNumberOfConflicts 
+				+ "," + structuredMergeConflictsLOC
 				+ "," + unstructuredNumberOfConflicts 
 				+ "," + unstructuredMergeConflictsLOC
 				+ "," + unstructuredMergeTime
-				+ "," + semistructuredMergeTime
-				+ "," + duplicatedDeclarationErrors
-				+ "," + orderingConflicts
+				+ "," + structuredMergeTime
 				+ "," + equalConflicts+	'\n';
 
 		LoggerStatistics.logScenario(loggermsg);
@@ -158,15 +114,15 @@ public final class Statistics {
 	}
 
 	/**
-	 * Calculates textually equal conflicts from given list of unstructured and semistructured merge conflicts.
+	 * Calculates textually equal conflicts from given list of unstructured and structured merge conflicts.
 	 * @param unstructuredMergeConflits
-	 * @param semistructuredMergeConflicts
+	 * @param structuredMergeConflicts
 	 * @return number of equal conflicts
 	 */
-	private static int computeEqualConflicts(List<MergeConflict> unstructuredMergeConflits,	List<MergeConflict> semistructuredMergeConflicts) {
+	private static int computeEqualConflicts(List<MergeConflict> unstructuredMergeConflits,	List<MergeConflict> structuredMergeConflicts) {
 		int equalconfs = 0;
 		for(MergeConflict mctxt : unstructuredMergeConflits ){
-			for(MergeConflict mcssm : semistructuredMergeConflicts){
+			for(MergeConflict mcssm : structuredMergeConflicts){
 				if(areEquivalentConflicts(mctxt,mcssm)){equalconfs++;break;}
 			}
 		}
@@ -179,8 +135,8 @@ public final class Statistics {
 	 * @throws IOException 
 	 */
 	private static void computeDifferentConflicts(MergeContext context) throws IOException {
-		Deque<MergeConflict> semistructuredMergeConflicts  = new ArrayDeque<MergeConflict>();
-		semistructuredMergeConflicts.addAll(FilesManager.extractMergeConflicts(context.semistructuredOutput));
+		Deque<MergeConflict> structuredMergeConflicts  = new ArrayDeque<MergeConflict>();
+		structuredMergeConflicts.addAll(FilesManager.extractMergeConflicts(context.structuredOutput));
 
 		Deque<MergeConflict> unstructuredMergeConflits = new ArrayDeque<MergeConflict>();
 		unstructuredMergeConflits.addAll(FilesManager.extractMergeConflicts(context.unstructuredOutput));
@@ -193,7 +149,7 @@ public final class Statistics {
 		for(MergeConflict confa : unstructuredMergeConflits){
 			confa.setOriginFiles(context.getLeft(), context.getBase(), context.getRight());
 			boolean found = false;
-			for(MergeConflict confb : semistructuredMergeConflicts){
+			for(MergeConflict confb : structuredMergeConflicts){
 				if(areEquivalentConflicts(confa,confb)){
 					equalMergeConflicts.add(confb); //or confa
 					found = true;
@@ -204,7 +160,7 @@ public final class Statistics {
 				differentUnstructuredMergeConflicts.add(confa);
 			}
 		}
-		for(MergeConflict confa : semistructuredMergeConflicts){
+		for(MergeConflict confa : structuredMergeConflicts){
 			confa.setOriginFiles(context.getLeft(), context.getBase(), context.getRight());
 			boolean found = false;
 			for(MergeConflict confb : unstructuredMergeConflits){
@@ -220,7 +176,7 @@ public final class Statistics {
 
 		LoggerStatistics.logConflicts(equalMergeConflicts,null);
 		LoggerStatistics.logConflicts(differentUnstructuredMergeConflicts,Source.UNSTRUCTURED);
-		LoggerStatistics.logConflicts(differentSemistructuredMergeConflicts,Source.SEMISTRUCTURED);
+		LoggerStatistics.logConflicts(differentSemistructuredMergeConflicts,Source.STRUCTURED);
 	}
 
 	private static boolean areEquivalentConflicts(MergeConflict confa, MergeConflict confb) {
@@ -229,16 +185,6 @@ public final class Statistics {
 		if(bodya.equals(bodyb)){
 			return true;
 		}
-
-		/*		String bodylefta = FilesManager.getStringContentIntoSingleLineNoSpacing(confa.left);
-		String bodyleftb = FilesManager.getStringContentIntoSingleLineNoSpacing(confb.left);
-		String bodyrighta = FilesManager.getStringContentIntoSingleLineNoSpacing(confa.right);
-		String bodyrightb = FilesManager.getStringContentIntoSingleLineNoSpacing(confb.right);
-		if((bodylefta.contains(bodyleftb) || bodyleftb.contains(bodylefta))	&& (bodyrighta.contains(bodyrightb) || bodyrightb.contains(bodyrighta))){
-			return true;
-		}*/
-
 		return false;
 	}
-
 }

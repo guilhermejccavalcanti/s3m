@@ -11,12 +11,12 @@ import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
 import br.ufpe.cin.exceptions.PrintException;
-import br.ufpe.cin.exceptions.SemistructuredMergeException;
+import br.ufpe.cin.exceptions.StructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.files.FilesTuple;
 import br.ufpe.cin.logging.LoggerFactory;
-import br.ufpe.cin.mergers.SemistructuredMerge;
+import br.ufpe.cin.mergers.StructuredMerge;
 import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
@@ -29,7 +29,7 @@ import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
 
 /**
- * Main class, responsible for performing <i>semistructured</i> merge in java files.
+ * Main class, responsible for performing <i>structured</i> merge in java files.
  * It also merges non java files, however, in these cases, traditional linebased
  * (unstructured) merge is invoked.
  * @author Guilherme
@@ -57,7 +57,7 @@ public class JFSTMerge {
 
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).",arity = 1)
 	public static boolean isCryptographed = true;
-	
+
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
@@ -143,7 +143,7 @@ public class JFSTMerge {
 	}
 
 	/**
-	 * Three-way semistructured merge of the given .java files.
+	 * Three-way structured merge of the given .java files.
 	 * @param left (mine) version of the file, or <b>null</b> in case of intentional empty file. 
 	 * @param base (older) version of the file, or <b>null</b> in case of intentional empty file. 
 	 * @param right (yours) version of the file, or <b>null</b> in case of intentional empty file. 
@@ -159,29 +159,29 @@ public class JFSTMerge {
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
-		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
-			long t0 = System.nanoTime();
-			try {
-				//running unstructured merge first is necessary due to future steps.
-				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
-				context.unstructuredMergeTime = System.nanoTime() - t0;
+		//if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
+		long t0 = System.nanoTime();
+		try {
+			//running unstructured merge first is necessary due to future steps.
+			context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
+			context.unstructuredMergeTime = System.nanoTime() - t0;
 
-				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);
-				context.semistructuredMergeTime = context.semistructuredMergeTime + (System.nanoTime() - t0);
+			context.structuredOutput = StructuredMerge.merge(left, base, right, context);
+			context.structuredMergeTime = context.structuredMergeTime + (System.nanoTime() - t0);
 
-				conflictState = checkConflictState(context);
-			} catch (TextualMergeException tme) { //textual merge must work even when semistructured not, so this exception precedes others
-				System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
-				LOGGER.log(Level.SEVERE, "", tme);
-				System.exit(-1);
-			} catch (SemistructuredMergeException sme) {
-				LOGGER.log(Level.WARNING, "", sme);
-				context.semistructuredOutput = context.unstructuredOutput;
-				context.semistructuredMergeTime = System.nanoTime() - t0;
+			conflictState = checkConflictState(context);
+		} catch (TextualMergeException tme) { //textual merge must work even when structured not, so this exception precedes others
+			System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			LOGGER.log(Level.SEVERE, "", tme);
+			System.exit(-1);
+		} catch (StructuredMergeException sme) {
+			LOGGER.log(Level.WARNING, "", sme);
+			context.structuredOutput = context.unstructuredOutput;
+			context.structuredMergeTime = System.nanoTime() - t0;
 
-				conflictState = checkConflictState(context);
-			}
+			conflictState = checkConflictState(context);
 		}
+		//}
 
 		//printing the resulting merged code
 		try {
@@ -208,15 +208,15 @@ public class JFSTMerge {
 	}
 
 	public static void main(String[] args) {
-		JFSTMerge merger = new JFSTMerge();
+		/*		JFSTMerge merger = new JFSTMerge();
 		merger.run(args);
 		System.exit(conflictState);
-
-		/*		new JFSTMerge().mergeFiles(
-						new File("C:/Users/Guilherme/Desktop/test/projects/sisbol/revisions/rev_0533511_8d296b5/rev_left_0533511/sisbol-core/src/main/java/br/mil/eb/cds/sisbol/boletim/util/Messages.java"),
-						new File("C:/Users/Guilherme/Desktop/test/projects/sisbol/revisions/rev_0533511_8d296b5/rev_base_7004707/sisbol-core/src/main/java/br/mil/eb/cds/sisbol/boletim/util/Messages.java"),
-						new File("C:/Users/Guilherme/Desktop/test/projects/sisbol/revisions/rev_0533511_8d296b5/rev_right_8d296b5/sisbol-core/src/main/java/br/mil/eb/cds/sisbol/boletim/util/Messages.java"),
-						null);*/
+		 */
+		 new JFSTMerge().mergeFiles(
+						new File("C:/Users/Guilherme/Desktop/mutuallymethodeditedfor/left.java"),
+						new File("C:/Users/Guilherme/Desktop/mutuallymethodeditedfor/base.java"),
+						new File("C:/Users/Guilherme/Desktop/mutuallymethodeditedfor/right.java"),
+						null);
 
 		/*		try {
 			List<String> listRevisions = new ArrayList<>();
@@ -251,7 +251,7 @@ public class JFSTMerge {
 	}
 
 	private int checkConflictState(MergeContext context) {
-		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
+		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.structuredOutput);
 		if (conflictList.size() > 0) {
 			return 1;
 		} else {

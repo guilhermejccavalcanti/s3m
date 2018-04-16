@@ -9,7 +9,7 @@ import br.ufpe.cin.mergers.util.MergeContext;
  * files with the same name from the same directory in 
  * the three revisions being merged (three-way merge).
  * It also stores the output of both unstructured and 
- * semistructured merge.
+ * structured merge.
  * @author Guilherme
  */
 public class FilesTuple {

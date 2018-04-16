@@ -7,11 +7,7 @@ sourceSets {
         }
       }
 	  
-	test {
-        java {
-            srcDirs = ["src/br/ufpe/cin/tests"]
-        }
-    }
+
 }
 
 repositories {

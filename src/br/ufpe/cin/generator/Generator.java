@@ -1,5 +1,6 @@
 package br.ufpe.cin.generator;
 
+
 /**
  * Class reponsible for dealing with the automatic generation 
  * of parsers trough <i>featureBNF</i> grammars. See the 
@@ -11,8 +12,8 @@ public class Generator {
 
 	public static void main(String[] args) {
 		try{
-			/* 1. read the featurebnf grammar in a .gcide file and converts into a javaCC grammar (.jj)
-			   with all associated artefacts (pretty printer,etc) */
+			/*	1. read the featurebnf grammar in a .gcide file and converts into a javaCC grammar (.jj)
+			with all associated artefacts (pretty printer,etc)  */
 			new FSTgenTask().generate(
 					"grammars/java18_merge_fst.gcide", 
 					"src/br/ufpe/cin/generated/java18_merge.jj",
@@ -31,7 +32,6 @@ public class Generator {
 					"CompilationUnit", 
 					"grammars/java18_merge_fst_test.java"
 					);
-		
 		}catch(Exception e){
 			System.err.println("Refresh the root project folder (F5). Try again.");
 			e.printStackTrace();

@@ -42,19 +42,19 @@ public final class Prettyprinter {
 	}
 
 	/**
-	 * Prints the merged code result of both unstructured and semistructured merge.
+	 * Prints the merged code result of both unstructured and structured merge.
 	 * @param context
 	 */
 	public static void printOnScreenMergedCode(MergeContext context) {
 		System.out.println("MERGE OUTPUT:");
-		System.out.println((context.semistructuredOutput.isEmpty()?"empty (deleted, inexistent or invalid merged files)\n":context.semistructuredOutput));
+		System.out.println((context.structuredOutput.isEmpty()?"empty (deleted, inexistent or invalid merged files)\n":context.structuredOutput));
 
 		/*		System.out.println("UNSTRUCTURED MERGE OUTPUT:");
 		System.out.println((context.unstructuredOutput.isEmpty()?"empty (deleted, inexistent or invalid merged files)\n":context.unstructuredOutput));*/
 	}
 
 	/**
-	 * Prints the merged code result of both unstructured and semistructured merge in the given
+	 * Prints the merged code result of both unstructured and structured merge in the given
 	 * output file.
 	 * @param context
 	 * @param outputFilePath of the merged file. 
@@ -63,9 +63,9 @@ public final class Prettyprinter {
 	public static void generateMergedFile(MergeContext context, String outputFilePath) throws PrintException {
 		if(outputFilePath != null){
 			if(outputFilePath.isEmpty())outputFilePath = context.getRight().getAbsolutePath(); //merging mine(left) into yours(right)
-			String semistructuredOutputFilePath 	= outputFilePath;
-			String semistructuredMergeOutputContent = context.semistructuredOutput;
-			boolean writeSucceed = FilesManager.writeContent(semistructuredOutputFilePath, semistructuredMergeOutputContent);
+			String structuredOutputFilePath 	= outputFilePath;
+			String structuredMergeOutputContent = context.structuredOutput;
+			boolean writeSucceed = FilesManager.writeContent(structuredOutputFilePath, structuredMergeOutputContent);
 			if(writeSucceed && !JFSTMerge.isGit){
 				String unstructuredOutputFilePath  		= outputFilePath +".merge"; 
 				String unstructuredMergeOutputContent 	= context.unstructuredOutput;
@@ -124,7 +124,11 @@ public final class Prettyprinter {
 			if(node.getType().equals("CompilationUnit")){
 				return node;
 			} else {
-				return node.getChildren().isEmpty()? null : getCompilationUnit(node.getChildren().get(1));
+				for(FSTNode child : node.getChildren()){
+					return getCompilationUnit(child);
+				}
+				//return node.getChildren().isEmpty()? null : getCompilationUnit(node.getChildren().get(1));
+				return null;
 			}
 		} else {
 			return null;

@@ -60,14 +60,14 @@ public final class Test {
 	/*
 	 * JAVA 7 TEST CODE:BEGIN
 	 */
-	private testDiamondOperator(){
+	private void testDiamondOperator(){
 		Map<String, List<Trade>> trades = new TreeMap<String, List<Trade>> ();
 		Map<String, List<Trade>> trades = new TreeMap <> ();
 	}
 
-	public testAutomaticresourcemanagement() {
-		try(FileOutputStream fos = newFileOutputStream("movies.txt");
-				DataOutputStream dos = newDataOutputStream(fos)) {
+	public void testAutomaticresourcemanagement() {
+		try(FileOutputStream fos = new FileOutputStream("movies.txt");
+				DataOutputStream dos = new DataOutputStream(fos)) {
 			dos.writeUTF("Java 7 Block Buster");
 		} catch(IOException e) {
 		}
@@ -82,7 +82,7 @@ public final class Test {
 		}
 	}
 
-	public voidnewMultiMultiCatch() {
+	public void newMultiMultiCatch() {
 		try{
 			methodThatThrowsThreeExceptions();
 		} catch(ExceptionOne e) {
@@ -90,7 +90,7 @@ public final class Test {
 		}
 	}
 
-	private testUsingstringsinswitchstatements(Trade t){
+	private void testUsingstringsinswitchstatements(Trade t){
 		String status = t.getStatus();
 		if(status.equalsIgnoreCase(NEW)) {
 			newTrade(t);
@@ -98,22 +98,23 @@ public final class Test {
 			executeTrade(t);
 		} else if(status.equalsIgnoreCase(PENDING)) {
 			pendingTrade(t);
+		} else {
+			String status = t.getStatus();
 		}
-		tring status = t.getStatus();
-		/*		switch(status) {
-
-		caseNEW:
-			newTrade(t);
-		break;
-		caseEXECUTE:
-			executeTrade(t);
-		break;
-		casePENDING:
-			pendingTrade(t);
-		break;
-		default:
-			break;
-		}*/
+		
+		switch(status){
+			case NEW:
+				newTrade(t);
+				break;
+			case EXECUTE:
+				executeTrade(t);
+				break;
+			case PENDING:
+				pendingTrade(t);
+				break;
+			default:
+				break;
+		}
 	}
 	/*
 	 * JAVA 7 TEST CODE:END
@@ -279,4 +280,99 @@ public final class Test {
 	/*
 	 * JAVA 8 TEST CODE:FINISH
 	 */
+	 
+	class Test{
+		void m(){
+			ContaCorrente[] minhasContas;
+			minhasContas = new ContaCorrente[10];
+			minhasContas[0] = contaNova;
+			int [] iniciaValores = { 12 , 32 , 54 , 6 , 8 , 89 , 64 , 64 , 6 };
+		
+		    for (int i = 0; i < 10; i++) {
+		        System.out.println(idades[i]);
+		    }
+			
+		    for (int x : array) {
+		        System.out.println(x);
+		    }
+		}
+	}
+	
+	class DoWhile {
+		public static void main(String[] args) {
+			boolean continuar=true;
+			int opcao;
+			Scanner entrada = new Scanner(System.in);
+			do
+			{
+				System.out.println("\t\tMenu de opções do curso Java Progressivo:");
+				System.out.println("\t1. Ver o menu");
+				System.out.println("\t2. Ler o menu");
+				System.out.println("\t3. Repetir o menu");
+				System.out.println("\t4. Tudo de novo");
+				System.out.println("\t5. Não li, pode repetir?");
+				System.out.println("\t0. Sair");
+				
+				System.out.print("\nInsira sua opção: ");
+				opcao = entrada.nextInt();
+				
+				if(opcao == 0){
+					continuar = false;
+					System.out.println("Programa finalizado.");
+				}
+				else{
+					System.out.printf("\n\n\n\n\n\n");
+				}
+				
+				Integer velocidadeParticula = retornarVelocidadeParticula(12, QUILOMETROS_POR_SEGUNDO);
+				assert(velocidadeParticula < VELOCIDADE_LUZ):"Velocidade da particula não pode ser maior que a velocidade da luz";	
+			} while( continuar );
+		}
+	}
+	
+	class Obstacles {
+		private static final int BOX_LENGTH = 12;
+		private ArrayList boxes;
+		private WormChase wcTop;
+
+		public Obstacles(WormChase wc) {
+			boxes = new ArrayList();
+			wcTop = wc;
+		}
+
+		public synchronized void add(int x, int y) {
+			boxes.add(new Rectangle(x, y, BOX_LENGTH, BOX_LENGTH));
+			wcTop.setBoxNumber(boxes.size()); 
+		}
+
+		synchronized public boolean hits(Point p, int size){
+			Rectangle r = new Rectangle(p.x, p.y, size, size);
+			Rectangle box;
+			for (int i = 0; i < boxes.size(); i++) {
+				box = (Rectangle) boxes.get(i);
+				if (box.intersects(r))
+					return true;
+			}
+			return false;
+		}
+
+		public void draw(Graphics g){
+			Rectangle box;
+			g.setColor(Color.blue);
+			for (int i = 0; i < boxes.size(); i++) {
+				box = (Rectangle) boxes.get(i);
+				g.fillRect(box.x, box.y, box.width, box.height);
+			}
+		}
+
+		public int getNumObstacles() {
+			synchronized(this){
+				return boxes.size();
+			}
+		}
+	}
 }
+
+
+ 
+
