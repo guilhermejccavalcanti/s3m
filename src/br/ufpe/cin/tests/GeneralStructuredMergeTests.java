@@ -125,4 +125,36 @@ public class GeneralStructuredMergeTests {
 				.equals("publicclassA{intm(){for(inti=11;i<11;i++){}}}")
 				);
 	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testEditionsToSemaPartOfSameStatement() {
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/samepositioneditionfor/left.java"), 
+				new File("testfiles/samepositioneditionfor/base.java"), 
+				new File("testfiles/samepositioneditionfor/right.java"), 
+				null);
+		assertTrue(
+				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.structuredOutput)
+				.equals("publicclassTest{voidm(){for(inti=<<<<<<<MINE1=======2>>>>>>>YOURS;i<10;i++){System.out.println(i);}}}")
+				);
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testMultipleEditionsToDifferentPositions() {
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/multipleeditionstodifferentpositions/left.java"), 
+				new File("testfiles/multipleeditionstodifferentpositions/base.java"), 
+				new File("testfiles/multipleeditionstodifferentpositions/right.java"), 
+				null);
+		assertTrue(
+				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.structuredOutput)
+				.equals("publicclassTest{privateintx=2;voidm(){inty=2;}}")
+				);
+	}
 }

@@ -37,18 +37,18 @@ public class MergeConflict {
 		this.left  = leftConflictingContent;
 		this.base  = baseConflictingContent;
 		this.right = rightConflictingContent;
-		this.body  ="<<<<<<< MINE\n"+
+		this.body  ="\n<<<<<<< MINE\n"+
 				leftConflictingContent+
 				"=======\n"+
 				rightConflictingContent+
-				">>>>>>> YOURS";
-		this.bodyInclBase="<<<<<<< MINE\n"+
+				">>>>>>> YOURS\n";
+		this.bodyInclBase="\n<<<<<<< MINE\n"+
 				leftConflictingContent+
 				"|||||||\n"+
 				baseConflictingContent+
 				"=======\n"+
 				rightConflictingContent+
-				">>>>>>> YOURS";
+				">>>>>>> YOURS\n";
 	}
 
 

@@ -208,25 +208,4 @@ public class JavaCompiler {
 		}
 		return encodings;
 	}
-
-	public static void main(String[] args) {
-		ASTParser parser = ASTParser.newParser(AST.JLS8);
-
-		String src = FilesManager
-				.readFileContent(new File(
-						"C:/GGTS/workspaces/workspace_jfst/jFSTMerge/grammars/java18_merge_fst_test.java"));
-
-		Map<String, String> options = JavaCore.getOptions();
-		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
-		parser.setCompilerOptions(options);
-		parser.setResolveBindings(false);
-		parser.setStatementsRecovery(false);
-		parser.setBindingsRecovery(false);
-		parser.setSource(src.toCharArray());
-		parser.setIgnoreMethodBodies(false);
-		parser.setKind(ASTParser.K_COMPILATION_UNIT);
-
-		CompilationUnit cu = (CompilationUnit) parser.createAST(null);
-		System.out.println(cu.toString());
-	}
 }

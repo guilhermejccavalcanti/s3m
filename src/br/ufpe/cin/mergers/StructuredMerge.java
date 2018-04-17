@@ -44,14 +44,10 @@ public final class StructuredMerge {
 			FSTNode baseTree = parser.parse(base);
 			FSTNode rightTree = parser.parse(right);
 
-			// merging
-			//context.join(merge(leftTree, baseTree, rightTree));
-
 			/*
 			 * common base left right nodes, or deleted based nodes
 			 */
 			FSTNode merged = merge_Left_Base_Right(leftTree, baseTree, rightTree, null);
-			System.out.println(merged.printFST(0));
 
 			/*
 			 * added left right nodes
@@ -59,10 +55,7 @@ public final class StructuredMerge {
 			FSTNode l = leftTree.getDeepClone();
 			FSTNode r = rightTree.getDeepClone();
 			merge_Left_Right(l, r, merged, false);
-			System.out.println(merged.printFST(0));
-
 			merge_Left_Right(r, l, merged, true);
-			System.out.println(merged.printFST(0));
 
 			context.superImposedTree = merged;
 
@@ -73,7 +66,7 @@ public final class StructuredMerge {
 			throw new StructuredMergeException(message, context);
 		}
 
-		// during the parsing process, code indentation is typically lost, so we reindent the code
+		// during the parsing process, code indentation is typically lost, so we indent the code
 		return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
 	}
 
@@ -144,53 +137,6 @@ public final class StructuredMerge {
 		return null;
 	}
 
-	private static void merge_Left_Right(FSTNode a, FSTNode b, FSTNode merged, boolean isProceessingRight){
-		if(isOrdered(a)){
-			merge_Left_Right_Ordered(a, b, merged, isProceessingRight);
-		} else {
-			if(a.isMerged()){
-				if(a instanceof FSTNonTerminal){
-					for(FSTNode aChild : ((FSTNonTerminal) a).getChildren()){
-						FSTNode bChild = ((FSTNonTerminal) b).getCompatibleChild(aChild);
-						FSTNode mergedChild = ((FSTNonTerminal) merged).getCompatibleChild(aChild);
-						if(bChild == null){ 
-							/*
-							 * added node
-							 */
-							((FSTNonTerminal)merged).addChildOnMerge(aChild);
-						} else {
-							merge_Left_Right(aChild, bChild, ((mergedChild!=null)? mergedChild : merged), isProceessingRight);
-						}
-					}
-				}
-			} else {
-				/*
-				 * the parent of a non-merged node is merged
-				 * unless base is null
-				 */
-				String aAST = FilesManager.getStringContentIntoSingleLineNoSpacing(a.printFST(0));
-				String bAST = FilesManager.getStringContentIntoSingleLineNoSpacing(b.printFST(0));
-				if(aAST.equals(bAST)){ 
-					/*
-					 * mutually added node
-					 */
-					((FSTNonTerminal)merged).addChildOnMerge(a);
-				} else { 
-					/*
-					 * common added nodes mutually edited
-					 */
-					((FSTNonTerminal)merged).addChildOnMerge(createConflict(a, null, b, isProceessingRight));
-				}
-
-				//avoiding re-processing nodes
-				b.setMerged();
-				a.setMerged();
-				b.getParent().removeChild(b);
-				a.getParent().removeChild(a);
-			}
-		}
-	}
-
 	private static FSTNode merge_Left_Base_Right_Ordered(FSTNode left, FSTNode base,FSTNode right, FSTNonTerminal target) throws TextualMergeException {
 		if(left !=null) left.setMerged();
 		if(base !=null) base.setMerged();
@@ -259,6 +205,53 @@ public final class StructuredMerge {
 		return null;
 	}
 
+	private static void merge_Left_Right(FSTNode a, FSTNode b, FSTNode merged, boolean isProceessingRight){
+		if(isOrdered(a)){
+			merge_Left_Right_Ordered(a, b, merged, isProceessingRight);
+		} else {
+			if(a.isMerged()){
+				if(a instanceof FSTNonTerminal){
+					for(FSTNode aChild : ((FSTNonTerminal) a).getChildren()){
+						FSTNode bChild = ((FSTNonTerminal) b).getCompatibleChild(aChild);
+						FSTNode mergedChild = ((FSTNonTerminal) merged).getCompatibleChild(aChild);
+						if(bChild == null){ 
+							/*
+							 * added node
+							 */
+							((FSTNonTerminal)merged).addChildOnMerge(aChild);
+						} else {
+							merge_Left_Right(aChild, bChild, ((mergedChild!=null)? mergedChild : merged), isProceessingRight);
+						}
+					}
+				}
+			} else {
+				/*
+				 * the parent of a non-merged node is merged
+				 * unless base is null
+				 */
+				String aAST = FilesManager.getStringContentIntoSingleLineNoSpacing(a.printFST(0));
+				String bAST = FilesManager.getStringContentIntoSingleLineNoSpacing(b.printFST(0));
+				if(aAST.equals(bAST)){ 
+					/*
+					 * mutually added node
+					 */
+					((FSTNonTerminal)merged).addChildOnMerge(a);
+				} else { 
+					/*
+					 * common added nodes mutually edited
+					 */
+					((FSTNonTerminal)merged).addChildOnMerge(createConflict(a, null, b, isProceessingRight));
+				}
+
+				//avoiding re-processing nodes
+				b.setMerged();
+				a.setMerged();
+				b.getParent().removeChild(b);
+				a.getParent().removeChild(a);
+			}
+		}
+	}
+
 	private static void merge_Left_Right_Ordered(FSTNode a, FSTNode b, FSTNode merged, boolean isProceessingRight){
 		if(a.isMerged()){
 			if(a instanceof FSTNonTerminal){
@@ -311,7 +304,20 @@ public final class StructuredMerge {
 	}
 
 	private static void mergeLeaves(FSTNode left, FSTNode base, FSTNode right,	FSTNode merged) throws TextualMergeException {
-		String mergedBody = TextualMerge.merge(((FSTTerminal) left).getBody(), ((FSTTerminal) base).getBody(), ((FSTTerminal) right).getBody(), true);
+		String mergedBody = "";
+		String leftBody  = FilesManager.getStringContentIntoSingleLineNoSpacing(((FSTTerminal) left).getBody());
+		String baseBody  = FilesManager.getStringContentIntoSingleLineNoSpacing(((FSTTerminal) base).getBody());
+		String rightBody = FilesManager.getStringContentIntoSingleLineNoSpacing(((FSTTerminal)right).getBody());
+		if(leftBody.equals(rightBody)){
+			mergedBody = ((FSTTerminal) left).getBody(); //or right
+		} else if(leftBody.equals(baseBody) && !rightBody.equals(leftBody)){
+			mergedBody = ((FSTTerminal) right).getBody();
+		} else if(rightBody.equals(baseBody) && !leftBody.equals(rightBody)){
+			mergedBody = ((FSTTerminal) left).getBody(); 
+		} else {
+			mergedBody = createConflict(left, base, right, false).getBody();
+		}
+		//		String mergedBody = TextualMerge.merge(((FSTTerminal) left).getBody(), ((FSTTerminal) base).getBody(), ((FSTTerminal) right).getBody(), false);
 		((FSTTerminal) merged).setBody(mergedBody);
 	}
 
@@ -324,9 +330,9 @@ public final class StructuredMerge {
 		String leftBody  = "";
 		String rightBody = "";
 		if(base instanceof FSTTerminal){
-			if(base != null) baseBody = ((FSTTerminal) base).getBody();
-			if(left != null) leftBody = ((FSTTerminal) left).getBody();
-			if(right!= null) rightBody= ((FSTTerminal)right).getBody();
+			if(base != null) baseBody = ((FSTTerminal) base).getBody()+"\n";
+			if(left != null) leftBody = ((FSTTerminal) left).getBody()+"\n";
+			if(right!= null) rightBody= ((FSTTerminal)right).getBody()+"\n";
 		} else {
 			if(base != null) baseBody = FilesManager.prettyPrint((FSTNonTerminal) base);
 			if(left != null) leftBody = FilesManager.prettyPrint((FSTNonTerminal) left);

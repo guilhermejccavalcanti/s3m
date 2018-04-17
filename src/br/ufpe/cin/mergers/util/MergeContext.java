@@ -4,8 +4,6 @@ import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import br.ufpe.cin.files.FilesManager;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 
@@ -32,9 +30,6 @@ public class MergeContext {
 	public List<FSTNode> nodesDeletedByLeft = new ArrayList<FSTNode>(); 
 	public List<FSTNode> nodesDeletedByRight= new ArrayList<FSTNode>();
 
-	public List<Pair<String,FSTNode>> possibleRenamedLeftNodes = new ArrayList<Pair<String,FSTNode>>();
-	public List<Pair<String,FSTNode>> possibleRenamedRightNodes= new ArrayList<Pair<String,FSTNode>>();
-
 	public List<FSTNode> editedLeftNodes = new ArrayList<FSTNode>(); 
 	public List<FSTNode> editedRightNodes= new ArrayList<FSTNode>();
 	
@@ -47,13 +42,13 @@ public class MergeContext {
 	public String unstructuredOutput;
 	
 	//statistics
-	public long structuredMergeTime = 0;
-	public long unstructuredMergeTime 	= 0;
-	public int structuredNumberOfConflicts = 0;
-	public int unstructuredNumberOfConflicts   = 0;
-	public int structuredMergeConflictsLOC = 0;
-	public int unstructuredMergeConflictsLOC   = 0;
-	public int equalConflicts     = 0;
+	public long structuredMergeTime 			= 0;
+	public long unstructuredMergeTime 			= 0;
+	public int structuredNumberOfConflicts 		= 0;
+	public int unstructuredNumberOfConflicts   	= 0;
+	public int structuredMergeConflictsLOC 		= 0;
+	public int unstructuredMergeConflictsLOC  	= 0;
+	public int equalConflicts     				= 0;
 	
 	
 	public MergeContext(){
@@ -85,20 +80,10 @@ public class MergeContext {
 		this.nodesDeletedByLeft. addAll(otherContext.nodesDeletedByLeft);
 		this.nodesDeletedByRight. addAll(otherContext.nodesDeletedByRight);
 
-		
-		this.possibleRenamedLeftNodes. addAll(otherContext.possibleRenamedLeftNodes);
-		this.possibleRenamedRightNodes.addAll(otherContext.possibleRenamedRightNodes);
-
 		this.leftTree = otherContext.leftTree;
 		this.baseTree = otherContext.baseTree;
 		this.rightTree = otherContext.rightTree;
 		this.superImposedTree = otherContext.superImposedTree;
-		
-/*		this.renamingConflicts	+=	otherContext.renamingConflicts;
-		this.newElementReferencingEditedOneConflicts	+=	otherContext.newElementReferencingEditedOneConflicts;
-		this.typeAmbiguityErrorsConflicts	+=	otherContext.typeAmbiguityErrorsConflicts;
-		this.deletionConflicts	+=	otherContext.deletionConflicts;
-		this.initializationBlocksConflicts	+= otherContext.initializationBlocksConflicts;*/
 		
 		return this;
 	}
