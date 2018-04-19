@@ -617,7 +617,7 @@ FSTInfo FinalOrAnnotation(boolean inTerminal) : { Token first=null,t;FSTInfo n;
 
 FSTInfo ConstructorDeclaration(boolean inTerminal) : { Token first=null,t;FSTInfo n; 
 } { {first=getToken(1); productionStart(inTerminal); } (
-	[LOOKAHEAD(Annotation()) n=Annotation(inTerminal){ replaceName(n);}] [n=TypeParameters(inTerminal){ replaceName(n);}] n=ConstructorDeclarator(inTerminal){ replaceName("ConstructorDeclarator", n);}{ replaceName(n);} ["throws" n=NameList(inTerminal){ replaceName(n);}] "{" [LOOKAHEAD(ExplicitConstructorInvocation()) n=ExplicitConstructorInvocation(inTerminal){ replaceName(n);}] (n=BlockStatement(inTerminal){ replaceName(n);})* "}" {return productionEndNonTerminal("ConstructorDeclaration","-","{ConstructorDeclarator})");}
+	[LOOKAHEAD(Annotation()) n=Annotation(inTerminal){ replaceName(n);}] [n=TypeParameters(inTerminal){ replaceName(n);}] n=ConstructorDeclarator(inTerminal){ replaceName("ConstructorDeclarator", n);}{ replaceName(n);} ["throws" n=NameList(inTerminal){ replaceName(n);}] n=ConstructorDeclarationBody(inTerminal){ replaceName(n);} {return productionEndNonTerminal("ConstructorDeclaration","-","{ConstructorDeclarator})");}
 
  )  }
 
@@ -634,6 +634,12 @@ FSTInfo ExplicitConstructorInvocation(boolean inTerminal) : { Token first=null,t
 	LOOKAHEAD(TypeArguments() "this" Arguments() ";") n=TypeArguments(inTerminal){ replaceName(n);} "this" n=Arguments(inTerminal){ replaceName(n);} ";" {return productionEndNonTerminal("ExplicitConstructorInvocationThisTypeArguments","-","-");}
  |
 	[LOOKAHEAD(PrimaryExpression() ".") n=PrimaryExpression(inTerminal){ replaceName(n);} "."] [n=TypeArguments(inTerminal){ replaceName(n);}] "super" n=Arguments(inTerminal){ replaceName(n);} ";" {return productionEndNonTerminal("ExplicitConstructorInvocationSuper","-","-");}
+
+ )  }
+
+FSTInfo ConstructorDeclarationBody(boolean inTerminal) : { Token first=null,t;FSTInfo n; 
+} { {first=getToken(1); productionStart(inTerminal); } (
+	"{" [LOOKAHEAD(ExplicitConstructorInvocation()) n=ExplicitConstructorInvocation(inTerminal){ replaceName(n);}] (n=BlockStatement(inTerminal){ replaceName(n);})* "}" {return productionEndNonTerminal("ConstructorDeclarationBody","-","-");}
 
  )  }
 

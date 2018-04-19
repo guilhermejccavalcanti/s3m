@@ -322,7 +322,8 @@ public final class StructuredMerge {
 	}
 
 	private static boolean isOrdered(FSTNode node) {
-		return node.getType().equals("MethodDeclarationBodyBlock");
+		return 		node.getType().equals("MethodDeclarationBodyBlock") 
+				 || node.getType().equals("ConstructorDeclarationBody");
 	}
 
 	private static FSTTerminal createConflict(FSTNode left, FSTNode base, FSTNode right, boolean invertBody) {

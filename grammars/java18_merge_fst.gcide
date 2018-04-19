@@ -635,10 +635,7 @@ ConstructorDeclaration:
 		[ LOOK_AHEAD("Annotation()") Annotation ]
 		[ TypeParameters]
 		ConstructorDeclarator [@~ "throws" NameList ]
-		"{" @+!
-		[ LOOK_AHEAD("ExplicitConstructorInvocation()")  ExplicitConstructorInvocation ]
-		( BlockStatement )*
-		 @- "}"
+		ConstructorDeclarationBody
 ;
 
 @FSTExportName("{Id}({FormalParameters})")
@@ -657,6 +654,15 @@ ExplicitConstructorInvocation:
         @FSTNonTerminal()
 		[LOOK_AHEAD("PrimaryExpression() \".\"") PrimaryExpression "." ] [ TypeArguments ] "super" Arguments ";" @! :: ExplicitConstructorInvocationSuper
 ;
+
+@FSTNonTerminal()
+ConstructorDeclarationBody:
+		"{" @+!
+		[ LOOK_AHEAD("ExplicitConstructorInvocation()")  ExplicitConstructorInvocation ]
+		( BlockStatement )*
+		 @- "}"
+;
+
 
 Initializer:  
         [ "static" <NONE>] Block
