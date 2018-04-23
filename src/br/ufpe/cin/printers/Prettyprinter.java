@@ -125,13 +125,15 @@ public final class Prettyprinter {
 				return node;
 			} else {
 				for(FSTNode child : node.getChildren()){
-					return getCompilationUnit(child);
+					if(child.getType().equals("CompilationUnit")){
+						return (FSTNonTerminal) child;
+					}
 				}
-				//return node.getChildren().isEmpty()? null : getCompilationUnit(node.getChildren().get(1));
 				return null;
 			}
 		} else {
 			return null;
 		}
+		//return node.getChildren().isEmpty()? null : getCompilationUnit(node.getChildren().get(1));
 	}
 }

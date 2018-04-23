@@ -155,9 +155,11 @@ public final class StructuredMerge {
 				 */
 				for(int i = 0; i<((FSTNonTerminal) base).getChildren().size(); i++){
 					FSTNode baseChild  = ((FSTNonTerminal) base).getChildren().get(i);
-					FSTNode leftChild  = ((FSTNonTerminal) left).getChildren().get(i);
-					FSTNode rightChild = ((FSTNonTerminal) right).getChildren().get(i);
-
+					FSTNode leftChild  = null;
+					FSTNode rightChild = null;
+					try { leftChild  = ((FSTNonTerminal) left).getChildren().get(i); } catch (IndexOutOfBoundsException e){/*when there is no children at that position*/}
+					try { rightChild = ((FSTNonTerminal) right).getChildren().get(i);} catch (IndexOutOfBoundsException e){/*when there is no children at that position*/}
+				
 					((FSTNonTerminal) merged).addChildOnMerge(merge_Left_Base_Right_Ordered(leftChild, baseChild, rightChild, (FSTNonTerminal) merged));
 				}
 			} else {
@@ -323,8 +325,8 @@ public final class StructuredMerge {
 
 	private static boolean isOrdered(FSTNode node) {
 		return 		node.getType().equals("MethodDeclarationBodyBlock") 
-				 || node.getType().equals("ConstructorDeclarationBody")
-				 || node.getType().equals("FieldDeclaration");
+				|| node.getType().equals("ConstructorDeclarationBody")
+				|| node.getType().equals("FieldDeclaration");
 	}
 
 	private static FSTTerminal createConflict(FSTNode left, FSTNode base, FSTNode right, boolean invertBody) {

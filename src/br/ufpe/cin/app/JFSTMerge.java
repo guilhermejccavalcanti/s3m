@@ -213,9 +213,9 @@ public class JFSTMerge {
 		System.exit(conflictState);
 		 */
 		 new JFSTMerge().mergeFiles(
-						new File("C:/Users/Guilherme/Desktop/mutuallymethodeditedfor/left.java"),
-						new File("C:/Users/Guilherme/Desktop/mutuallymethodeditedfor/base.java"),
-						new File("C:/Users/Guilherme/Desktop/mutuallymethodeditedfor/right.java"),
+						new File("C:/Users/Guilherme/Desktop/test_empurr3/left/Test.java"),
+						new File("C:/Users/Guilherme/Desktop/test_empurr3/base/Test.java"),
+						new File("C:/Users/Guilherme/Desktop/test_empurr3/right/Test.java"),
 						null);
 
 		/*		try {
