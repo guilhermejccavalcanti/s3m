@@ -28,7 +28,7 @@ public class Generator {
 
 			//3. test the generated artefacts
 			new GeneratedParserTest().test(
-					"br.ufpe.cin.generated.Java18MergeParser", 
+					"br.ufpe.cin.generated.Java18MergeParserStructured", 
 					"CompilationUnit", 
 					"grammars/java18_merge_fst_test.java"
 					);

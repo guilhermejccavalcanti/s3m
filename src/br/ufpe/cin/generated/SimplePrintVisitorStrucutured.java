@@ -9,11 +9,11 @@ import cide.languages.*;
 
 import de.ovgu.cide.fstgen.ast.*;
 
-public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
-	public SimplePrintVisitor(PrintStream out) {
+public class SimplePrintVisitorStrucutured extends AbstractFSTPrintVisitor  {
+	public SimplePrintVisitorStrucutured(PrintStream out) {
 		super(out); generateSpaces=true;
 	}
-	public SimplePrintVisitor() {
+	public SimplePrintVisitorStrucutured() {
 		super(); generateSpaces=true;
 	}
 	public boolean visit(FSTNonTerminal nonTerminal) {
