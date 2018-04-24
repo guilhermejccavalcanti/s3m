@@ -212,11 +212,11 @@ public class JFSTMerge {
 		merger.run(args);
 		System.exit(conflictState);
 		 */
-		 new JFSTMerge().mergeFiles(
-						new File("C:/Users/Guilherme/Desktop/test_empurr3/left/Test.java"),
-						new File("C:/Users/Guilherme/Desktop/test_empurr3/base/Test.java"),
-						new File("C:/Users/Guilherme/Desktop/test_empurr3/right/Test.java"),
-						null);
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/toy/left.java"), 
+				new File("testfiles/toy/base.java"), 
+				new File("testfiles/toy/right.java"), 
+				null);
 
 		/*		try {
 			List<String> listRevisions = new ArrayList<>();
