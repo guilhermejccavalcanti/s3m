@@ -1,5 +1,9 @@
-public class Test{
-	void method(){
-		return new RemoteViewClient(this,clientLocation,OpenGammaFugdeContext.getInstace(),_connectionFactory,_heartBeatScheduler);
+class Test{
+	void m(){
+		int a;
+		int b;
+		if(true){
+			int c;
+		}
 	}
 }

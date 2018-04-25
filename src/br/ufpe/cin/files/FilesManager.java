@@ -471,7 +471,9 @@ public final class FilesManager {
 		try{
 			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes()), StandardCharsets.UTF_8);
 			indentedCode = indenter.toString();
-		} catch (Exception e){} //in case of any errors, returns the non-indented sourceCode
+		} catch (Exception e){ //in case of any error, returns the non-indented sourceCode, without empty lines
+			indentedCode = indentedCode.replaceAll("(?m)^[ \t]*\r?\n", "");
+		} 
 		return indentedCode;
 	}
 
@@ -567,7 +569,7 @@ public final class FilesManager {
 		sourceCode = sourceCode.replaceAll(">>>>>>> YOURS", "int yyyy;");
 		return sourceCode;
 	}
-	
+
 	/**
 	 * Given a main list of files path, searches for corresponding files in other two given files path list.
 	 * @param firstVariantDir root directory 
@@ -586,20 +588,20 @@ public final class FilesManager {
 			boolean isFirstVariantDriven,
 			boolean isMainVariantDriven,
 			boolean isSecondVariantDriven) {
-	
+
 		while(!filesPathFromMainVariant.isEmpty()){
 			String baseFilePath = filesPathFromMainVariant.poll();
 			String correspondingFirstVariantFilePath = replaceFilePath(baseFilePath,mainDir,firstVariantDir);
 			String correspondingSecondVariantFilePath = replaceFilePath(baseFilePath,mainDir,secondVariantDir);
-	
+
 			File firstVariantFile = new File(correspondingFirstVariantFilePath);
 			File baseFile = new File(baseFilePath);
 			File secondVariantFile = new File(correspondingSecondVariantFilePath);
-	
+
 			if(!firstVariantFile.exists())firstVariantFile = null;
 			if(!baseFile.exists())baseFile = null;
 			if(!secondVariantFile.exists())secondVariantFile = null;
-	
+
 			//to fill the tuples parameters accordingly
 			if(isFirstVariantDriven){
 				FilesTuple tuple = new FilesTuple(baseFile, firstVariantFile, secondVariantFile);
@@ -611,7 +613,7 @@ public final class FilesManager {
 				FilesTuple tuple = new FilesTuple(firstVariantFile, secondVariantFile, baseFile);
 				listOfTuplesToBeFilled.add(tuple);
 			}
-	
+
 			if(filesPathFromFirstVariant.contains(correspondingFirstVariantFilePath)){
 				filesPathFromFirstVariant.remove(correspondingFirstVariantFilePath);
 			}
@@ -631,6 +633,6 @@ public final class FilesManager {
 	private static String replaceFilePath(String filePath, String oldPattern, String newPattern){
 		String result = (filePath.replace(oldPattern, newPattern));
 		return result;
-	
+
 	}
 }

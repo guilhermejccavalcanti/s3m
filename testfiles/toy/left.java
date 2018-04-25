@@ -1,5 +1,9 @@
-public class Test{
-	void method(){
-		return new RemoteViewClient(this,clientLocation,OpenGammaFugdeContext.getInstace(),_jmsConnector,_scheduler);
+class Test{
+	void m(){
+		int a;
+		if(true){
+			int b = 1;
+			int c;
+		}
 	}
 }
