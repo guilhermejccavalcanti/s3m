@@ -44,18 +44,11 @@ public final class StructuredMerge {
 			FSTNode baseTree = parser.parse(base);
 			FSTNode rightTree = parser.parse(right);
 
-//			System.out.println(leftTree);
-//			System.out.println(baseTree);
-//			System.out.println(rightTree);
-			
 			/*
-			 * common base left right nodes, or deleted based nodes
+			 * common base left right nodes, or deleted base nodes
 			 */
 			FSTNode merged = merge_Left_Base_Right(leftTree, baseTree, rightTree, null);
 
-			System.out.println(merged);
-
-			
 			/*
 			 * added left right nodes
 			 */
@@ -81,8 +74,8 @@ public final class StructuredMerge {
 		if(isOrdered(base) && (left != null && right!=null)){
 			return merge_Left_Base_Right_Ordered(left, base, right, target);
 		} else {
-			if(left!=null)left.setMerged();
-			if(base!=null)base.setMerged();
+			if(left!=null)  left.setMerged();
+			if(base!=null)  base.setMerged();
 			if(right!=null)right.setMerged();
 			if (base.compatibleWith(left) && base.compatibleWith(right)) { 
 				/*
@@ -106,7 +99,6 @@ public final class StructuredMerge {
 				/*
 				 * only left has the same type and name
 				 */
-				//setNodesProcessed(left, right);
 				String baseAST = FilesManager.getStringContentIntoSingleLineNoSpacing(base.printFST(0));
 				String leftAST = FilesManager.getStringContentIntoSingleLineNoSpacing(left.printFST(0));
 				if(baseAST.equals(leftAST)){
@@ -118,7 +110,6 @@ public final class StructuredMerge {
 				/*
 				 * only right has the same type and name
 				 */
-				//setNodesProcessed(left, right);
 				String baseAST = FilesManager.getStringContentIntoSingleLineNoSpacing(base.printFST(0));
 				String rightAST = FilesManager.getStringContentIntoSingleLineNoSpacing(right.printFST(0));
 				if(baseAST.equals(rightAST)){
@@ -136,7 +127,6 @@ public final class StructuredMerge {
 					 * no need for further actions
 					 */
 				} else {
-					//setNodesProcessed(left, right);
 					return createConflict(left, base, right, false);
 				}
 			}
@@ -161,11 +151,9 @@ public final class StructuredMerge {
 				 * Ordered merge considers the position a node
 				 */
 				for(int i = 0; i<((FSTNonTerminal) base).getChildren().size(); i++){
-					FSTNode baseChild  = ((FSTNonTerminal) base).getChildren().get(i);
-					FSTNode leftChild  = null;
-					FSTNode rightChild = null;
-					try { leftChild  = ((FSTNonTerminal) left).getChildren().get(i); } catch (IndexOutOfBoundsException e){/*when there is no children at that position*/}
-					try { rightChild = ((FSTNonTerminal) right).getChildren().get(i);} catch (IndexOutOfBoundsException e){/*when there is no children at that position*/}
+					FSTNode baseChild  = getChildAtPosition(base,i);
+					FSTNode leftChild  = getChildAtPosition(left,i);
+					FSTNode rightChild = getChildAtPosition(right,i);
 
 					((FSTNonTerminal) merged).addChildOnMerge(merge_Left_Base_Right_Ordered(leftChild, baseChild, rightChild, (FSTNonTerminal) merged));
 				}
@@ -273,12 +261,8 @@ public final class StructuredMerge {
 					((FSTNonTerminal)merged).addChildOnMerge(createConflict(a, null, b, isProceessingRight));
 				}
 
-				//avoiding re-processing nodes
 				b.setMerged();
 				a.setMerged();
-
-				/*				b.getParent().removeChild(b);
-				a.getParent().removeChild(a);*/
 			}
 		}
 	}
@@ -322,7 +306,13 @@ public final class StructuredMerge {
 								 * Already processed merge conflict in Merge_Left_Base_Right_Ordered
 								 */
 							} else {
-								merge_Left_Right_Ordered(aChild, baseChild, bChild, mergedChild, isProceessingRight);
+								if(hasRemainingChanges(aChild,baseChild,mergedChild)){
+									merge_Left_Right_Ordered(aChild, baseChild, bChild, mergedChild, isProceessingRight);
+								} else {
+									/*
+									 * The entire node was already processed in Merge_Left_Base_Right_Ordered
+									 */
+								}
 							}
 						}
 					}
@@ -343,12 +333,8 @@ public final class StructuredMerge {
 				((FSTNonTerminal)merged).addChildOnMerge(createConflict(a, null, b, isProceessingRight));
 			}
 
-			//avoiding re-processing nodes
 			b.setMerged();
 			a.setMerged();
-
-			/*			b.getParent().removeChild(b);
-			a.getParent().removeChild(a);*/
 		}
 	}
 
@@ -414,6 +400,13 @@ public final class StructuredMerge {
 		} catch(Exception e){
 			return null;
 		}
+	}
+
+	private static boolean hasRemainingChanges(FSTNode a, FSTNode base, FSTNode merged) {
+		String aAST = FilesManager.getStringContentIntoSingleLineNoSpacing(a.printFST(0));
+		String bAST = FilesManager.getStringContentIntoSingleLineNoSpacing(base.printFST(0));
+		String mAST = FilesManager.getStringContentIntoSingleLineNoSpacing(merged.printFST(0));
+		return !aAST.equals(bAST) && !aAST.equals(mAST);
 	}
 
 	/*	private static void setNodesProcessed(FSTNode left, FSTNode right) {

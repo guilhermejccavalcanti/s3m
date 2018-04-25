@@ -6,6 +6,6 @@ import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
 @SuiteClasses({
-	GeneralStructuredMergeTests.class
+	StructuredMergeTests.class
 })
 public class AllTests {}

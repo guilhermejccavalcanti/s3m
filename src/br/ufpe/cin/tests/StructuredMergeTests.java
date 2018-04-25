@@ -13,7 +13,7 @@ import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeContext;
 
-public class GeneralStructuredMergeTests {
+public class StructuredMergeTests {
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -235,6 +235,22 @@ public class GeneralStructuredMergeTests {
 		assertTrue(
 				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.structuredOutput)
 				.equals("publicclassTest{privatestaticintgetInitialValue(){Stringnewvalue=System.getProperty(\"cassandra.fd_initial_value_ms\");if(newvalue==null){returnGossiper.intervalInMillis*30;}else<<<<<<<MINEreturnGossiper.intervalInMillis*2;======={logger.info(\"OverridingFDINITIAL_VALUEto{}ms\",newvalue);returnInteger.parseInt(newvalue);}>>>>>>>YOURS}}")
+				);
+	}
+	
+	/**
+	 * 
+	 */
+	@Test
+	public void testMultipleStatementsEditions3() {
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/multiplestatementseditions3/left.java"), 
+				new File("testfiles/multiplestatementseditions3/base.java"), 
+				new File("testfiles/multiplestatementseditions3/right.java"), 
+				null);
+		assertTrue(
+				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.structuredOutput)
+				.equals("publicclassTest{@OverridepublicBroadcastFilter.BroadcastActionfilter(ObjectoriginalMessage,Objecto){if(!(receivedMessages.remove(originalMessage.toString()))){jedisPublisher.publish(bc.getID(),originalMessage.toString());}<<<<<<<MINEreturnnewBroadcastFilter.BroadcastAction(BroadcastAction.ACTION.CONTINUE,o);=======if(!(receivedMessages.remove(contents))){jedisPublisher.publish(bc.getID(),contents);returnnewBroadcastFilter.BroadcastAction(BroadcastAction.ACTION.CONTINUE,o);}>>>>>>>YOURS<<<<<<<MINE=======returnnewBroadcastFilter.BroadcastAction(BroadcastAction.ACTION.ABORT,o);>>>>>>>YOURS}}")
 				);
 	}
 
