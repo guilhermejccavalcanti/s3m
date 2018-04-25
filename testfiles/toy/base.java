@@ -1,11 +1,5 @@
 public class Test{
-    @Override
-	public BroadcastFilter.BroadcastAction filter(Object originalMessage, Object o) {
-	    String contents = originalMessage.toString();
-	
-	    if (!(receivedMessages.remove(contents))) {
-	        jedisPublisher.publish(bc.getID(), contents);
-	    }
-	    return new BroadcastFilter.BroadcastAction(BroadcastAction.ACTION.CONTINUE, o);
+	void method(){
+		return new RemoteViewClient(this,clientLocation,OpenGammaFugdeContext.getInstace(),_connectionFactory,_scheduler);
 	}
 }

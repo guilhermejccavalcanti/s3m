@@ -26,13 +26,13 @@ public class LoggerStatistics {
 	static{ 
 		if(!JFSTMerge.isCryptographed){
 			try {
-				String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+				String logpath   = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
 
 				logpath = logpath + "stjfstmerge.statistics";
 				File file = new File(logpath);
 				CryptoUtils.decrypt(file, file);
 
-				logpath = logpath + "jfstmerge.files";
+				logpath = logpath + "stjfstmerge.files";
 				file = new File(logpath);
 				CryptoUtils.decrypt(file, file);
 
@@ -48,7 +48,7 @@ public class LoggerStatistics {
 
 			//logging
 			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
-			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			String logpath   = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
 			String logentry	 = timeStamp+","+msg+"\n";
 			logpath = logpath + "stjfstmerge.statistics";
 			File statisticsLog = new File(logpath);
@@ -59,6 +59,10 @@ public class LoggerStatistics {
 
 			FileUtils.write(statisticsLog, logentry, true);
 
+			if(JFSTMerge.isCryptographed){
+				CryptoUtils.encrypt(statisticsLog, statisticsLog);
+			}
+			
 			if(JFSTMerge.logFiles){
 				//logging merged files for further analysis
 				logFiles(timeStamp,context);
@@ -66,7 +70,7 @@ public class LoggerStatistics {
 		}
 		catch (CryptoException c)
 		{
-			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			String logpath   = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
 			logpath = logpath + "stjfstmerge.statistics";
 			File log = new File(logpath);
 			if (log.exists())
@@ -87,7 +91,7 @@ public class LoggerStatistics {
 	}
 
 	public static void logScenario(String loggermsg) throws IOException {
-		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+		String logpath = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
 		new File(logpath).mkdirs(); //ensuring that the directories exists	
 		logpath = logpath + "stjfstmerge.statistics.scenarios";
 
@@ -102,7 +106,7 @@ public class LoggerStatistics {
 	}
 
 	public static void logConflicts(List<MergeConflict> conflicts, Source source) throws IOException {
-		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+		String logpath = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
 		new File(logpath).mkdirs(); //ensuring that the directories exists	
 		for(MergeConflict mc : conflicts){
 			String origin =  ((mc.leftOriginFile != null) ? mc.leftOriginFile.getAbsolutePath() : "<empty left>") 
@@ -130,9 +134,9 @@ public class LoggerStatistics {
 	private static void logFiles(String timeStamp, MergeContext context) throws IOException {
 		try{
 			//initialization
-			String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			String logpath = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
 			new File(logpath).mkdirs(); //ensuring that the directories exists	
-			logpath = logpath + "jfstmerge.files";
+			logpath = logpath + "stjfstmerge.files";
 			manageLogBuffer(logpath);
 			File logfiles = new File(logpath);
 
@@ -182,8 +186,8 @@ public class LoggerStatistics {
 		}
 		catch (CryptoException c)
 		{
-			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-			logpath = logpath + "jfstmerge.files";
+			String logpath   = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
+			logpath = logpath + "stjfstmerge.files";
 			File log = new File(logpath);
 			if (log.exists())
 			{
@@ -199,7 +203,7 @@ public class LoggerStatistics {
 	}
 
 	private static void initializeLogger() throws IOException, CryptoException {
-		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+		String logpath = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
 		new File(logpath).mkdirs(); //ensuring that the directories exists	
 		logpath = logpath + "stjfstmerge.statistics";
 

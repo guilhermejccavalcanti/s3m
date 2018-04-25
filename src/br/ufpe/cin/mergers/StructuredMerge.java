@@ -183,16 +183,27 @@ public final class StructuredMerge {
 			} else {
 				return createConflict(left, base, right, false);
 			}
-		} else {
+		} else if((left!=null && right!=null) && left.compatibleType(right)){
 			/*
-			 * the three nodes have different type
+			 * left and right has the same type, but are different from base
 			 */
+			String leftAST  = FilesManager.getStringContentIntoSingleLineNoSpacing(left.printFST(0));
+			String rightAST = FilesManager.getStringContentIntoSingleLineNoSpacing(right.printFST(0));
+			if(leftAST.equals(rightAST)){
+				return left;
+			} else {
+				return createConflict(left, base, right, false);
+			}
+		} else {
 			if(left == null && right ==null) {
 				/*
 				 * base node mutually deleted, 
 				 * no need for further actions
 				 */
 			} else {
+				/*
+				 * the three nodes have different type
+				 */
 				return createConflict(left, base, right, false);
 			}
 		}
@@ -310,7 +321,7 @@ public final class StructuredMerge {
 									merge_Left_Right_Ordered(aChild, baseChild, bChild, mergedChild, isProceessingRight);
 								} else {
 									/*
-									 * The entire node was already processed in Merge_Left_Base_Right_Ordered
+									 * Entire node already processed in Merge_Left_Base_Right_Ordered
 									 */
 								}
 							}
@@ -408,10 +419,4 @@ public final class StructuredMerge {
 		String mAST = FilesManager.getStringContentIntoSingleLineNoSpacing(merged.printFST(0));
 		return !aAST.equals(bAST) && !aAST.equals(mAST);
 	}
-
-	/*	private static void setNodesProcessed(FSTNode left, FSTNode right) {
-		//avoiding re-processing nodes in further merging processes (e.g. merge_Left_Right)
-		if(left!=null  && left.getParent()!=null) left.getParent().removeChild(left);
-		if(right!=null && right.getParent()!=null)right.getParent().removeChild(right);
-	}*/
 }

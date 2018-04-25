@@ -29,7 +29,7 @@ public class LoggerFactory {
 
 		try{
 			//creating FileHandler to record the logs
-			String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
+			String logpath = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
 			new File(logpath).mkdirs(); //assuring that the directories exists
 			logpath = logpath + "jfstmerge.log";
 			logfile = logpath;

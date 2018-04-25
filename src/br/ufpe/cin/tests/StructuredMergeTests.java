@@ -51,6 +51,19 @@ public class StructuredMergeTests {
 				.equals("publicclassA{intm(){<<<<<<<MINEif(true){return;}=======while(true){return;}>>>>>>>YOURSreturn30+10;}}")
 				);
 	}
+	
+	@Test
+	public void testMutualStatementReplacement() {
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/mutualbasestatementreplacement/left.java"), 
+				new File("testfiles/mutualbasestatementreplacement/base.java"), 
+				new File("testfiles/mutualbasestatementreplacement/right.java"), 
+				null);
+		assertTrue(
+				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.structuredOutput)
+				.equals("publicclassTest{protectedvoidpush(Entryentry){if(destroyed.get()){return;}recentActivity.set(true);inta;ObjectfinalMsg=translate(entry.message);<<<<<<<MINEif(finalMsg==null){logger.trace(\"Broascastmessagewasnull{}\",finalMsg);return;}=======entry.originalMessage=(entry.originalMessage!=entry.message?translate(entry.originalMessage):finalMsg);>>>>>>>YOURS<<<<<<<MINEObjectprevM=entry.originalMessage;=======entry.message=finalMsg;>>>>>>>YOURS<<<<<<<MINEentry.originalMessage=(entry.originalMessage!=entry.message?translate(entry.originalMessage):finalMsg);=======if(resources.isEmpty()){inta;}>>>>>>>YOURS<<<<<<<MINEif(entry.originalMessage==null){logger.trace(\"Broascastmessagewasnull{}\",prevM);return;}=======try{inta;}catch(InterruptedExceptionex){logger.debug(ex.getMessage(),ex);}>>>>>>>YOURSentry.message=finalMsg;if(resources.isEmpty()){inta;}try{inta;}catch(InterruptedExceptionex){logger.debug(ex.getMessage(),ex);}}}")
+				);
+	}
 
 	@Test
 	public void testRightMethodDeletion() {

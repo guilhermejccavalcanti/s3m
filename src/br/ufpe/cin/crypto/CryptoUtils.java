@@ -102,8 +102,8 @@ public class CryptoUtils {
 
 //	@SuppressWarnings("static-access")
 //	public static void main(String[] args) {
-//		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-//		File f1 = new File(logpath + "jfstmerge.files");
+//		String logpath = System.getProperty("user.home")+ File.separator + ".stjfstmerge" + File.separator;
+//		File f1 = new File(logpath + "stjfstmerge.files");
 //		File f2 = new File(logpath + "jfstmerge.statistics");
 //		try {
 //			new CryptoUtils().decrypt(f1, f1);

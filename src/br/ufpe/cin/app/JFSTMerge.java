@@ -56,10 +56,10 @@ public class JFSTMerge {
 	public static boolean isGit = false;
 
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).",arity = 1)
-	public static boolean isCryptographed = true;
+	public static boolean isCryptographed = false;
 
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
-	public static boolean logFiles = true;
+	public static boolean logFiles = false;
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -158,30 +158,30 @@ public class JFSTMerge {
 
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
 
-		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
-		//if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
-		long t0 = System.nanoTime();
-		try {
-			//running unstructured merge first is necessary due to future steps.
-			context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
-			context.unstructuredMergeTime = System.nanoTime() - t0;
+		//there is no need to call specific merge algorithms in equal or consistently changes files (fast-forward merge)
+		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
+			long t0 = System.nanoTime();
+			try {
+				//running unstructured merge first is necessary due to future steps.
+				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
+				context.unstructuredMergeTime = System.nanoTime() - t0;
 
-			context.structuredOutput = StructuredMerge.merge(left, base, right, context);
-			context.structuredMergeTime = context.structuredMergeTime + (System.nanoTime() - t0);
+				context.structuredOutput = StructuredMerge.merge(left, base, right, context);
+				context.structuredMergeTime = context.structuredMergeTime + (System.nanoTime() - t0);
 
-			conflictState = checkConflictState(context);
-		} catch (TextualMergeException tme) { //textual merge must work even when structured not, so this exception precedes others
-			System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
-			LOGGER.log(Level.SEVERE, "", tme);
-			System.exit(-1);
-		} catch (StructuredMergeException sme) {
-			LOGGER.log(Level.WARNING, "", sme);
-			context.structuredOutput = context.unstructuredOutput;
-			context.structuredMergeTime = System.nanoTime() - t0;
+				conflictState = checkConflictState(context);
+			} catch (TextualMergeException tme) { //textual merge must work even when structured not, so this exception precedes others
+				System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+				LOGGER.log(Level.SEVERE, "", tme);
+				System.exit(-1);
+			} catch (StructuredMergeException sme) {
+				LOGGER.log(Level.WARNING, "", sme);
+				context.structuredOutput = context.unstructuredOutput;
+				context.structuredMergeTime = System.nanoTime() - t0;
 
-			conflictState = checkConflictState(context);
+				conflictState = checkConflictState(context);
+			}
 		}
-		//}
 
 		//printing the resulting merged code
 		try {
@@ -208,15 +208,15 @@ public class JFSTMerge {
 	}
 
 	public static void main(String[] args) {
-		/*		JFSTMerge merger = new JFSTMerge();
+		JFSTMerge merger = new JFSTMerge();
 		merger.run(args);
 		System.exit(conflictState);
-		 */
-		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+
+		/*		new JFSTMerge().mergeFiles(
 				new File("testfiles/toy/left.java"), 
 				new File("testfiles/toy/base.java"), 
 				new File("testfiles/toy/right.java"), 
-				null);
+				null);*/
 
 		/*		try {
 			List<String> listRevisions = new ArrayList<>();
