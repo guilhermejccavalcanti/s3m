@@ -23,7 +23,7 @@ Installation
 -------------
 #### Requisites
 
-The instalation intregates the tool with GIT version control system. So, GIT must be installed and configured. Otherwise, you can run the tool [standalone](https://github.com/guilhermejccavalcanti/jFSTMerge#running-standalone).
+The instalation integrates the tool with GIT version control system. So, GIT must be installed and configured. Otherwise, you can run the tool [standalone](https://github.com/guilhermejccavalcanti/jFSTMerge#running-standalone).
 
 #### Automatic installation
 Double-click on the jar from the [/installer](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/installer) folder.
@@ -101,9 +101,9 @@ To run theses tests, you will need the shunit2 framework installed:
 1. Install a Linux [enviroment](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) , and follow the manual instalation [instructions](https://github.com/guilhermejccavalcanti/jFSTMerge#manual-installation) above on the Linux enviroment.
 
 To execute the tests, follow the instructions bellow:
-1. Go to the tesfiles/shelltests directory inside the jFSTMerge project folder
+1. Go to the testfiles/shelltests directory inside the jFSTMerge project folder
 2. Open the terminal
 3. Run the command `shunit2 test_you_want_to_execute.sh`
 4. Take a look at the output in the terminal to see the result of your tests
 
-The files "example", "exampletxt" and "big"  should be copied to your $HOME directory during the execution of the tests (you can delete them manually if you want after the execution of the tests).
+The files "exemplo", "exemplotxt" and "big"  should be copied to your $HOME directory during the execution of the tests (you can delete them manually if you want after the execution of the tests).
