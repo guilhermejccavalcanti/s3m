@@ -38,7 +38,7 @@ options {
   STATIC = false;
 }
 
-PARSER_BEGIN(Java18MergeParser)
+PARSER_BEGIN(Java18MergeParserStructured)
 package de.ovgu.cide.fstgen.parsers.generated_java18_merge;
 
 import java.io.*;
@@ -47,12 +47,12 @@ import cide.gast.*;
 import cide.gparser.*;
 import de.ovgu.cide.fstgen.ast.*;
 
-public class Java18MergeParser extends AbstractFSTParser
+public class Java18MergeParserStructured extends AbstractFSTParser
 {
- 	public Java18MergeParser(){}
+ 	public Java18MergeParserStructured(){}
 }
 
-PARSER_END(Java18MergeParser)
+PARSER_END(Java18MergeParserStructured)
 
 
 /********************************************
@@ -825,7 +825,7 @@ EqualityOp:
 
 @FSTNonTerminal()
 InstanceOfExpression:
-			RelationalExpression [ LOOK_AHEAD(2) "instanceof" Type ]
+			RelationalExpression [ LOOK_AHEAD(2) @~ "instanceof" Type ]
 ;
 
 @FSTNonTerminal()

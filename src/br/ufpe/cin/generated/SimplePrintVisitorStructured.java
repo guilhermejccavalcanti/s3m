@@ -1,19 +1,17 @@
 package br.ufpe.cin.generated;
 
-import java.util.*;
-import cide.gast.*;
-
 import java.io.PrintStream;
+import java.util.Iterator;
 
-import cide.languages.*;
+import de.ovgu.cide.fstgen.ast.AbstractFSTPrintVisitor;
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 
-import de.ovgu.cide.fstgen.ast.*;
-
-public class SimplePrintVisitorStrucutured extends AbstractFSTPrintVisitor  {
-	public SimplePrintVisitorStrucutured(PrintStream out) {
+public class SimplePrintVisitorStructured extends AbstractFSTPrintVisitor  {
+	public SimplePrintVisitorStructured(PrintStream out) {
 		super(out); generateSpaces=true;
 	}
-	public SimplePrintVisitorStrucutured() {
+	public SimplePrintVisitorStructured() {
 		super(); generateSpaces=true;
 	}
 	public boolean visit(FSTNonTerminal nonTerminal) {
@@ -816,6 +814,7 @@ public class SimplePrintVisitorStrucutured extends AbstractFSTPrintVisitor  {
 			{
 				FSTNode v=getChild(nonTerminal, "Type");
 				if (v!=null) {
+					hintSingleSpace();
 					printToken("instanceof");
 					v.accept(this);
 				}

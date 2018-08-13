@@ -88,7 +88,9 @@ public final class StructuredMerge {
 					for(FSTNode baseChild : ((FSTNonTerminal) base).getChildren()){
 						FSTNode leftChild  = ((FSTNonTerminal) left).getCompatibleChild(baseChild);
 						FSTNode rightChild = ((FSTNonTerminal)right).getCompatibleChild(baseChild);
-						((FSTNonTerminal) merged).addChildOnMerge(merge_Left_Base_Right(leftChild, baseChild, rightChild, (FSTNonTerminal) merged));
+						if(merged instanceof FSTNonTerminal){
+							((FSTNonTerminal) merged).addChildOnMerge(merge_Left_Base_Right(leftChild, baseChild, rightChild, (FSTNonTerminal) merged));
+						}
 					}
 				} else {
 					mergeLeaves(left, base, right, merged);
@@ -155,7 +157,9 @@ public final class StructuredMerge {
 					FSTNode leftChild  = getChildAtPosition(left,i);
 					FSTNode rightChild = getChildAtPosition(right,i);
 
-					((FSTNonTerminal) merged).addChildOnMerge(merge_Left_Base_Right_Ordered(leftChild, baseChild, rightChild, (FSTNonTerminal) merged));
+					if(merged instanceof FSTNonTerminal){
+						((FSTNonTerminal) merged).addChildOnMerge(merge_Left_Base_Right_Ordered(leftChild, baseChild, rightChild, (FSTNonTerminal) merged));
+					}
 				}
 			} else {
 				mergeLeaves(left, base, right, merged);
@@ -225,9 +229,10 @@ public final class StructuredMerge {
 								/*
 								 * added node
 								 */
-								((FSTNonTerminal)merged).addChildOnMerge(aChild);
+								if(merged instanceof FSTNonTerminal){
+									((FSTNonTerminal)merged).addChildOnMerge(aChild);
+								}
 								aChild.setMerged();
-								continue;	
 							} else {
 								if(!isProceessingRight) {
 									/*
@@ -264,12 +269,16 @@ public final class StructuredMerge {
 					/*
 					 * mutually added node
 					 */
-					((FSTNonTerminal)merged).addChildOnMerge(a);
+					if(merged instanceof FSTNonTerminal){
+						((FSTNonTerminal)merged).addChildOnMerge(a);
+					}
 				} else { 
 					/*
 					 * common added nodes mutually edited
 					 */
-					((FSTNonTerminal)merged).addChildOnMerge(createConflict(a, null, b, isProceessingRight));
+					if(merged instanceof FSTNonTerminal){
+						((FSTNonTerminal)merged).addChildOnMerge(createConflict(a, null, b, isProceessingRight));
+					}
 				}
 
 				b.setMerged();
@@ -291,9 +300,10 @@ public final class StructuredMerge {
 							/*
 							 * added node
 							 */
-							((FSTNonTerminal)merged).addChildOnMerge(aChild);
+							if(merged instanceof FSTNonTerminal){
+								((FSTNonTerminal)merged).addChildOnMerge(aChild);
+							}
 							aChild.setMerged();
-							continue;	
 						} else {
 							if(!isProceessingRight) {
 								/*
@@ -336,12 +346,16 @@ public final class StructuredMerge {
 				/*
 				 * mutually added node
 				 */
-				((FSTNonTerminal)merged).addChildOnMerge(a);
+				if(merged instanceof FSTNonTerminal){
+					((FSTNonTerminal)merged).addChildOnMerge(a);
+				}
 			} else { 
 				/*
 				 * common added nodes mutually edited
 				 */
-				((FSTNonTerminal)merged).addChildOnMerge(createConflict(a, null, b, isProceessingRight));
+				if(merged instanceof FSTNonTerminal){
+					((FSTNonTerminal)merged).addChildOnMerge(createConflict(a, null, b, isProceessingRight));
+				}
 			}
 
 			b.setMerged();
@@ -378,15 +392,17 @@ public final class StructuredMerge {
 		String baseBody  = "";
 		String leftBody  = "";
 		String rightBody = "";
-		if(base instanceof FSTTerminal){
-			if(base != null) baseBody = ((FSTTerminal) base).getBody()+"\n";
-			if(left != null) leftBody = ((FSTTerminal) left).getBody()+"\n";
-			if(right!= null) rightBody= ((FSTTerminal)right).getBody()+"\n";
-		} else {
-			if(base != null) baseBody = FilesManager.prettyPrint((FSTNonTerminal) base);
-			if(left != null) leftBody = FilesManager.prettyPrint((FSTNonTerminal) left);
-			if(right!= null) rightBody = FilesManager.prettyPrint((FSTNonTerminal) right);
+
+		if(base != null){
+			baseBody = (base instanceof FSTTerminal) ? ((FSTTerminal) base).getBody() +"\n" : FilesManager.prettyPrint((FSTNonTerminal) base);
 		}
+		if(left != null){
+			leftBody = (left instanceof FSTTerminal) ? ((FSTTerminal) left).getBody() +"\n" : FilesManager.prettyPrint((FSTNonTerminal) left);
+		}
+		if(right != null){
+			rightBody= (right instanceof FSTTerminal)? ((FSTTerminal) right).getBody()+"\n" : FilesManager.prettyPrint((FSTNonTerminal) right);
+		}
+
 		MergeConflict mc;
 		if(invertBody){
 			mc = new MergeConflict(rightBody, baseBody, leftBody); 

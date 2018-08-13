@@ -17,7 +17,7 @@ import java.util.stream.Collectors;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
-import br.ufpe.cin.generated.SimplePrintVisitorStrucutured;
+import br.ufpe.cin.generated.SimplePrintVisitorStructured;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 
@@ -548,7 +548,7 @@ public final class FilesManager {
 	 * @param node
 	 */
 	public static String prettyPrint(FSTNonTerminal node) {
-		SimplePrintVisitorStrucutured visitor = new SimplePrintVisitorStrucutured();
+		SimplePrintVisitorStructured visitor = new SimplePrintVisitorStructured();
 		visitor.visit(node);
 		return visitor.getResult().replaceAll(("  "), " ");
 	}

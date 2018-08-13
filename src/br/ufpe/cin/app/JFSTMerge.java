@@ -208,15 +208,21 @@ public class JFSTMerge {
 	}
 
 	public static void main(String[] args) {
-		JFSTMerge merger = new JFSTMerge();
-		merger.run(args);
-		System.exit(conflictState);
+		//		JFSTMerge merger = new JFSTMerge();
+		//		merger.run(args);
+		//		System.exit(conflictState);
 
-		/*		new JFSTMerge().mergeFiles(
+		new JFSTMerge().mergeFiles(
 				new File("testfiles/toy/left.java"), 
 				new File("testfiles/toy/base.java"), 
 				new File("testfiles/toy/right.java"), 
-				null);*/
+				null);
+
+		//		new JFSTMerge().mergeFiles(
+		//				new File("E:/Pesquisa/sample2/projects/Kundera/revisions/rev_99736be_52e157c/rev_left_99736be/src/kundera-rdbms/src/main/java/com/impetus/client/rdbms/HibernateClient.java"),
+		//				new File("E:/Pesquisa/sample2/projects/Kundera/revisions/rev_99736be_52e157c/rev_base_4337143/src/kundera-rdbms/src/main/java/com/impetus/client/rdbms/HibernateClient.java"),
+		//				new File("E:/Pesquisa/sample2/projects/Kundera/revisions/rev_99736be_52e157c/rev_right_52e157c/src/kundera-rdbms/src/main/java/com/impetus/client/rdbms/HibernateClient.java"),
+		//				null);
 
 		/*		try {
 			List<String> listRevisions = new ArrayList<>();

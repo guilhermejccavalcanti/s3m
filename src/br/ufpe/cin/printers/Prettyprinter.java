@@ -7,7 +7,7 @@ import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.PrintException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.files.FilesTuple;
-import br.ufpe.cin.generated.SimplePrintVisitorStrucutured;
+import br.ufpe.cin.generated.SimplePrintVisitorStructured;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.MergeScenario;
 import de.ovgu.cide.fstgen.ast.FSTNode;
@@ -31,7 +31,7 @@ public final class Prettyprinter {
 
 		String printable = "";
 		//de.ovgu.cide.fstgen.parsers.generated_java18_merge.SimplePrintVisitor printer = new de.ovgu.cide.fstgen.parsers.generated_java18_merge.SimplePrintVisitor();
-		SimplePrintVisitorStrucutured printer = new SimplePrintVisitorStrucutured();
+		SimplePrintVisitorStructured printer = new SimplePrintVisitorStructured();
 		FSTNode root = getCompilationUnit(tree);
 		if(root != null){
 			root.accept(printer);
