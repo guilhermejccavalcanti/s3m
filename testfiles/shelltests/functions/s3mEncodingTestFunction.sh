@@ -6,6 +6,9 @@ testMultipleEncodings()
 {	
     cp -r otherencodings $HOME/
     cd $HOME
+    rm -rf .jfstmerge
+    mkdir .jfstmerge
+    cp otherencodings/jfstmerge.statistics ./.jfstmerge/
     rm -rf repo
     mkdir repo
     cd repo
@@ -27,6 +30,11 @@ testMultipleEncodings()
     git checkout master
     git merge left
     HAS_CONFLICT=$(git merge right | grep -c "CONFLICT")
+    cd ../.jfstmerge
+    CRYPTO_WORKED=$(ls | grep -c "defect")
     assertTrue "[ $HAS_CONFLICT -eq 1 ]"
+    assertTrue "[ $CRYPTO_WORKED -eq 1 ]"
     cd ..
+    rm -rf repo
+    rm -rf .jfstmerge
 }

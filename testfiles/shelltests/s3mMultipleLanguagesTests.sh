@@ -1,17 +1,17 @@
 #! /bin/sh
 # file: s3mMultipleFileTypesTests.sh
 
-. ./s3mMultipleLanguagesFunctions.sh
+. ./functions/s3mMultipleLanguagesFunctions.sh
 THISDIRECTORY=$PWD
 
 # Test the tool with C++ files.
 testCPP() {
 
-	multipleLanguages "$THISDIRECTORY/cppsupport" ".cpp"
+	multipleLanguages "$THISDIRECTORY/otherlanguages" ".cpp"
 }
 
 # Test the tool with Typescript files.
 testTS() {
 
-	multipleLanguages "$THISDIRECTORY/typescriptsupport" ".ts"
+	multipleLanguages "$THISDIRECTORY/otherlanguages" ".ts"
 }

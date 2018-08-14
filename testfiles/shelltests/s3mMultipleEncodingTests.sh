@@ -6,7 +6,7 @@ testEncoding() {
 
 	THISDIRECTORY=$PWD
 
-	. ./s3mEncodingTestFunction.sh
+	. ./functions/s3mEncodingTestFunction.sh
 	testMultipleEncodings "$THISDIRECTORY/otherencodings/ASCII"
 	testMultipleEncodings "$THISDIRECTORY/otherencodings/ISO1"
 	testMultipleEncodings "$THISDIRECTORY/otherencodings/UTF-8"
