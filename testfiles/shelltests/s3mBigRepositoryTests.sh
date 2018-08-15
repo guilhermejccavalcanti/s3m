@@ -59,3 +59,6 @@ testCorruptedFilesMerge()
     rm -rf bigrepo
 	
 }
+
+suite_addTest testMultipleMerges
+suite_addTest testCorruptedFilesMerge

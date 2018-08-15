@@ -15,3 +15,6 @@ testTS() {
 
 	multipleLanguages "$THISDIRECTORY/otherlanguages" ".ts"
 }
+
+suite_addTest testCPP
+suite_addTest testTS

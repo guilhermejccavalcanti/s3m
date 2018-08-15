@@ -158,3 +158,7 @@ testNodeReordering()
     cd .. 
 }
 
+suite_addTest testSemistructuredMerge
+suite_addTest testTextualMerge
+suite_addTest testWorkingDiff
+suite_addTest testNodeReordering

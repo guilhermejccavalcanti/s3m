@@ -12,3 +12,5 @@ testEncoding() {
 	testMultipleEncodings "$THISDIRECTORY/otherencodings/UTF-8"
 	testMultipleEncodings "$THISDIRECTORY/otherencodings/UTF-16"
 }
+
+suite_addTest testEncoding
