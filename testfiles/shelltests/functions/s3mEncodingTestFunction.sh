@@ -13,7 +13,7 @@ testMultipleEncodings()
     HAS_CONFLICT=$(git merge right | grep -c "CONFLICT")
     cd ../.jfstmerge
     CRYPTO_WORKED=$(ls | grep -c "defect")
-    assertTrue "[ $HAS_CONFLICT -eq 1 ]"
+    assertTrue "[ $HAS_CONFLICT -eq $2 ]"
     assertTrue "[ $CRYPTO_WORKED -eq 1 ]"
     cd ..
     rm -rf repo

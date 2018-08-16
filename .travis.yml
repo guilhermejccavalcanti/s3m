@@ -17,5 +17,4 @@ before_install:
 - git config --global user.name "Guilherme Cavalcanti" 
 - sudo apt-get install shunit2
 script:
-- shunit2 s3mGitTests.sh
-- shunit2 s3mBigRepositoryTests.sh
+- shunit2 s3mTests.sh
