@@ -15,14 +15,14 @@ public class Generator {
 			   with all associated artefacts (pretty printer,etc) */
 			new FSTgenTask().generate(
 					"grammars/java18_merge_fst.gcide", 
-					"src/br/ufpe/cin/generated/java18_merge.jj",
+					"src/main/java/br/ufpe/cin/generated/java18_merge.jj",
 					"br.ufpe.cin.generated"
 					);
 
 			//2. generate a javaCC parser based on the .jj file
 			new JavaCCTask().generate(
-					"src/br/ufpe/cin/generated/java18_merge.jj", 
-					"src/br/ufpe/cin/generated/"
+					"src/main/java/br/ufpe/cin/generated/java18_merge.jj",
+					"src/main/java/br/ufpe/cin/generated/"
 					);
 
 			//3. test the generated artefacts
