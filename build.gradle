@@ -3,25 +3,25 @@ apply plugin: 'java'
 sourceSets {
     main {
         java {
-            srcDir 'src'
+            srcDir 'src/main'
         }
-      }
-	  
-	test {
+    }
+
+    test {
         java {
-            srcDirs = ["src/br/ufpe/cin/tests"]
+            srcDirs = ["src/test"]
         }
     }
 }
 
 repositories {
-	mavenCentral()
+    mavenCentral()
 }
 
 // most of the jar libraries is available in the /dependencies folder, not in a remote repository
 dependencies {
-	compile fileTree(dir: 'dependencies', include: ['*.jar'])
-	testCompile 'junit:junit:4.12'
+    compile fileTree(dir: 'dependencies', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
 }
 
 // the lines bellow deal with exporting a running jar
@@ -32,16 +32,16 @@ jar {
 }
 
 task fatJar(type: Jar) {
-  manifest.from jar.manifest
-  classifier = 'all'
-  from {
-    configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
-  } {
+    manifest.from jar.manifest
+    classifier = 'all'
+    from {
+        configurations.runtime.collect { it.isDirectory() ? it : zipTree(it) }
+    } {
         exclude "META-INF/*.SF"
         exclude "META-INF/*.DSA"
         exclude "META-INF/*.RSA"
-  }
-  with jar
+    }
+    with jar
 }
 
 artifacts {
