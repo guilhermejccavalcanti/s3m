@@ -15,10 +15,6 @@ Compilation
 This project uses Gradle to manage all dependencies and versioning. JAVA 8 is required.
 
 
-#### Troubleshooting
-
-If you face error while trying to build the project with gradle, just delete the lines from 10 to 13 of this [file](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/build.gradle) .
-
 Installation
 -------------
 #### Requisites
