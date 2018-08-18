@@ -63,16 +63,23 @@ public final class RenamingConflictsHandler {
         if (context.possibleRenamedLeftNodes.isEmpty() && context.possibleRenamedRightNodes.isEmpty()) return;
 
         //possible renamings or deletions in left
-        for (Pair<String, FSTNode> tuple : context.possibleRenamedLeftNodes) {
+        handleSingleRenamings(context, context.possibleRenamedLeftNodes, context.addedLeftNodes);
+
+        //possible renamings or deletions in right
+        handleSingleRenamings(context, context.possibleRenamedRightNodes, context.addedRightNodes);
+    }
+
+    private static void handleSingleRenamings(MergeContext context, List<Pair<String, FSTNode>> possibleRenamedNodes, List<FSTNode> addedNodes) {
+        for (Pair<String, FSTNode> tuple : possibleRenamedNodes) {
             if (!nodeHasConflict(tuple.getRight())) continue;
 
             String baseContent = tuple.getLeft();
             String currentNodeContent = ((FSTTerminal) tuple.getRight()).getBody(); //node content with conflict
             String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).right;
 
-            List<Pair<Double, String>> similarNodes = new ArrayList<Pair<Double, String>>(); //list of possible nodes renaming a previous one
+            List<Pair<Double, String>> similarNodes = new ArrayList<>(); //list of possible nodes renaming a previous one
             //1. getting similar nodes to fulfill renaming conflicts
-            for (FSTNode newNode : context.addedLeftNodes) { // a possible renamed node is seem as "new" node due to superimposition
+            for (FSTNode newNode : addedNodes) { // a possible renamed node is seem as "new" node due to superimposition
                 if (!isValidNode(newNode)) continue;
 
                 String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
@@ -85,48 +92,15 @@ public final class RenamingConflictsHandler {
 
             //2. checking if unstructured merge also reported the renaming conflict
             String signature = getSignature(baseContent);
-            boolean unstructuredMergeReportsConflict = FilesManager.extractMergeConflicts(context.unstructuredOutput).stream()
+            boolean hasUnstructuredMergeConflict = FilesManager.extractMergeConflicts(context.unstructuredOutput).stream()
                     .map(conflict -> FilesManager.getStringContentIntoSingleLineNoSpacing(conflict.body))
                     .anyMatch(conflict -> conflict.contains(signature));
 
-            if (unstructuredMergeReportsConflict) {
+            if (hasUnstructuredMergeConflict) {
                 String possibleRenamingContent = getMostSimilarContent(similarNodes);
                 generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, editedNodeContent, false);
             } else { //do not report the renaming conflict
                 ((FSTTerminal) tuple.getRight()).setBody(editedNodeContent);
-            }
-        }
-
-
-        //possible renamings or deletions in right
-        for (Pair<String, FSTNode> tuple : context.possibleRenamedRightNodes) {
-            List<Pair<Double, String>> similarNodes = new ArrayList<Pair<Double, String>>(); //list of possible nodes renaming a previous one
-            if (nodeHasConflict(tuple.getRight()) && isValidNode(tuple.getRight())) {
-                String baseContent = tuple.getLeft();
-                String currentNodeContent = ((FSTTerminal) tuple.getRight()).getBody(); //node content with conflict
-                String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).left;
-
-                for (FSTNode newNode : context.addedRightNodes) { // a possible renamed node is seem as "new" node due to superimposition
-                    if (isValidNode(newNode)) {
-                        String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
-                        double similarity = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
-                        if (similarity >= 0.7) { //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
-                            Pair<Double, String> tp = Pair.of(similarity, possibleRenamingContent);
-                            similarNodes.add(tp);
-                        }
-                    }
-                }
-
-                String signature = getSignature(baseContent);
-                List<MergeConflict> unstructuredMergeConflictsHavingRenamedSignature = FilesManager.extractMergeConflicts(context.unstructuredOutput).stream()
-                        .filter(mc -> FilesManager.getStringContentIntoSingleLineNoSpacing(mc.body).contains(signature))
-                        .collect(Collectors.toList());
-                if (unstructuredMergeConflictsHavingRenamedSignature.size() > 0) {
-                    String possibleRenamingContent = getMostSimilarContent(similarNodes);
-                    generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, editedNodeContent, false);
-                } else { //do not report the renaming conflict
-                    ((FSTTerminal) tuple.getRight()).setBody(editedNodeContent);
-                }
             }
         }
     }
