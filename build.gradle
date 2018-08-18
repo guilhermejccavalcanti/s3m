@@ -1,18 +1,5 @@
 apply plugin: 'java'
 
-sourceSets {
-    main {
-        java {
-            srcDir 'src/main'
-        }
-    }
-
-    test {
-        java {
-            srcDirs = ["src/test"]
-        }
-    }
-}
 
 repositories {
     mavenCentral()
