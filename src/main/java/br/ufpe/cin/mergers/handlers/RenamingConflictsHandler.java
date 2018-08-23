@@ -20,6 +20,7 @@ import java.util.stream.Collectors;
  */
 public final class RenamingConflictsHandler {
     private static final double BODY_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
+    private static final boolean MERGE_NEW_SIGNATURE_AND_NEW_BODY = false; //TODO make this a configurable parameter
 
     private enum RenamingSide {LEFT, RIGHT}
 
@@ -99,12 +100,24 @@ public final class RenamingConflictsHandler {
             }
 
             //2. checking if unstructured merge also reported the renaming conflict
-            String signature = getSignature(baseContent);
+            String signature = getTrimmedSignature(baseContent);
             boolean hasUnstructuredMergeConflict = FilesManager.extractMergeConflicts(context.unstructuredOutput).stream()
                     .map(conflict -> FilesManager.getStringContentIntoSingleLineNoSpacing(conflict.body))
                     .anyMatch(conflict -> conflict.contains(signature));
 
-            if (hasUnstructuredMergeConflict) {
+            if (MERGE_NEW_SIGNATURE_AND_NEW_BODY && !similarNodes.isEmpty()) {
+                String possibleRenamingContent = getMostSimilarContent(similarNodes);
+                String newSignature = getSignature(possibleRenamingContent);
+                String newBody = removeSignature(oppositeSideNodeContent);
+
+                //TODO check method references!
+
+                // replace node with both nodes content
+                FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newSignature + newBody);
+
+                // remove other node
+                FilesManager.findAndDeleteASTNode(context.superImposedTree, possibleRenamingContent);
+            } else if (hasUnstructuredMergeConflict) {
                 String possibleRenamingContent = getMostSimilarContent(similarNodes);
                 generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, oppositeSideNodeContent, renamingSide);
             } else { //do not report the renaming conflict
@@ -113,10 +126,13 @@ public final class RenamingConflictsHandler {
         }
     }
 
+    private static String getTrimmedSignature(String source) {
+        String trimmedSource = FilesManager.getStringContentIntoSingleLineNoSpacing(source);
+        return getSignature(trimmedSource);
+    }
+
     private static String getSignature(String source) {
-        String trim = FilesManager.getStringContentIntoSingleLineNoSpacing(source);
-        String signatureTrimmed = trim.substring(0, (/*is interface?*/(trim.contains("{")) ? trim.indexOf("{") : trim.indexOf(";")));
-        return signatureTrimmed;
+        return source.substring(0, (/*is interface?*/(source.contains("{")) ? source.indexOf("{") : source.indexOf(";")));
     }
 
     private static String getMostSimilarContent(List<Pair<Double, String>> similarNodes) {
