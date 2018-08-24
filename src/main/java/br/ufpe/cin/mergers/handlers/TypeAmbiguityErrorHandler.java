@@ -25,51 +25,56 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  */
 public final class TypeAmbiguityErrorHandler {
 
-	public static void handle(MergeContext context,	LinkedList<FSTNode> leftImportStatementsNodes, LinkedList<FSTNode> rightImportStatementsNodes) {
-		/*
-		 * using unstructured merge output as guide to ensure that semistructured merge is not worse than unstructured merge.
-		 * if there is a conflict with the import statements in unstructured merge output, we flag the imports as conflicting
-		 * in semistructured merge as well (might be false positive). If there isn't, we go futher and compile the semistructured 
-		 * output to look for compilation problems. 
-		 */
-		if(!leftImportStatementsNodes.isEmpty() && !rightImportStatementsNodes.isEmpty()){
-			List<MergeConflict> unstructuredMergeConflicts = FilesManager.extractMergeConflicts(context.unstructuredOutput);
-			JavaCompiler compiler = new JavaCompiler();
-			compiler.compile(context, Source.SEMISTRUCTURED);	//compiling source code
-			while(!leftImportStatementsNodes.isEmpty()){
-				FSTNode leftImportStatementNode = ((FSTTerminal)leftImportStatementsNodes.poll());
-				String leftImportStatement 		= ((FSTTerminal) leftImportStatementNode).getBody();
-				for(FSTNode rightImportStatementNode : rightImportStatementsNodes){
-					
-					//getting the imported member
-					String rightImportStatement = ((FSTTerminal)rightImportStatementNode).getBody(); 
-					String[] aux = rightImportStatement.split("\\.");
-					String rightImportedMember = aux[aux.length-1];
-					aux = leftImportStatement.split("\\.");
-					String leftImportedMember  = aux[aux.length-1];
-					
-					//possible compilation type ambiguity error: p.* vs q.* or p.Z vs. q.Z	
-					if( (rightImportedMember.equals("*;") && leftImportedMember.equals("*;")) ||
-							(rightImportedMember.equals(leftImportedMember))){
-						if(thereIsCompiltationProblemWithImportedStatements(compiler,context,leftImportStatement,rightImportStatement)){
-							generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
-						} 
-						/*					else if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
-						generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
-					}*/
-					}
-					
-					//possible behaviorial type ambiguity error: p.Z vs. q.*
-					else if(rightImportedMember.equals("*;") || leftImportedMember.equals("*;")) {	
-						if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
-							if(thereIsContributionUsingImportedMember(context,rightImportedMember, leftImportedMember)){
-								generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
-							}
-						}
-					}
-				}
-			}
-		}
+    public static void handle(MergeContext context) {
+        /*
+         * using unstructured merge output as guide to ensure that semistructured merge is not worse than unstructured merge.
+         * if there is a conflict with the import statements in unstructured merge output, we flag the imports as conflicting
+         * in semistructured merge as well (might be false positive). If there isn't, we go further and compile the semistructured
+         * output to look for compilation problems.
+         */
+
+        //identifying the import statements added by left and right
+        LinkedList<FSTNode> leftImportStatementsNodes = identifyImportStatements(context.addedLeftNodes);
+        LinkedList<FSTNode> rightImportStatementsNodes = identifyImportStatements(context.addedRightNodes);
+
+        if (leftImportStatementsNodes.isEmpty() || rightImportStatementsNodes.isEmpty()) return;
+
+        List<MergeConflict> unstructuredMergeConflicts = FilesManager.extractMergeConflicts(context.unstructuredOutput);
+        JavaCompiler compiler = new JavaCompiler();
+        compiler.compile(context, Source.SEMISTRUCTURED);	//compiling source code
+        while(!leftImportStatementsNodes.isEmpty()){
+            FSTNode leftImportStatementNode = ((FSTTerminal)leftImportStatementsNodes.poll());
+            String leftImportStatement 		= ((FSTTerminal) leftImportStatementNode).getBody();
+            for(FSTNode rightImportStatementNode : rightImportStatementsNodes){
+
+                //getting the imported member
+                String rightImportStatement = ((FSTTerminal)rightImportStatementNode).getBody();
+                String[] aux = rightImportStatement.split("\\.");
+                String rightImportedMember = aux[aux.length-1];
+                aux = leftImportStatement.split("\\.");
+                String leftImportedMember  = aux[aux.length-1];
+
+                //possible compilation type ambiguity error: p.* vs q.* or p.Z vs. q.Z
+                if( (rightImportedMember.equals("*;") && leftImportedMember.equals("*;")) ||
+                        (rightImportedMember.equals(leftImportedMember))){
+                    if(thereIsCompiltationProblemWithImportedStatements(compiler,context,leftImportStatement,rightImportStatement)){
+                        generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
+                    }
+                    /*					else if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
+                    generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
+                }*/
+                }
+
+                //possible behaviorial type ambiguity error: p.Z vs. q.*
+                else if(rightImportedMember.equals("*;") || leftImportedMember.equals("*;")) {
+                    if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
+                        if(thereIsContributionUsingImportedMember(context,rightImportedMember, leftImportedMember)){
+                            generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
+                        }
+                    }
+                }
+            }
+        }
 	}
 
 	/**
@@ -107,6 +112,20 @@ public final class TypeAmbiguityErrorHandler {
 		}
 		return false;
 	}
+
+    private static LinkedList<FSTNode> identifyImportStatements(List<FSTNode> addedNodes) {
+        LinkedList<FSTNode> importStatements = new LinkedList<>();
+
+        for (int i = 0; i < addedNodes.size(); i++) {
+            FSTNode node = addedNodes.get(i);
+            if ((node instanceof FSTTerminal) && node.getType().contains("ImportDeclaration")) {
+                importStatements.add(node);
+                addedNodes.remove(i); //to not interfere with the others handlers
+            }
+        }
+
+        return importStatements;
+    }
 
 	/**
 	 * Give two import statements, verifies if there is a compilation type ambiguity error.

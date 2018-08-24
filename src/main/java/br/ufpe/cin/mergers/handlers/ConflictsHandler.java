@@ -3,10 +3,6 @@ package br.ufpe.cin.mergers.handlers;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.printers.Prettyprinter;
-import de.ovgu.cide.fstgen.ast.FSTNode;
-import de.ovgu.cide.fstgen.ast.FSTTerminal;
-
-import java.util.LinkedList;
 
 /**
  * Class responsbile for dealing with language specific conflicts that
@@ -27,26 +23,8 @@ final public class ConflictsHandler {
 	}
 
 	private static void findAndDetectTypeAmbiguityErrors(MergeContext context) {
-		LinkedList<FSTNode> leftImportStatements  = new LinkedList<FSTNode>();
-		LinkedList<FSTNode> rightImportStatements = new LinkedList<FSTNode>();
-
-		//identifying the import statements added by left and right
-		for(int i = 0; i < context.addedLeftNodes.size();i++){
-			FSTNode leftNode = context.addedLeftNodes.get(i);
-			if((leftNode instanceof FSTTerminal) && leftNode.getType().contains("ImportDeclaration")){
-				leftImportStatements.add(leftNode);
-				context.addedLeftNodes.remove(i); //to not interfere with the others handlers
-			}
-		}
-		for(int i = 0; i<context.addedRightNodes.size();i++){
-			FSTNode rightNode = context.addedRightNodes.get(i);
-			if((rightNode instanceof FSTTerminal) && rightNode.getType().contains("ImportDeclaration")){
-				rightImportStatements.add(rightNode);
-				context.addedRightNodes.remove(i);
-			}
-		}
 		//invoking the specific handler for type ambiguity errors
-		TypeAmbiguityErrorHandler.handle(context, leftImportStatements, rightImportStatements);
+		TypeAmbiguityErrorHandler.handle(context);
 	}
 
 	private static void findAndDetectNewElementReferencingEditedOne(MergeContext context) {
