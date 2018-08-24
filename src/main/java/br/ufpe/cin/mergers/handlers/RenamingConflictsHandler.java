@@ -19,9 +19,9 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * @author Guilherme
  *
  */
-public final class RenamingConflictsHandler {
+public final class RenamingConflictsHandler implements ConflictHandler {
 
-	public static void handle(MergeContext context) {
+	public void handle(MergeContext context) {
 		//when both developers rename the same method/constructor
 		handleMutualRenamings(context);
 

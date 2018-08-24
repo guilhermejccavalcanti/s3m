@@ -5,13 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import br.ufpe.cin.mergers.handlers.*;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
 
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
-import br.ufpe.cin.mergers.handlers.ConflictsHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
@@ -31,6 +32,15 @@ public final class SemistructuredMerge {
 
 	static final String MERGE_SEPARATOR = "##FSTMerge##";
 	static final String SEMANTIC_MERGE_MARKER = "~~FSTMerge~~";
+
+	private static final ImmutableList<ConflictHandler> CONFLICT_HANDLERS = ImmutableList.of(
+			new TypeAmbiguityErrorHandler(),
+			new NewElementReferencingEditedOneHandler(),
+			new RenamingConflictsHandler(),
+			new InitializationBlocksHandler(),
+			new DuplicatedDeclarationHandler(),
+			new DeletionsHandler()
+	);
 
 	/**
 	 * Three-way semistructured merge of three given files.
@@ -54,7 +64,10 @@ public final class SemistructuredMerge {
 			context.join(merge(leftTree, baseTree, rightTree));
 
 			// handling special kinds of conflicts
-			ConflictsHandler.handle(context);
+			context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
+			for (ConflictHandler conflictHandler : CONFLICT_HANDLERS) {
+				conflictHandler.handle(context);
+			}
 
 		} catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex) {
 			String message = ExceptionUtils.getCauseMessage(ex);

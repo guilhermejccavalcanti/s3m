@@ -18,14 +18,14 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 /**
  * Behavioral or compilation type ambiguity errors might occur
- * when import statements share members with the same name (e.g <i>import java.util.List</i> and <i>import java.awt.List</i>, 
+ * when import statements share members with the same name (e.g <i>import java.util.List</i> and <i>import java.awt.List</i>,
  * or <i>import java.util.*</i> and <i>import java.awt.*</i>). They also happen when imported members with the same name shared methods with
- * the same name (eg. <i>import java.util.List.add()</i> and <i>import java.awt.List.add()</i>). 
+ * the same name (eg. <i>import java.util.List.add()</i> and <i>import java.awt.List.add()</i>).
  * @author Guilherme
  */
-public final class TypeAmbiguityErrorHandler {
+public final class TypeAmbiguityErrorHandler implements ConflictHandler {
 
-    public static void handle(MergeContext context) {
+    public void handle(MergeContext context) {
         /*
          * using unstructured merge output as guide to ensure that semistructured merge is not worse than unstructured merge.
          * if there is a conflict with the import statements in unstructured merge output, we flag the imports as conflicting
@@ -129,7 +129,7 @@ public final class TypeAmbiguityErrorHandler {
 
 	/**
 	 * Give two import statements, verifies if there is a compilation type ambiguity error.
-	 * @param compiler 
+	 * @param compiler
 	 * @param context
 	 * @param leftImportStatement
 	 * @param rightImportStatement
@@ -147,7 +147,7 @@ public final class TypeAmbiguityErrorHandler {
 						return true;
 					}
 				}
-			} 
+			}
 			else if(problemMessage.contains("ambiguous")){
 				compiler.compilationProblems.remove(i);//avoiding duplications
 				return true;
@@ -174,7 +174,7 @@ public final class TypeAmbiguityErrorHandler {
 	}
 
 	/**
-	 * Creates a merge conflict with the given import statements. 
+	 * Creates a merge conflict with the given import statements.
 	 * It also updates the merged AST with the new merge conflict.
 	 * @param context
 	 * @param leftImportStatement

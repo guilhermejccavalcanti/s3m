@@ -19,9 +19,9 @@ import java.util.stream.Collectors;
  *
  * @author Guilherme
  */
-public class InitializationBlocksHandler {
+public class InitializationBlocksHandler implements ConflictHandler {
 
-    public static void handle(MergeContext context) throws TextualMergeException {
+    public void handle(MergeContext context) throws TextualMergeException {
         List<FSTNode> leftInitlBlocks = findInitializationBlocks(context.addedLeftNodes);
         List<FSTNode> rightInitlBlocks = findInitializationBlocks(context.addedRightNodes);
         List<FSTNode> baseInitlBlocks = findInitializationBlocks(context.deletedBaseNodes);
