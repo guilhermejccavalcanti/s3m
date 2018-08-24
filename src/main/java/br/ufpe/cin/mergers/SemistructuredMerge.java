@@ -33,7 +33,7 @@ public final class SemistructuredMerge {
 	static final String MERGE_SEPARATOR = "##FSTMerge##";
 	static final String SEMANTIC_MERGE_MARKER = "~~FSTMerge~~";
 
-	private static final ImmutableList<ConflictHandler> CONFLICT_HANDLERS = ImmutableList.of(
+	private static final List<ConflictHandler> CONFLICT_HANDLERS = ImmutableList.of(
 			new TypeAmbiguityErrorHandler(),
 			new NewElementReferencingEditedOneHandler(),
 			new RenamingConflictsHandler(),
@@ -53,32 +53,36 @@ public final class SemistructuredMerge {
 	 * @throws TextualMergeException
 	 */
 	public static String merge(File left, File base, File right, MergeContext context)	throws SemistructuredMergeException, TextualMergeException {
-		try {
-			// parsing the files to be merged
-			JParser parser = new JParser();
-			FSTNode leftTree = parser.parse(left);
-			FSTNode baseTree = parser.parse(base);
-			FSTNode rightTree = parser.parse(right);
-
-			// merging
-			context.join(merge(leftTree, baseTree, rightTree));
-
-			// handling special kinds of conflicts
-			context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
-			for (ConflictHandler conflictHandler : CONFLICT_HANDLERS) {
-				conflictHandler.handle(context);
-			}
-
-		} catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex) {
-			String message = ExceptionUtils.getCauseMessage(ex);
-			if(ex instanceof FileNotFoundException) //FileNotFoundException does not support custom messages
-				message = "The merged file was deleted in one version.";
-			throw new SemistructuredMergeException(message, context);
-		}
-
-		// during the parsing process, code indentation is typically lost, so we reindent the code
-		return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
+		return merge(left, base, right, context, CONFLICT_HANDLERS);
 	}
+
+    public static String merge(File left, File base, File right, MergeContext context, List<ConflictHandler> conflictHandlers)	throws SemistructuredMergeException, TextualMergeException {
+        try {
+            // parsing the files to be merged
+            JParser parser = new JParser();
+            FSTNode leftTree = parser.parse(left);
+            FSTNode baseTree = parser.parse(base);
+            FSTNode rightTree = parser.parse(right);
+
+            // merging
+            context.join(merge(leftTree, baseTree, rightTree));
+
+            // handling special kinds of conflicts
+            context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
+            for (ConflictHandler conflictHandler : conflictHandlers) {
+                conflictHandler.handle(context);
+            }
+
+        } catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex) {
+            String message = ExceptionUtils.getCauseMessage(ex);
+            if(ex instanceof FileNotFoundException) //FileNotFoundException does not support custom messages
+                message = "The merged file was deleted in one version.";
+            throw new SemistructuredMergeException(message, context);
+        }
+
+        // during the parsing process, code indentation is typically lost, so we reindent the code
+        return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
+    }
 
 	/**
 	 * Merges the AST representation of previous given java files.
