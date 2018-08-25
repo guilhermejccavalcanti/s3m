@@ -61,6 +61,9 @@ public class JFSTMerge {
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
+	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.",arity = 1)
+	public static boolean keepOldRenamedMethod = false;
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -157,6 +160,7 @@ public class JFSTMerge {
 		}
 
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
+		context.keepOldRenamedMethod = keepOldRenamedMethod;
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {

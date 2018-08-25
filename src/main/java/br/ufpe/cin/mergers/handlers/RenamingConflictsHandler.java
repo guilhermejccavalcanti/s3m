@@ -20,13 +20,12 @@ import java.util.stream.Collectors;
  */
 public final class RenamingConflictsHandler {
     private static final double BODY_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
-    private static final boolean KEEP_BOTH_METHODS = false; //TODO make this a configurable parameter
 
     private enum RenamingSide {LEFT, RIGHT}
 
     public static void handle(MergeContext context) {
         //when both developers rename the same method/constructor
-        if (!KEEP_BOTH_METHODS) handleMutualRenamings(context);
+        if (!context.keepOldRenamedMethod) handleMutualRenamings(context);
 
         //when one of the developers rename a method/constructor
         handleSingleRenamings(context);
@@ -81,7 +80,7 @@ public final class RenamingConflictsHandler {
             MergeConflict mergeConflict = FilesManager.extractMergeConflicts(currentNodeContent).get(0);
             String oppositeSideNodeContent = getMergeConflictContentOfOppositeSide(mergeConflict, renamingSide);
 
-            if (KEEP_BOTH_METHODS) {
+            if (context.keepOldRenamedMethod) {
                 ((FSTTerminal) tuple.getRight()).setBody(oppositeSideNodeContent);
                 continue;
             }
