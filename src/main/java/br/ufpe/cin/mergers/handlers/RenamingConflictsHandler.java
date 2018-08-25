@@ -107,7 +107,7 @@ public final class RenamingConflictsHandler {
 
             if (hasUnstructuredMergeConflict) {
                 String possibleRenamingContent = getMostSimilarContent(similarNodes);
-                generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, oppositeSideNodeContent, false);
+                generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, oppositeSideNodeContent, renamingSide);
             } else { //do not report the renaming conflict
                 ((FSTTerminal) tuple.getRight()).setBody(oppositeSideNodeContent);
             }
@@ -147,8 +147,8 @@ public final class RenamingConflictsHandler {
         return false;
     }
 
-    private static void generateRenamingConflict(MergeContext context, String currentNodeContent, String firstContent, String secondContent, boolean isLeftToRight) {
-        if (!isLeftToRight) {//managing the origin of the changes in the conflict
+    private static void generateRenamingConflict(MergeContext context, String currentNodeContent, String firstContent, String secondContent, RenamingSide renamingSide) {
+        if (renamingSide == RenamingSide.LEFT) {//managing the origin of the changes in the conflict
             String aux = secondContent;
             secondContent = firstContent;
             firstContent = aux;
@@ -165,7 +165,7 @@ public final class RenamingConflictsHandler {
         MergeConflict newConflict = new MergeConflict(firstContent + '\n', secondContent + '\n');
         //second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
         FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.body);
-        if (isLeftToRight) {
+        if (renamingSide == RenamingSide.RIGHT) {
             FilesManager.findAndDeleteASTNode(context.superImposedTree, firstContent);
         } else {
             FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);

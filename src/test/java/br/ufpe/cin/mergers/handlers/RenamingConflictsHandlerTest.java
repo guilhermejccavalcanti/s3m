@@ -32,7 +32,7 @@ public class RenamingConflictsHandlerTest {
     }
 
     @Test
-    public void testMethodRenamingOnLeft_whenOneVersionRenamesMethod_andOtherVersionChangesBodyBelowSignature_shouldReportConflict() {
+    public void testMethodRenamingOnLeft_whenLeftRenamesMethod_andRightChangesBodyBelowSignature_shouldReportConflict() {
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 renamedMethodFile1,
                 baseFile,
@@ -45,7 +45,7 @@ public class RenamingConflictsHandlerTest {
     }
 
     @Test
-    public void testMethodRenamingOnRight_whenOneVersionRenamesMethod_andOtherVersionChangesBodyBelowSignature_shouldReportConflict() {
+    public void testMethodRenamingOnRight_whenRightRenamesMethod_andLeftChangesBodyBelowSignature_shouldReportConflict() {
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 bodyChangedFileBelowSignature,
                 baseFile,
@@ -53,12 +53,12 @@ public class RenamingConflictsHandlerTest {
                 null);
         String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("<<<<<<<MINEpublicvoidm(){inta=123;}=======publicvoidn1(){inta;}>>>>>>>YOURS");
+        assertThat(mergeResult).contains("<<<<<<<MINEpublicvoidn1(){inta;}=======publicvoidm(){inta=123;}>>>>>>>YOURS");
         assertThat(ctx.renamingConflicts).isOne();
     }
 
     @Test
-    public void testMethodRenamingOnLeft_whenOneVersionRenamesMethod_andOtherVersionChangesBodyAtEnd_shouldNotReportConflict() {
+    public void testMethodRenamingOnLeft_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 renamedMethodFile1,
                 baseFile,
@@ -71,7 +71,7 @@ public class RenamingConflictsHandlerTest {
     }
 
     @Test
-    public void testMethodRenamingOnRight_whenOneVersionRenamesMethod_andOtherVersionChangesBodyAtEnd_shouldNotReportConflict() {
+    public void testMethodRenamingOnRight_whenLeftRenamesMethod_andRightnChangesBodyAtEnd_shouldNotReportConflict() {
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 bodyChangedAtEndFile,
                 baseFile,
@@ -84,7 +84,7 @@ public class RenamingConflictsHandlerTest {
     }
 
     @Test
-    public void testMethodRenamingMutual_whenBothVersionRenamesMethodDifferently_shouldReportConflict() {
+    public void testMethodRenamingMutual_whenBothVersionsRenamesMethodDifferently_shouldReportConflict() {
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 renamedMethodFile1,
                 baseFile,
