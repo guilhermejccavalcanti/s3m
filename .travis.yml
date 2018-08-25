@@ -8,7 +8,7 @@ notifications:
   on_success: always
 before_install:
 - ./gradlew clean build -x test
-- cp build/libs/jFSTMerge-all.jar testfiles/shelltests/config/FSTMerge.jar
+- cp build/libs/jFSTMerge-all.jar testfiles/shelltests/config/jFSTMerge.jar
 - bash testfiles/shelltests/config/gitconfiguration.sh
 - git config --global user.email "gjcc@cin.ufpe.br"
 - git config --global user.name "Guilherme Cavalcanti" 
