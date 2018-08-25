@@ -9,6 +9,7 @@ repositories {
 dependencies {
     compile fileTree(dir: 'dependencies', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
+    testCompile 'org.assertj:assertj-core:3.11.0'
 }
 
 // the lines bellow deal with exporting a running jar
