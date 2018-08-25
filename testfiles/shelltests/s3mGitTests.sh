@@ -47,7 +47,7 @@ testSemistructuredMerge()
     git commit -m "right"
 
     git checkout master
-    git merge left
+    git merge left --no-edit
 
     HAS_CONFLICT=$(git merge right | grep -c "CONFLICT")
     assertTrue "[ $HAS_CONFLICT -eq 1 ]"
@@ -76,7 +76,7 @@ testTextualMerge()
     git commit -m "right"
 
     git checkout master
-    git merge left
+    git merge left --no-edit
 
     IS_RECURSIVE=$(git merge right -m "test merge" | grep -c "recursive")
     assertTrue "[ $IS_RECURSIVE -eq 1 ]"
@@ -104,7 +104,7 @@ testWorkingDiff()
     git commit -m "right"
 
     git checkout master
-    git merge left
+    git merge left --no-edit
 
     DIFF_WORKED=$(git diff left right | grep -c "@@ -1,5 +1,9 @@")
     assertTrue "[ $DIFF_WORKED -eq 1 ]"
@@ -137,8 +137,8 @@ testCryptoIssueAvoidance()
     git commit -m "right"
 
     git checkout master
-    git merge left
-    git merge right
+    git merge left --no-edit
+    git merge right --no-edit
 
     cd $HOME/.jfstmerge
     CRYPTO_WORKED=$(ls | grep -c "defect")
@@ -167,8 +167,8 @@ testNodeReordering()
     git commit -m "right"
 
     git checkout master
-    git merge left
-    git merge right
+    git merge left --no-edit
+    git merge right --no-edit
 
     INTERNAL_CLASSES_AND_INTERFACES=$(cat base.java | sed -n 's/.*[class|interface] \([^ \t\n]*\)/\1/p' | tr -d ' ' | tr -d '\n' | tr -d '{')
     assertEquals 'ABCI' "$INTERNAL_CLASSES_AND_INTERFACES"

@@ -40,7 +40,7 @@ testMultipleMerges()
 	git commit -m "right commit"
 
 	git checkout master
-	git merge left
+	git merge left --no-edit
 
 	MERGE_COUNT=$(git merge right | grep -c "finished")
 	assertTrue "[ $MERGE_COUNT -eq 3 ]"
@@ -65,7 +65,7 @@ testCorruptedFilesMerge()
 	git commit -m "right commit"
 	
 	git checkout master
-	git merge left
+	git merge left --no-edit
 
 	MERGE_COUNT=$(git merge right | grep -c "finished")
 	assertTrue "[ $MERGE_COUNT -eq 3 ]"
