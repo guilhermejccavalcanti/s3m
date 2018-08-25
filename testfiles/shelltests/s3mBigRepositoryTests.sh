@@ -4,7 +4,7 @@
 #Tests multiple merges with a great number of files
 testMultipleMerges()
 {
-	cp -r big/ $HOME/
+	cp -r big $HOME/
 	cd $HOME
 	rm -rf bigrepo/
 	mkdir bigrepo
@@ -28,12 +28,13 @@ testMultipleMerges()
 	assertTrue "[ $MERGE_COUNT -eq 3 ]"
 	cd .. 
     rm -rf bigrepo
+    rm -rf big
 }
 
 #Test multiple merges with some corrupted or invalid java files
 testCorruptedFilesMerge()
 {
-    cp -r big/ $HOME/
+    cp -r big $HOME/
 	cd $HOME
 	rm -rf bigrepo/
 	mkdir bigrepo
@@ -57,7 +58,7 @@ testCorruptedFilesMerge()
 	assertTrue "[ $MERGE_COUNT -eq 3 ]"
 	cd .. 
     rm -rf bigrepo
-	
+	rm -rf big
 }
 
 suite_addTest testMultipleMerges
