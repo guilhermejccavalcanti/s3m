@@ -18,10 +18,8 @@ setUp()
 	git init
 }
 
-#Tests multiple merges with a great number of files
-testMultipleMerges()
-{
-
+bigRepositoryMergeProcedure() {
+	
 	cp -r $START_PATH/big/biginitial/* .
 	git add .
 	git commit -m "initial commit"
@@ -40,6 +38,12 @@ testMultipleMerges()
 	git checkout master
 	git merge left --no-edit
 
+}
+
+#Tests multiple merges with a great number of files
+testMultipleMerges()
+{
+	bigRepositoryMergeProcedure
 	MERGE_COUNT=$(git merge right | grep -c "finished")
 	assertTrue "[ $MERGE_COUNT -eq 3 ]"
 	tearDown
@@ -71,5 +75,43 @@ testCorruptedFilesMerge()
 	tearDown
 }
 
+#Test log correctness with big repositories
+testLogCorrectness() {
+
+ 	rm -rf $HOME/.jfstmerge
+	bigRepositoryMergeProcedure
+	git merge right --no-edit
+
+	cd $HOME/.jfstmerge
+	NUM_JAVA_FILES=$(cat jfstmerge.summary | grep -Eo "[0-9]+ JAVA files" | grep -Eo "[0-9]")
+	assertTrue "[ '$NUM_JAVA_FILES' = '3' ]"
+
+	FP_AVOIDED=$(cat jfstmerge.summary | grep -Eo "least [0-9]+ false positive\(s\)" | grep -Eo "[0-9]")
+	assertTrue "[ '$FP_AVOIDED' = '1' ]"
+
+	FN_AVOIDED=$(cat jfstmerge.summary | grep -Eo "[0-9]+ false negative\(s\)" | grep -Eo "[0-9]")
+	assertTrue "[ '$FN_AVOIDED' = '1' ]"
+
+	S3M_NUM_CONFLICTS=$(cat jfstmerge.summary | grep -Eo "reported [0-9]+ conflicts" | grep -Eo "[0-9]")
+	assertTrue "[ '$S3M_NUM_CONFLICTS' = '1' ]"
+
+	S3M_NUM_CONFLICTING_LOC=$(cat jfstmerge.summary | grep -Eo "totaling [0-9]+ conflicting" | grep -Eo "[0-9]")
+	assertTrue "[ '$S3M_NUM_CONFLICTING_LOC' = '2' ]"
+
+	UNSTR_NUM_CONFLICTS=$(cat jfstmerge.summary | grep -Eo "to [0-9]+ conflicts" | grep -Eo "[0-9]")
+	assertTrue "[ '$UNSTR_NUM_CONFLICTS' = '1' ]"
+
+	UNSTR_NUM_CONFLICTING_LOC=$(cat jfstmerge.summary | grep -Eo "and [0-9]+ conflicting" | grep -Eo "[0-9]")
+	assertTrue "[ '$UNSTR_NUM_CONFLICTING_LOC' = '2' ]"
+
+	FP_REDUCTION=$(cat jfstmerge.summary | grep -Eo "A reduction of [0-9]+,[0-9]+%" | grep -Eo "[0-9]+,[0-9]+%")
+	assertTrue "[ '$FP_REDUCTION' = '100,00%' ]"
+
+	FN_REDUCTION=$(cat jfstmerge.summary | grep -Eo "And a reduction of [0-9]+,[0-9]+%" | grep -Eo "[0-9]+,[0-9]+%")
+	assertTrue "[ '$FN_REDUCTION' = '100,00%' ]"
+	
+}
+
 suite_addTest testMultipleMerges
 suite_addTest testCorruptedFilesMerge
+suite_addTest testLogCorrectness
