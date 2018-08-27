@@ -1,9 +1,14 @@
 #! /bin/sh
 # file: s3mBigRepositoryTests.sh
 
-oneTimeSetUp()
+. ./functions/basicFunctions.sh
+
+tearDown()
 {
-	START_PATH=`pwd`
+    rm -rf $HOME/repo
+    rm -rf $HOME/big 
+    rm -rf $HOME/bigrepo
+    cd $START_PATH
 }
 
 setUp()
@@ -11,13 +16,6 @@ setUp()
 	mkdir $HOME/bigrepo
 	cd $HOME/bigrepo
 	git init
-}
-
-tearDown()
-{
-	rm -rf $HOME/big
-	rm -rf $HOME/bigrepo
-	cd $START_PATH
 }
 
 #Tests multiple merges with a great number of files
@@ -44,6 +42,7 @@ testMultipleMerges()
 
 	MERGE_COUNT=$(git merge right | grep -c "finished")
 	assertTrue "[ $MERGE_COUNT -eq 3 ]"
+	tearDown
 }
 
 #Test multiple merges with some corrupted or invalid java files
@@ -69,6 +68,7 @@ testCorruptedFilesMerge()
 
 	MERGE_COUNT=$(git merge right | grep -c "finished")
 	assertTrue "[ $MERGE_COUNT -eq 3 ]"
+	tearDown
 }
 
 suite_addTest testMultipleMerges

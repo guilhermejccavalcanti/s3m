@@ -4,16 +4,17 @@
 
 multipleLanguages() {
    
-    cp -r otherlanguages $HOME/
+    cp -r $START_PATH/otherlanguages $HOME/
     cd $HOME
-    createLogDirectory "otherlanguages"
-    testProcedure "../otherlanguages" "$2"
+    createLogDirectory "$START_PATH/otherlanguages"
+    testProcedure "$START_PATH/otherlanguages" "$2"
+    
     HAS_CONFLICT=$(git merge right | grep -c "CONFLICT")
-    cd ../.jfstmerge
-    CRYPTO_WORKED=$(ls | grep -c "defect")
     assertTrue "[ $HAS_CONFLICT -eq 1 ]"
+    
+    cd $HOME/.jfstmerge
+    CRYPTO_WORKED=$(ls | grep -c "defect")
     assertTrue "[ $CRYPTO_WORKED -eq 0 ]"
-    cd ..
-    rm -rf repo
-    rm -rf .jfstmerge
+
+    rm -rf $HOME/otherlanguages
 }

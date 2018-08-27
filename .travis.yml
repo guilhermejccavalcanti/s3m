@@ -4,7 +4,7 @@ jdk:
 notifications:
  email:
   recipients:
-   - guiganister@gmail.com
+   - joao.coutinho9@gmail.com
   on_success: always
 before_install:
 - gradle check

@@ -1,6 +1,26 @@
 #! /bin/sh
 # file: basicFunctions.sh
 
+oneTimeSetUp()
+{
+    START_PATH=`pwd`
+}
+
+setUp()
+{
+    mkdir $HOME/repo
+    cd $HOME/repo
+    git init
+}
+
+tearDown()
+{
+    rm -rf $HOME/repo
+    rm -rf $HOME/big 
+    rm -rf $HOME/bigrepo
+    cd $START_PATH
+}
+
 testProcedure() {
 
    if [ -z $2 ]
@@ -8,30 +28,31 @@ testProcedure() {
 	 set "$1" "java" 
    fi 
 
-    rm -rf repo
-    mkdir repo
-    cd repo
-    git init
+    tearDown
+    setUp
+
     cp $1/base.$2 .
     git add .
     git commit -m "base"
     git checkout -b left
     rm base.$2
+
     cp $1/left.$2 base.$2
     git add .
     git commit -m "left"
     git checkout master
     git checkout -b right
     rm base.$2
+
     cp $1/right.$2 base.$2
     git add .
     git commit -m "right"
     git checkout master
-    git merge left
+    git merge left --no-edit
 }
 
 createLogDirectory() {
-	rm -rf .jfstmerge/
-	mkdir .jfstmerge/
-	cp $1/jfstmerge.statistics ./.jfstmerge/
+	rm -rf $HOME/.jfstmerge/
+	mkdir $HOME/.jfstmerge/
+	cp $1/jfstmerge.statistics $HOME/.jfstmerge/
 }
