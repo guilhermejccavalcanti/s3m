@@ -7,14 +7,13 @@ notifications:
    - joao.coutinho9@gmail.com
   on_success: always
 before_install:
-- gradle check
-- cd testfiles
-- cd shelltests
-- cd config
-- bash gitconfiguration.sh
-- cd ..
+- ./gradlew clean build -x test
+- cp build/libs/jFSTMerge-all.jar testfiles/shelltests/config/jFSTMerge.jar
+- bash testfiles/shelltests/config/gitconfiguration.sh
 - git config --global user.email "gjcc@cin.ufpe.br"
 - git config --global user.name "Guilherme Cavalcanti" 
 - sudo apt-get install shunit2
 script:
+- ./gradlew test
+- cd testfiles/shelltests/
 - shunit2 s3mTests.sh
