@@ -8,7 +8,9 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import static java.nio.file.StandardCopyOption.*;
 
+import org.junit.AfterClass;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -27,7 +29,18 @@ public class CryptoPerformanceTest {
 			public void write(int b) {}
 		});
 		System.setOut(hideStream);
+		
+		File logpath   = new File(System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator + "jfstmerge.statistics");
+		File logcopyPath = new File(System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator + "jfstmerge.statistics2");
+		Files.move(logpath.toPath(), logcopyPath.toPath(), REPLACE_EXISTING);
     }
+	
+	@AfterClass
+	public static void tearDownAfterClass() throws Exception {
+		File logpath   = new File(System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator + "jfstmerge.statistics");
+		File logcopyPath = new File(System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator + "jfstmerge.statistics2");
+		Files.move(logcopyPath.toPath(), logpath.toPath(), REPLACE_EXISTING);
+	}
 	
 	public long computeMeanTimeOfMergeProcedure() {
 		long totalTime = 0;
@@ -50,14 +63,6 @@ public class CryptoPerformanceTest {
 	
 	@Test
 	public void testPerformance() {
-		
-		File logpath   = new File(System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator + "jfstmerge.statistics");
-		try {
-			Files.deleteIfExists(logpath.toPath());
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
 		
 		JFSTMerge.isCryptographed = false;
 		long noCryptoMean = computeMeanTimeOfMergeProcedure();	
