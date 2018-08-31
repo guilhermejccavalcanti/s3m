@@ -37,7 +37,7 @@ bigRepositoryMergeProcedure() {
 
 	git checkout master
 	git merge left --no-edit
-
+  
 }
 
 #Tests multiple merges with a great number of files
@@ -109,7 +109,6 @@ testLogCorrectness() {
 
 	FN_REDUCTION=$(cat jfstmerge.summary | grep -Eo "And a reduction of [0-9]+.[0-9]+%" | grep -Eo "[0-9]+.[0-9]+%")
 	assertTrue "[ '$FN_REDUCTION' = '100.00%' ]"
-	
 }
 
 suite_addTest testMultipleMerges
