@@ -9,6 +9,7 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -91,6 +92,7 @@ public final class RenamingConflictsHandler {
             //1. getting similar nodes to fulfill renaming conflicts
             for (FSTNode newNode : addedNodes) { // a possible renamed node is seem as "new" node due to superimposition
                 if (!isMethodOrConstructorNode(newNode)) continue;
+                if (!haveSameParent(newNode, tuple.getRight())) continue;
 
                 String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
                 double bodySimilarity = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
@@ -137,12 +139,10 @@ public final class RenamingConflictsHandler {
     }
 
     private static String getMostSimilarContent(List<Pair<Double, String>> similarNodes) {
-        if (!similarNodes.isEmpty()) {
-            similarNodes.sort((n1, n2) -> n1.getLeft().compareTo(n2.getLeft()));
-            return (similarNodes.get(similarNodes.size() - 1)).getRight();// the top of the list
-        } else {
-            return "";
-        }
+        return similarNodes.stream()
+                .max(Comparator.comparing(Pair::getLeft))
+                .map(Pair::getRight)
+                .orElse("");
     }
 
     private static boolean nodeHasConflict(FSTNode node) {
@@ -161,6 +161,10 @@ public final class RenamingConflictsHandler {
         }
 
         return false;
+    }
+
+    private static boolean haveSameParent(FSTNode left, FSTNode right) {
+        return left.getParent().equals(right.getParent());
     }
 
     private static void generateRenamingConflict(MergeContext context, String currentNodeContent, String firstContent, String secondContent, RenamingSide renamingSide) {
