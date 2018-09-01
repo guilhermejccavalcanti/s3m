@@ -12,7 +12,7 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
 /**
  * Encapsulates pertinent information of the merging process. A context
  * is also necessary to handle specific conflicts that simple
- * superimposition of trees is not able to address. 
+ * superimposition of trees is not able to address.
  * @author Guilherme
  */
 public class MergeContext {
@@ -20,24 +20,24 @@ public class MergeContext {
 	File right;
 	File left;
 	String outputFilePath;
-	
+
 	String baseContent = "";
 	String leftContent = "";
 	String rightContent= "";
-	
+
 	public List<FSTNode> addedLeftNodes = new ArrayList<FSTNode>();
 	public List<FSTNode> addedRightNodes= new ArrayList<FSTNode>();
-	
+
 	public List<FSTNode> deletedBaseNodes = new ArrayList<FSTNode>();
-	public List<FSTNode> nodesDeletedByLeft = new ArrayList<FSTNode>(); 
+	public List<FSTNode> nodesDeletedByLeft = new ArrayList<FSTNode>();
 	public List<FSTNode> nodesDeletedByRight= new ArrayList<FSTNode>();
 
 	public List<Pair<String,FSTNode>> possibleRenamedLeftNodes = new ArrayList<Pair<String,FSTNode>>();
 	public List<Pair<String,FSTNode>> possibleRenamedRightNodes= new ArrayList<Pair<String,FSTNode>>();
 
-	public List<FSTNode> editedLeftNodes = new ArrayList<FSTNode>(); 
+	public List<FSTNode> editedLeftNodes = new ArrayList<FSTNode>();
 	public List<FSTNode> editedRightNodes= new ArrayList<FSTNode>();
-	
+
 
 	public FSTNode leftTree;
 	public FSTNode baseTree;
@@ -45,7 +45,7 @@ public class MergeContext {
 	public FSTNode superImposedTree;
 	public String semistructuredOutput;
 	public String unstructuredOutput;
-	
+
 	//statistics
 	public int newElementReferencingEditedOneConflicts = 0;
 	public int renamingConflicts = 0;
@@ -65,8 +65,8 @@ public class MergeContext {
 	public int equalConflicts     = 0;
 
 	//configurations
-	public boolean keepOldRenamedMethod = false;
-	
+	public RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
+
 	public MergeContext(){
 	}
 
@@ -75,7 +75,7 @@ public class MergeContext {
 		this.base = base;
 		this.right= right;
 		this.outputFilePath = outputFilePath;
-		
+
 		this.leftContent = FilesManager.readFileContent(this.left);
 		this.baseContent = FilesManager.readFileContent(this.base);
 		this.rightContent= FilesManager.readFileContent(this.right);
@@ -88,15 +88,15 @@ public class MergeContext {
 	public MergeContext join(MergeContext otherContext){
 		this.addedLeftNodes. addAll(otherContext.addedLeftNodes);
 		this.addedRightNodes.addAll(otherContext.addedRightNodes);
-		
+
 		this.editedLeftNodes. addAll(otherContext.editedLeftNodes);
 		this.editedRightNodes.addAll(otherContext.editedRightNodes);
-		
+
 		this.deletedBaseNodes. addAll(otherContext.deletedBaseNodes);
 		this.nodesDeletedByLeft. addAll(otherContext.nodesDeletedByLeft);
 		this.nodesDeletedByRight. addAll(otherContext.nodesDeletedByRight);
 
-		
+
 		this.possibleRenamedLeftNodes. addAll(otherContext.possibleRenamedLeftNodes);
 		this.possibleRenamedRightNodes.addAll(otherContext.possibleRenamedRightNodes);
 
@@ -110,10 +110,10 @@ public class MergeContext {
 		this.typeAmbiguityErrorsConflicts	+=	otherContext.typeAmbiguityErrorsConflicts;
 		this.deletionConflicts	+=	otherContext.deletionConflicts;
 		this.initializationBlocksConflicts	+= otherContext.initializationBlocksConflicts;*/
-		
+
 		return this;
 	}
-	
+
 	public File getBase() {
 		return base;
 	}

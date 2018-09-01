@@ -18,9 +18,8 @@ import br.ufpe.cin.files.FilesTuple;
 import br.ufpe.cin.logging.LoggerFactory;
 import br.ufpe.cin.mergers.SemistructuredMerge;
 import br.ufpe.cin.mergers.TextualMerge;
-import br.ufpe.cin.mergers.util.MergeConflict;
-import br.ufpe.cin.mergers.util.MergeContext;
-import br.ufpe.cin.mergers.util.MergeScenario;
+import br.ufpe.cin.mergers.util.*;
+import br.ufpe.cin.mergers.util.converters.RenamingStrategyConverter;
 import br.ufpe.cin.printers.Prettyprinter;
 import br.ufpe.cin.statistics.Statistics;
 
@@ -57,17 +56,17 @@ public class JFSTMerge {
 
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).",arity = 1)
 	public static boolean isCryptographed = true;
-	
+
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
-	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.",arity = 1)
-	public boolean keepOldRenamedMethod = false;
+	@Parameter(names = "--renaming", description = "Parameter to enable keeping both methods on renaming conflicts.", arity = 1, converter = RenamingStrategyConverter.class)
+	public RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
 
 	/**
-	 * Merges merge scenarios, indicated by .revisions files. 
+	 * Merges merge scenarios, indicated by .revisions files.
 	 * This is mainly used for evaluation purposes.
-	 * A .revisions file contains the directories of the revisions to merge in top-down order: 
+	 * A .revisions file contains the directories of the revisions to merge in top-down order:
 	 * first revision, base revision, second revision (three-way merge).
 	 * @param revisionsPath file path
 	 */
@@ -147,9 +146,9 @@ public class JFSTMerge {
 
 	/**
 	 * Three-way semistructured merge of the given .java files.
-	 * @param left (mine) version of the file, or <b>null</b> in case of intentional empty file. 
-	 * @param base (older) version of the file, or <b>null</b> in case of intentional empty file. 
-	 * @param right (yours) version of the file, or <b>null</b> in case of intentional empty file. 
+	 * @param left (mine) version of the file, or <b>null</b> in case of intentional empty file.
+	 * @param base (older) version of the file, or <b>null</b> in case of intentional empty file.
+	 * @param right (yours) version of the file, or <b>null</b> in case of intentional empty file.
 	 * @param outputFilePath of the merged file. Can be <b>null</b>, in this case, the output will only be printed in the console.
 	 * @return context with relevant information gathered during the merging process.
 	 */
@@ -160,7 +159,7 @@ public class JFSTMerge {
 		}
 
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
-		context.keepOldRenamedMethod = keepOldRenamedMethod;
+		context.renamingStrategy = renamingStrategy;
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {

@@ -3,6 +3,7 @@ package br.ufpe.cin.mergers.handlers;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.RenamingStrategy;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 import org.apache.commons.lang3.tuple.Pair;
@@ -19,14 +20,13 @@ import java.util.stream.Collectors;
  * @author Guilherme
  */
 public final class RenamingConflictsHandler {
-    private static final double BODY_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
-    private static final boolean MERGE_NEW_SIGNATURE_AND_NEW_BODY = false; //TODO make this a configurable parameter
+    private static final double BODY_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate cmparison, or decrease for a more relaxed one.
 
     private enum RenamingSide {LEFT, RIGHT}
 
     public static void handle(MergeContext context) {
         //when both developers rename the same method/constructor
-        if (!context.keepOldRenamedMethod) handleMutualRenamings(context);
+        handleMutualRenamings(context);
 
         //when one of the developers rename a method/constructor
         handleSingleRenamings(context);
@@ -34,6 +34,7 @@ public final class RenamingConflictsHandler {
 
     private static void handleMutualRenamings(MergeContext context) {
         if (context.addedLeftNodes.isEmpty() || context.addedRightNodes.isEmpty()) return;
+        if (context.renamingStrategy == RenamingStrategy.KEEP_BOTH_METHODS) return;
 
         List<FSTNode> leftNewMethodsOrConstructors = context.addedLeftNodes.stream().filter(m -> isMethodOrConstructorNode(m)).collect(Collectors.toList());
         List<FSTNode> rightNewMethodsOrConstructors = context.addedRightNodes.stream().filter(m -> isMethodOrConstructorNode(m)).collect(Collectors.toList());
@@ -81,7 +82,7 @@ public final class RenamingConflictsHandler {
             MergeConflict mergeConflict = FilesManager.extractMergeConflicts(currentNodeContent).get(0);
             String oppositeSideNodeContent = getMergeConflictContentOfOppositeSide(mergeConflict, renamingSide);
 
-            if (context.keepOldRenamedMethod) {
+            if (context.renamingStrategy == RenamingStrategy.KEEP_BOTH_METHODS) {
                 ((FSTTerminal) tuple.getRight()).setBody(oppositeSideNodeContent);
                 continue;
             }
@@ -105,7 +106,7 @@ public final class RenamingConflictsHandler {
                     .map(conflict -> FilesManager.getStringContentIntoSingleLineNoSpacing(conflict.body))
                     .anyMatch(conflict -> conflict.contains(signature));
 
-            if (MERGE_NEW_SIGNATURE_AND_NEW_BODY && !similarNodes.isEmpty()) {
+            if (context.renamingStrategy == RenamingStrategy.MERGE_METHODS && !similarNodes.isEmpty()) {
                 String possibleRenamingContent = getMostSimilarContent(similarNodes);
                 String newSignature = getSignature(possibleRenamingContent);
                 String newBody = removeSignature(oppositeSideNodeContent);
