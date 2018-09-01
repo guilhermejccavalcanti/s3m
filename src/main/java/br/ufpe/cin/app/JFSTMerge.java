@@ -62,7 +62,7 @@ public class JFSTMerge {
 	public static boolean logFiles = true;
 
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.",arity = 1)
-	public static boolean keepOldRenamedMethod = false;
+	public boolean keepOldRenamedMethod = false;
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
