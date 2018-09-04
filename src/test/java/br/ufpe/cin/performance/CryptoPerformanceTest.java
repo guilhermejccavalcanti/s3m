@@ -18,11 +18,18 @@ import br.ufpe.cin.app.JFSTMerge;
 
 public class CryptoPerformanceTest {
 	
-	private static final int NUM_ITERATIONS = 5;
+	private static final int NUM_ITERATIONS = 6;
+	private static final int NUM_TESTS = 5;
 	private static final double ACCEPTED_MARGIN = 0.3;
 	
 	public static File getLogPath(String file) {
 		return new File(System.getProperty("user.home") + File.separator + ".jfstmerge" + File.separator + file);
+	}
+	
+	public static void renameFile(String file1, String file2) throws Exception {
+		File logPath   = getLogPath(file1);
+		File logCopyPath = getLogPath(file2);
+		Files.move(logPath.toPath(), logCopyPath.toPath(), REPLACE_EXISTING);
 	}
 	
 	@BeforeClass
@@ -35,47 +42,49 @@ public class CryptoPerformanceTest {
 		});
 		System.setOut(hideStream);
 		
-		File logPath   = getLogPath("jfstmerge.statistics");
-		File logCopyPath = getLogPath("jfstmerge.statistics2");
-		Files.move(logPath.toPath(), logCopyPath.toPath(), REPLACE_EXISTING);
+		renameFile("jfstmerge.statistics", "jfstmerge.statistics2");
     }
 	
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		File logPath   = getLogPath("jfstmerge.statistics");
-		File logCopyPath = getLogPath("jfstmerge.statistics2");
-		Files.move(logCopyPath.toPath(), logPath.toPath(), REPLACE_EXISTING);
+		renameFile("jfstmerge.statistics2", "jfstmerge.statistics");
 	}
 	
-	public long computeMeanTimeOfMergeProcedure() {
+	public long computeMeanTimeOfMergeProcedure(int testCase) {
 		long totalTime = 0;
 		for(int i = 0; i < NUM_ITERATIONS; i++) {
 			long initialTime = System.currentTimeMillis();
 					
 			new JFSTMerge().mergeFiles(
-					new File("testfiles/cryptoperformance/test"+i+"/left.java"), 
-					new File("testfiles/cryptoperformance/test"+i+"/base.java"), 
-					new File("testfiles/cryptoperformance/test"+i+"/right.java"),
+					new File("testfiles/cryptoperformance/test" + testCase + "/left.java"), 
+					new File("testfiles/cryptoperformance/test" + testCase + "/base.java"), 
+					new File("testfiles/cryptoperformance/test" + testCase + "/right.java"),
 					null);
 			
 			long finalTime = System.currentTimeMillis();
-			
 			totalTime += finalTime - initialTime;
+			
 		}
 		
 		return totalTime / NUM_ITERATIONS;
 	}
-	
+		
 	@Test
-	public void testPerformance() {
+	public void testPerformance() throws Exception {
+			
+		for(int i = 0; i < NUM_TESTS; i++) {
+			
+			JFSTMerge.isCryptographed = false;
+			long noCryptoMean = computeMeanTimeOfMergeProcedure(i);	
 		
-		JFSTMerge.isCryptographed = false;
-		long noCryptoMean = computeMeanTimeOfMergeProcedure();	
-	
-		JFSTMerge.isCryptographed = true;
-		long cryptoMean = computeMeanTimeOfMergeProcedure();
-		
-		assertTrue((double) (cryptoMean - noCryptoMean) <= ACCEPTED_MARGIN * noCryptoMean);
+			JFSTMerge.isCryptographed = true;
+			long cryptoMean = computeMeanTimeOfMergeProcedure(i);
+			
+			assertTrue((double) (cryptoMean - noCryptoMean) <= ACCEPTED_MARGIN * noCryptoMean);
+			
+			// Renaming statistics file to not block next non-cryptographed merge, simplifying operations.
+			renameFile("jfstmerge.statistics", "jfstmerge.statistics2");
+		}
 		
 	}
 	
