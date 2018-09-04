@@ -3,9 +3,10 @@
 
 . ./functions/basicFunctions.sh
 
-suite() {
-	. ./s3mMultipleEncodingTests.sh
-	. ./s3mMultipleLanguagesTests.sh
-	. ./s3mGitTests.sh
-	. ./s3mBigRepositoryTests.sh
+suite() 
+{
+    . ./s3mMultipleEncodingTests.sh
+    . ./s3mMultipleLanguagesTests.sh
+    . ./s3mGitTests.sh
+    . ./s3mBigRepositoryTests.sh
 }

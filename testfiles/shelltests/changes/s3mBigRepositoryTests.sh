@@ -5,6 +5,7 @@
 
 tearDownBig()
 {
+    rm -rf $HOME/repo
     rm -rf $HOME/big 
     rm -rf $HOME/bigrepo
     cd $START_PATH
