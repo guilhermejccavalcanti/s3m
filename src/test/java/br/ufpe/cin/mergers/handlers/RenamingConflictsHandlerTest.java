@@ -33,7 +33,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_whenLeftRenamesMethod_andRightChangesBodyBelowSignature_shouldReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = false;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = false;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 renamedMethodFile1,
@@ -48,7 +48,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_whenRightRenamesMethod_andLeftChangesBodyBelowSignature_shouldReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = false;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = false;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 bodyChangedFileBelowSignature,
@@ -63,7 +63,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = false;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = false;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 renamedMethodFile1,
@@ -78,7 +78,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_whenLeftRenamesMethod_andRightnChangesBodyAtEnd_shouldNotReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = false;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = false;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 bodyChangedAtEndFile,
@@ -93,7 +93,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMutualMethodRenaming_whenBothVersionsRenamesMethodDifferently_shouldReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = false;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = false;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 renamedMethodFile1,
@@ -108,7 +108,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_givenKeepBothMethodsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyBelowSignature_shouldReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = true;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = true;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 renamedMethodFile1,
@@ -123,7 +123,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_givenKeepBothMethodsIsEnabled_whenRightRenamesMethod_andLeftChangesBodyBelowSignature_shouldNotReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = true;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = true;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 bodyChangedFileBelowSignature,
@@ -138,7 +138,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_givenKeepBothMethodsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = true;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = true;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 renamedMethodFile1,
@@ -153,7 +153,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_givenKeepBothMethodsIsEnabled_whenLeftRenamesMethod_andRightnChangesBodyAtEnd_shouldNotReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = true;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = true;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 bodyChangedAtEndFile,
@@ -168,7 +168,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMutualMethodRenaming_givenKeepBothMethodsIsEnabled_whenBothVersionsRenameMethodDifferently_shouldNotReportConflict() {
-        JFSTMerge.keepOldRenamedMethod = true;
+        JFSTMerge.keepBothVersionsOfRenamedMethod = true;
 
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 renamedMethodFile1,

@@ -25,7 +25,7 @@ public final class RenamingConflictsHandler {
 
     public static void handle(MergeContext context) {
         //when both developers rename the same method/constructor
-        if (!context.keepOldRenamedMethod) handleMutualRenamings(context);
+        if (!context.keepBothVersionsOfRenamedMethod) handleMutualRenamings(context);
 
         //when one of the developers rename a method/constructor
         handleSingleRenamings(context);
@@ -80,7 +80,7 @@ public final class RenamingConflictsHandler {
             MergeConflict mergeConflict = FilesManager.extractMergeConflicts(currentNodeContent).get(0);
             String oppositeSideNodeContent = getMergeConflictContentOfOppositeSide(mergeConflict, renamingSide);
 
-            if (context.keepOldRenamedMethod) {
+            if (context.keepBothVersionsOfRenamedMethod) {
                 ((FSTTerminal) tuple.getRight()).setBody(oppositeSideNodeContent);
                 continue;
             }

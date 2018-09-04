@@ -65,7 +65,7 @@ public class MergeContext {
 	public int equalConflicts     = 0;
 
 	//configurations
-	public boolean keepOldRenamedMethod = false;
+	public boolean keepBothVersionsOfRenamedMethod = false;
 	
 	public MergeContext(){
 	}
