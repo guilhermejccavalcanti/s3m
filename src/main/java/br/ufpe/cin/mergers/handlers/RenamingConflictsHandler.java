@@ -57,7 +57,7 @@ public final class RenamingConflictsHandler {
     }
 
     private static String removeSignature(String string) {
-        string = string.replaceFirst("^.*(?=(\\{))", "");
+        string = string.replaceFirst("^.[^{]*(?=(\\{))", "");
         return string;
     }
 
