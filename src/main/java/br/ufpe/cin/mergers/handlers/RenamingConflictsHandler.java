@@ -183,82 +183,10 @@ public final class RenamingConflictsHandler {
         FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
     }
 
-    /*	pure similarity-based handler (it works)
-
-     public static void handle(MergeContext context) {
-        //possible renamings or deletions in left
-        if(!context.possibleRenamedLeftNodes.isEmpty() || !context.possibleRenamedRightNodes.isEmpty()){
-            for(Pair<String,FSTNode> tuple: context.possibleRenamedLeftNodes){
-                List<Pair<Double,String>> similarNodes = new ArrayList<Pair<Double,String>>(); //list of possible nodes renaming a previous one
-                if(nodeHasConflict(tuple.getRight())){
-                    String baseContent = tuple.getLeft();
-                    String currentNodeContent= ((FSTTerminal) tuple.getRight()).getBody(); //node content with conflict
-                    String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).right;
-                    for(FSTNode newNode : context.addedLeftNodes){ // a possible renamed node is seem as "new" node due to superimposition
-                        if(isMethodOrConstructorNode(newNode)){
-                            String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
-                            double similarity  	  		   = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
-                            if(similarity >= 0.7){ //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
-                                Pair<Double,String> tp = Pair.of(similarity, possibleRenamingContent);
-                                similarNodes.add(tp);
-                            }
-                        }
-                    }
-                    if(similarNodes.isEmpty()){//there is no similar node. it is a possible deletion, so remove the conflict keeping the edited version of the content
-                        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent,editedNodeContent);
-
-                        //statistics
-                        context.deletionConflicts++;
-                    } else {
-                        String possibleRenamingContent = getMostSimilarContent(similarNodes);
-                        generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, editedNodeContent,true);
-                    }
-                }
-            }
-
-            //possible renamings or deletions in right
-            for(Pair<String,FSTNode> tuple: context.possibleRenamedRightNodes){
-                List<Pair<Double,String>> similarNodes = new ArrayList<Pair<Double,String>>(); //list of possible nodes renaming a previous one
-                if(nodeHasConflict(tuple.getRight())){
-                    String baseContent = tuple.getLeft();
-                    String currentNodeContent= ((FSTTerminal) tuple.getRight()).getBody(); //node content with conflict
-                    String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).left;
-                    for(FSTNode newNode : context.addedRightNodes){ // a possible renamed node is seem as "new" node due to superimposition
-                        if(isMethodOrConstructorNode(newNode)){
-                            String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
-                            double similarity  	  		   = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
-                            if(similarity >= 0.7){ //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
-                                Pair<Double,String> tp = Pair.of(similarity, possibleRenamingContent);
-                                similarNodes.add(tp);
-                            }
-                        }
-                    }
-                    if(similarNodes.isEmpty()){//there is no similar node. it is a possible deletion, so remove the conflict keeping the edited version of the content
-                        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent,editedNodeContent);
-
-                        //statistics
-                        context.deletionConflicts++;
-                    } else {
-                        String possibleRenamingContent = getMostSimilarContent(similarNodes);
-                        generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, editedNodeContent,false);
-                    }
-                }
-            }
-        }
-    }
-     */
-
     private static String getMergeConflictContentOfOppositeSide(MergeConflict mergeConflict, RenamingSide side) {
         if (side == RenamingSide.LEFT) return mergeConflict.right;
         if (side == RenamingSide.RIGHT) return mergeConflict.left;
 
         return null;
-    }
-
-    public static void main(String[] args) {
-        String s = "intsum(inta,intb){returna+b;}";
-        removeSignature(s);
-        System.out.println(s);
-
     }
 }
