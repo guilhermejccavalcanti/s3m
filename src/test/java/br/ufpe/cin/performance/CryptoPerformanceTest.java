@@ -1,4 +1,4 @@
-package br.ufpe.cin.tests;
+package test.java.br.ufpe.cin.performance;
 
 import static org.junit.Assert.assertTrue;
 
@@ -19,6 +19,11 @@ import br.ufpe.cin.app.JFSTMerge;
 public class CryptoPerformanceTest {
 	
 	private static final int NUM_ITERATIONS = 5;
+	private static final double ACCEPTED_MARGIN = 0.3;
+	
+	public static File getLogPath(String file) {
+		return new File(System.getProperty("user.home") + File.separator + ".jfstmerge" + File.separator + file);
+	}
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
@@ -30,16 +35,16 @@ public class CryptoPerformanceTest {
 		});
 		System.setOut(hideStream);
 		
-		File logpath   = new File(System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator + "jfstmerge.statistics");
-		File logcopyPath = new File(System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator + "jfstmerge.statistics2");
-		Files.move(logpath.toPath(), logcopyPath.toPath(), REPLACE_EXISTING);
+		File logPath   = getLogPath("jfstmerge.statistics");
+		File logCopyPath = getLogPath("jfstmerge.statistics2");
+		Files.move(logPath.toPath(), logCopyPath.toPath(), REPLACE_EXISTING);
     }
 	
 	@AfterClass
 	public static void tearDownAfterClass() throws Exception {
-		File logpath   = new File(System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator + "jfstmerge.statistics");
-		File logcopyPath = new File(System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator + "jfstmerge.statistics2");
-		Files.move(logcopyPath.toPath(), logpath.toPath(), REPLACE_EXISTING);
+		File logPath   = getLogPath("jfstmerge.statistics");
+		File logCopyPath = getLogPath("jfstmerge.statistics2");
+		Files.move(logCopyPath.toPath(), logPath.toPath(), REPLACE_EXISTING);
 	}
 	
 	public long computeMeanTimeOfMergeProcedure() {
@@ -70,7 +75,7 @@ public class CryptoPerformanceTest {
 		JFSTMerge.isCryptographed = true;
 		long cryptoMean = computeMeanTimeOfMergeProcedure();
 		
-		assertTrue(cryptoMean <= 1.3 * noCryptoMean);
+		assertTrue((double) (cryptoMean - noCryptoMean) <= ACCEPTED_MARGIN * noCryptoMean);
 		
 	}
 	
