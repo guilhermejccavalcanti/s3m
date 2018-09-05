@@ -1,5 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
@@ -25,7 +26,7 @@ public final class RenamingConflictsHandler {
 
     public static void handle(MergeContext context) {
         //when both developers rename the same method/constructor
-        if (!context.keepBothVersionsOfRenamedMethod) handleMutualRenamings(context);
+        if (!JFSTMerge.keepBothVersionsOfRenamedMethod) handleMutualRenamings(context);
 
         //when one of the developers rename a method/constructor
         handleSingleRenamings(context);
@@ -80,7 +81,7 @@ public final class RenamingConflictsHandler {
             MergeConflict mergeConflict = FilesManager.extractMergeConflicts(currentNodeContent).get(0);
             String oppositeSideNodeContent = getMergeConflictContentOfOppositeSide(mergeConflict, renamingSide);
 
-            if (context.keepBothVersionsOfRenamedMethod) {
+            if (JFSTMerge.keepBothVersionsOfRenamedMethod) {
                 ((FSTTerminal) tuple.getRight()).setBody(oppositeSideNodeContent);
                 continue;
             }
