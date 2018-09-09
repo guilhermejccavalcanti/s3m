@@ -61,6 +61,8 @@ public class JFSTMerge {
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
+
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -152,6 +154,8 @@ public class JFSTMerge {
 	 */
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath) {
 		FilesManager.validateFiles(left, base, right);
+		FilesManager.detectEncoding(left, base, right);
+		
 		if (!isGit) {
 			System.out.println("MERGING FILES: \n" + ((left != null) ? left.getAbsolutePath() : "<empty left>") + "\n" + ((base != null) ? base.getAbsolutePath() : "<empty base>") + "\n" + ((right != null) ? right.getAbsolutePath() : "<empty right>"));
 		}
