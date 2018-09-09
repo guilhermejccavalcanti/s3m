@@ -23,7 +23,7 @@ public class RenamingConflictsHandlerTest {
     private JFSTMerge jfstMerge = new JFSTMerge();
 
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() {
         //hidding sysout output
         @SuppressWarnings("unused")
         PrintStream originalStream = System.out;
@@ -36,6 +36,8 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_whenLeftRenamesMethod_andRightChangesBodyBelowSignature_shouldReportConflict() {
+        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
+
         MergeContext ctx = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
@@ -49,6 +51,8 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_whenRightRenamesMethod_andLeftChangesBodyBelowSignature_shouldReportConflict() {
+        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
+
         MergeContext ctx = jfstMerge.mergeFiles(
                 bodyChangedFileBelowSignature,
                 baseFile,
@@ -62,6 +66,8 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
+        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
+
         MergeContext ctx = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
@@ -75,6 +81,8 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
+        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
+
         MergeContext ctx = jfstMerge.mergeFiles(
                 bodyChangedAtEndFile,
                 baseFile,
@@ -88,6 +96,8 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMutualMethodRenaming_whenBothVersionsRenamesMethodDifferently_shouldReportConflict() {
+        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
+
         MergeContext ctx = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
@@ -101,7 +111,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_givenKeepBothMethodsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyBelowSignature_shouldReportConflict() {
-        jfstMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 renamedMethodFile1,
@@ -116,7 +126,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_givenKeepBothMethodsIsEnabled_whenRightRenamesMethod_andLeftChangesBodyBelowSignature_shouldNotReportConflict() {
-        jfstMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 bodyChangedFileBelowSignature,
@@ -131,7 +141,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_givenKeepBothMethodsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
-        jfstMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 renamedMethodFile1,
@@ -146,7 +156,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_givenKeepBothMethodsIsEnabled_whenLeftRenamesMethod_andRightnChangesBodyAtEnd_shouldNotReportConflict() {
-        jfstMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 bodyChangedAtEndFile,
@@ -161,7 +171,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMutualMethodRenaming_givenKeepBothMethodsIsEnabled_whenBothVersionsRenameMethodDifferently_shouldNotReportConflict() {
-        jfstMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 renamedMethodFile1,
@@ -176,7 +186,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_givenMergeRenamingsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyBelowSignature_shouldMergeChanges() {
-        jfstMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 renamedMethodFile1,
@@ -193,7 +203,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_givenMergeRenamingsIsEnabled_whenRightRenamesMethod_andLeftChangesBodyBelowSignature_shouldMergeChanges() {
-        jfstMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 bodyChangedFileBelowSignature,
@@ -208,7 +218,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnLeft_givenMergeRenamingsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldMergeChangess() {
-        jfstMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 renamedMethodFile1,
@@ -223,7 +233,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMethodRenamingOnRight_givenMergeRenamingsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldMergeChanges() {
-        jfstMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 bodyChangedAtEndFile,
@@ -238,7 +248,7 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testMutualMethodRenaming_givenMergeRenamingsIsEnabled_whenBothVersionsRenameMethodDifferently_shouldMergeChanges() {
-        jfstMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
         MergeContext ctx = jfstMerge.mergeFiles(
                 renamedMethodFile1,

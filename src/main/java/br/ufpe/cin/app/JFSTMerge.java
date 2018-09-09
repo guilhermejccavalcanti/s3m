@@ -1,5 +1,24 @@
 package br.ufpe.cin.app;
 
+import br.ufpe.cin.exceptions.PrintException;
+import br.ufpe.cin.exceptions.SemistructuredMergeException;
+import br.ufpe.cin.exceptions.TextualMergeException;
+import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.files.FilesTuple;
+import br.ufpe.cin.logging.LoggerFactory;
+import br.ufpe.cin.mergers.SemistructuredMerge;
+import br.ufpe.cin.mergers.TextualMerge;
+import br.ufpe.cin.mergers.util.MergeConflict;
+import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.MergeScenario;
+import br.ufpe.cin.mergers.util.RenamingStrategy;
+import br.ufpe.cin.mergers.util.converters.RenamingStrategyConverter;
+import br.ufpe.cin.printers.Prettyprinter;
+import br.ufpe.cin.statistics.Statistics;
+import com.beust.jcommander.JCommander;
+import com.beust.jcommander.Parameter;
+import com.beust.jcommander.ParameterException;
+
 import java.io.BufferedReader;
 import java.io.File;
 import java.nio.file.Files;
@@ -9,23 +28,6 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
-
-import br.ufpe.cin.exceptions.PrintException;
-import br.ufpe.cin.exceptions.SemistructuredMergeException;
-import br.ufpe.cin.exceptions.TextualMergeException;
-import br.ufpe.cin.files.FilesManager;
-import br.ufpe.cin.files.FilesTuple;
-import br.ufpe.cin.logging.LoggerFactory;
-import br.ufpe.cin.mergers.SemistructuredMerge;
-import br.ufpe.cin.mergers.TextualMerge;
-import br.ufpe.cin.mergers.util.*;
-import br.ufpe.cin.mergers.util.converters.RenamingStrategyConverter;
-import br.ufpe.cin.printers.Prettyprinter;
-import br.ufpe.cin.statistics.Statistics;
-
-import com.beust.jcommander.JCommander;
-import com.beust.jcommander.Parameter;
-import com.beust.jcommander.ParameterException;
 
 /**
  * Main class, responsible for performing <i>semistructured</i> merge in java files.
@@ -61,7 +63,7 @@ public class JFSTMerge {
 	public static boolean logFiles = true;
 
 	@Parameter(names = "--renaming", description = "Parameter to enable keeping both methods on renaming conflicts.", arity = 1, converter = RenamingStrategyConverter.class)
-	public RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
+	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files.
@@ -159,7 +161,6 @@ public class JFSTMerge {
 		}
 
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
-		context.renamingStrategy = renamingStrategy;
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {

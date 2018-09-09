@@ -1,5 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
@@ -21,7 +22,7 @@ import java.util.stream.Collectors;
  * @author Guilherme
  */
 public final class RenamingConflictsHandler {
-    private static final double BODY_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate cmparison, or decrease for a more relaxed one.
+    private static final double BODY_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
 
     private enum RenamingSide {LEFT, RIGHT}
 
@@ -35,7 +36,7 @@ public final class RenamingConflictsHandler {
 
     private static void handleMutualRenamings(MergeContext context) {
         if (context.addedLeftNodes.isEmpty() || context.addedRightNodes.isEmpty()) return;
-        if (context.renamingStrategy == RenamingStrategy.KEEP_BOTH_METHODS) return;
+        if (JFSTMerge.renamingStrategy == RenamingStrategy.KEEP_BOTH_METHODS) return;
 
         List<FSTNode> leftNewMethodsOrConstructors = context.addedLeftNodes.stream().filter(m -> isMethodOrConstructorNode(m)).collect(Collectors.toList());
         List<FSTNode> rightNewMethodsOrConstructors = context.addedRightNodes.stream().filter(m -> isMethodOrConstructorNode(m)).collect(Collectors.toList());
@@ -60,7 +61,7 @@ public final class RenamingConflictsHandler {
     }
 
     private static String removeSignature(String string) {
-        string = string.replaceFirst("^.*(?=(\\{))", "");
+        string = string.replaceFirst("^.[^{]*(?=(\\{))", "");
         return string;
     }
 
@@ -83,7 +84,7 @@ public final class RenamingConflictsHandler {
             MergeConflict mergeConflict = FilesManager.extractMergeConflicts(currentNodeContent).get(0);
             String oppositeSideNodeContent = getMergeConflictContentOfOppositeSide(mergeConflict, renamingSide);
 
-            if (context.renamingStrategy == RenamingStrategy.KEEP_BOTH_METHODS) {
+            if (JFSTMerge.renamingStrategy == RenamingStrategy.KEEP_BOTH_METHODS) {
                 ((FSTTerminal) tuple.getRight()).setBody(oppositeSideNodeContent);
                 continue;
             }
@@ -108,7 +109,7 @@ public final class RenamingConflictsHandler {
                     .map(conflict -> FilesManager.getStringContentIntoSingleLineNoSpacing(conflict.body))
                     .anyMatch(conflict -> conflict.contains(signature));
 
-            if (context.renamingStrategy == RenamingStrategy.MERGE_METHODS && !similarNodes.isEmpty()) {
+            if (JFSTMerge.renamingStrategy == RenamingStrategy.MERGE_METHODS && !similarNodes.isEmpty()) {
                 String possibleRenamingContent = getMostSimilarContent(similarNodes);
                 String newSignature = getSignature(possibleRenamingContent);
                 String newBody = removeSignature(oppositeSideNodeContent);
@@ -204,82 +205,10 @@ public final class RenamingConflictsHandler {
         FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
     }
 
-    /*	pure similarity-based handler (it works)
-
-     public static void handle(MergeContext context) {
-        //possible renamings or deletions in left
-        if(!context.possibleRenamedLeftNodes.isEmpty() || !context.possibleRenamedRightNodes.isEmpty()){
-            for(Pair<String,FSTNode> tuple: context.possibleRenamedLeftNodes){
-                List<Pair<Double,String>> similarNodes = new ArrayList<Pair<Double,String>>(); //list of possible nodes renaming a previous one
-                if(nodeHasConflict(tuple.getRight())){
-                    String baseContent = tuple.getLeft();
-                    String currentNodeContent= ((FSTTerminal) tuple.getRight()).getBody(); //node content with conflict
-                    String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).right;
-                    for(FSTNode newNode : context.addedLeftNodes){ // a possible renamed node is seem as "new" node due to superimposition
-                        if(isMethodOrConstructorNode(newNode)){
-                            String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
-                            double similarity  	  		   = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
-                            if(similarity >= 0.7){ //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
-                                Pair<Double,String> tp = Pair.of(similarity, possibleRenamingContent);
-                                similarNodes.add(tp);
-                            }
-                        }
-                    }
-                    if(similarNodes.isEmpty()){//there is no similar node. it is a possible deletion, so remove the conflict keeping the edited version of the content
-                        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent,editedNodeContent);
-
-                        //statistics
-                        context.deletionConflicts++;
-                    } else {
-                        String possibleRenamingContent = getMostSimilarContent(similarNodes);
-                        generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, editedNodeContent,true);
-                    }
-                }
-            }
-
-            //possible renamings or deletions in right
-            for(Pair<String,FSTNode> tuple: context.possibleRenamedRightNodes){
-                List<Pair<Double,String>> similarNodes = new ArrayList<Pair<Double,String>>(); //list of possible nodes renaming a previous one
-                if(nodeHasConflict(tuple.getRight())){
-                    String baseContent = tuple.getLeft();
-                    String currentNodeContent= ((FSTTerminal) tuple.getRight()).getBody(); //node content with conflict
-                    String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).left;
-                    for(FSTNode newNode : context.addedRightNodes){ // a possible renamed node is seem as "new" node due to superimposition
-                        if(isMethodOrConstructorNode(newNode)){
-                            String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
-                            double similarity  	  		   = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
-                            if(similarity >= 0.7){ //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
-                                Pair<Double,String> tp = Pair.of(similarity, possibleRenamingContent);
-                                similarNodes.add(tp);
-                            }
-                        }
-                    }
-                    if(similarNodes.isEmpty()){//there is no similar node. it is a possible deletion, so remove the conflict keeping the edited version of the content
-                        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent,editedNodeContent);
-
-                        //statistics
-                        context.deletionConflicts++;
-                    } else {
-                        String possibleRenamingContent = getMostSimilarContent(similarNodes);
-                        generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, editedNodeContent,false);
-                    }
-                }
-            }
-        }
-    }
-     */
-
     private static String getMergeConflictContentOfOppositeSide(MergeConflict mergeConflict, RenamingSide side) {
         if (side == RenamingSide.LEFT) return mergeConflict.right;
         if (side == RenamingSide.RIGHT) return mergeConflict.left;
 
         return null;
-    }
-
-    public static void main(String[] args) {
-        String s = "intsum(inta,intb){returna+b;}";
-        removeSignature(s);
-        System.out.println(s);
-
     }
 }
