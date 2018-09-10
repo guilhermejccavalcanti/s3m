@@ -4,7 +4,7 @@ jdk:
 notifications:
  email:
   recipients:
-   - guiganister@gmail.com
+   - joao.coutinho9@gmail.com
   on_success: always
 before_install:
 - ./gradlew clean build -x test
@@ -16,5 +16,4 @@ before_install:
 script:
 - ./gradlew test
 - cd testfiles/shelltests/
-- shunit2 s3mGitTests.sh
-- shunit2 s3mBigRepositoryTests.sh
+- shunit2 s3mTests.sh
