@@ -34,7 +34,7 @@ public class EncodingInferenceParameterTest {
 
 	@Test
 	public void testEncodingInferenceEnabled() {
-		String mergeResult = FilesManager.getStringContentIntoSingleLine(getMergeResult(true));
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(getMergeResult(true));
 		assertThat(mergeResult.substring(1)).isEqualTo("publicclassTest{voidhelloWorld(){System.out.println(\"HelloWorld!\");}}");
 	}
 	
