@@ -42,6 +42,7 @@ import org.mozilla.universalchardet.UniversalDetector;
 public final class FilesManager {
 	
 	private static Map<File, String> encodings;
+	private static final String DEFAULT_ENCODING = "UTF-8";
 
 	private FilesManager(){}
 
@@ -233,7 +234,7 @@ public final class FilesManager {
 		//StringBuilder content = new StringBuilder();
 		String content = "";
 		try{
-			String fileEncoding = encodings.get(file);
+			String fileEncoding = encodings.getOrDefault(file, DEFAULT_ENCODING);
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding));
 			content = reader.lines().collect(Collectors.joining("\n"));
 		}catch(Exception e){
@@ -246,14 +247,18 @@ public final class FilesManager {
 	 * Try to detect the encoding of the files envolved in a merge.
 	 * @param files to be analysed
 	 */
-	public static void detectEncoding(File left, File base, File right) {
+	public static void detectEncoding(File... files) {
 		
 		encodings = new HashMap<File, String>();
 		
 		try {
-			detectEncoding(left);
-			detectEncoding(base);
-			detectEncoding(right);
+			
+			for(File file : files) {
+				if(file != null) {
+					detectEncoding(file);
+				}
+			}
+			
 		} catch (IOException e) {
 			System.err.println("An error occurred while opening files for encoding detection.");
 			System.exit(-1);
@@ -267,27 +272,25 @@ public final class FilesManager {
 	 */
 	private static void detectEncoding(File file) throws IOException {
 		
-		if(file != null) {
-			InputStream reader = Files.newInputStream(Paths.get(file.getAbsolutePath()));
-			UniversalDetector detector = new UniversalDetector(null);
-			
-			byte[] data = new byte[4096];
-			int dataRead = reader.read(data);
-			while(dataRead > 0 && !detector.isDone()) {
-				detector.handleData(data, 0, dataRead);
-				dataRead = reader.read(data);
-			}
-			detector.dataEnd();
-			
-			String encoding = detector.getDetectedCharset();
-			
-			if(encoding == null)
-				encodings.put(file, "UTF-8");
-			else
-				encodings.put(file, encoding);
-			
-			detector.reset();
+		InputStream reader = Files.newInputStream(Paths.get(file.getAbsolutePath()));
+		UniversalDetector detector = new UniversalDetector(null);
+		
+		byte[] data = new byte[4096];
+		int dataRead = reader.read(data);
+		while(dataRead > 0 && !detector.isDone()) {
+			detector.handleData(data, 0, dataRead);
+			dataRead = reader.read(data);
 		}
+		detector.dataEnd();
+		
+		String encoding = detector.getDetectedCharset();
+		
+		if(encoding == null)
+			encodings.put(file, DEFAULT_ENCODING);
+		else
+			encodings.put(file, encoding);
+		
+		detector.reset();
 	}
 	
 	/**

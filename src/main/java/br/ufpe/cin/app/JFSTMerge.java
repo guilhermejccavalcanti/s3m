@@ -60,6 +60,10 @@ public class JFSTMerge {
 	
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
+	
+	@Parameter(names = "-encoding-inference", description = "Tries to infer file encodings to properly merge them."
+			+ " If not enabled, the tool assumes files are encoded in UTF-8.", arity = 1)
+	public static boolean isEncodingInferenceEnabled = true;
 
 
 
@@ -154,7 +158,10 @@ public class JFSTMerge {
 	 */
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath) {
 		FilesManager.validateFiles(left, base, right);
-		FilesManager.detectEncoding(left, base, right);
+		
+		if(isEncodingInferenceEnabled) {
+			FilesManager.detectEncoding(left, base, right);
+		}
 		
 		if (!isGit) {
 			System.out.println("MERGING FILES: \n" + ((left != null) ? left.getAbsolutePath() : "<empty left>") + "\n" + ((base != null) ? base.getAbsolutePath() : "<empty base>") + "\n" + ((right != null) ? right.getAbsolutePath() : "<empty right>"));
