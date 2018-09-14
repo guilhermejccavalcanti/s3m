@@ -33,7 +33,7 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
-import org.mozilla.universalchardet.*;
+import org.mozilla.universalchardet.UniversalDetector;
 
 /**
  * A set of utilities for managing files.
