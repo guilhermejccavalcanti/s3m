@@ -67,6 +67,11 @@ public class JFSTMerge {
 
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
+	
+	@Parameter(names = "-ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
+			+ "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
+	public static boolean isWhitespaceIgnored = true;
+	
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -178,7 +183,7 @@ public class JFSTMerge {
 				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
 				context.unstructuredMergeTime = System.nanoTime() - t0;
 
-				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);
+				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context, isWhitespaceIgnored);
 				context.semistructuredMergeTime = context.semistructuredMergeTime + (System.nanoTime() - t0);
 
 				conflictState = checkConflictState(context);
