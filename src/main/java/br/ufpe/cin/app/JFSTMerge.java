@@ -50,19 +50,21 @@ public class JFSTMerge {
 	@Parameter(names = "-d", arity = 3, description = "Directories to be merged (mine, base, yours)")
 	List<String> directoriespath = new ArrayList<String>();
 
-	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, " + "then it will use \"yours\" as the destination for the merge. ")
+	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
+            + "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
 
 	@Parameter(names = "-g", description = "Parameter to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
 
-	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).",arity = 1)
+	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).", arity = 1)
 	public static boolean isCryptographed = true;
 
-	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
+	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).", arity = 1)
 	public static boolean logFiles = true;
 
-	@Parameter(names = "--renaming", description = "Parameter to enable keeping both methods on renaming conflicts.", arity = 1, converter = RenamingStrategyConverter.class)
+	@Parameter(names = {"-r", "--renaming"}, description = "Parameter to choose strategy on renaming conflicts.",
+            converter = RenamingStrategyConverter.class)
 	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
 
 	/**
