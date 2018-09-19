@@ -11,10 +11,10 @@ import static br.ufpe.cin.mergers.util.RenamingStrategy.SAFE;
 public class RenamingStrategyConverter implements IStringConverter<RenamingStrategy> {
     @Override
     public RenamingStrategy convert(String value) {
-        switch (value) {
-            case "both":
+        switch (value.toUpperCase()) {
+            case "BOTH":
                 return KEEP_BOTH_METHODS;
-            case "merge":
+            case "MERGE":
                 return MERGE_METHODS;
             default:
                 return SAFE;
