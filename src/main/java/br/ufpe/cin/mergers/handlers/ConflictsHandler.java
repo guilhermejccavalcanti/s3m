@@ -20,15 +20,21 @@ final public class ConflictsHandler {
 
 	public static void handle(MergeContext context, Map<String, Boolean> activations) throws TextualMergeException{
 		context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
-		
-		findAndDetectTypeAmbiguityErrors(context);
+
+        if(activations.get("typeambiguityerror"))
+		    findAndDetectTypeAmbiguityErrors(context);
+
 		if(activations.get("newelementreferencingeditedone"))
 		    findAndDetectNewElementReferencingEditedOne(context);
+
 		if(activations.get("renamingconflicts"))
 		    findAndResolveRenamingOrDeletionConflicts(context);
+
 		if(activations.get("initializationblocks"))
 		    findAndDetectInitializationBlocks(context);
+
 		findAndDetectDeletionsOfHighLevelElements(context);
+
 		if(activations.get("duplicateddeclaration"))
 		    findAndAccountDuplicatedDeclarationErrors(context);
 	}

@@ -88,6 +88,10 @@ public class JFSTMerge {
             "semistructured merge alone is unable to solve.", arity = 1)
     public static boolean isRenamingConflictsHandlerEnabled = true;
 
+    @Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
+        arity = 1)
+    public static boolean isTypeAmbiguityHandlerEnabled = true;
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -298,6 +302,7 @@ public class JFSTMerge {
 	    parameters.put("initializationblocks", isInitializationBlocksHandlerEnabled);
 	    parameters.put("newelementreferencingeditedone", isNewElementReferencingEditedOneHandlerEnabled);
 	    parameters.put("renamingconflicts", isRenamingConflictsHandlerEnabled);
+	    parameters.put("typeambiguityerror", isTypeAmbiguityHandlerEnabled);
 	    return parameters;
     }
 }
