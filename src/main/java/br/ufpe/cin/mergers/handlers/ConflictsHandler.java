@@ -2,6 +2,7 @@ package br.ufpe.cin.mergers.handlers;
 
 import java.util.List;
 import java.util.LinkedList;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import br.ufpe.cin.exceptions.TextualMergeException;
@@ -17,7 +18,7 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  */
 final public class ConflictsHandler {
 
-	public static void handle(MergeContext context) throws TextualMergeException{
+	public static void handle(MergeContext context, Map<String, Boolean> activations) throws TextualMergeException{
 		context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
 		
 		findAndDetectTypeAmbiguityErrors(context);
@@ -25,7 +26,8 @@ final public class ConflictsHandler {
 		findAndResolveRenamingOrDeletionConflicts(context);
 		findAndDetectInitializationBlocks(context);
 		findAndDetectDeletionsOfHighLevelElements(context);
-		findAndAccountDuplicatedDeclarationErrors(context);
+		if(activations.get("duplicateddeclaration"))
+		    findAndAccountDuplicatedDeclarationErrors(context);
 	}
 
 	private static void findAndDetectTypeAmbiguityErrors(MergeContext context) {

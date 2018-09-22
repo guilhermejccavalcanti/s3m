@@ -5,7 +5,9 @@ import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
@@ -69,6 +71,10 @@ public class JFSTMerge {
     @Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
             + "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
     public static boolean isWhitespaceIgnored = true;
+
+    @Parameter(names = {"--handle-duplicate-declarations", "-hdd"}, description = "Detects situations where merging developers' contributions adds " +
+            "declarations with the same signature to different areas of the same class.", arity = 1)
+    public static boolean isDuplicatedDeclarationHandlerEnabled = true;
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -171,6 +177,7 @@ public class JFSTMerge {
 		}
 
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
+        Map<String, Boolean> handlersParametrizations = assembleHandlersParameters();
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
@@ -180,7 +187,7 @@ public class JFSTMerge {
 				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
 				context.unstructuredMergeTime = System.nanoTime() - t0;
 
-				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context, isWhitespaceIgnored);
+				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context, isWhitespaceIgnored, handlersParametrizations);
 				context.semistructuredMergeTime = context.semistructuredMergeTime + (System.nanoTime() - t0);
 
 				conflictState = checkConflictState(context);
@@ -272,4 +279,10 @@ public class JFSTMerge {
 			return 0;
 		}
 	}
+
+	private Map<String, Boolean> assembleHandlersParameters() {
+	    Map<String, Boolean> parameters = new HashMap<String, Boolean>();
+	    parameters.put("duplicateddeclaration", isDuplicatedDeclarationHandlerEnabled);
+	    return parameters;
+    }
 }
