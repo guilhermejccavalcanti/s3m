@@ -20,6 +20,8 @@ jar {
 }
 
 task fatJar(type: Jar) {
+    group 'Binaries'
+
     manifest.from jar.manifest
     classifier = 'all'
     from {
@@ -35,3 +37,10 @@ task fatJar(type: Jar) {
 artifacts {
     archives fatJar
 }
+
+task copyBinary(type: Copy, dependsOn: assemble, group: "Binaries", description: "Copy binaries to /binary folder.") {
+    from fatJar
+    into "${project.getProjectDir()}" + File.separator + "binary"
+    rename "jFSTMerge.*", "jFSTMerge.jar"
+}
+build.finalizedBy(copyBinary)
