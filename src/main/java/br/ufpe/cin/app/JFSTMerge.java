@@ -80,6 +80,10 @@ public class JFSTMerge {
             "using textual similarity.", arity = -1)
     public static boolean isInitializationBlocksHandlerEnabled = true;
 
+    @Parameter(names = {"--handle-new-element-referencing-edited-one", "-hnereo"}, description = "Detects cases where a developer" +
+            "add an element that references an edited one.", arity = 1)
+    public static boolean isNewElementReferencingEditedOneHandlerEnabled = true;
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -288,6 +292,7 @@ public class JFSTMerge {
 	    Map<String, Boolean> parameters = new HashMap<String, Boolean>();
 	    parameters.put("duplicateddeclaration", isDuplicatedDeclarationHandlerEnabled);
 	    parameters.put("initializationblocks", isInitializationBlocksHandlerEnabled);
+	    parameters.put("newelementreferencingeditedone", isNewElementReferencingEditedOneHandlerEnabled);
 	    return parameters;
     }
 }

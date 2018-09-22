@@ -22,7 +22,8 @@ final public class ConflictsHandler {
 		context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
 		
 		findAndDetectTypeAmbiguityErrors(context);
-		findAndDetectNewElementReferencingEditedOne(context);
+		if(activations.get("newelementreferencingeditedone"))
+		    findAndDetectNewElementReferencingEditedOne(context);
 		findAndResolveRenamingOrDeletionConflicts(context);
 		if(activations.get("initializationblocks"))
 		    findAndDetectInitializationBlocks(context);
