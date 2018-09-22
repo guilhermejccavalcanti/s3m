@@ -43,4 +43,19 @@ task copyBinary(type: Copy, dependsOn: assemble, group: "Binaries", description:
     into "${project.getProjectDir()}" + File.separator + "binary"
     rename "jFSTMerge.*", "jFSTMerge.jar"
 }
-build.finalizedBy(copyBinary)
+
+task updateInstaller(type: Copy, dependsOn: assemble, group: "Binaries", description: "Update installer jar.") {
+    String installerPath = "${project.getProjectDir()}" + File.separator + "installer"
+    from fatJar
+    into installerPath
+    rename "jFSTMerge.*", "s3m.jar"
+    
+    doLast {
+        ant.jar(update: "true", destfile: installerPath + File.separator + "s3mInstaller.jar") {
+            zipfileset(file: installerPath + File.separator + "s3m.jar")
+        }
+        
+        delete installerPath + File.separator + "s3m.jar"
+    }
+}
+build.finalizedBy(copyBinary, updateInstaller)
