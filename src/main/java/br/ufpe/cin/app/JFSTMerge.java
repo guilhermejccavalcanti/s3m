@@ -76,6 +76,10 @@ public class JFSTMerge {
             "declarations with the same signature to different areas of the same class.", arity = 1)
     public static boolean isDuplicatedDeclarationHandlerEnabled = true;
 
+    @Parameter(names = {"--handle-initialization-blocks", "-hib"}, description = "Detects and avoid duplications caused by merge of blocks without identifiers," +
+            "using textual similarity.", arity = -1)
+    public static boolean isInitializationBlocksHandlerEnabled = true;
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -283,6 +287,7 @@ public class JFSTMerge {
 	private Map<String, Boolean> assembleHandlersParameters() {
 	    Map<String, Boolean> parameters = new HashMap<String, Boolean>();
 	    parameters.put("duplicateddeclaration", isDuplicatedDeclarationHandlerEnabled);
+	    parameters.put("initializationblocks", isInitializationBlocksHandlerEnabled);
 	    return parameters;
     }
 }
