@@ -4,14 +4,19 @@ import java.io.BufferedReader;
 import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.IOException;
+import java.io.InputStream;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.Iterator;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.apache.commons.io.FilenameUtils;
@@ -28,11 +33,16 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
+import org.mozilla.universalchardet.UniversalDetector;
+
 /**
  * A set of utilities for managing files.
  * @author Guilherme
  */
 public final class FilesManager {
+	
+	private static Map<File, String> encodings;
+	private static final String DEFAULT_ENCODING = "UTF-8";
 
 	private FilesManager(){}
 
@@ -220,17 +230,69 @@ public final class FilesManager {
 	 * @return string content of the file, or null in case of errors.
 	 */
 	public static String readFileContent(File file){
+		
 		//StringBuilder content = new StringBuilder();
 		String content = "";
 		try{
-			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8);
+			String fileEncoding = encodings.getOrDefault(file, DEFAULT_ENCODING);
+			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding));
 			content = reader.lines().collect(Collectors.joining("\n"));
 		}catch(Exception e){
 			//System.err.println(e.getMessage());
 		}
 		return content;
 	}
-
+	
+	/**
+	 * Try to detect the encoding of the files envolved in a merge.
+	 * @param files to be analysed
+	 */
+	public static void detectEncoding(File... files) {
+		
+		encodings = new HashMap<File, String>();
+		
+		try {
+			
+			for(File file : files) {
+				if(file != null) {
+					detectEncoding(file);
+				}
+			}
+			
+		} catch (IOException e) {
+			System.err.println("An error occurred while opening files for encoding detection.");
+			System.exit(-1);
+		}
+	}
+	
+	/**
+	 * Try to detect the encoding of a file using Mozilla's API.
+	 * @param file to be analysed
+	 * @throws IOException 
+	 */
+	private static void detectEncoding(File file) throws IOException {
+		
+		InputStream reader = Files.newInputStream(Paths.get(file.getAbsolutePath()));
+		UniversalDetector detector = new UniversalDetector(null);
+		
+		byte[] data = new byte[4096];
+		int dataRead = reader.read(data);
+		while(dataRead > 0 && !detector.isDone()) {
+			detector.handleData(data, 0, dataRead);
+			dataRead = reader.read(data);
+		}
+		detector.dataEnd();
+		
+		String encoding = detector.getDetectedCharset();
+		
+		if(encoding == null)
+			encodings.put(file, DEFAULT_ENCODING);
+		else
+			encodings.put(file, encoding);
+		
+		detector.reset();
+	}
+	
 	/**
 	 * Given a main list of files path, searches for corresponding files in other two given files path list.
 	 * @param firstVariantDir root directory 

@@ -60,6 +60,15 @@ public class JFSTMerge {
 	
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
+	
+	@Parameter(names = "-encoding-inference", description = "Tries to infer file encodings to properly merge them."
+			+ " If not enabled, the tool assumes files are encoded in UTF-8.", arity = 1)
+	public static boolean isEncodingInferenceEnabled = true;
+	
+	@Parameter(names = "-ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
+			+ "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
+	public static boolean isWhitespaceIgnored = true;
+	
 
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
@@ -155,6 +164,11 @@ public class JFSTMerge {
 	 */
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath) {
 		FilesManager.validateFiles(left, base, right);
+		
+		if(isEncodingInferenceEnabled) {
+			FilesManager.detectEncoding(left, base, right);
+		}
+		
 		if (!isGit) {
 			System.out.println("MERGING FILES: \n" + ((left != null) ? left.getAbsolutePath() : "<empty left>") + "\n" + ((base != null) ? base.getAbsolutePath() : "<empty base>") + "\n" + ((right != null) ? right.getAbsolutePath() : "<empty right>"));
 		}
@@ -169,7 +183,7 @@ public class JFSTMerge {
 				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
 				context.unstructuredMergeTime = System.nanoTime() - t0;
 
-				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);
+				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context, isWhitespaceIgnored);
 				context.semistructuredMergeTime = context.semistructuredMergeTime + (System.nanoTime() - t0);
 
 				conflictState = checkConflictState(context);
