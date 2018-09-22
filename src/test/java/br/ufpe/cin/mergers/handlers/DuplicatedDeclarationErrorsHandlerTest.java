@@ -1,6 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -32,7 +32,7 @@ public class DuplicatedDeclarationErrorsHandlerTest {
 				new File("testfiles/duplicationsnoconflict/base/Test.java"),
 				new File("testfiles/duplicationsnoconflict/right/Test.java"),
 				null);
-		assertTrue(ctx.duplicatedDeclarationErrors==1);
+		assertThat(ctx.duplicatedDeclarationErrors).isZero();
 	}
 
 	@Test
@@ -42,6 +42,6 @@ public class DuplicatedDeclarationErrorsHandlerTest {
 				new File("testfiles/duplicationsconflicting/base/Test.java"),
 				new File("testfiles/duplicationsconflicting/right/Test.java"),
 				null);
-		assertTrue(ctx.duplicatedDeclarationErrors==0);
+		assertThat(ctx.duplicatedDeclarationErrors).isOne();
 	}
 }
