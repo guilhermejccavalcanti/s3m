@@ -44,4 +44,18 @@ public class DuplicatedDeclarationErrorsHandlerTest {
 				null);
 		assertThat(ctx.duplicatedDeclarationErrors).isOne();
 	}
+
+	@Test
+    public void testDuplicationDeclarationParameter() {
+	    boolean defaultValue = JFSTMerge.isDuplicatedDeclarationHandlerEnabled;
+
+        JFSTMerge.isDuplicatedDeclarationHandlerEnabled = false;
+        MergeContext ctx = 	new JFSTMerge().mergeFiles(
+                new File("testfiles/duplicationsconflicting/left/Test.java"),
+                new File("testfiles/duplicationsconflicting/base/Test.java"),
+                new File("testfiles/duplicationsconflicting/right/Test.java"),
+                null);
+        assertThat(ctx.duplicatedDeclarationErrors).isZero();
+        JFSTMerge.isDuplicatedDeclarationHandlerEnabled = defaultValue;
+    }
 }

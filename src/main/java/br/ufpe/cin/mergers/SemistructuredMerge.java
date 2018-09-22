@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
+import java.util.Map;
 
 import org.apache.commons.lang3.tuple.Pair;
 
@@ -42,7 +43,7 @@ public final class SemistructuredMerge {
 	 * @throws SemistructuredMergeException
 	 * @throws TextualMergeException
 	 */
-	public static String merge(File left, File base, File right, MergeContext context, boolean ignoreWhitespaces)	throws SemistructuredMergeException, TextualMergeException {
+	public static String merge(File left, File base, File right, MergeContext context, boolean ignoreWhitespaces, Map<String, Boolean> handlersParameters)	throws SemistructuredMergeException, TextualMergeException {
 		try {
 			// parsing the files to be merged
 			JParser parser = new JParser();
@@ -54,7 +55,7 @@ public final class SemistructuredMerge {
 			context.join(merge(leftTree, baseTree, rightTree, ignoreWhitespaces));
 
 			// handling special kinds of conflicts
-			ConflictsHandler.handle(context);
+			ConflictsHandler.handle(context, handlersParameters);
 
 		} catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex) {
 			String message = ExceptionUtils.getCauseMessage(ex);
