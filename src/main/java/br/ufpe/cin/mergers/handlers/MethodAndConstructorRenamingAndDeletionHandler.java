@@ -1,14 +1,13 @@
 package br.ufpe.cin.mergers.handlers;
 
 import br.ufpe.cin.app.JFSTMerge;
-import br.ufpe.cin.files.FilesManager;
-import br.ufpe.cin.mergers.util.MergeConflict;
+import br.ufpe.cin.mergers.handlers.singlerenaming.SingleRenamingHandler;
+import br.ufpe.cin.mergers.handlers.singlerenaming.SingleRenamingHandlerFactory;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingStrategy;
 import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
 import de.ovgu.cide.fstgen.ast.FSTNode;
-import de.ovgu.cide.fstgen.ast.FSTTerminal;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.List;
@@ -62,42 +61,17 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 
     private static void handleSingleRenamings(MergeContext context, List<Pair<String, FSTNode>> possibleRenamedNodes,
                                               List<FSTNode> addedNodes, Side renamingSide) {
+        SingleRenamingHandler handler = SingleRenamingHandlerFactory.getHandler(JFSTMerge.renamingStrategy);
+
         for (Pair<String, FSTNode> tuple : possibleRenamedNodes) {
+            String baseContent = tuple.getLeft();
             FSTNode currentNode = tuple.getRight();
             if (!RenamingUtils.nodeHasConflict(currentNode)) continue;
 
-            String baseContent = tuple.getLeft();
-            String currentNodeContent = ((FSTTerminal) currentNode).getBody(); //node content with conflict
-            MergeConflict mergeConflict = FilesManager.extractMergeConflicts(currentNodeContent).get(0);
-            String oppositeSideNodeContent = RenamingUtils.getMergeConflictContentOfOppositeSide(mergeConflict, renamingSide);
-
-            if (JFSTMerge.renamingStrategy == RenamingStrategy.KEEP_BOTH_METHODS) {
-                ((FSTTerminal) currentNode).setBody(oppositeSideNodeContent);
-                continue;
-            }
-
             List<Pair<Double, String>> similarNodes = RenamingUtils.getSimilarNodes(baseContent, currentNode, addedNodes,
                     BODY_SIMILARITY_THRESHOLD);
-            boolean hasUnstructuredMergeConflict = RenamingUtils.hasUnstructuredMergeConflict(context, baseContent);
 
-            if (JFSTMerge.renamingStrategy == RenamingStrategy.MERGE_METHODS && !similarNodes.isEmpty()) {
-                String possibleRenamingContent = RenamingUtils.getMostSimilarContent(similarNodes);
-                String newSignature = RenamingUtils.getSignature(possibleRenamingContent);
-                String newBody = RenamingUtils.removeSignature(oppositeSideNodeContent);
-
-                //TODO check method references!
-
-                // replace node with both nodes content
-                FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newSignature + newBody);
-
-                // remove other node
-                FilesManager.findAndDeleteASTNode(context.superImposedTree, possibleRenamingContent);
-            } else if (hasUnstructuredMergeConflict) {
-                String possibleRenamingContent = RenamingUtils.getMostSimilarContent(similarNodes);
-                RenamingUtils.generateRenamingConflict(context, currentNodeContent, possibleRenamingContent, oppositeSideNodeContent, renamingSide);
-            } else { //do not report the renaming conflict
-                ((FSTTerminal) tuple.getRight()).setBody(oppositeSideNodeContent);
-            }
+            handler.handle(context, baseContent, currentNode, similarNodes, renamingSide);
         }
     }
 }
