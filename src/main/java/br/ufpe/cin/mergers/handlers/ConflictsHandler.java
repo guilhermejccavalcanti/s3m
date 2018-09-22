@@ -24,7 +24,8 @@ final public class ConflictsHandler {
 		findAndDetectTypeAmbiguityErrors(context);
 		if(activations.get("newelementreferencingeditedone"))
 		    findAndDetectNewElementReferencingEditedOne(context);
-		findAndResolveRenamingOrDeletionConflicts(context);
+		if(activations.get("renamingconflicts"))
+		    findAndResolveRenamingOrDeletionConflicts(context);
 		if(activations.get("initializationblocks"))
 		    findAndDetectInitializationBlocks(context);
 		findAndDetectDeletionsOfHighLevelElements(context);

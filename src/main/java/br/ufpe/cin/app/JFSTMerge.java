@@ -84,6 +84,10 @@ public class JFSTMerge {
             "add an element that references an edited one.", arity = 1)
     public static boolean isNewElementReferencingEditedOneHandlerEnabled = true;
 
+    @Parameter(names = {"--handle-renaming-conflicts", "-hrc"}, description = "Detects and solves conflicts caused by renaming or deletion, where" +
+            "semistructured merge alone is unable to solve.", arity = 1)
+    public static boolean isRenamingConflictsHandlerEnabled = true;
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -293,6 +297,7 @@ public class JFSTMerge {
 	    parameters.put("duplicateddeclaration", isDuplicatedDeclarationHandlerEnabled);
 	    parameters.put("initializationblocks", isInitializationBlocksHandlerEnabled);
 	    parameters.put("newelementreferencingeditedone", isNewElementReferencingEditedOneHandlerEnabled);
+	    parameters.put("renamingconflicts", isRenamingConflictsHandlerEnabled);
 	    return parameters;
     }
 }
