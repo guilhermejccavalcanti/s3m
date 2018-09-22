@@ -1,6 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -35,8 +35,8 @@ public class TypeAmbiguityErrorHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertTrue(mergeResult.contains("<<<<<<<MINEimportjava.awt.List;=======importjava.util.List;>>>>>>>YOURS"));
-		assertTrue(ctx.typeAmbiguityErrorsConflicts==1);
+		assertThat(mergeResult).contains("<<<<<<<MINEimportjava.awt.List;=======importjava.util.List;>>>>>>>YOURS");
+		assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
 	}
 	
 	@Test
@@ -47,9 +47,9 @@ public class TypeAmbiguityErrorHandlerTest {
 				new File("testfiles/importpackagepackage/right/Test/src/Test.java"),
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
-		
-		assertTrue(mergeResult.contains("<<<<<<<MINEimportpckt.*;=======importpcktright.*;>>>>>>>YOURS"));
-		assertTrue(ctx.typeAmbiguityErrorsConflicts==1);
+
+        assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.*;=======importpcktright.*;>>>>>>>YOURS");
+        assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
 	}
 	
 	@Test
@@ -60,9 +60,26 @@ public class TypeAmbiguityErrorHandlerTest {
 				new File("testfiles/importpackagemember/right/Test/src/Test.java"),
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
-		
-		assertTrue(mergeResult.contains("<<<<<<<MINEimportpckt.A;=======importpcktright.*;>>>>>>>YOURS"));
-		assertTrue(ctx.typeAmbiguityErrorsConflicts==1);
+
+        assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.A;=======importpcktright.*;>>>>>>>YOURS");
+        assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
+	}
+
+	@Test
+	public void testTypeAmbiguityErrorParameter() {
+		boolean defaultValue = JFSTMerge.isTypeAmbiguityHandlerEnabled;
+
+		JFSTMerge.isTypeAmbiguityHandlerEnabled = false;
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/importmembermember/left/Test/src/Test.java"),
+				new File("testfiles/importmembermember/base/Test/src/Test.java"),
+				new File("testfiles/importmembermember/right/Test/src/Test.java"),
+				null);
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+
+        assertThat(mergeResult).contains("importjava.util.List;importjava.awt.List;publicclassTest{Listlist;}");
+        assertThat(ctx.typeAmbiguityErrorsConflicts).isZero();
+		JFSTMerge.isTypeAmbiguityHandlerEnabled = defaultValue;
 	}
 
 }
