@@ -1,6 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
-import static org.junit.Assert.*;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -35,9 +35,8 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINEinta=15;=======intm(){returna+15;}>>>>>>>YOURS"));
-		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
-
+		assertThat(mergeResult).contains("<<<<<<<MINEinta=15;=======intm(){returna+15;}>>>>>>>YOURS");
+		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
 	
 	
@@ -50,8 +49,8 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINEstaticintm(){return15;}=======inta=m();>>>>>>>YOURS"));
-		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
+		assertThat(mergeResult).contains("<<<<<<<MINEstaticintm(){return15;}=======inta=m();>>>>>>>YOURS");
+		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
 	
 	@Test
@@ -63,8 +62,8 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINEinta=15;=======intb=a+20;>>>>>>>YOURS"));
-		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
+		assertThat(mergeResult).contains("<<<<<<<MINEinta=15;=======intb=a+20;>>>>>>>YOURS");
+		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
 	
 	
@@ -77,7 +76,24 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINEstaticStringm(){return\"insidemethodmedited\";}=======voidn(){if(m().equals(\"something...\")){System.out.println(\"insidemethodn\");}}>>>>>>>YOURS"));
-		assertTrue(ctx.newElementReferencingEditedOneConflicts==1);
+		assertThat(mergeResult).contains("<<<<<<<MINEstaticStringm(){return\"insidemethodmedited\";}=======voidn(){if(m().equals(\"something...\")){System.out.println(\"insidemethodn\");}}>>>>>>>YOURS");
+		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
+
+	@Test
+    public void testNewElementReferencingEditedOneParameter() {
+        boolean defaultValue = JFSTMerge.isNewElementReferencingEditedOneHandlerEnabled;
+
+        JFSTMerge.isNewElementReferencingEditedOneHandlerEnabled = false;
+        MergeContext ctx = 	new JFSTMerge().mergeFiles(
+                new File("testfiles/nereomethodfield/left/Test.java"),
+                new File("testfiles/nereomethodfield/base/Test.java"),
+                new File("testfiles/nereomethodfield/right/Test.java"),
+                null);
+        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+
+        assertThat(mergeResult).isEqualTo("publicclassTest{inta=15;intm(){returna+15;}}");
+        assertThat(ctx.newElementReferencingEditedOneConflicts).isZero();
+        JFSTMerge.isNewElementReferencingEditedOneHandlerEnabled = defaultValue;
+    }
 }
