@@ -63,14 +63,18 @@ public class JFSTMerge {
 	
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
-
+  
 	@Parameter(names = "--encoding-inference", description = "Tries to infer file encodings to properly merge them. If" +
             "not enabled, the tool assumes files are encoded in UTF-8.", arity = 1)
-    public static boolean isEncodingInferenceEnabled = true;
+  public static boolean isEncodingInferenceEnabled = true;
 
-    @Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
+  @Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
             + "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
-    public static boolean isWhitespaceIgnored = true;
+  public static boolean isWhitespaceIgnored = true;
+
+	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
+	public static boolean keepBothVersionsOfRenamedMethod = false;
+
 
     @Parameter(names = {"--handle-duplicate-declarations", "-hdd"}, description = "Detects situations where merging developers' contributions adds " +
             "declarations with the same signature to different areas of the same class.", arity = 1)
