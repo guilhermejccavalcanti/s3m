@@ -66,15 +66,14 @@ public class JFSTMerge {
   
 	@Parameter(names = "--encoding-inference", description = "Tries to infer file encodings to properly merge them. If" +
             "not enabled, the tool assumes files are encoded in UTF-8.", arity = 1)
-  public static boolean isEncodingInferenceEnabled = true;
+  	public static boolean isEncodingInferenceEnabled = true;
 
-  @Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
-            + "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
-  public static boolean isWhitespaceIgnored = true;
+  	@Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
+			+ "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
+  	public static boolean isWhitespaceIgnored = true;
 
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
-
 
     @Parameter(names = {"--handle-duplicate-declarations", "-hdd"}, description = "Detects situations where merging developers' contributions adds " +
             "declarations with the same signature to different areas of the same class.", arity = 1)
@@ -88,9 +87,9 @@ public class JFSTMerge {
             "add an element that references an edited one.", arity = 1)
     public static boolean isNewElementReferencingEditedOneHandlerEnabled = true;
 
-    @Parameter(names = {"--handle-renaming-conflicts", "-hrc"}, description = "Detects and solves conflicts caused by renaming or deletion, where" +
+    @Parameter(names = {"--handle-method-constructor-renaming-deletion", "-hmcrd"}, description = "Detects and solves conflicts caused by renaming or deletion, where" +
             "semistructured merge alone is unable to solve.", arity = 1)
-    public static boolean isRenamingConflictsHandlerEnabled = true;
+    public static boolean isMethodAndConstructorRenamingandDeletionHandlerEnabled = true;
 
     @Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
         arity = 1)
@@ -305,7 +304,7 @@ public class JFSTMerge {
 	    parameters.put("duplicateddeclaration", isDuplicatedDeclarationHandlerEnabled);
 	    parameters.put("initializationblocks", isInitializationBlocksHandlerEnabled);
 	    parameters.put("newelementreferencingeditedone", isNewElementReferencingEditedOneHandlerEnabled);
-	    parameters.put("renamingconflicts", isRenamingConflictsHandlerEnabled);
+	    parameters.put("renamingconflicts", isMethodAndConstructorRenamingandDeletionHandlerEnabled);
 	    parameters.put("typeambiguityerror", isTypeAmbiguityHandlerEnabled);
 	    return parameters;
     }
