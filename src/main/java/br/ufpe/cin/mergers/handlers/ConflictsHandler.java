@@ -58,7 +58,7 @@ final public class ConflictsHandler {
 	
 	private static void findAndResolveRenamingOrDeletionConflicts(MergeContext context) {
 		//invoking the specific handler for renaming and deletion conflicts
-		RenamingConflictsHandler.handle(context);
+		MethodAndConstructorRenamingAndDeletionHandler.handle(context);
 	}
 	
 	private static void findAndDetectInitializationBlocks(MergeContext context) throws TextualMergeException {

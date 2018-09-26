@@ -13,7 +13,7 @@ import java.io.PrintStream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-public class RenamingConflictsHandlerTest {
+public class MethodAndConstructorRenamingAndDeletionHandlerTest {
     private File baseFile = new File("testfiles/renaming/method/base_method/Test.java");
     private File bodyChangedFileBelowSignature = new File("testfiles/renaming/method/changed_body_below_signature/Test.java");
     private File bodyChangedAtEndFile = new File("testfiles/renaming/method/changed_body_at_end/Test.java");
@@ -194,8 +194,6 @@ public class RenamingConflictsHandlerTest {
                 bodyChangedFileBelowSignature,
                 null);
         String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
-
-        System.out.println(mergeResult);
 
         assertThat(mergeResult).contains("publicclassTest{publicvoidn1(){inta=123;}}");
         assertThat(ctx.renamingConflicts).isZero();

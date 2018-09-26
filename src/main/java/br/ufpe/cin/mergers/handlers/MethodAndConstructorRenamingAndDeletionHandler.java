@@ -22,7 +22,7 @@ import java.util.stream.Collectors;
  *
  * @author Guilherme
  */
-public final class RenamingConflictsHandler {
+public final class MethodAndConstructorRenamingAndDeletionHandler {
     private static final double BODY_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
 
     private enum RenamingSide {LEFT, RIGHT}
@@ -153,7 +153,7 @@ public final class RenamingConflictsHandler {
                 .map(FSTTerminal.class::cast)
                 .map(FSTTerminal::getBody)
                 .map(FilesManager::getStringContentIntoSingleLineNoSpacing)
-                .map(RenamingConflictsHandler::removeSignature)
+                .map(MethodAndConstructorRenamingAndDeletionHandler::removeSignature)
                 .orElse(null);
     }
 
