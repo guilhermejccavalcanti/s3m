@@ -61,6 +61,9 @@ public class JFSTMerge {
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
+	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
+	public static boolean keepBothVersionsOfRenamedMethod = false;
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
