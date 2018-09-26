@@ -43,6 +43,7 @@ public final class RenamingConflictsHandler {
         List<FSTNode> rightNewMethodsOrConstructors = context.addedRightNodes.stream().filter(m -> isMethodOrConstructorNode(m)).collect(Collectors.toList());
         for (FSTNode left : leftNewMethodsOrConstructors) {
             for (FSTNode right : rightNewMethodsOrConstructors) {
+                if (!haveSameParent(left, right)) continue;
                 if (!left.getName().equals(right.getName())) { //only if the two declarations have different signatures
                     String leftBody = getNodeBodyWithoutSignature(left);
                     String rightBody = getNodeBodyWithoutSignature(right);
