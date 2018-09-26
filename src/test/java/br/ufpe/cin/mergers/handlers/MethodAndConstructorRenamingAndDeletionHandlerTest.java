@@ -38,224 +38,207 @@ public class MethodAndConstructorRenamingAndDeletionHandlerTest {
     public void testMethodRenamingOnLeft_whenLeftRenamesMethod_andRightChangesBodyBelowSignature_shouldReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
                 bodyChangedFileBelowSignature,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("<<<<<<<MINEpublicvoidm(){inta=123;}=======publicvoidn1(){inta;}>>>>>>>YOURS");
-        assertThat(ctx.renamingConflicts).isOne();
+        verifyMergeResultWithConflict(mergeContext, "<<<<<<<MINEpublicvoidm(){inta=123;}=======publicvoidn1(){inta;}>>>>>>>YOURS");
     }
 
     @Test
     public void testMethodRenamingOnRight_whenRightRenamesMethod_andLeftChangesBodyBelowSignature_shouldReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 bodyChangedFileBelowSignature,
                 baseFile,
                 renamedMethodFile1,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("<<<<<<<MINEpublicvoidn1(){inta;}=======publicvoidm(){inta=123;}>>>>>>>YOURS");
-        assertThat(ctx.renamingConflicts).isOne();
+        verifyMergeResultWithConflict(mergeContext, "<<<<<<<MINEpublicvoidn1(){inta;}=======publicvoidm(){inta=123;}>>>>>>>YOURS");
     }
 
     @Test
     public void testMethodRenamingOnLeft_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
                 bodyChangedAtEndFile,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).doesNotContain("(cause:possiblerenaming)");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;}publicvoidm(){inta;a=123;}}");
     }
 
     @Test
     public void testMethodRenamingOnRight_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 bodyChangedAtEndFile,
                 baseFile,
                 renamedMethodFile1,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).doesNotContain("(cause:possiblerenaming)");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidm(){inta;a=123;}publicvoidn1(){inta;}}");
     }
 
     @Test
     public void testMutualMethodRenaming_whenBothVersionsRenamesMethodDifferently_shouldReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
                 renamedMethodFile2,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("<<<<<<<MINEpublicvoidn1(){inta;}=======publicvoidn2(){inta;}>>>>>>>YOURS");
-        assertThat(ctx.renamingConflicts).isOne();
+        verifyMergeResultWithConflict(mergeContext, "<<<<<<<MINEpublicvoidn1(){inta;}=======publicvoidn2(){inta;}>>>>>>>YOURS");
     }
 
     @Test
     public void testMethodRenamingOnLeft_givenKeepBothMethodsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyBelowSignature_shouldReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
                 bodyChangedFileBelowSignature,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).doesNotContain("(cause:possiblerenaming)");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;}publicvoidm(){inta=123;}}");
     }
 
     @Test
     public void testMethodRenamingOnRight_givenKeepBothMethodsIsEnabled_whenRightRenamesMethod_andLeftChangesBodyBelowSignature_shouldNotReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 bodyChangedFileBelowSignature,
                 baseFile,
                 renamedMethodFile1,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).doesNotContain("(cause:possiblerenaming)");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidm(){inta=123;}publicvoidn1(){inta;}}");
     }
 
     @Test
     public void testMethodRenamingOnLeft_givenKeepBothMethodsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
                 bodyChangedAtEndFile,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).doesNotContain("(cause:possiblerenaming)");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;}publicvoidm(){inta;a=123;}}");
     }
 
     @Test
     public void testMethodRenamingOnRight_givenKeepBothMethodsIsEnabled_whenLeftRenamesMethod_andRightnChangesBodyAtEnd_shouldNotReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 bodyChangedAtEndFile,
                 baseFile,
                 renamedMethodFile1,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).doesNotContain("(cause:possiblerenaming)");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidm(){inta;a=123;}publicvoidn1(){inta;}}");
     }
 
     @Test
     public void testMutualMethodRenaming_givenKeepBothMethodsIsEnabled_whenBothVersionsRenameMethodDifferently_shouldNotReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
                 renamedMethodFile2,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).doesNotContain("(cause:possiblerenaming)");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;}publicvoidn2(){inta;}}");
     }
 
     @Test
     public void testMethodRenamingOnLeft_givenMergeRenamingsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyBelowSignature_shouldMergeChanges() {
         JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
                 bodyChangedFileBelowSignature,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("publicclassTest{publicvoidn1(){inta=123;}}");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidn1(){inta=123;}}");
     }
 
     @Test
     public void testMethodRenamingOnRight_givenMergeRenamingsIsEnabled_whenRightRenamesMethod_andLeftChangesBodyBelowSignature_shouldMergeChanges() {
         JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 bodyChangedFileBelowSignature,
                 baseFile,
                 renamedMethodFile1,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("publicclassTest{publicvoidn1(){inta=123;}}");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidn1(){inta=123;}}");
     }
 
     @Test
     public void testMethodRenamingOnLeft_givenMergeRenamingsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldMergeChangess() {
         JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
                 bodyChangedAtEndFile,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("publicclassTest{publicvoidn1(){inta;a=123;}}");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;a=123;}}");
     }
 
     @Test
     public void testMethodRenamingOnRight_givenMergeRenamingsIsEnabled_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldMergeChanges() {
         JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 bodyChangedAtEndFile,
                 baseFile,
                 renamedMethodFile1,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("publicclassTest{publicvoidn1(){inta;a=123;}}");
-        assertThat(ctx.renamingConflicts).isZero();
+        verifyMergeResultWithoutConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;a=123;}}");
     }
 
     @Test
     public void testMutualMethodRenaming_givenMergeRenamingsIsEnabled_whenBothVersionsRenameMethodDifferently_shouldMergeChanges() {
         JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
 
-        MergeContext ctx = jfstMerge.mergeFiles(
+        MergeContext mergeContext = jfstMerge.mergeFiles(
                 renamedMethodFile1,
                 baseFile,
                 renamedMethodFile2,
                 null);
-        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("<<<<<<<MINEpublicvoidn1(){inta;}=======publicvoidn2(){inta;}>>>>>>>YOURS");
-        assertThat(ctx.renamingConflicts).isOne();
+        verifyMergeResultWithConflict(mergeContext, "<<<<<<<MINEpublicvoidn1(){inta;}=======publicvoidn2(){inta;}>>>>>>>YOURS");
+    }
+
+    private void verifyMergeResultWithConflict(MergeContext context, String expectedResult) {
+        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(context.semistructuredOutput);
+        assertThat(mergeResult).contains(expectedResult);
+        assertThat(context.renamingConflicts).isOne();
+    }
+
+    private void verifyMergeResultWithoutConflict(MergeContext context, String expectedResult) {
+        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(context.semistructuredOutput);
+        assertThat(mergeResult).contains(expectedResult);
+        assertThat(mergeResult).doesNotContain("(cause:possiblerenaming)");
+        assertThat(context.renamingConflicts).isZero();
     }
 }
