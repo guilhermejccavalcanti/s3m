@@ -5,6 +5,7 @@ import java.util.LinkedList;
 import java.util.Map;
 import java.util.stream.Collectors;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.printers.Prettyprinter;
@@ -18,24 +19,24 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  */
 final public class ConflictsHandler {
 
-	public static void handle(MergeContext context, Map<String, Boolean> activations) throws TextualMergeException{
+	public static void handle(MergeContext context) throws TextualMergeException{
 		context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
 
-        if(activations.get("typeambiguityerror"))
+        if(JFSTMerge.handlersParametrizations.get("typeambiguityerror"))
 		    findAndDetectTypeAmbiguityErrors(context);
 
-		if(activations.get("newelementreferencingeditedone"))
+		if(JFSTMerge.handlersParametrizations.get("newelementreferencingeditedone"))
 		    findAndDetectNewElementReferencingEditedOne(context);
 
-		if(activations.get("renamingconflicts"))
+		if(JFSTMerge.handlersParametrizations.get("renamingconflicts"))
 		    findAndResolveRenamingOrDeletionConflicts(context);
 
-		if(activations.get("initializationblocks"))
+		if(JFSTMerge.handlersParametrizations.get("initializationblocks"))
 		    findAndDetectInitializationBlocks(context);
 
 		findAndDetectDeletionsOfHighLevelElements(context);
 
-		if(activations.get("duplicateddeclaration"))
+		if(JFSTMerge.handlersParametrizations.get("duplicateddeclaration"))
 		    findAndAccountDuplicatedDeclarationErrors(context);
 	}
 

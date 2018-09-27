@@ -95,6 +95,8 @@ public class JFSTMerge {
 			arity = 1)
 	public static boolean isTypeAmbiguityHandlerEnabled = true;
 
+	public static Map<String, Boolean> handlersParametrizations;
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
 	 * This is mainly used for evaluation purposes.
@@ -188,7 +190,7 @@ public class JFSTMerge {
 		FilesManager.validateFiles(left, base, right);
 
 		if(isEncodingInferenceEnabled) {
-			new FilesEncoding().analyseFiles(left, base, right);
+			FilesEncoding.analyseFiles(left, base, right);
 		}
 
 		if (!isGit) {
@@ -196,7 +198,7 @@ public class JFSTMerge {
 		}
 
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
-		Map<String, Boolean> handlersParametrizations = assembleHandlersParameters();
+		handlersParametrizations = assembleHandlersParameters();
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
@@ -206,7 +208,7 @@ public class JFSTMerge {
 				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
 				context.unstructuredMergeTime = System.nanoTime() - t0;
 
-				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context, isWhitespaceIgnored, handlersParametrizations);
+				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);
 				context.semistructuredMergeTime = context.semistructuredMergeTime + (System.nanoTime() - t0);
 
 				conflictState = checkConflictState(context);
@@ -299,7 +301,7 @@ public class JFSTMerge {
 		}
 	}
 
-	private Map<String, Boolean> assembleHandlersParameters() {
+	private static Map<String, Boolean> assembleHandlersParameters() {
 		Map<String, Boolean> parameters = new HashMap<String, Boolean>();
 		parameters.put("duplicateddeclaration", isDuplicatedDeclarationHandlerEnabled);
 		parameters.put("initializationblocks", isInitializationBlocksHandlerEnabled);

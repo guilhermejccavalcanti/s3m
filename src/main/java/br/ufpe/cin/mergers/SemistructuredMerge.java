@@ -6,6 +6,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 import java.util.Map;
 
+import br.ufpe.cin.app.JFSTMerge;
 import org.apache.commons.lang3.tuple.Pair;
 
 import br.ufpe.cin.exceptions.ExceptionUtils;
@@ -43,7 +44,7 @@ public final class SemistructuredMerge {
 	 * @throws SemistructuredMergeException
 	 * @throws TextualMergeException
 	 */
-	public static String merge(File left, File base, File right, MergeContext context, boolean ignoreWhitespaces, Map<String, Boolean> handlersParameters)	throws SemistructuredMergeException, TextualMergeException {
+	public static String merge(File left, File base, File right, MergeContext context)	throws SemistructuredMergeException, TextualMergeException {
 		try {
 			// parsing the files to be merged
 			JParser parser = new JParser();
@@ -52,10 +53,10 @@ public final class SemistructuredMerge {
 			FSTNode rightTree = parser.parse(right);
 
 			// merging
-			context.join(merge(leftTree, baseTree, rightTree, ignoreWhitespaces));
+			context.join(merge(leftTree, baseTree, rightTree));
 
 			// handling special kinds of conflicts
-			ConflictsHandler.handle(context, handlersParameters);
+			ConflictsHandler.handle(context);
 
 		} catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex) {
 			String message = ExceptionUtils.getCauseMessage(ex);
@@ -75,7 +76,7 @@ public final class SemistructuredMerge {
 	 * @param right tree
 	 * @throws TextualMergeException
 	 */
-	private static MergeContext merge(FSTNode left, FSTNode base, FSTNode right, boolean ignoreWhitespaces) throws TextualMergeException {
+	private static MergeContext merge(FSTNode left, FSTNode base, FSTNode right) throws TextualMergeException {
 		// indexes are necessary to a proper matching between nodes
 		left.index 	= 0;
 		base.index 	= 1;
@@ -90,7 +91,7 @@ public final class SemistructuredMerge {
 		FSTNode mergeLeftBaseRight = superimpose(mergeLeftBase, right, null, context, false);
 		
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
-		mergeMatchedContent(mergeLeftBaseRight, context, ignoreWhitespaces);
+		mergeMatchedContent(mergeLeftBaseRight, context);
 		
 		context.superImposedTree = mergeLeftBaseRight;
 		
@@ -263,10 +264,10 @@ public final class SemistructuredMerge {
 	 * @param node to be merged
 	 * @throws TextualMergeException
 	 */
-	private static void mergeMatchedContent(FSTNode node, MergeContext context, boolean ignoreWhitespaces) throws TextualMergeException {
+	private static void mergeMatchedContent(FSTNode node, MergeContext context) throws TextualMergeException {
 		if (node instanceof FSTNonTerminal) {
 			for (FSTNode child : ((FSTNonTerminal) node).getChildren())
-				mergeMatchedContent(child, context, ignoreWhitespaces);
+				mergeMatchedContent(child, context);
 		} else if (node instanceof FSTTerminal) {
 			if (((FSTTerminal) node).getBody().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
 				String body = ((FSTTerminal) node).getBody() + " ";
@@ -276,7 +277,7 @@ public final class SemistructuredMerge {
 				String baseContent = splittedBodyContent[1].trim();
 				String rightContent = splittedBodyContent[2].trim();
 
-				String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, ignoreWhitespaces);
+				String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
 				((FSTTerminal) node).setBody(mergedBodyContent);
 
 				identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);

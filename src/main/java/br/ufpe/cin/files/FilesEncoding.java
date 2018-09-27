@@ -19,7 +19,7 @@ public class FilesEncoding {
     private static Map<File, String> encodings = new HashMap<File, String>();
     private static final String DEFAULT_ENCODING = "UTF-8";
     
-    public void analyseFiles(File... files) {
+    public static void analyseFiles(File... files) {
 
         try {
             for (File file : files) {
@@ -38,7 +38,7 @@ public class FilesEncoding {
         return encodings.getOrDefault(file, DEFAULT_ENCODING);
     }
 
-    private String detectEncoding(File file) throws IOException {
+    private static String detectEncoding(File file) throws IOException {
         InputStream reader = Files.newInputStream(Paths.get(file.getAbsolutePath()));
         UniversalDetector detector = new UniversalDetector(null);
 
