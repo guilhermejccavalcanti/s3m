@@ -14,14 +14,14 @@ import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeContext;
 
 public class TypeAmbiguityErrorHandlerTest {
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
 		//hidding sysout output
 		@SuppressWarnings("unused")
 		PrintStream originalStream = System.out;
 		PrintStream hideStream    = new PrintStream(new OutputStream(){
-		    public void write(int b) {}
+			public void write(int b) {}
 		});
 		System.setOut(hideStream);
 	}
@@ -29,40 +29,40 @@ public class TypeAmbiguityErrorHandlerTest {
 	@Test
 	public void testImportMemberMember() {
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
-				new File("testfiles/importmembermember/left/Test/src/Test.java"), 
-				new File("testfiles/importmembermember/base/Test/src/Test.java"), 
+				new File("testfiles/importmembermember/left/Test/src/Test.java"),
+				new File("testfiles/importmembermember/base/Test/src/Test.java"),
 				new File("testfiles/importmembermember/right/Test/src/Test.java"),
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
-		
+
 		assertThat(mergeResult).contains("<<<<<<<MINEimportjava.awt.List;=======importjava.util.List;>>>>>>>YOURS");
 		assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
 	}
-	
+
 	@Test
 	public void testImportPackagePackage() {
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
-				new File("testfiles/importpackagepackage/left/Test/src/Test.java"), 
-				new File("testfiles/importpackagepackage/base/Test/src/Test.java"), 
+				new File("testfiles/importpackagepackage/left/Test/src/Test.java"),
+				new File("testfiles/importpackagepackage/base/Test/src/Test.java"),
 				new File("testfiles/importpackagepackage/right/Test/src/Test.java"),
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.*;=======importpcktright.*;>>>>>>>YOURS");
-        assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
+		assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.*;=======importpcktright.*;>>>>>>>YOURS");
+		assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
 	}
-	
+
 	@Test
 	public void testImportPackageMember() {
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
-				new File("testfiles/importpackagemember/left/Test/src/Test.java"), 
-				new File("testfiles/importpackagemember/base/Test/src/Test.java"), 
+				new File("testfiles/importpackagemember/left/Test/src/Test.java"),
+				new File("testfiles/importpackagemember/base/Test/src/Test.java"),
 				new File("testfiles/importpackagemember/right/Test/src/Test.java"),
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.A;=======importpcktright.*;>>>>>>>YOURS");
-        assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
+		assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.A;=======importpcktright.*;>>>>>>>YOURS");
+		assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
 	}
 
 	@Test
@@ -77,8 +77,8 @@ public class TypeAmbiguityErrorHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-        assertThat(mergeResult).contains("importjava.util.List;importjava.awt.List;publicclassTest{Listlist;}");
-        assertThat(ctx.typeAmbiguityErrorsConflicts).isZero();
+		assertThat(mergeResult).contains("importjava.util.List;importjava.awt.List;publicclassTest{Listlist;}");
+		assertThat(ctx.typeAmbiguityErrorsConflicts).isZero();
 		JFSTMerge.isTypeAmbiguityHandlerEnabled = defaultValue;
 	}
 

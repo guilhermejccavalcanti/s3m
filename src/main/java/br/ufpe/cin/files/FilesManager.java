@@ -191,7 +191,7 @@ public final class FilesManager {
 			for (File file : fList){
 				if (file.isFile()){
 					allFiles.add(file.getAbsolutePath());
-				} 
+				}
 			}
 		}
 		return allFiles;
@@ -224,7 +224,7 @@ public final class FilesManager {
 		//StringBuilder content = new StringBuilder();
 		String content = "";
 		try{
-		    String fileEncoding = FilesEncoding.retrieveEncoding(file);
+			String fileEncoding = FilesEncoding.retrieveEncoding(file);
 
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding));
 			content = reader.lines().collect(Collectors.joining("\n"));
@@ -239,8 +239,8 @@ public final class FilesManager {
 	 * @param firstVariantDir root directory 
 	 * @param mainDir root directory
 	 * @param secondVariantDir root directory
-	 * @param listOfTuplesToBeFilled 
-	 * @param filesPathFromMainVariant 
+	 * @param listOfTuplesToBeFilled
+	 * @param filesPathFromMainVariant
 	 * @param filesPathFromFirstVariant
 	 * @param filesPathFromSecondVariant
 	 */
@@ -426,7 +426,7 @@ public final class FilesManager {
 				}
 			}
 		}
-		return false;		
+		return false;
 	}
 
 	/**
@@ -524,7 +524,7 @@ public final class FilesManager {
 		if(base!=null && base.getAbsolutePath().contains(File.separator+"src"+File.separator)){
 			int srcidx = base.getAbsolutePath().indexOf(File.separator+"src"+File.separator);
 			rootFolderPathBase = (base.getAbsolutePath().substring(0, srcidx))+File.separator;
-		} 
+		}
 		if(right!=null && right.getAbsolutePath().contains(File.separator+"src"+File.separator)){
 			int srcidx = right.getAbsolutePath().indexOf(File.separator+"src"+File.separator);
 			rootFolderPathRight= (right.getAbsolutePath().substring(0, srcidx))+File.separator;
@@ -600,12 +600,12 @@ public final class FilesManager {
 		@SuppressWarnings("unused")
 		String longer = first, shorter = second;
 		if (first.length() < second.length()) { // longer should always have greater length
-			longer = second; 
+			longer = second;
 			shorter= first;
 		}
 		int longerLength = longer.length();
 		if (longerLength == 0) {
-			return 1.0; /* both strings are zero length */ 
+			return 1.0; /* both strings are zero length */
 		}
 
 		int levenshteinDistance = StringUtils.getLevenshteinDistance(first, second);
@@ -628,7 +628,7 @@ public final class FilesManager {
 		sourceCode = sourceCode.replaceAll(">>>>>>> YOURS", "int yyyy;");
 		return sourceCode;
 	}
-	
+
 	/**
 	 * Pretty print of a given non-terminal node.
 	 * @param node

@@ -20,7 +20,7 @@ public class DuplicatedDeclarationErrorsHandlerTest {
 		@SuppressWarnings("unused")
 		PrintStream originalStream = System.out;
 		PrintStream hideStream    = new PrintStream(new OutputStream(){
-		    public void write(int b) {}
+			public void write(int b) {}
 		});
 		System.setOut(hideStream);
 	}
@@ -46,16 +46,16 @@ public class DuplicatedDeclarationErrorsHandlerTest {
 	}
 
 	@Test
-    public void testDuplicationDeclarationParameter() {
-	    boolean defaultValue = JFSTMerge.isDuplicatedDeclarationHandlerEnabled;
+	public void testDuplicationDeclarationParameter() {
+		boolean defaultValue = JFSTMerge.isDuplicatedDeclarationHandlerEnabled;
 
-        JFSTMerge.isDuplicatedDeclarationHandlerEnabled = false;
-        MergeContext ctx = 	new JFSTMerge().mergeFiles(
-                new File("testfiles/duplicationsconflicting/left/Test.java"),
-                new File("testfiles/duplicationsconflicting/base/Test.java"),
-                new File("testfiles/duplicationsconflicting/right/Test.java"),
-                null);
-        assertThat(ctx.duplicatedDeclarationErrors).isZero();
-        JFSTMerge.isDuplicatedDeclarationHandlerEnabled = defaultValue;
-    }
+		JFSTMerge.isDuplicatedDeclarationHandlerEnabled = false;
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/duplicationsconflicting/left/Test.java"),
+				new File("testfiles/duplicationsconflicting/base/Test.java"),
+				new File("testfiles/duplicationsconflicting/right/Test.java"),
+				null);
+		assertThat(ctx.duplicatedDeclarationErrors).isZero();
+		JFSTMerge.isDuplicatedDeclarationHandlerEnabled = defaultValue;
+	}
 }

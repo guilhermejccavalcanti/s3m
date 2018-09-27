@@ -183,9 +183,9 @@ public class RenamingConflictsHandlerTest {
 
     @Test
     public void testRenamingConflictsParameter() {
-        boolean defaultValue = JFSTMerge.isMethodAndConstructorRenamingandDeletionHandlerEnabled;
+        boolean defaultValue = JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled;
 
-        JFSTMerge.isMethodAndConstructorRenamingandDeletionHandlerEnabled = false;
+        JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled = false;
         MergeContext ctx = new JFSTMerge().mergeFiles(
                 baseFile,
                 renamedMethodFile1,
@@ -195,7 +195,7 @@ public class RenamingConflictsHandlerTest {
 
         assertThat(mergeResult).isEqualTo("publicclassTest{publicvoidm(){inta;}publicvoidn2(){inta;}}");
         assertThat(ctx.renamingConflicts).isZero();
-        JFSTMerge.isMethodAndConstructorRenamingandDeletionHandlerEnabled = defaultValue;
+        JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled = defaultValue;
     }
 }
 

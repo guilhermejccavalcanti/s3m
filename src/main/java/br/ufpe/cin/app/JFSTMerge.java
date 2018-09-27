@@ -60,40 +60,40 @@ public class JFSTMerge {
 
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).",arity = 1)
 	public static boolean isCryptographed = true;
-	
+
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
-  
-	@Parameter(names = "--encoding-inference", description = "Tries to infer file encodings to properly merge them. If" +
-            "not enabled, the tool assumes files are encoded in UTF-8.", arity = 1)
-  	public static boolean isEncodingInferenceEnabled = true;
 
-  	@Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
+	@Parameter(names = "--encoding-inference", description = "Tries to infer file encodings to properly merge them. If" +
+			"not enabled, the tool assumes files are encoded in UTF-8.", arity = 1)
+	public static boolean isEncodingInferenceEnabled = true;
+
+	@Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
 			+ "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
-  	public static boolean isWhitespaceIgnored = true;
+	public static boolean isWhitespaceIgnored = true;
 
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
 
-    @Parameter(names = {"--handle-duplicate-declarations", "-hdd"}, description = "Detects situations where merging developers' contributions adds " +
-            "declarations with the same signature to different areas of the same class.", arity = 1)
-    public static boolean isDuplicatedDeclarationHandlerEnabled = true;
+	@Parameter(names = {"--handle-duplicate-declarations", "-hdd"}, description = "Detects situations where merging developers' contributions adds " +
+			"declarations with the same signature to different areas of the same class.", arity = 1)
+	public static boolean isDuplicatedDeclarationHandlerEnabled = true;
 
-    @Parameter(names = {"--handle-initialization-blocks", "-hib"}, description = "Detects and avoid duplications caused by merge of blocks without identifiers," +
-            "using textual similarity.", arity = -1)
-    public static boolean isInitializationBlocksHandlerEnabled = true;
+	@Parameter(names = {"--handle-initialization-blocks", "-hib"}, description = "Detects and avoid duplications caused by merge of blocks without identifiers," +
+			"using textual similarity.", arity = 1)
+	public static boolean isInitializationBlocksHandlerEnabled = true;
 
-    @Parameter(names = {"--handle-new-element-referencing-edited-one", "-hnereo"}, description = "Detects cases where a developer" +
-            "add an element that references an edited one.", arity = 1)
-    public static boolean isNewElementReferencingEditedOneHandlerEnabled = true;
+	@Parameter(names = {"--handle-new-element-referencing-edited-one", "-hnereo"}, description = "Detects cases where a developer" +
+			"add an element that references an edited one.", arity = 1)
+	public static boolean isNewElementReferencingEditedOneHandlerEnabled = true;
 
-    @Parameter(names = {"--handle-method-constructor-renaming-deletion", "-hmcrd"}, description = "Detects and solves conflicts caused by renaming or deletion, where" +
-            "semistructured merge alone is unable to solve.", arity = 1)
-    public static boolean isMethodAndConstructorRenamingandDeletionHandlerEnabled = true;
+	@Parameter(names = {"--handle-method-constructor-renaming-deletion", "-hmcrd"}, description = "Detects and solves conflicts caused by renaming or deletion, where" +
+			"semistructured merge alone is unable to solve.", arity = 1)
+	public static boolean isMethodAndConstructorRenamingAndDeletionHandlerEnabled = true;
 
-    @Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
-        arity = 1)
-    public static boolean isTypeAmbiguityHandlerEnabled = true;
+	@Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
+			arity = 1)
+	public static boolean isTypeAmbiguityHandlerEnabled = true;
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files. 
@@ -188,15 +188,15 @@ public class JFSTMerge {
 		FilesManager.validateFiles(left, base, right);
 
 		if(isEncodingInferenceEnabled) {
-		    new FilesEncoding().analyseFiles(left, base, right);
-        }
+			new FilesEncoding().analyseFiles(left, base, right);
+		}
 
 		if (!isGit) {
 			System.out.println("MERGING FILES: \n" + ((left != null) ? left.getAbsolutePath() : "<empty left>") + "\n" + ((base != null) ? base.getAbsolutePath() : "<empty base>") + "\n" + ((right != null) ? right.getAbsolutePath() : "<empty right>"));
 		}
 
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
-        Map<String, Boolean> handlersParametrizations = assembleHandlersParameters();
+		Map<String, Boolean> handlersParametrizations = assembleHandlersParameters();
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
@@ -300,12 +300,12 @@ public class JFSTMerge {
 	}
 
 	private Map<String, Boolean> assembleHandlersParameters() {
-	    Map<String, Boolean> parameters = new HashMap<String, Boolean>();
-	    parameters.put("duplicateddeclaration", isDuplicatedDeclarationHandlerEnabled);
-	    parameters.put("initializationblocks", isInitializationBlocksHandlerEnabled);
-	    parameters.put("newelementreferencingeditedone", isNewElementReferencingEditedOneHandlerEnabled);
-	    parameters.put("renamingconflicts", isMethodAndConstructorRenamingandDeletionHandlerEnabled);
-	    parameters.put("typeambiguityerror", isTypeAmbiguityHandlerEnabled);
-	    return parameters;
-    }
+		Map<String, Boolean> parameters = new HashMap<String, Boolean>();
+		parameters.put("duplicateddeclaration", isDuplicatedDeclarationHandlerEnabled);
+		parameters.put("initializationblocks", isInitializationBlocksHandlerEnabled);
+		parameters.put("newelementreferencingeditedone", isNewElementReferencingEditedOneHandlerEnabled);
+		parameters.put("renamingconflicts", isMethodAndConstructorRenamingAndDeletionHandlerEnabled);
+		parameters.put("typeambiguityerror", isTypeAmbiguityHandlerEnabled);
+		return parameters;
+	}
 }
