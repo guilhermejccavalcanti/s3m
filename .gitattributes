@@ -1,0 +1,2 @@
+installer/*.jar filter=lfs diff=lfs merge=lfs -text
+binary/*.jar filter=lfs diff=lfs merge=lfs -text
