@@ -5,6 +5,7 @@
 
 tearDownBig()
 {
+    rm -rf $HOME/repo
     rm -rf $HOME/big 
     rm -rf $HOME/bigrepo
     cd $START_PATH
@@ -112,10 +113,10 @@ testLogCorrectness() {
 	assertTrue "[ '$UNSTR_NUM_CONFLICTING_LOC' = '2' ]"
 
 	FP_REDUCTION=$(cat jfstmerge.summary | grep -Eo "A reduction of [0-9]+[.,][0-9]+%" | grep -Eo "[0-9]+[.,][0-9]+%")
-	assertTrue "[ '$FP_REDUCTION' = '100.00%' ] || [ '$FP_REDUCTION' = '100,00%' ]"
+	assertTrue "[ '$FP_REDUCTION' = '100.00%' ]"
 
-	FN_REDUCTION=$(cat jfstmerge.summary | grep -Eo "And a reduction of [0-9]+[.,][0-9]+%" | grep -Eo "[0-9]+[.,][0-9]+%")
-	assertTrue "[ '$FN_REDUCTION' = '100.00%' ] || [ '$FN_REDUCTION' = '100,00%' ]"
+	FN_REDUCTION=$(cat jfstmerge.summary | grep -Eo "And a reduction of [0-9]+.[0-9]+%" | grep -Eo "[0-9]+.[0-9]+%")
+	assertTrue "[ '$FN_REDUCTION' = '100.00%' ]"
 
 	tearDownBig
 }
