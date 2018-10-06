@@ -190,7 +190,7 @@ public final class FilesManager {
 			for (File file : fList){
 				if (file.isFile()){
 					allFiles.add(file.getAbsolutePath());
-				} 
+				}
 			}
 		}
 		return allFiles;
@@ -219,13 +219,11 @@ public final class FilesManager {
 	 * @param file to be read
 	 * @return string content of the file, or null in case of errors.
 	 */
-	public static String readFileContent(File file){
-		//StringBuilder content = new StringBuilder();
+	public static String readFileContent(File file) {
 		String content = "";
-		try{
-			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8);
+		try (BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8)) {
 			content = reader.lines().collect(Collectors.joining("\n"));
-		}catch(Exception e){
+		} catch (Exception e) {
 			//System.err.println(e.getMessage());
 		}
 		return content;
@@ -233,11 +231,11 @@ public final class FilesManager {
 
 	/**
 	 * Given a main list of files path, searches for corresponding files in other two given files path list.
-	 * @param firstVariantDir root directory 
+	 * @param firstVariantDir root directory
 	 * @param mainDir root directory
 	 * @param secondVariantDir root directory
-	 * @param listOfTuplesToBeFilled 
-	 * @param filesPathFromMainVariant 
+	 * @param listOfTuplesToBeFilled
+	 * @param filesPathFromMainVariant
 	 * @param filesPathFromFirstVariant
 	 * @param filesPathFromSecondVariant
 	 */
@@ -401,7 +399,7 @@ public final class FilesManager {
 	}
 
 	/**
-	 * Finds a node with the content in the first parameter, 
+	 * Finds a node with the content in the first parameter,
 	 * and replace the content with the content in the second parameter.
 	 * @param tree
 	 * @param newContent
@@ -423,12 +421,12 @@ public final class FilesManager {
 				}
 			}
 		}
-		return false;		
+		return false;
 	}
 
 	/**
 	 * Finds a node with the given content and
-	 * deletes it from the given tree. 
+	 * deletes it from the given tree.
 	 * @param node represeting the AST.
 	 * @param content
 	 * @return if the deletion was successful
@@ -521,7 +519,7 @@ public final class FilesManager {
 		if(base!=null && base.getAbsolutePath().contains(File.separator+"src"+File.separator)){
 			int srcidx = base.getAbsolutePath().indexOf(File.separator+"src"+File.separator);
 			rootFolderPathBase = (base.getAbsolutePath().substring(0, srcidx))+File.separator;
-		} 
+		}
 		if(right!=null && right.getAbsolutePath().contains(File.separator+"src"+File.separator)){
 			int srcidx = right.getAbsolutePath().indexOf(File.separator+"src"+File.separator);
 			rootFolderPathRight= (right.getAbsolutePath().substring(0, srcidx))+File.separator;
@@ -597,12 +595,12 @@ public final class FilesManager {
 		@SuppressWarnings("unused")
 		String longer = first, shorter = second;
 		if (first.length() < second.length()) { // longer should always have greater length
-			longer = second; 
+			longer = second;
 			shorter= first;
 		}
 		int longerLength = longer.length();
 		if (longerLength == 0) {
-			return 1.0; /* both strings are zero length */ 
+			return 1.0; /* both strings are zero length */
 		}
 
 		int levenshteinDistance = StringUtils.getLevenshteinDistance(first, second);
@@ -625,7 +623,7 @@ public final class FilesManager {
 		sourceCode = sourceCode.replaceAll(">>>>>>> YOURS", "int yyyy;");
 		return sourceCode;
 	}
-	
+
 	/**
 	 * Pretty print of a given non-terminal node.
 	 * @param node
