@@ -20,7 +20,8 @@ jar {
     }
 }
 
-task fatJar(type: Jar) {
+task fatJar(type: Jar, group: "Binaries", description: "Creates S3M's main binary.") {
+
     manifest.from jar.manifest
     classifier = 'all'
     from {
@@ -36,3 +37,24 @@ task fatJar(type: Jar) {
 artifacts {
     archives fatJar
 }
+
+task copyBinary(type: Copy, dependsOn: assemble, group: "Binaries", description: "Copies binaries to /binary folder.") {
+    from fatJar
+    into "binary"
+    rename "jFSTMerge.*", "jFSTMerge.jar"
+}
+
+task updateInstaller(type: Copy, dependsOn: assemble, group: "Binaries", description: "Updates installer jar.") {
+    from fatJar
+    into "installer"
+    rename "jFSTMerge.*", "s3m.jar"
+    
+    doLast {
+        ant.jar(update: "true", destfile: "installer/s3mInstaller.jar") {
+            zipfileset(file: "installer/s3m.jar")
+        }
+        
+        delete "installer/s3m.jar"
+    }
+}
+build.finalizedBy(copyBinary, updateInstaller)
