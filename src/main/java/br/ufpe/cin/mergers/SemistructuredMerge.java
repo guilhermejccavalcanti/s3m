@@ -91,7 +91,7 @@ public final class SemistructuredMerge {
 	 * @param right tree
 	 * @throws TextualMergeException
 	 */
-	private static MergeContext merge(FSTNode left, FSTNode base, FSTNode right, boolean ignoreWhitespaces) throws TextualMergeException {
+	private static MergeContext merge(FSTNode left, FSTNode base, FSTNode right) throws TextualMergeException {
 		// indexes are necessary to a proper matching between nodes
 		left.index 	= 0;
 		base.index 	= 1;
@@ -106,7 +106,7 @@ public final class SemistructuredMerge {
 		FSTNode mergeLeftBaseRight = superimpose(mergeLeftBase, right, null, context, false);
 		
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
-		mergeMatchedContent(mergeLeftBaseRight, context, ignoreWhitespaces);
+		mergeMatchedContent(mergeLeftBaseRight, context);
 		
 		context.superImposedTree = mergeLeftBaseRight;
 		
@@ -116,7 +116,7 @@ public final class SemistructuredMerge {
 	/**
 	 * Superimposes two given ASTs.
 	 * 
-	 * @param nodeA representing the first tree
+	 * @param nodeArepresenting the first tree
 	 * @param nodeB representing the second tree
 	 * @param parent node to be superimposed in (can be null)
 	 * @param context
@@ -279,10 +279,10 @@ public final class SemistructuredMerge {
 	 * @param node to be merged
 	 * @throws TextualMergeException
 	 */
-	private static void mergeMatchedContent(FSTNode node, MergeContext context, boolean ignoreWhitespaces) throws TextualMergeException {
+	private static void mergeMatchedContent(FSTNode node, MergeContext context) throws TextualMergeException {
 		if (node instanceof FSTNonTerminal) {
 			for (FSTNode child : ((FSTNonTerminal) node).getChildren())
-				mergeMatchedContent(child, context, ignoreWhitespaces);
+				mergeMatchedContent(child, context);
 		} else if (node instanceof FSTTerminal) {
 			if (((FSTTerminal) node).getBody().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
 				String body = ((FSTTerminal) node).getBody() + " ";
@@ -292,7 +292,7 @@ public final class SemistructuredMerge {
 				String baseContent = splittedBodyContent[1].trim();
 				String rightContent = splittedBodyContent[2].trim();
 
-				String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, ignoreWhitespaces);
+				String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, true);
 				((FSTTerminal) node).setBody(mergedBodyContent);
 
 				identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
