@@ -36,7 +36,7 @@ public final class SemistructuredMerge {
 	private static final List<ConflictHandler> CONFLICT_HANDLERS = ImmutableList.of(
 			new TypeAmbiguityErrorHandler(),
 			new NewElementReferencingEditedOneHandler(),
-			new RenamingConflictsHandler(),
+			new MethodAndConstructorRenamingAndDeletionHandler(),
 			new InitializationBlocksHandler(),
 			new DuplicatedDeclarationHandler(),
 			new DeletionsHandler()

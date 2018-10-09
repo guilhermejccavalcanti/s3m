@@ -1,4 +1,4 @@
-package test.java.br.ufpe.cin.performance;
+package br.ufpe.cin.performance;
 
 import static org.junit.Assert.assertTrue;
 
