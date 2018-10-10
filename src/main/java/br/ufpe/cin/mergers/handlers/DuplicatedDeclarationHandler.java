@@ -17,9 +17,9 @@ import br.ufpe.cin.mergers.util.Source;
  * This handler detects such situations. Note that semistructured merge detects such false negatives without handlers, so this handler serves only for statistics purpose.
  * @author Guilherme Cavalcanti
  */
-public final class DuplicatedDeclarationHandler {
+public final class DuplicatedDeclarationHandler implements ConflictHandler {
 
-	public static void handle(MergeContext context){
+	public void handle(MergeContext context){
 		int duplicatedDeclarationErrors = 0;
 		
 		long t0 = System.nanoTime();
