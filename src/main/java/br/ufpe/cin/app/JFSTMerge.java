@@ -1,6 +1,5 @@
 package br.ufpe.cin.app;
 
-<<<<<<< HEAD
 import java.io.BufferedReader;
 import java.io.File;
 import java.nio.file.Files;
@@ -13,8 +12,6 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
-=======
->>>>>>> 80db2e7... Merge pull request #5 from guilhermejccavalcanti/master
 import br.ufpe.cin.exceptions.PrintException;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
@@ -34,16 +31,6 @@ import br.ufpe.cin.statistics.Statistics;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
-
-import java.io.BufferedReader;
-import java.io.File;
-import java.nio.file.Files;
-import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
 /**
  * Main class, responsible for performing <i>semistructured</i> merge in java files.
@@ -76,7 +63,6 @@ public class JFSTMerge {
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).", arity = 1)
 	public static boolean isCryptographed = true;
 
-<<<<<<< HEAD
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
@@ -90,14 +76,10 @@ public class JFSTMerge {
 
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
-=======
-	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).", arity = 1)
-	public static boolean logFiles = true;
 
 	@Parameter(names = {"-r", "--renaming"}, description = "Parameter to choose strategy on renaming conflicts.",
             converter = RenamingStrategyConverter.class)
 	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
->>>>>>> 80db2e7... Merge pull request #5 from guilhermejccavalcanti/master
 
 	@Parameter(names = {"--handle-duplicate-declarations", "-hdd"}, description = "Detects situations where merging developers' contributions adds " +
 			"declarations with the same signature to different areas of the same class.", arity = 1)
@@ -117,9 +99,7 @@ public class JFSTMerge {
 
 	@Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
 			arity = 1)
-	public static boolean isTypeAmbiguityHandlerEnabled = true;
-
-	public static Map<String, Boolean> handlersParametrizations;
+	public static boolean isTypeAmbiguityErrorHandlerEnabled = true;
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files.
@@ -222,7 +202,6 @@ public class JFSTMerge {
 		}
 
 		MergeContext context = new MergeContext(left, base, right, outputFilePath);
-		handlersParametrizations = assembleHandlersParameters();
 
 		//there is no need to call specific merge algorithms in equal or consistenly changes files (fast-forward merge)
 		if (FilesManager.areFilesDifferent(left, base, right, outputFilePath, context)) {
@@ -325,13 +304,4 @@ public class JFSTMerge {
 		}
 	}
 
-	private static Map<String, Boolean> assembleHandlersParameters() {
-		Map<String, Boolean> parameters = new HashMap<String, Boolean>();
-		parameters.put("duplicateddeclaration", isDuplicatedDeclarationHandlerEnabled);
-		parameters.put("initializationblocks", isInitializationBlocksHandlerEnabled);
-		parameters.put("newelementreferencingeditedone", isNewElementReferencingEditedOneHandlerEnabled);
-		parameters.put("renamingconflicts", isMethodAndConstructorRenamingAndDeletionHandlerEnabled);
-		parameters.put("typeambiguityerror", isTypeAmbiguityHandlerEnabled);
-		return parameters;
-	}
 }

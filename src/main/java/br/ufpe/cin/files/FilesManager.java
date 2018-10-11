@@ -222,14 +222,10 @@ public final class FilesManager {
 	 */
 	public static String readFileContent(File file) {
 		String content = "";
-<<<<<<< HEAD
 		try{
 			String fileEncoding = FilesEncoding.retrieveEncoding(file);
 
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding));
-=======
-		try (BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8)) {
->>>>>>> 80db2e7... Merge pull request #5 from guilhermejccavalcanti/master
 			content = reader.lines().collect(Collectors.joining("\n"));
 		} catch (Exception e) {
 			//System.err.println(e.getMessage());

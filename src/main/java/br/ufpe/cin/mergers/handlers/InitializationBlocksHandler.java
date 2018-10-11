@@ -1,5 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.TextualMerge;

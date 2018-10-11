@@ -67,9 +67,9 @@ public class TypeAmbiguityErrorHandlerTest {
 
 	@Test
 	public void testTypeAmbiguityErrorParameter() {
-		boolean defaultValue = JFSTMerge.isTypeAmbiguityHandlerEnabled;
+		boolean defaultValue = JFSTMerge.isTypeAmbiguityErrorHandlerEnabled;
 
-		JFSTMerge.isTypeAmbiguityHandlerEnabled = false;
+		JFSTMerge.isTypeAmbiguityErrorHandlerEnabled = false;
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
 				new File("testfiles/importmembermember/left/Test/src/Test.java"),
 				new File("testfiles/importmembermember/base/Test/src/Test.java"),
@@ -79,7 +79,7 @@ public class TypeAmbiguityErrorHandlerTest {
 
 		assertThat(mergeResult).contains("importjava.util.List;importjava.awt.List;publicclassTest{Listlist;}");
 		assertThat(ctx.typeAmbiguityErrorsConflicts).isZero();
-		JFSTMerge.isTypeAmbiguityHandlerEnabled = defaultValue;
+		JFSTMerge.isTypeAmbiguityErrorHandlerEnabled = defaultValue;
 	}
 
 }
