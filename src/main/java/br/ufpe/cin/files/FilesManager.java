@@ -220,15 +220,18 @@ public final class FilesManager {
 	 * @param file to be read
 	 * @return string content of the file, or null in case of errors.
 	 */
-	public static String readFileContent(File file){
-		//StringBuilder content = new StringBuilder();
+	public static String readFileContent(File file) {
 		String content = "";
+<<<<<<< HEAD
 		try{
 			String fileEncoding = FilesEncoding.retrieveEncoding(file);
 
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding));
+=======
+		try (BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8)) {
+>>>>>>> 80db2e7... Merge pull request #5 from guilhermejccavalcanti/master
 			content = reader.lines().collect(Collectors.joining("\n"));
-		}catch(Exception e){
+		} catch (Exception e) {
 			//System.err.println(e.getMessage());
 		}
 		return content;
@@ -236,7 +239,7 @@ public final class FilesManager {
 
 	/**
 	 * Given a main list of files path, searches for corresponding files in other two given files path list.
-	 * @param firstVariantDir root directory 
+	 * @param firstVariantDir root directory
 	 * @param mainDir root directory
 	 * @param secondVariantDir root directory
 	 * @param listOfTuplesToBeFilled
@@ -404,7 +407,7 @@ public final class FilesManager {
 	}
 
 	/**
-	 * Finds a node with the content in the first parameter, 
+	 * Finds a node with the content in the first parameter,
 	 * and replace the content with the content in the second parameter.
 	 * @param tree
 	 * @param newContent
@@ -431,7 +434,7 @@ public final class FilesManager {
 
 	/**
 	 * Finds a node with the given content and
-	 * deletes it from the given tree. 
+	 * deletes it from the given tree.
 	 * @param node represeting the AST.
 	 * @param content
 	 * @return if the deletion was successful

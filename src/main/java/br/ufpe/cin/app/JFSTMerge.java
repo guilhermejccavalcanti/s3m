@@ -1,5 +1,6 @@
 package br.ufpe.cin.app;
 
+<<<<<<< HEAD
 import java.io.BufferedReader;
 import java.io.File;
 import java.nio.file.Files;
@@ -12,6 +13,8 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
 
+=======
+>>>>>>> 80db2e7... Merge pull request #5 from guilhermejccavalcanti/master
 import br.ufpe.cin.exceptions.PrintException;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
@@ -24,12 +27,23 @@ import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.MergeScenario;
+import br.ufpe.cin.mergers.util.RenamingStrategy;
+import br.ufpe.cin.mergers.util.converters.RenamingStrategyConverter;
 import br.ufpe.cin.printers.Prettyprinter;
 import br.ufpe.cin.statistics.Statistics;
-
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+
+import java.io.BufferedReader;
+import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
 /**
  * Main class, responsible for performing <i>semistructured</i> merge in java files.
@@ -52,15 +66,17 @@ public class JFSTMerge {
 	@Parameter(names = "-d", arity = 3, description = "Directories to be merged (mine, base, yours)")
 	List<String> directoriespath = new ArrayList<String>();
 
-	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, " + "then it will use \"yours\" as the destination for the merge. ")
+	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
+            + "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
 
 	@Parameter(names = "-g", description = "Parameter to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
 
-	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).",arity = 1)
+	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).", arity = 1)
 	public static boolean isCryptographed = true;
 
+<<<<<<< HEAD
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
@@ -74,6 +90,14 @@ public class JFSTMerge {
 
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
+=======
+	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).", arity = 1)
+	public static boolean logFiles = true;
+
+	@Parameter(names = {"-r", "--renaming"}, description = "Parameter to choose strategy on renaming conflicts.",
+            converter = RenamingStrategyConverter.class)
+	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
+>>>>>>> 80db2e7... Merge pull request #5 from guilhermejccavalcanti/master
 
 	@Parameter(names = {"--handle-duplicate-declarations", "-hdd"}, description = "Detects situations where merging developers' contributions adds " +
 			"declarations with the same signature to different areas of the same class.", arity = 1)
@@ -98,9 +122,9 @@ public class JFSTMerge {
 	public static Map<String, Boolean> handlersParametrizations;
 
 	/**
-	 * Merges merge scenarios, indicated by .revisions files. 
+	 * Merges merge scenarios, indicated by .revisions files.
 	 * This is mainly used for evaluation purposes.
-	 * A .revisions file contains the directories of the revisions to merge in top-down order: 
+	 * A .revisions file contains the directories of the revisions to merge in top-down order:
 	 * first revision, base revision, second revision (three-way merge).
 	 * @param revisionsPath file path
 	 */
@@ -180,9 +204,9 @@ public class JFSTMerge {
 
 	/**
 	 * Three-way semistructured merge of the given .java files.
-	 * @param left (mine) version of the file, or <b>null</b> in case of intentional empty file. 
-	 * @param base (older) version of the file, or <b>null</b> in case of intentional empty file. 
-	 * @param right (yours) version of the file, or <b>null</b> in case of intentional empty file. 
+	 * @param left (mine) version of the file, or <b>null</b> in case of intentional empty file.
+	 * @param base (older) version of the file, or <b>null</b> in case of intentional empty file.
+	 * @param right (yours) version of the file, or <b>null</b> in case of intentional empty file.
 	 * @param outputFilePath of the merged file. Can be <b>null</b>, in this case, the output will only be printed in the console.
 	 * @return context with relevant information gathered during the merging process.
 	 */
