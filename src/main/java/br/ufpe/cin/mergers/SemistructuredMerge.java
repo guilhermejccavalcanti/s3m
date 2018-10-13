@@ -86,7 +86,14 @@ public final class SemistructuredMerge {
             // handling special kinds of conflicts
             context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
 			for (ConflictHandler conflictHandler : conflictHandlers) {
-                conflictHandler.handle(context);
+
+				try {
+					conflictHandler.handle(context);
+				} catch (TextualMergeException e) {
+					String message = ExceptionUtils.getCauseMessage(e);
+					throw new SemistructuredMergeException(message, context);
+				}
+
             }
 
         } catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex) {
