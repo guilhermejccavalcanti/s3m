@@ -26,9 +26,9 @@ public class CryptoPerformanceTest {
 			public void write(int b) {}
 		});
 		System.setOut(hideStream);
-	}
+    }
 
-	@Before
+    @Before
 	public void decryptFiles() {
 		try {
 			decrypt("jfstmerge.statistics");
@@ -38,7 +38,7 @@ public class CryptoPerformanceTest {
 			System.out.println("Cryptography performance test: the files are already decrypted. Proceeding normally.");
 		}
 	}
-
+		
 	@Test
 	public void testPerformanceWithDeletion() {
 
