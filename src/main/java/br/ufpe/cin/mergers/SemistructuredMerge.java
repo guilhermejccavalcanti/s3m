@@ -5,13 +5,14 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import br.ufpe.cin.mergers.handlers.*;
+import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
 
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
-import br.ufpe.cin.mergers.handlers.ConflictsHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
@@ -32,6 +33,15 @@ public final class SemistructuredMerge {
 	static final String MERGE_SEPARATOR = "##FSTMerge##";
 	static final String SEMANTIC_MERGE_MARKER = "~~FSTMerge~~";
 
+	private static final List<ConflictHandler> CONFLICT_HANDLERS = ImmutableList.of(
+			new TypeAmbiguityErrorHandler(),
+			new NewElementReferencingEditedOneHandler(),
+			new MethodAndConstructorRenamingAndDeletionHandler(),
+			new InitializationBlocksHandler(),
+			new DuplicatedDeclarationHandler(),
+			new DeletionsHandler()
+	);
+
 	/**
 	 * Three-way semistructured merge of three given files.
 	 * @param left
@@ -43,29 +53,36 @@ public final class SemistructuredMerge {
 	 * @throws TextualMergeException
 	 */
 	public static String merge(File left, File base, File right, MergeContext context)	throws SemistructuredMergeException, TextualMergeException {
-		try {
-			// parsing the files to be merged
-			JParser parser = new JParser();
-			FSTNode leftTree = parser.parse(left);
-			FSTNode baseTree = parser.parse(base);
-			FSTNode rightTree = parser.parse(right);
-
-			// merging
-			context.join(merge(leftTree, baseTree, rightTree));
-
-			// handling special kinds of conflicts
-			ConflictsHandler.handle(context);
-
-		} catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex) {
-			String message = ExceptionUtils.getCauseMessage(ex);
-			if(ex instanceof FileNotFoundException) //FileNotFoundException does not support custom messages
-				message = "The merged file was deleted in one version.";
-			throw new SemistructuredMergeException(message, context);
-		}
-
-		// during the parsing process, code indentation is typically lost, so we reindent the code
-		return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
+		return merge(left, base, right, context, CONFLICT_HANDLERS);
 	}
+
+    public static String merge(File left, File base, File right, MergeContext context, List<ConflictHandler> conflictHandlers)	throws SemistructuredMergeException, TextualMergeException {
+        try {
+            // parsing the files to be merged
+            JParser parser = new JParser();
+            FSTNode leftTree = parser.parse(left);
+            FSTNode baseTree = parser.parse(base);
+            FSTNode rightTree = parser.parse(right);
+
+            // merging
+            context.join(merge(leftTree, baseTree, rightTree));
+
+            // handling special kinds of conflicts
+            context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); //partial result of semistructured merge is necessary for further processing
+            for (ConflictHandler conflictHandler : conflictHandlers) {
+                conflictHandler.handle(context);
+            }
+
+        } catch (ParseException | FileNotFoundException | UnsupportedEncodingException | TokenMgrError ex) {
+            String message = ExceptionUtils.getCauseMessage(ex);
+            if(ex instanceof FileNotFoundException) //FileNotFoundException does not support custom messages
+                message = "The merged file was deleted in one version.";
+            throw new SemistructuredMergeException(message, context);
+        }
+
+        // during the parsing process, code indentation is typically lost, so we reindent the code
+        return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
+    }
 
 	/**
 	 * Merges the AST representation of previous given java files.

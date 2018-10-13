@@ -1,15 +1,15 @@
 package br.ufpe.cin.mergers.handlers;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.stream.Collectors;
-
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeContext;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Semistructured merge uses elements identifier to match nodes, if a node has no identifier,
@@ -19,28 +19,31 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  *
  * @author Guilherme
  */
-public class InitializationBlocksHandler {
+public class InitializationBlocksHandler implements ConflictHandler {
 
-    public static void handle(MergeContext context, List<FSTNode> leftInitlBlocks, List<FSTNode> baseInitlBlocks, List<FSTNode> rightInitlBlocks) throws TextualMergeException {
+    public void handle(MergeContext context) throws TextualMergeException {
+        List<FSTNode> leftInitlBlocks = findInitializationBlocks(context.addedLeftNodes);
+        List<FSTNode> rightInitlBlocks = findInitializationBlocks(context.addedRightNodes);
+        List<FSTNode> baseInitlBlocks = findInitializationBlocks(context.deletedBaseNodes);
         List<Triple> matchedInitlBlocks = new ArrayList<Triple>();
 
-		//1. when there is only a single block, this is the match
-		if(leftInitlBlocks.size()==1 && rightInitlBlocks.size()==1 && baseInitlBlocks.size()==1){
-			Triple matched 	   = new Triple(leftInitlBlocks.get(0), baseInitlBlocks.get(0), rightInitlBlocks.get(0));
-			matchedInitlBlocks.add(matched);
-		} else {
-			//2. find similar left and right nodes to a base node
-			for(FSTNode baseBlock : baseInitlBlocks){
-				//search similar node in left, and remove from the list of left nodes for the next iteration
-				FSTNode leftSimilarBlock = leftInitlBlocks.stream()
-						.filter(leftBlock -> areSimilarBlocks(baseBlock, leftBlock))
-						.findFirst()
-						.orElse(null);
-				if(leftSimilarBlock != null){
-					leftInitlBlocks = leftInitlBlocks.stream()
-							.filter(leftBlock -> !leftSimilarBlock.equals(leftBlock))
-							.collect(Collectors.toList());
-				}
+        //1. when there is only a single block, this is the match
+        if (leftInitlBlocks.size() == 1 && rightInitlBlocks.size() == 1 && baseInitlBlocks.size() == 1) {
+            Triple matched = new Triple(leftInitlBlocks.get(0), baseInitlBlocks.get(0), rightInitlBlocks.get(0));
+            matchedInitlBlocks.add(matched);
+        } else {
+            //2. find similar left and right nodes to a base node
+            for (FSTNode baseBlock : baseInitlBlocks) {
+                //search similar node in left, and remove from the list of left nodes for the next iteration
+                FSTNode leftSimilarBlock = leftInitlBlocks.stream()
+                        .filter(leftBlock -> areSimilarBlocks(baseBlock, leftBlock))
+                        .findFirst()
+                        .orElse(null);
+                if (leftSimilarBlock != null) {
+                    leftInitlBlocks = leftInitlBlocks.stream()
+                            .filter(leftBlock -> !leftSimilarBlock.equals(leftBlock))
+                            .collect(Collectors.toList());
+                }
 
                 //search similar node in right, and remove from the list of right nodes for the next iteration
                 FSTNode rightSimilarBlock = rightInitlBlocks.stream()
@@ -120,6 +123,12 @@ public class InitializationBlocksHandler {
         } else {                //are different
             return false;
         }
+    }
+
+    private static List<FSTNode> findInitializationBlocks(List<FSTNode> nodes) {
+        return nodes.stream()
+                .filter(p -> p.getType().equals("InitializerDecl"))
+                .collect(Collectors.toList());
     }
 }
 

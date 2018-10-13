@@ -1,7 +1,6 @@
 public class Test {
 	
-	public void m()
-	{
+	public void m()	{
 		int a;
 	}
 

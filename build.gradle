@@ -8,6 +8,7 @@ repositories {
 // most of the jar libraries is available in the /dependencies folder, not in a remote repository
 dependencies {
     compile fileTree(dir: 'dependencies', include: ['*.jar'])
+    compile 'com.google.guava:guava:26.0-jre'
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:3.11.0'
 }
@@ -19,8 +20,7 @@ jar {
     }
 }
 
-task fatJar(type: Jar, group: "Binaries", description: "Creates S3M's main binary.") {
-
+task fatJar(type: Jar) {
     manifest.from jar.manifest
     classifier = 'all'
     from {
