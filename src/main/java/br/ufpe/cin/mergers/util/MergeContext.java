@@ -16,7 +16,7 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
  * @author Guilherme
  */
 public class MergeContext {
-	File base;
+    File base;
 	File right;
 	File left;
 	String outputFilePath;
@@ -63,8 +63,7 @@ public class MergeContext {
 	public int orderingConflicts 			   = 0;
 	public int duplicatedDeclarationErrors	   = 0;
 	public int equalConflicts     = 0;
-	
-	
+
 	public MergeContext(){
 	}
 

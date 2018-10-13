@@ -12,9 +12,9 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * Behavioral errors might occur when one developer adds an element that refers to an edited one.
  * This class handle such cases.
  */
-public final class NewElementReferencingEditedOneHandler {
+public final class NewElementReferencingEditedOneHandler implements ConflictHandler {
 
-	public static void handle(MergeContext context) {
+	public void handle(MergeContext context) {
 		/*
 		 * using unstructured merge output as guide to ensure that semistructured merge is not worse than unstructured merge.
 		 * if there is a conflict with the investigated elements in unstructured merge output, we flag the elements as conflicting

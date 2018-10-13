@@ -27,11 +27,11 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * This last solution also verify if the renamed changeset includes a new reference to that class.
  * @author Guilherme
  */
-public class DeletionsHandler {
+public class DeletionsHandler implements ConflictHandler {
 
 	private final static double DEFAULT_SIMILARITY_THRESHOLD = 0.9;
 
-	public static void handle(MergeContext context) {
+	public void handle(MergeContext context) {
 		normalizeDeletions(context);
 		for(FSTNode deletedLeft : context.nodesDeletedByLeft){
 			manageDeletions(context, deletedLeft, context.rightTree, true);
