@@ -34,7 +34,7 @@ public class FilesEncoding {
         }
     }
 
-    static String retrieveEncoding(File file) {
+    public static String retrieveEncoding(File file) {
         return encodings.getOrDefault(file, DEFAULT_ENCODING);
     }
 

@@ -31,10 +31,10 @@ public class EncodingInferenceParameterTest {
         assertThat(mergeResult).isEmpty();
     }
 
-    // The first character is a special one from UTF-16.
     @Test
     public void testEncodingInferenceEnabled() {
         String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(getMergeResult(true));
+        // The first character is a special one from UTF-16.
         assertThat(mergeResult.substring(1)).isEqualTo("publicclassTest{voidhelloWorld(){System.out.println(\"HelloWorld!\");}}");
     }
 
