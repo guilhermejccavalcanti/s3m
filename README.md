@@ -10,25 +10,30 @@ A semistructured merge tool for Java applications.
 
 Contact Guilherme Cavalcanti &lt;<gjcc@cin.ufpe.br>&gt;.
 
-Compilation
------------
+## Getting Started
+
+### Downloading
+This project uses [Git Large File Storage](https://git-lfs.github.com/) to version binaries. 
+- After installing it, you may additionally run ``git lfs install --skip-smudge`` to avoid downloading the project binaries.
+- It's always possible to retrieve their most updated versions by running `git lfs pull`.
+
+### Compilation
 This project uses Gradle to manage all dependencies and versioning. JAVA 8 is required.
 
+### Installation
 
-Installation
--------------
 #### Requisites
 
-The instalation integrates the tool with GIT version control system. So, GIT must be installed and configured. Otherwise, you can run the tool [standalone](https://github.com/guilhermejccavalcanti/jFSTMerge#running-standalone).
+Installation integrates the tool with GIT version control system. So, GIT must be installed and configured. Otherwise, you can run the tool [standalone](https://github.com/guilhermejccavalcanti/jFSTMerge#running-standalone).
 
 #### Automatic installation
 Double-click on the jar from the [/installer](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/installer) folder.
 In case double-click does not work, install with the command 
-`java -jar s3mInstaller.jar`
+`java -jar s3mInstaller.jar`.
 
 #### Manual installation
-1. Copy the [binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/jFSTMerge.jar) file to your `$HOME` folder
-2. Add the following lines to your `.gitconfig` file (typically localized in the `$HOME` folder)
+1. Copy the [binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/jFSTMerge.jar) file to your `$HOME` folder.
+2. Add the following lines to your `.gitconfig` file (typically localized in the `$HOME` folder).
 	```
     [core]
 		attributesfile = ~/.gitattributes
@@ -41,12 +46,13 @@ In case double-click does not work, install with the command
     `*.java merge=s3m`
     
 
-Usage
--------------
+## Usage
 
-Usage data (such as the number of detected conflicts, number of merged scenarios, and more useful details for studying the benefits and drawbacks of the tool) is stored in the `$HOME/.jfstmerge` folder.  A summary of collected statistics that might help one decide to continue using the tool is available in the `jfstmerge.summary` file.
+#### Statistics
+- Usage data (such as the number of detected conflicts, number of merged scenarios, and more useful details for studying the benefits and drawbacks of the tool) is stored in the `$HOME/.jfstmerge` folder.
+- A summary of collected statistics that might help one decide to continue using the tool is available in the `jfstmerge.summary` file.
 
-#### Running with git
+#### Running with _git_
 
 After installation, the tool is automatically integrated with git, with no need for further configuration. Then every time you invoke the `git merge` command, the tool is executed.
 
@@ -80,26 +86,31 @@ Then, after the "git merge" command detects conflicts, call the tool with:
    `git mergetool -tool=jfstmerge`
 -->
 
-Testing
--------------
+## Development
 
-We provide standalone tests in the [/testfiles/shelltests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/testfiles/shelltests) folder in addition to a few [JUnit tests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/src/br/ufpe/cin/tests).
-To run theses tests, you will need the shunit2 framework installed:
+### Testing
 
-* On Mac:
-1. Install the homebrew packet manager
-2. Run the command  `brew install shunit2 `
+We provide standalone shell tests in addition to a few [JUnit tests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/src/br/ufpe/cin/tests). To execute those, the [shunit2](https://github.com/kward/shunit2/) framework is required:
 
-* On Linux:
-1. `sudo apt-get install shunit2`
+* Mac:
+1. Install [Homebrew](https://brew.sh/) for package managing.
+2. Run `brew install shunit2 `.
 
-* On Windows:
-1. Install a Linux [enviroment](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) , and follow the manual instalation [instructions](https://github.com/guilhermejccavalcanti/jFSTMerge#manual-installation) above on the Linux enviroment.
+* Linux:
+1. Run `sudo apt-get install shunit2`.
 
-To execute the tests, follow the instructions bellow:
-1. Go to the testfiles/shelltests directory inside the jFSTMerge project folder
-2. Open the terminal
-3. Run the command `shunit2 test_you_want_to_execute.sh`
-4. Take a look at the output in the terminal to see the result of your tests
+* Windows:
+1. Run `git config --global core.autocrlf true` to avoid line-ending issues, as shell tests use primarily LF line-endings.
+2. Install a Linux [environment](https://www.howtogeek.com/249966/how-to-install-and-use-the-linux-bash-shell-on-windows-10/) and follow the [manual installation instructions](https://github.com/guilhermejccavalcanti/jFSTMerge#manual-installation) above on it.
 
-The files "exemplo", "exemplotxt" and "big"  should be copied to your $HOME directory during the execution of the tests (you can delete them manually if you want after the execution of the tests).
+To execute the tests, follow the instructions below:
+1. Open terminal in [testfiles/shelltests](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/testfiles/shelltests) directory.
+2. Run `shunit2 s3mTests.sh` to execute all of the tests. It's possible to execute isolated tests by replacing `s3mTests` for any `.sh` file. 
+
+<!--The files "exemplo", "exemplotxt" and "big"  should be copied to your $HOME directory during the execution of the tests (you can delete them manually if you want after the execution of the tests).-->
+
+### Binaries updating
+The main and installer binaries ([jFSTMerge](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/jFSTMerge.jar) and [s3mInstaller](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/installer/s3mInstaller.jar), respectively) are updated on every build.
+ - It's possible to update the main binary by running `gradle copyBinary`.
+ - It's possible to update the installer binary by running `gradle updateInstaller`.
+ On both tasks, the files are assembled but no test is executed.
