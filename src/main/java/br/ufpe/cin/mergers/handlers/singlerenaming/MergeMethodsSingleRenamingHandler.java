@@ -19,6 +19,11 @@ public class MergeMethodsSingleRenamingHandler implements SingleRenamingHandler 
         MergeConflict mergeConflict = FilesManager.extractMergeConflicts(conflictNodeContent).get(0);
         String oppositeSideNodeContent = RenamingUtils.getMergeConflictContentOfOppositeSide(mergeConflict, renamingSide);
 
+        if (similarNodes.isEmpty()) {
+            ((FSTTerminal) conflictNode).setBody(oppositeSideNodeContent);
+            return;
+        }
+
         String possibleRenamingContent = RenamingUtils.getMostSimilarContent(similarNodes);
         String newSignature = RenamingUtils.getSignature(possibleRenamingContent);
         String newBody = RenamingUtils.removeSignature(oppositeSideNodeContent);

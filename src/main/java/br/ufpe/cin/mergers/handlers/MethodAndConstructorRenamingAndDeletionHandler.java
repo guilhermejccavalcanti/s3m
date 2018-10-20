@@ -22,7 +22,6 @@ import java.util.List;
 public final class MethodAndConstructorRenamingAndDeletionHandler implements ConflictHandler {
     private static final double BODY_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
 
-
     public void handle(MergeContext context) {
         //when both developers rename the same method/constructor
         handleMutualRenamings(context);
