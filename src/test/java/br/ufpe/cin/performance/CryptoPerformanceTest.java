@@ -16,7 +16,7 @@ public class CryptoPerformanceTest {
 
 	private static final int NUM_ITERATIONS = 6;
 	private static final double ACCEPTED_MARGIN = 0.4;
-	
+
 	@BeforeClass
 	public static void setUpBeforeClass() {
 		//hidding sysout output
@@ -124,5 +124,5 @@ public class CryptoPerformanceTest {
 		File file = new File(logPath);
 		CryptoUtils.decrypt(file, file);
 	}
-	
+
 }

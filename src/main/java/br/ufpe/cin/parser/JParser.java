@@ -5,8 +5,10 @@ import java.io.FileInputStream;
 import java.io.FileNotFoundException;
 import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import br.ufpe.cin.app.JFSTMerge;
+import br.ufpe.cin.files.FilesEncoding;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.generated.Java18MergeParser;
 import cide.gparser.OffsetCharStream;
@@ -39,7 +41,9 @@ public class JParser {
 			if(!JFSTMerge.isGit){
 				System.out.println("Parsing: " + javaFile.getAbsolutePath());
 			}
-			Java18MergeParser parser = new Java18MergeParser(new OffsetCharStream(new InputStreamReader(new FileInputStream(javaFile),"UTF8")));
+
+			String fileEncoding = FilesEncoding.retrieveEncoding(javaFile);
+			Java18MergeParser parser = new Java18MergeParser(new OffsetCharStream(new InputStreamReader(new FileInputStream(javaFile), Charset.forName(fileEncoding))));
 			parser.CompilationUnit(false);
 			generatedAst.addChild(new FSTNonTerminal("Java-File", javaFile.getName()));
 			generatedAst.addChild(parser.getRoot());

@@ -94,7 +94,7 @@ testLogCorrectness() {
 	assertTrue "[ '$NUM_JAVA_FILES' = '3' ]"
 
 	FP_AVOIDED=$(cat jfstmerge.summary | grep -Eo "least [0-9]+ false positive\(s\)" | grep -Eo "[0-9]")
-	assertTrue "[ '$FP_AVOIDED' = '1' ]"
+	assertTrue "[ '$FP_AVOIDED' = '2' ]"
 
 	FN_AVOIDED=$(cat jfstmerge.summary | grep -Eo "[0-9]+ false negative\(s\)" | grep -Eo "[0-9]")
 	assertTrue "[ '$FN_AVOIDED' = '1' ]"
@@ -106,10 +106,10 @@ testLogCorrectness() {
 	assertTrue "[ '$S3M_NUM_CONFLICTING_LOC' = '2' ]"
 
 	UNSTR_NUM_CONFLICTS=$(cat jfstmerge.summary | grep -Eo "to [0-9]+ conflicts" | grep -Eo "[0-9]")
-	assertTrue "[ '$UNSTR_NUM_CONFLICTS' = '1' ]"
+	assertTrue "[ '$UNSTR_NUM_CONFLICTS' = '2' ]"
 
 	UNSTR_NUM_CONFLICTING_LOC=$(cat jfstmerge.summary | grep -Eo "and [0-9]+ conflicting" | grep -Eo "[0-9]")
-	assertTrue "[ '$UNSTR_NUM_CONFLICTING_LOC' = '2' ]"
+	assertTrue "[ '$UNSTR_NUM_CONFLICTING_LOC' = '5' ]"
 
 	FP_REDUCTION=$(cat jfstmerge.summary | grep -Eo "A reduction of [0-9]+[.,][0-9]+%" | grep -Eo "[0-9]+[.,][0-9]+%")
 	assertTrue "[ '$FP_REDUCTION' = '100.00%' ] || [ '$FP_REDUCTION' = '100,00%' ]"

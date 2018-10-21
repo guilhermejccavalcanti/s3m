@@ -1,6 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -20,7 +20,7 @@ public class DuplicatedDeclarationErrorsHandlerTest {
 		@SuppressWarnings("unused")
 		PrintStream originalStream = System.out;
 		PrintStream hideStream    = new PrintStream(new OutputStream(){
-		    public void write(int b) {}
+			public void write(int b) {}
 		});
 		System.setOut(hideStream);
 	}
@@ -32,7 +32,7 @@ public class DuplicatedDeclarationErrorsHandlerTest {
 				new File("testfiles/duplicationsnoconflict/base/Test.java"),
 				new File("testfiles/duplicationsnoconflict/right/Test.java"),
 				null);
-		assertTrue(ctx.duplicatedDeclarationErrors==1);
+		assertThat(ctx.duplicatedDeclarationErrors).isZero();
 	}
 
 	@Test
@@ -42,6 +42,20 @@ public class DuplicatedDeclarationErrorsHandlerTest {
 				new File("testfiles/duplicationsconflicting/base/Test.java"),
 				new File("testfiles/duplicationsconflicting/right/Test.java"),
 				null);
-		assertTrue(ctx.duplicatedDeclarationErrors==0);
+		assertThat(ctx.duplicatedDeclarationErrors).isOne();
+	}
+
+	@Test
+	public void testDuplicationDeclarationParameter() {
+		boolean defaultValue = JFSTMerge.isDuplicatedDeclarationHandlerEnabled;
+
+		JFSTMerge.isDuplicatedDeclarationHandlerEnabled = false;
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/duplicationsconflicting/left/Test.java"),
+				new File("testfiles/duplicationsconflicting/base/Test.java"),
+				new File("testfiles/duplicationsconflicting/right/Test.java"),
+				null);
+		assertThat(ctx.duplicatedDeclarationErrors).isZero();
+		JFSTMerge.isDuplicatedDeclarationHandlerEnabled = defaultValue;
 	}
 }
