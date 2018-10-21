@@ -11,7 +11,7 @@ testASCIIEncoding()
 
 testISOEncoding() 
 {
-	multipleEncodingsFunction "$START_PATH/otherencodings/ISO1" "0"
+	multipleEncodingsFunction "$START_PATH/otherencodings/ISO1" "1"
 }
 
 testUTF8Encoding() 

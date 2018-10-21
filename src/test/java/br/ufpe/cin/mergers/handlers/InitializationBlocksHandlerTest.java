@@ -1,6 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
-import static org.junit.Assert.assertTrue;
+import static org.assertj.core.api.Assertions.*;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -35,8 +35,8 @@ public class InitializationBlocksHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINE_name=\"Left\";=======_name=\"Right\";>>>>>>>YOURS"));
-		assertTrue(ctx.initializationBlocksConflicts == 1);
+		assertThat(mergeResult).contains("<<<<<<<MINE_name=\"Left\";=======_name=\"Right\";>>>>>>>YOURS");
+		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 
 	@Test
@@ -48,8 +48,8 @@ public class InitializationBlocksHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINE_name=\"Left\";=======_name=\"Right\";>>>>>>>YOURS"));
-		assertTrue(ctx.initializationBlocksConflicts == 1);
+		assertThat(mergeResult).contains("<<<<<<<MINE_name=\"Left\";=======_name=\"Right\";>>>>>>>YOURS");
+		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 
 	@Test
@@ -61,8 +61,25 @@ public class InitializationBlocksHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertTrue(mergeResult.contains("<<<<<<<MINESystem.out.println(\"Left\");=======try{Class.forName(\"Right\");}catch(ClassNotFoundExceptione){e.printStackTrace();}>>>>>>>YOURS"));
-		assertTrue(ctx.initializationBlocksConflicts == 1);
+		assertThat(mergeResult).contains("<<<<<<<MINESystem.out.println(\"Left\");=======try{Class.forName(\"Right\");}catch(ClassNotFoundExceptione){e.printStackTrace();}>>>>>>>YOURS");
+		assertThat(ctx.initializationBlocksConflicts).isOne();
+	}
+
+	@Test
+	public void testInitializationBlocksParameter() {
+        boolean defaultValue = JFSTMerge.isInitializationBlocksHandlerEnabled;
+
+        JFSTMerge.isInitializationBlocksHandlerEnabled = false;
+        MergeContext ctx = 	new JFSTMerge().mergeFiles(
+                new File("testfiles/initlblocksdistincts/left/Test.java"),
+                new File("testfiles/initlblocksdistincts/base/Test.java"),
+                new File("testfiles/initlblocksdistincts/right/Test.java"),
+                null);
+        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+
+        assertThat(mergeResult).isEqualTo("publicclassTest{staticString_name;static{System.out.println(\"Left\");}static{try{Class.forName(\"Right\");}catch(ClassNotFoundExceptione){e.printStackTrace();}}}");
+        assertThat(ctx.initializationBlocksConflicts).isZero();
+        JFSTMerge.isInitializationBlocksHandlerEnabled = defaultValue;
 	}
 
 }
