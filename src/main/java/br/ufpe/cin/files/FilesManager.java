@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -227,8 +228,11 @@ public final class FilesManager {
 
 			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding));
 			content = reader.lines().collect(Collectors.joining("\n"));
-		} catch (Exception e) {
-			//System.err.println(e.getMessage());
+		} catch (IOException e) {
+			System.err.println("Error at opening file. Shutting down.");
+			System.exit(1);
+		} catch (NullPointerException e) {
+			return "";
 		}
 		return content;
 	}

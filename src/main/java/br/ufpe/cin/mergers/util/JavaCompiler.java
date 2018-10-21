@@ -105,7 +105,7 @@ public class JavaCompiler {
 	 * @return
 	 */
 	private String generateUnitName(MergeContext context) {
-		String unitName = "anyname";
+		String unitName = "";
 		try{
 			String projectpath = FilesManager.estimateProjectRootFolderPath(context);
 			String pattern = Pattern.quote(System.getProperty("file.separator"));
@@ -118,15 +118,17 @@ public class JavaCompiler {
 
 			if(left!=null){
 				int srcidx = left.getAbsolutePath().indexOf(projectname);
-				unitName = (left.getAbsolutePath().substring(srcidx, left.getAbsolutePath().length()));
+				unitName = (left.getAbsolutePath().substring(srcidx));
 			}else if(base!=null){
 				int srcidx = base.getAbsolutePath().indexOf(projectname);
-				unitName = (base.getAbsolutePath().substring(srcidx, base.getAbsolutePath().length()));
+				unitName = (base.getAbsolutePath().substring(srcidx));
 			} else if(right!=null){
 				int srcidx = right.getAbsolutePath().indexOf(projectname);
-				unitName = (right.getAbsolutePath().substring(srcidx, right.getAbsolutePath().length()));
+				unitName = (right.getAbsolutePath().substring(srcidx));
 			}
-		}catch(Exception e){} //in case of any error gives a generic unit name
+		} catch(StringIndexOutOfBoundsException e){ //in case of any error gives a generic unit name
+			unitName = "anyname";
+		}
 		return unitName;
 	}
 

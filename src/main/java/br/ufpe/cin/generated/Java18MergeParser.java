@@ -10367,12 +10367,14 @@ public class Java18MergeParser extends AbstractFSTParser implements Java18MergeP
         }
         p = p.next;
       } while (p != null);
-      } catch(LookaheadSuccess ls) { }
+      } catch(LookaheadSuccess ls) {
+        System.err.println("Parsing error!");
+      }
     }
     jj_rescan = false;
   }
 
-  final private void jj_save(int index, int xla) {
+  private void jj_save(int index, int xla) {
     JJCalls p = jj_2_rtns[index];
     while (p.gen > jj_gen) {
       if (p.next == null) { p = p.next = new JJCalls(); break; }
