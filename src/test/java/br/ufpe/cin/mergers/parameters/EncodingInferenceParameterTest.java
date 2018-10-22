@@ -27,8 +27,9 @@ public class EncodingInferenceParameterTest {
 
     @Test
     public void testEncodingInferenceDisabled() {
-        String mergeResult = getMergeResult(false);
-        assertThat(mergeResult).isEmpty();
+        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(getMergeResult(false));
+        // The first two characters are weird ones.
+        assertThat(mergeResult.substring(2)).isEqualTo("publicclassTest{voidhelloWorld(){System.out.println(\"HelloWorld!\");}}");
     }
 
     @Test

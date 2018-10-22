@@ -223,17 +223,40 @@ public final class FilesManager {
 	 */
 	public static String readFileContent(File file) {
 		String content = "";
-		try{
-			String fileEncoding = FilesEncoding.retrieveEncoding(file);
 
-			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding));
+		String fileEncoding = FilesEncoding.retrieveEncoding(file);
+		try(BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding))) {
 			content = reader.lines().collect(Collectors.joining("\n"));
+
 		} catch (IOException e) {
-			System.err.println("Error at opening file. Shutting down.");
+			System.err.println("Error at reading file. Shutting down.");
 			System.exit(1);
-		} catch (NullPointerException e) {
+
+		} catch (NullPointerException e) { // The file has been deleted between directories.
 			return "";
+
+		} catch (UncheckedIOException e) { // The file is encoded with an unsupported text encoding, so we read characters.
+			return readFileContentUnsupportedEncoding(file);
 		}
+
+		return content;
+	}
+
+	private static String readFileContentUnsupportedEncoding(File file) {
+		String content = "";
+		try(InputStreamReader reader = new InputStreamReader(Files.newInputStream(Paths.get(file.getAbsolutePath())))) {
+			char[] buffer = new char[4096];
+
+			StringBuilder builder = new StringBuilder();
+			while(reader.read(buffer) > 0)
+				builder.append(buffer);
+
+			content = builder.toString();
+		} catch (Exception e) {
+			System.err.println("Error at reading file. Shutting down.");
+			System.exit(1);
+		}
+
 		return content;
 	}
 
@@ -350,7 +373,7 @@ public final class FilesManager {
 	 * @return
 	 */
 	public static String getStringContentIntoSingleLineNoSpacing(String content) {
-		return (content.replaceAll("\\r\\n|\\r|\\n","")).replaceAll("\\s+","");
+		return (content.replaceAll("\\r\\n|\\r|\\n|\\u0000","")).replaceAll("\\s+","");
 	}
 
 	/**
