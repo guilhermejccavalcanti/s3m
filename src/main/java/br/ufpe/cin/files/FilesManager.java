@@ -16,6 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import com.github.javaparser.ParseException;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -252,7 +253,7 @@ public final class FilesManager {
 				builder.append(buffer);
 
 			content = builder.toString();
-		} catch (Exception e) {
+		} catch (IOException e) {
 			System.err.println("Error at reading file. Shutting down.");
 			System.exit(1);
 		}
@@ -564,11 +565,13 @@ public final class FilesManager {
 	 * @return indented sourceCode
 	 */
 	public static String indentCode(String sourceCode){
-		String indentedCode = sourceCode;
+		String indentedCode;
 		try{
 			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes()), StandardCharsets.UTF_8.displayName());
 			indentedCode = indenter.toString();
-		} catch (Exception e){} //in case of any errors, returns the non-indented sourceCode
+		} catch (ParseException e) { //in case of any errors, returns the non-indented sourceCode.
+			return sourceCode;
+		}
 		return indentedCode;
 	}
 
