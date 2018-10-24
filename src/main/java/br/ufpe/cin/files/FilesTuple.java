@@ -21,13 +21,13 @@ public class FilesTuple {
 	
 	private String outputpath;
 	
-	public FilesTuple(File left, File base, File right){
+	FilesTuple(File left, File base, File right){
 		this.leftFile = left;
 		this.baseFile = base;
 		this.rightFile = right;		
 	}
 	
-	public FilesTuple(File left, File base, File right, String outputpath){
+	FilesTuple(File left, File base, File right, String outputpath){
 		this.leftFile = left;
 		this.baseFile = base;
 		this.rightFile = right;
@@ -99,6 +99,12 @@ public class FilesTuple {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		assert false: "hashCode not designed";
+		return 42;
 	}
 	
 }
