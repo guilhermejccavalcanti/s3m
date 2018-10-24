@@ -337,28 +337,28 @@ public class LoggerStatistics {
 			int JAVA_FILES, int FP_UN, int FN_UN, int FP_SS, int FN_SS,
 			double M, double N) {
 		StringBuilder summary = new StringBuilder();
-		summary.append("S3M was invoked in " +JAVA_FILES+ " JAVA files so far.\n");
+		summary.append("S3M was invoked in ").append(JAVA_FILES).append(" JAVA files so far.\n");
 
 		if(FP_UN > 0 && FN_UN > 0){
-			summary.append("In these files, you avoided at least " +FP_UN+ " false positive(s),");
-			summary.append(" and at least "+FN_UN+" false negative(s) in relation to unstructured merge.\n");
+			summary.append("In these files, you avoided at least ").append(FP_UN).append(" false positive(s),");
+			summary.append(" and at least ").append(FN_UN).append(" false negative(s) in relation to unstructured merge.\n");
 		} else if(FP_UN == 0 && FN_UN == 0){
 			summary.append("In these files, S3M did not find any occurrence of unstructured merge false positives and false negatives.\n");
 		} else if(FP_UN > 0 && FN_UN == 0){
-			summary.append("In these files, you avoided at least " +FP_UN+" false positive(s), and S3M did not find any occurrence of unstructured merge false negatives.\n");
+			summary.append("In these files, you avoided at least ").append(FP_UN).append(" false positive(s), and S3M did not find any occurrence of unstructured merge false negatives.\n");
 		} else if(FP_UN == 0 && FN_UN > 0){
-			summary.append("In these files, S3M did not find any occurrence of unstructured merge false positives, but you avoided at least "+FN_UN+" false negative(s) in relation to unstructured merge.\n");
+			summary.append("In these files, S3M did not find any occurrence of unstructured merge false positives, but you avoided at least ").append(FN_UN).append(" false negative(s) in relation to unstructured merge.\n");
 		}
 
 		summary.append("Conversely,");
 		if(FN_SS == 0) {
 			summary.append(" you had no extra false positives, nor potential extra false negatives.");
 		} else if(FN_SS > 0) {
-			summary.append(" you had no extra false positives, but you had at most "+FN_SS+" potential extra false negative(s).");
+			summary.append(" you had no extra false positives, but you had at most ").append(FN_SS).append(" potential extra false negative(s).");
 		}
 
-		summary.append("\n\nS3M reported "+ssmergeconfs+" conflicts, totaling " +ssmergeloc+ " conflicting LOC,");
-		summary.append(" compared to "+unmergeconfs+" conflicts and " +unmergeloc+ " conflicting LOC from unstructured merge.");
+		summary.append("\n\nS3M reported ").append(ssmergeconfs).append(" conflicts, totaling ").append(ssmergeloc).append(" conflicting LOC,");
+		summary.append(" compared to ").append(unmergeconfs).append(" conflicts and ").append(unmergeloc).append(" conflicting LOC from unstructured merge.");
 		/*		if(equalconfs >0){
 			summary.append("\nWith " +equalconfs+ " similar conflict(s) between the tools.");
 		}*/
@@ -366,7 +366,7 @@ public class LoggerStatistics {
 		summary.append("\n\nAltogether, ");
 		if(ssmergeconfs != unmergeconfs){
 			if(ssmergeconfs < unmergeconfs){
-				summary.append("these numbers represent a reduction of " + String.format("%.2f",((double)((unmergeconfs - ssmergeconfs)/(double)unmergeconfs))*100) +"% in the number of conflicts by S3M.\n");
+				summary.append("these numbers represent a reduction of ").append(String.format("%.2f",((unmergeconfs - ssmergeconfs)/(double)unmergeconfs)*100)).append("% in the number of conflicts by S3M.\n");
 			} else if(ssmergeconfs > unmergeconfs){
 				summary.append("these numbers represent no reduction of conflicts by S3M.\n");
 			}
@@ -375,15 +375,15 @@ public class LoggerStatistics {
 		}
 
 		if(FP_UN > 0){
-			summary.append("A reduction of " + String.format("%.2f",((double)((FP_UN - 0)/(double)FP_UN))*100,2) +"% in the number of false positives.\n");
+			summary.append("A reduction of ").append(String.format("%.2f", (FP_UN/(double)FP_UN)*100)).append("% in the number of false positives.\n");
 		} else {
 			summary.append("No difference in terms of false positives.\n");
 		}
 
 		if(FN_UN != FN_SS){
 			if(FN_UN > FN_SS) {
-				summary.append("And a reduction of " + String.format("%.2f",((double)((FN_UN - FN_SS)/(double)FN_UN))*100,2) +"% in the number of false negatives.");
-			} else if(FN_SS > FN_UN){
+				summary.append("And a reduction of ").append(String.format("%.2f", ((FN_UN - FN_SS)/(double)FN_UN)*100)).append("% in the number of false negatives.");
+			} else if(FN_SS > FN_UN) {
 				summary.append("And no reduction of false negatives.");
 			}
 		}  else {
@@ -391,10 +391,10 @@ public class LoggerStatistics {
 		}
 
 
-		summary.append("\n\nFinally, S3M took " + (new DecimalFormat("#.##").format(M))+" seconds, and unstructured merge " + (new DecimalFormat("#.##").format(N)) + " seconds to merge all these files.");
+		summary.append("\n\nFinally, S3M took ").append((new DecimalFormat("#.##").format(M))).append(" seconds, and unstructured merge ").append((new DecimalFormat("#.##").format(N))).append(" seconds to merge all these files.");
 
 		summary.append("\n\n\n");
-		summary.append("LAST TIME UPDATED: " + (new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime())));
+		summary.append("LAST TIME UPDATED: ").append(new SimpleDateFormat("yyyy/MM/dd_HH:mm:ss").format(Calendar.getInstance().getTime()));
 		return summary;
 	}
 
