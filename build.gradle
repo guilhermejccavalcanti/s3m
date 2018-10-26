@@ -8,7 +8,8 @@ apply plugin: "ru.vyarus.quality"
 
 quality {
     exclude '**/generated/*'
-
+    sourceSets = [project.sourceSets.main, project.sourceSets.test]
+    
     spotbugsVersion = '3.1.8'
     spotbugs = true // false to disable automatic plugin activation
     spotbugsEffort = 'max'  // min, less, more or max

@@ -10,6 +10,8 @@ import org.junit.Test;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -23,14 +25,14 @@ public class MethodAndConstructorRenamingAndDeletionHandlerTest {
     private JFSTMerge jfstMerge = new JFSTMerge();
 
     @BeforeClass
-    public static void setUpBeforeClass() {
+    public static void setUpBeforeClass() throws UnsupportedEncodingException {
         //hidding sysout output
         @SuppressWarnings("unused")
         PrintStream originalStream = System.out;
         PrintStream hideStream = new PrintStream(new OutputStream() {
             public void write(int b) {
             }
-        });
+        }, true, Charset.defaultCharset().displayName());
         System.setOut(hideStream);
     }
 
