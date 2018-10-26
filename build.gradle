@@ -1,5 +1,22 @@
-apply plugin: 'java'
+plugins {
+    id "com.github.spotbugs" version "1.6.5"
+    id 'ru.vyarus.quality' version '3.0.0'
+}
 
+apply plugin: 'java'
+apply plugin: "ru.vyarus.quality"
+
+quality {
+    exclude '**/generated/*'
+
+    spotbugsVersion = '3.1.8'
+    spotbugs = true // false to disable automatic plugin activation
+    spotbugsEffort = 'max'  // min, less, more or max
+    spotbugsLevel = 'high' // low, medium, high
+
+    checkstyle = false
+    pmd = false
+}
 
 repositories {
     mavenCentral()
@@ -49,7 +66,7 @@ task updateInstaller(type: Copy, dependsOn: assemble, group: "Binaries", descrip
     rename "jFSTMerge.*", "s3m.jar"
     
     doLast {
-        File installer = file("installer/s3mInstaller.jar");
+        File installer = file("installer/s3mInstaller.jar")
         if(!installer.exists() || installer.length() < 5000) {
             exec {
                 commandLine("git", "lfs", "pull", "-I", "installer/s3mInstaller.jar")
