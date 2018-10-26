@@ -161,21 +161,21 @@ public class LoggerStatistics {
 				for(int i = 1; i <lines.size(); i++){
 					String[] columns = lines.get(i).split(",");
 
-					ssmergeconfs += Integer.valueOf(columns[2]);
-					ssmergeloc 	 += Integer.valueOf(columns[3]);
-					ssmergerenamingconfs += Integer.valueOf(columns[4]);
-					ssmergedeletionconfs += Integer.valueOf(columns[5]);
-					ssmergetaeconfs   += Integer.valueOf(columns[7]);
-					ssmergenereoconfs += Integer.valueOf(columns[8]);
-					ssmergeinitlblocksconfs += Integer.valueOf(columns[9]);
-					ssmergeacidentalconfs 	+= Integer.valueOf(columns[10]);
-					unmergeconfs += Integer.valueOf(columns[11]);
-					unmergeloc 	 += Integer.valueOf(columns[12]);
+					ssmergeconfs += Integer.parseInt(columns[2]);
+					ssmergeloc 	 += Integer.parseInt(columns[3]);
+					ssmergerenamingconfs += Integer.parseInt(columns[4]);
+					ssmergedeletionconfs += Integer.parseInt(columns[5]);
+					ssmergetaeconfs   += Integer.parseInt(columns[7]);
+					ssmergenereoconfs += Integer.parseInt(columns[8]);
+					ssmergeinitlblocksconfs += Integer.parseInt(columns[9]);
+					ssmergeacidentalconfs 	+= Integer.parseInt(columns[10]);
+					unmergeconfs += Integer.parseInt(columns[11]);
+					unmergeloc 	 += Integer.parseInt(columns[12]);
 					unmergetime  += Long.parseLong(columns[13]);
 					ssmergetime  += Long.parseLong((columns[14]));
-					duplicateddeclarationerrors += Integer.valueOf(columns[15]);
-					unmergeorderingconfs += Integer.valueOf(columns[16]);
-					equalconfs 	 += Integer.valueOf(columns[17]);
+					duplicateddeclarationerrors += Integer.parseInt(columns[15]);
+					unmergeorderingconfs += Integer.parseInt(columns[16]);
+					equalconfs 	 += Integer.parseInt(columns[17]);
 				}
 
 				if(JFSTMerge.isCryptographed){
