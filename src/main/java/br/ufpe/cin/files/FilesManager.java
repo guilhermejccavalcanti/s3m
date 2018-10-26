@@ -245,7 +245,7 @@ public final class FilesManager {
 
 	private static String readFileContentUnsupportedEncoding(File file) {
 		String content = "";
-		try(InputStreamReader reader = new InputStreamReader(Files.newInputStream(Paths.get(file.getAbsolutePath())))) {
+		try(InputStreamReader reader = new InputStreamReader(Files.newInputStream(Paths.get(file.getAbsolutePath())), StandardCharsets.UTF_8)) {
 			char[] buffer = new char[4096];
 
 			StringBuilder builder = new StringBuilder();
@@ -567,7 +567,7 @@ public final class FilesManager {
 	public static String indentCode(String sourceCode){
 		String indentedCode;
 		try{
-			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes()), StandardCharsets.UTF_8.displayName());
+			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8.displayName());
 			indentedCode = indenter.toString();
 		} catch (ParseException e) { //in case of any errors, returns the non-indented sourceCode.
 			return sourceCode;
