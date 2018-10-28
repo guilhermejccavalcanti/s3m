@@ -113,10 +113,9 @@ public class JFSTMerge {
 		isCryptographed = false;
 
 		MergeScenario scenario = null;
-		try {
+		try(BufferedReader reader = Files.newBufferedReader(Paths.get(revisionsPath))) {
 			//reading the .revisions file line by line to get revisions directories
 			List<String> listRevisions = new ArrayList<>();
-			BufferedReader reader = Files.newBufferedReader(Paths.get(revisionsPath));
 			listRevisions = reader.lines().collect(Collectors.toList());
 			if (listRevisions.size() != 3)
 				throw new Exception("Invalid .revisions file!");
