@@ -14,6 +14,7 @@ import org.junit.*;
 
 import br.ufpe.cin.app.JFSTMerge;
 
+@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 public class CryptoPerformanceTest {
 
 	private static final int NUM_ITERATIONS = 6;

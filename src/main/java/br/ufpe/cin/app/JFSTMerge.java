@@ -75,6 +75,7 @@ public class JFSTMerge {
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
 
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
 	@Parameter(names = {"-r", "--renaming"}, description = "Parameter to choose strategy on renaming conflicts.",
             converter = RenamingStrategyConverter.class)
 	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
@@ -106,6 +107,7 @@ public class JFSTMerge {
 	 * first revision, base revision, second revision (three-way merge).
 	 * @param revisionsPath file path
 	 */
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public MergeScenario mergeRevisions(String revisionsPath) {
 		//disabling cryptography for performance improvement
 		isCryptographed = false;
