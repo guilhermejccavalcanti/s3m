@@ -31,6 +31,6 @@ jobs:
     - git config --global user.name "Guilherme Cavalcanti"
     - sudo apt-get install shunit2
     script:
-    - git clone https://github.com/jvcoutinho/s3m-test-samples
     - cd testfiles/shelltests
-    - shunit2 s3mBigRepositoryTests.sh
+    - git clone https://github.com/jvcoutinho/s3m-test-samples
+    - shunit2 s3mTravisCronJobsTests.sh
