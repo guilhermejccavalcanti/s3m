@@ -41,8 +41,8 @@ testBigRepository()
 
     # Merge phase.
 	git checkout master
-	git merge left --no-edit
-	git merge right --no-edit
+	git merge left --no-edit --quiet
+	git merge right --no-edit --quiet
 
     # Evaluation phase.
 	cd $HOME/.jfstmerge
@@ -94,8 +94,8 @@ testMergeRevisionsSample()
 
     # Merge phase.
 	git checkout master
-	git merge left --no-edit
-	git merge right --no-edit
+	git merge left --no-edit --quiet
+	git merge right --no-edit --quiet
 
     # Evaluation phase.
 	cd $HOME/.jfstmerge
