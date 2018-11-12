@@ -1,6 +1,7 @@
 package br.ufpe.cin.files;
 
 import java.io.File;
+import java.util.Objects;
 
 import br.ufpe.cin.mergers.util.MergeContext;
 
@@ -21,13 +22,13 @@ public class FilesTuple {
 	
 	private String outputpath;
 	
-	FilesTuple(File left, File base, File right){
+	public FilesTuple(File left, File base, File right){
 		this.leftFile = left;
 		this.baseFile = base;
 		this.rightFile = right;		
 	}
 	
-	FilesTuple(File left, File base, File right, String outputpath){
+	public FilesTuple(File left, File base, File right, String outputpath){
 		this.leftFile = left;
 		this.baseFile = base;
 		this.rightFile = right;
@@ -103,8 +104,7 @@ public class FilesTuple {
 
 	@Override
 	public int hashCode() {
-		assert false: "hashCode not designed";
-		return 42;
+		return Objects.hash(leftFile, baseFile, rightFile, context, outputpath);
 	}
 	
 }
