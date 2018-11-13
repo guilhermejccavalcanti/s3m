@@ -26,3 +26,6 @@ gradle-app.setting
 .settings
 .classpath
 .project
+
+### IntelliJ ###
+.idea
