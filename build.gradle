@@ -20,7 +20,8 @@ jar {
     }
 }
 
-task fatJar(type: Jar) {
+task fatJar(type: Jar, group: "Binaries", description: "Creates S3M's main binary.") {
+
     manifest.from jar.manifest
     classifier = 'all'
     from {
@@ -49,14 +50,7 @@ task updateInstaller(type: Copy, dependsOn: assemble, group: "Binaries", descrip
     rename "jFSTMerge.*", "s3m.jar"
     
     doLast {
-        File installer = file("installer/s3mInstaller.jar");
-        if(!installer.exists() || installer.length() < 5000) {
-            exec {
-                commandLine("git", "lfs", "pull", "-I", "installer/s3mInstaller.jar")
-            }
-        }
-
-        ant.jar(update: "true", destfile: installer) {
+        ant.jar(update: "true", destfile: "installer/s3mInstaller.jar") {
             zipfileset(file: "installer/s3m.jar")
         }
         
