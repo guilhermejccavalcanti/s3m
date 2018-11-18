@@ -567,7 +567,8 @@ public final class FilesManager {
 	public static String indentCode(String sourceCode){
 		String indentedCode;
 		try{
-			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes(StandardCharsets.UTF_8)), StandardCharsets.UTF_8.displayName());
+			String fileEncoding = FilesEncoding.retrieveBaseEncoding();
+			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes(Charset.forName(fileEncoding))), Charset.forName(fileEncoding).displayName());
 			indentedCode = indenter.toString();
 		} catch (ParseException e) { //in case of any errors, returns the non-indented sourceCode.
 			return sourceCode;
