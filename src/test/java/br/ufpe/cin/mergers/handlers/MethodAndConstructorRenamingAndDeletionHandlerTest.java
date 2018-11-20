@@ -21,7 +21,7 @@ public class MethodAndConstructorRenamingAndDeletionHandlerTest {
     @BeforeClass
     public static void setUpBeforeClass() {
         //hidding sysout output
-
+        TestUtils.hideSystemOutput();
     }
 
     @Test
