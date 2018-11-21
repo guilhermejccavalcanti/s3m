@@ -8,10 +8,13 @@ import java.util.List;
 
 public class DefaultMutualRenamingHandler implements MutualRenamingHandler {
     public void handle(MergeContext context) {
-        if (context.addedLeftNodes.isEmpty() || context.addedRightNodes.isEmpty()) return;
-
+        List<FSTNode> mutualRemovedMethodsOrConstructors = RenamingUtils.getMethodsOrConstructors(context.deletedBaseNodes);
         List<FSTNode> leftNewMethodsOrConstructors = RenamingUtils.getMethodsOrConstructors(context.addedLeftNodes);
         List<FSTNode> rightNewMethodsOrConstructors = RenamingUtils.getMethodsOrConstructors(context.addedRightNodes);
+
+        if (mutualRemovedMethodsOrConstructors.isEmpty()) return;
+        if (leftNewMethodsOrConstructors.isEmpty() || rightNewMethodsOrConstructors.isEmpty()) return;
+
         for (FSTNode left : leftNewMethodsOrConstructors) {
             for (FSTNode right : rightNewMethodsOrConstructors) {
                 if (RenamingUtils.haveSameParent(left, right)

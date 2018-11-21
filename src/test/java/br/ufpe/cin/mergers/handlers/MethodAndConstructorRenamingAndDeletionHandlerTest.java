@@ -26,7 +26,7 @@ public class MethodAndConstructorRenamingAndDeletionHandlerTest {
     }
 
     @Test
-    public void testMutualMethodRenaming_whenBothVersionsRenamesMethodDifferently_shouldReportConflict() {
+    public void testMutualMethodRenaming_whenBothVersionsRenameMethodDifferently_shouldReportConflict() {
         JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
 
         merge(renamedMethodFile1, renamedMethodFile2);
@@ -57,6 +57,21 @@ public class MethodAndConstructorRenamingAndDeletionHandlerTest {
 
         merge(renamedMethodFile2, addedMethodFile1);
         TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicvoidn2(){inta;}publicvoidn1(){inta;}");
+    }
+
+    @Test
+    public void testMutualMethodRenaming_whenBothVersionsRenameToSameName_andBodiesAreEqual_shouldNotReportConflict() {
+        //TODO
+    }
+
+    @Test
+    public void testMutualMethodRenaming_whenBothVersionsRenameToSameName_andBodiesAreNotEqual_shouldReportConflict() {
+        //TODO
+    }
+
+    @Test
+    public void testMutualMethodRenaming_whenBothVersionsAddVerySimilarMethods_andBodiesAreEqual_shouldNotReportConflict() {
+        //TODO
     }
 
     @Test
