@@ -15,6 +15,7 @@ public class MergeMethodsSingleRenamingHandlerTest {
     private File bodyChangedFileBelowSignature = new File("testfiles/renaming/method/changed_body_below_signature/Test.java");
     private File bodyChangedAtEndFile = new File("testfiles/renaming/method/changed_body_at_end/Test.java");
     private File renamedMethodFile = new File("testfiles/renaming/method/renamed_method_1/Test.java");
+    private File renamedMethodAndChangedBodyFile = new File("testfiles/renaming/method/renamed_method_1_and_changed_body_at_end/Test.java");
 
     private JFSTMerge jfstMerge = new JFSTMerge();
     private File left, right;
@@ -48,7 +49,7 @@ public class MergeMethodsSingleRenamingHandlerTest {
     }
 
     @Test
-    public void testHandle_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldMergeChangess() {
+    public void testHandle_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldMergeChanges() {
         left = renamedMethodFile;
         right = bodyChangedAtEndFile;
 
@@ -58,13 +59,33 @@ public class MergeMethodsSingleRenamingHandlerTest {
     }
 
     @Test
-    public void testHandle_whenLeftRenamesMethod_andRightChangesBodyAtEnd_shouldNotReportConflict() {
+    public void testHandle_whenRightRenamesMethod_andLeftChangesBodyAtEnd_shouldNotReportConflict() {
         left = bodyChangedAtEndFile;
         right = renamedMethodFile;
 
         merge();
 
         TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;a=123;}}");
+    }
+
+    @Test
+    public void testHandle_whenLeftRenamesMethodAndChangedBody_andRightChangesBodyAtSameArea_shouldReportConflictOnBody() {
+        left = renamedMethodAndChangedBodyFile;
+        right = bodyChangedAtEndFile;
+
+        merge();
+
+        TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "publicclassTest{publicvoidm1(){inta;<<<<<<<MINEa;=======a=123;>>>>>>>YOURS}}");
+    }
+
+    @Test
+    public void testHandle_whenRightRenamesMethodAndChangedBody_andLeftChangesBodyAtSameArea_shouldReportConflictOnBody() {
+        left = bodyChangedAtEndFile;
+        right = renamedMethodAndChangedBodyFile;
+
+        merge();
+
+        TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "publicclassTest{publicvoidm1(){inta;<<<<<<<MINEa=123;=======a;>>>>>>>YOURS}}");
     }
 
     private void merge() {

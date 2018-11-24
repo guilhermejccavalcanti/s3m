@@ -1,8 +1,12 @@
 package br.ufpe.cin.mergers.util;
 
+import br.ufpe.cin.app.JFSTMerge;
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.TextualMerge;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -93,7 +97,7 @@ public class RenamingUtils {
         return left.getParent().equals(right.getParent());
     }
 
-    public static void generateRenamingConflict(MergeContext context, String currentNodeContent, String firstContent,
+    public static void generateRenamingConflict(MergeContext context, String currentNodeContent, String baseContent, String firstContent,
                                                 String secondContent, Side renamingSide) {
         if (renamingSide == Side.LEFT) {//managing the origin of the changes in the conflict
             String aux = secondContent;
@@ -101,22 +105,59 @@ public class RenamingUtils {
             firstContent = aux;
         }
 
-        //statistics
-        if (firstContent.isEmpty() || secondContent.isEmpty()) {
-            context.deletionConflicts++;
-        } else {
-            context.renamingConflicts++;
+        //first creates a conflict
+        String newConflictBody;
+        try {
+            newConflictBody = TextualMerge.merge(firstContent, baseContent, secondContent, JFSTMerge.isWhitespaceIgnored);
+        } catch (TextualMergeException e) {
+            e.printStackTrace();
+            MergeConflict newConflict = new MergeConflict(firstContent + '\n', secondContent + '\n');
+            newConflictBody = newConflict.body;
         }
 
-        //first creates a conflict
-        MergeConflict newConflict = new MergeConflict(firstContent + '\n', secondContent + '\n');
         //second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
-        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.body);
+        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflictBody);
         if (renamingSide == Side.RIGHT) {
             FilesManager.findAndDeleteASTNode(context.superImposedTree, firstContent);
         } else {
             FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
         }
+
+        //statistics
+        if (firstContent.isEmpty() || secondContent.isEmpty()) {
+            context.deletionConflicts++;
+        } else {
+            context.renamingConflicts += StringUtils.countMatches(newConflictBody, "<<<<<<<");
+        }
+    }
+
+    public static String mergeBodies(String leftContent, String baseContent, String rightContent) {
+        String bodyResult;
+
+        try {
+            String leftBody = RenamingUtils.removeSignature(leftContent);
+            String baseBody = RenamingUtils.removeSignature(baseContent);
+            String rightBody = RenamingUtils.removeSignature(rightContent);
+            bodyResult = TextualMerge.merge(leftBody, baseBody, rightBody, JFSTMerge.isWhitespaceIgnored);
+        } catch (TextualMergeException e) {
+            e.printStackTrace();
+            bodyResult = new MergeConflict(leftContent + '\n', rightContent + '\n').body;
+        }
+
+        return bodyResult;
+    }
+
+    public static Pair<String, String> getRenamingContentOnCorrectOrder(String possibleRenamingContent, String oppositeSideNodeContent, Side renamingSide) {
+        String leftContent, rightContent;
+        if (renamingSide == Side.LEFT) {
+            leftContent = possibleRenamingContent;
+            rightContent = oppositeSideNodeContent;
+        } else {
+            rightContent = possibleRenamingContent;
+            leftContent = oppositeSideNodeContent;
+        }
+
+        return Pair.of(leftContent, rightContent);
     }
 
     public static void generateMutualRenamingConflict(MergeContext context, FSTNode left, FSTNode right) {
