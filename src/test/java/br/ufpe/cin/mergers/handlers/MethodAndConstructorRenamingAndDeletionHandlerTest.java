@@ -75,17 +75,16 @@ public class MethodAndConstructorRenamingAndDeletionHandlerTest {
         TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;}}");
     }
 
-    //TODO: check semistructured original
-//    @Test
-//    public void testMutualMethodRenaming_whenBothVersionsRenameToSameName_andBodiesAreNotEqual_shouldReportConflict() {
-//        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
-//
-//        merge(renamedMethod1AndAddedComment1, renamedMethod1AndChangedBody1);
-//        TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "publicclassTest{publicvoidn1(){<<<<<<<MINEinta;=======inta=2;>>>>>>>YOURS}}");
-//
-//        merge(renamedMethod1AndChangedBody1, renamedMethod1AndAddedComment1);
-//        TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "publicclassTest{inta;=======inta=2;<<<<<<<MINEpublicvoidn1(){>>>>>>>YOURS}}");
-//    }
+    @Test
+    public void testMutualMethodRenaming_whenBothVersionsRenameToSimilarNames_andBodiesAreSimilar_shouldNotReportConflict() {
+        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
+
+        merge(renamedMethod2, renamedMethod1AndChangedBody1);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicclassTest{publicvoidn2(){inta;}publicvoidn1(){inta=2;}}");
+
+        merge(renamedMethod1AndChangedBody1, renamedMethod2);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicclassTest{publicvoidn1(){inta=2;}publicvoidn2(){inta;}}");
+    }
 
     @Test
     public void testMutualMethodRenaming_whenBothVersionsAddVerySimilarNamedMethods_andBodiesAreEqual_shouldNotReportConflict() {
@@ -115,6 +114,51 @@ public class MethodAndConstructorRenamingAndDeletionHandlerTest {
 
         merge(renamedMethod2, renamedMethod1);
         TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "<<<<<<<MINEpublicvoidn2(){inta;}=======publicvoidn1(){inta;}>>>>>>>YOURS");
+    }
+
+    @Test
+    public void testMutualMethodRenaming_givenMergeRenamingsIsEnabled_whenSomeVersionHasNotRenamedAnyMethodsOrConstructors_shouldNotReportConflict() {
+        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
+
+        merge(addedMethod1, addedMethod2);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicvoidn1(){inta;}publicvoidn2(){inta;}");
+
+        merge(addedMethod2, addedMethod1);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicvoidn2(){inta;}publicvoidn1(){inta;}");
+
+        merge(renamedMethod1, addedMethod2);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicvoidn1(){inta;}publicvoidn2(){inta;}");
+
+        merge(addedMethod2, renamedMethod1);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicvoidn2(){inta;}publicvoidn1(){inta;}");
+
+        merge(addedMethod1, renamedMethod2);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicvoidn1(){inta;}publicvoidn2(){inta;}");
+
+        merge(renamedMethod2, addedMethod1);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicvoidn2(){inta;}publicvoidn1(){inta;}");
+    }
+
+    @Test
+    public void testMutualMethodRenaming_givenMergeRenamingsIsEnabled_whenBothVersionsRenameToSameName_andBodiesAreEqual_shouldNotReportConflict() {
+        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
+
+        merge(renamedMethod1AndAddedComment1, renamedMethod1AndAddedComment2);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;}}");
+
+        merge(renamedMethod1AndAddedComment2, renamedMethod1AndAddedComment1);
+        TestUtils.verifyMergeResultWithoutRenamingConflict(mergeContext, "publicclassTest{publicvoidn1(){inta;}}");
+    }
+
+    @Test
+    public void testMutualMethodRenaming_givenMergeRenamingsIsEnabled_whenBothVersionsRenameToSimilarNames_andBodiesAreSimilar_shouldReportConflict() {
+        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
+
+        merge(renamedMethod2, renamedMethod1AndChangedBody1);
+        TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "publicclassTest{<<<<<<<MINEpublicvoidn2(){inta;}=======publicvoidn1(){inta=2;}>>>>>>>YOURS}");
+
+        merge(renamedMethod1AndChangedBody1, renamedMethod2);
+        TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "publicclassTest{<<<<<<<MINEpublicvoidn1(){inta=2;}=======publicvoidn2(){inta;}>>>>>>>YOURS}");
     }
 
     private void merge(File left, File right) {

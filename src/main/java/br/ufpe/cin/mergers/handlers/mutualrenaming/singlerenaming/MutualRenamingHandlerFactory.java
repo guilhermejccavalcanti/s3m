@@ -3,9 +3,9 @@ package br.ufpe.cin.mergers.handlers.mutualrenaming.singlerenaming;
 import br.ufpe.cin.mergers.util.RenamingStrategy;
 
 public class MutualRenamingHandlerFactory {
-    private static MutualRenamingHandler mergeMethodsHandler = new SafeMutualRenamingHandler();
+    private static MutualRenamingHandler mergeMethodsHandler = new MergeMethodsMutualRenamingHandler();
     private static MutualRenamingHandler keepBothMethodsHandler = new KeepBothMethodsSingleRenamingHandler();
-    private static MutualRenamingHandler defaultHandler = new SafeMutualRenamingHandler();
+    private static MutualRenamingHandler safeHandler = new SafeMutualRenamingHandler();
 
     public static MutualRenamingHandler getHandler(RenamingStrategy strategy) {
         switch (strategy) {
@@ -16,7 +16,7 @@ public class MutualRenamingHandlerFactory {
                 return keepBothMethodsHandler;
 
             default:
-                return defaultHandler;
+                return safeHandler;
         }
     }
 }

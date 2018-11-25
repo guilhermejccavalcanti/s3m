@@ -13,7 +13,7 @@ import java.util.List;
 
 public class KeepBothMethodsSingleRenamingHandler implements SingleRenamingHandler {
     public void handle(MergeContext context, String baseContent, FSTNode conflictNode,
-                       List<Pair<Double, String>> similarNodes, Side renamingSide) {
+                       List<FSTNode> addedNodes, Side renamingSide) {
 
         String conflictNodeContent = ((FSTTerminal) conflictNode).getBody();
         MergeConflict mergeConflict = FilesManager.extractMergeConflicts(conflictNodeContent).get(0);
