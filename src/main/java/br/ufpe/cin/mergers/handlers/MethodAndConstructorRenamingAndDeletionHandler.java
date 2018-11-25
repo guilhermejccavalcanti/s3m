@@ -21,8 +21,6 @@ import java.util.List;
  * @author Guilherme
  */
 public final class MethodAndConstructorRenamingAndDeletionHandler implements ConflictHandler {
-    private static final double BODY_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
-
     private SingleRenamingHandler singleRenamingHandler;
     private MutualRenamingHandler mutualRenamingHandler;
 
@@ -58,12 +56,10 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         for (Pair<String, FSTNode> tuple : possibleRenamedNodes) {
             String baseContent = tuple.getLeft();
             FSTNode currentNode = tuple.getRight();
-            if (!RenamingUtils.nodeHasConflict(currentNode)) continue;
 
-            List<Pair<Double, String>> similarNodes = RenamingUtils.getSimilarNodes(baseContent, currentNode, addedNodes,
-                    BODY_SIMILARITY_THRESHOLD);
-
-            singleRenamingHandler.handle(context, baseContent, currentNode, similarNodes, renamingSide);
+            if (RenamingUtils.nodeHasConflict(currentNode)) {
+                singleRenamingHandler.handle(context, baseContent, currentNode, addedNodes, renamingSide);
+            }
         }
     }
 }

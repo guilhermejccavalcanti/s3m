@@ -1,5 +1,6 @@
 package br.ufpe.cin.mergers.util;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
@@ -21,8 +22,13 @@ public class RenamingUtils {
                 .anyMatch(conflict -> conflict.contains(signature));
     }
 
-    public static List<Pair<Double, String>> getSimilarNodes(String baseContent, FSTNode currentNode,
-                                                             List<FSTNode> addedNodes, double similarityThreshold) {
+    public static String getMostSimilarNodeContent(String baseContent, FSTNode currentNode, List<FSTNode> addedNodes) {
+        List<Pair<Double, String>> similarNodes = getSimilarNodes(baseContent, currentNode, addedNodes);
+
+        return getMostSimilarContent(similarNodes);
+    }
+
+    public static List<Pair<Double, String>> getSimilarNodes(String baseContent, FSTNode currentNode, List<FSTNode> addedNodes) {
         //list of possible nodes renaming a previous one
         List<Pair<Double, String>> similarNodes = new ArrayList<>();
 
@@ -33,13 +39,20 @@ public class RenamingUtils {
 
             String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
             double bodySimilarity = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
-            if (bodySimilarity >= similarityThreshold) {
+            if (bodySimilarity >= JFSTMerge.RENAMING_SIMILARITY_THRESHOLD) {
                 Pair<Double, String> tp = Pair.of(bodySimilarity, possibleRenamingContent);
                 similarNodes.add(tp);
             }
         }
 
         return similarNodes;
+    }
+
+    public static String getMostSimilarContent(List<Pair<Double, String>> similarNodes) {
+        return similarNodes.stream()
+                .max(Comparator.comparing(Pair::getLeft))
+                .map(Pair::getRight)
+                .orElse(StringUtils.EMPTY);
     }
 
     public static String getTrimmedSignature(String source) {
@@ -68,13 +81,6 @@ public class RenamingUtils {
         if (!hasDefinedBody(string)) return StringUtils.EMPTY;
 
         return string.replaceFirst("^.[^{]*(?=(\\{))", "");
-    }
-
-    public static String getMostSimilarContent(List<Pair<Double, String>> similarNodes) {
-        return similarNodes.stream()
-                .max(Comparator.comparing(Pair::getLeft))
-                .map(Pair::getRight)
-                .orElse(StringUtils.EMPTY);
     }
 
     public static boolean nodeHasConflict(FSTNode node) {
@@ -170,5 +176,14 @@ public class RenamingUtils {
         String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
 
         return leftBody.equals(rightBody);
+    }
+
+    public static boolean haveSimilarBody(FSTNode left, FSTNode right) {
+        String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
+        String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
+
+        double bodySimilarity = FilesManager.computeStringSimilarity(leftBody, rightBody);
+
+        return bodySimilarity >= JFSTMerge.RENAMING_SIMILARITY_THRESHOLD;
     }
 }
