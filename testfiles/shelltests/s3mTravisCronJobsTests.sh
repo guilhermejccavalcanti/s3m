@@ -76,24 +76,10 @@ testBigRepository()
 
 testMergeRevisionsSample()
 {
-    # Configuration phase.
-    cp -r ${START_PATH}/sample/sampleleft/* .
-	git add .
-	git commit -m "initial commit"
-
-	git checkout -b left
-	cp -r ${START_PATH}/sample/samplebase/* .
-	git add .
-	git commit -m "left commit"
-
-	git checkout master
-	git checkout -b right
-	cp -r ${START_PATH}/sample/sampleright/* .
-	git add .
-	git commit -m "right commit"
-
+    # Configuration phase (the repository is already configured).
+    cd ${START_PATH}
+g
     # Merge phase.
-	git checkout master
 	git merge left --no-edit --quiet
 	git merge right --no-edit --quiet
 
