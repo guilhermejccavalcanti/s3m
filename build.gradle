@@ -83,3 +83,8 @@ task updateInstaller(type: Copy, dependsOn: assemble, group: "Binaries", descrip
     }
 }
 build.finalizedBy(copyBinary, updateInstaller)
+
+// Disabling asserts.
+tasks.withType(Test) {
+    enableAssertions = false
+}
