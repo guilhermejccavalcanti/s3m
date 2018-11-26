@@ -86,31 +86,31 @@ g
     # Evaluation phase.
 	cd $HOME/.jfstmerge
 	NUM_JAVA_FILES=$(cat jfstmerge.summary | grep -Eo "[0-9]+ JAVA files" | grep -Eo "[0-9]+")
-	assertEquals 1797 ${NUM_JAVA_FILES}
+	assertEquals 1746 ${NUM_JAVA_FILES}
 
 	FP_AVOIDED=$(cat jfstmerge.summary | grep -Eo "least [0-9]+ false positive\(s\)" | grep -Eo "[0-9]+")
-	assertEquals 1723 ${FP_AVOIDED}
+	assertEquals 1668 ${FP_AVOIDED}
 
 	FN_AVOIDED=$(cat jfstmerge.summary | grep -Eo "[0-9]+ false negative\(s\)" | grep -Eo "[0-9]+")
-	assertEquals 57 ${FN_AVOIDED}
+	assertEquals 51 ${FN_AVOIDED}
 
     FP_EXTRA=$(cat jfstmerge.summary | grep -Eo "([0-9]+|no) extra false positive\(s\)" | grep -Eo "([0-9]+|no)")
 	assertEquals "no" ${FP_EXTRA}
 
 	FN_EXTRA=$(cat jfstmerge.summary | grep -Eo "[0-9]+ potential extra false negative\(s\)" | grep -Eo "[0-9]+")
-	assertEquals 537 ${FN_EXTRA}
+	assertEquals 637 ${FN_EXTRA}
 
 	S3M_NUM_CONFLICTS=$(cat jfstmerge.summary | grep -Eo "reported [0-9]+ conflicts" | grep -Eo "[0-9]+")
-	assertEquals 1868 ${S3M_NUM_CONFLICTS}
+	assertEquals 1761 ${S3M_NUM_CONFLICTS}
 
 	S3M_NUM_CONFLICTING_LOC=$(cat jfstmerge.summary | grep -Eo "totaling [0-9]+ conflicting" | grep -Eo "[0-9]+")
-	assertEquals 31118 ${S3M_NUM_CONFLICTING_LOC}
+	assertEquals 23511 ${S3M_NUM_CONFLICTING_LOC}
 
 	UNSTR_NUM_CONFLICTS=$(cat jfstmerge.summary | grep -Eo "to [0-9]+ conflicts" | grep -Eo "[0-9]+")
-	assertEquals 3498 ${UNSTR_NUM_CONFLICTS}
+	assertEquals 3358 ${UNSTR_NUM_CONFLICTS}
 
 	UNSTR_NUM_CONFLICTING_LOC=$(cat jfstmerge.summary | grep -Eo "and [0-9]+ conflicting" | grep -Eo "[0-9]+")
-	assertEquals 51703 ${UNSTR_NUM_CONFLICTING_LOC}
+	assertEquals 49448 ${UNSTR_NUM_CONFLICTING_LOC}
 
 	FP_REDUCTION=$(cat jfstmerge.summary | grep -Eo "A reduction of [0-9]+[.,][0-9]+%" | grep -Eo "[0-9]+[.,][0-9]+%")
 	assertTrue "[ '$FP_REDUCTION' = '100.00%' ] || [ '$FP_REDUCTION' = '100,00%' ]"
