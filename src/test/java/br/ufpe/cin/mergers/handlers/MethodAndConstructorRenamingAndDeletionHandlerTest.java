@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 public class MethodAndConstructorRenamingAndDeletionHandlerTest {
     private File baseFile = new File("testfiles/renaming/method/base_method/Test.java");
@@ -18,7 +19,7 @@ public class MethodAndConstructorRenamingAndDeletionHandlerTest {
     private MergeContext mergeContext;
 
     @BeforeClass
-    public static void setUpBeforeClass() {
+    public static void setUpBeforeClass() throws UnsupportedEncodingException {
         //hidding sysout output
         TestUtils.hideSystemOutput();
     }

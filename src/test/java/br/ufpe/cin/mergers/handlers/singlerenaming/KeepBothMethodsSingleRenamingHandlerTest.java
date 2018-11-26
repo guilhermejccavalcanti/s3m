@@ -8,6 +8,7 @@ import org.junit.BeforeClass;
 import org.junit.Test;
 
 import java.io.File;
+import java.io.UnsupportedEncodingException;
 
 public class KeepBothMethodsSingleRenamingHandlerTest {
     private File baseFile = new File("testfiles/renaming/method/base_method/Test.java");
@@ -20,7 +21,7 @@ public class KeepBothMethodsSingleRenamingHandlerTest {
     private MergeContext mergeContext;
 
     @BeforeClass
-    public static void setUpBeforeClass() {
+    public static void setUpBeforeClass() throws UnsupportedEncodingException {
         TestUtils.hideSystemOutput();
 
         JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
