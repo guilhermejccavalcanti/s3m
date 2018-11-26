@@ -16,7 +16,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import com.github.javaparser.ParseException;
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -341,9 +341,7 @@ public final class FilesManager {
 					file.getParentFile().mkdirs();
 					file.createNewFile();
 				}
-				BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
-				writer.write(content);
-				writer.flush();	writer.close();
+				FileUtils.write(file, content);
 			} catch(NullPointerException ne){
 				//empty, necessary for integration with git version control system
 			} catch(Exception e){
