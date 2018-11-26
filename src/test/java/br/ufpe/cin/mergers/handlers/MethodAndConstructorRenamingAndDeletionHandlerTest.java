@@ -18,7 +18,7 @@ public class MethodAndConstructorRenamingAndDeletionHandlerTest {
     private MergeContext mergeContext;
 
     @BeforeClass
-    public static void setUpBeforeClass() throws UnsupportedEncodingException {
+    public static void setUpBeforeClass() {
         //hidding sysout output
         TestUtils.hideSystemOutput();
     }
