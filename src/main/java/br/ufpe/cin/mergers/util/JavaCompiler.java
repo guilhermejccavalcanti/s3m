@@ -58,7 +58,7 @@ public class JavaCompiler {
 	 */
 	@SuppressWarnings("unchecked")
 	public CompilationUnit compile(String unitName, String javaSource, String[] sources, String[] classpaths){
-		ASTParser parser = ASTParser.newParser(AST.JLS8);
+		ASTParser parser = ASTParser.newParser(AST.JLS10);
 
 		Map<String, String> options = JavaCore.getOptions();
 		JavaCore.setComplianceOptions(JavaCore.VERSION_1_8, options);
