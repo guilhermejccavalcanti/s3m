@@ -17,14 +17,18 @@ public class MergeMethodsMutualRenamingHandler implements MutualRenamingHandler 
         if (leftNewMethodsOrConstructors.isEmpty() || rightNewMethodsOrConstructors.isEmpty()) return;
 
         mutualRemovedMethodsOrConstructors.stream()
-                .map(node -> getMutualMatchingNodes(node, leftNewMethodsOrConstructors, rightNewMethodsOrConstructors))
+                .map(node -> getNodesWithMatchingBody(node, leftNewMethodsOrConstructors, rightNewMethodsOrConstructors))
                 .filter(pair -> pair.getLeft() != null && pair.getRight() != null)
                 .filter(pair -> RenamingUtils.haveDifferentSignature(pair.getLeft(), pair.getRight()))
-                .forEach(pair -> RenamingUtils.generateMutualRenamingConflict(context, pair.getLeft(), pair.getRight()));
+                .forEach(pair -> {
+                    RenamingUtils.generateMutualRenamingConflict(context, pair.getLeft(), pair.getRight());
+                    leftNewMethodsOrConstructors.remove(pair.getLeft());
+                    rightNewMethodsOrConstructors.remove(pair.getRight());
+                });
     }
 
-    private Pair<FSTNode, FSTNode> getMutualMatchingNodes(FSTNode baseRemovedNode, List<FSTNode> leftNodes,
-                                                          List<FSTNode> rightNodes) {
+    private Pair<FSTNode, FSTNode> getNodesWithMatchingBody(FSTNode baseRemovedNode, List<FSTNode> leftNodes,
+                                                            List<FSTNode> rightNodes) {
         FSTNode leftNode = leftNodes.stream()
                 .filter(node -> RenamingUtils.haveSimilarBody(node, baseRemovedNode))
                 .findFirst()
