@@ -1,5 +1,6 @@
 package br.ufpe.cin.mergers.handlers.singlerenaming;
 
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
@@ -13,7 +14,7 @@ import java.util.List;
 
 public class DefaultSingleRenamingHandler implements SingleRenamingHandler {
     public void handle(MergeContext context, String baseContent, FSTNode conflictNode,
-                       List<Pair<Double, String>> similarNodes, Side renamingSide) {
+                       List<Pair<Double, String>> similarNodes, Side renamingSide) throws TextualMergeException {
 
         String conflictNodeContent = ((FSTTerminal) conflictNode).getBody();
         MergeConflict mergeConflict = FilesManager.extractMergeConflicts(conflictNodeContent).get(0);

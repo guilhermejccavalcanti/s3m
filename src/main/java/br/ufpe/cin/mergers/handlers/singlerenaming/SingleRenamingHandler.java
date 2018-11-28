@@ -1,5 +1,6 @@
 package br.ufpe.cin.mergers.handlers.singlerenaming;
 
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.Side;
 import de.ovgu.cide.fstgen.ast.FSTNode;
@@ -9,5 +10,5 @@ import java.util.List;
 
 public interface SingleRenamingHandler {
     void handle(MergeContext context, String baseContent, FSTNode conflictNode,
-                List<Pair<Double, String>> similarNodes, Side newNodeSide);
+                List<Pair<Double, String>> similarNodes, Side newNodeSide) throws TextualMergeException;
 }

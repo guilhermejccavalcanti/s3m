@@ -98,7 +98,7 @@ public class RenamingUtils {
     }
 
     public static void generateRenamingConflict(MergeContext context, String currentNodeContent, String baseContent, String firstContent,
-                                                String secondContent, Side renamingSide) {
+                                                String secondContent, Side renamingSide) throws TextualMergeException {
         if (renamingSide == Side.LEFT) {//managing the origin of the changes in the conflict
             String aux = secondContent;
             secondContent = firstContent;
@@ -106,14 +106,7 @@ public class RenamingUtils {
         }
 
         //first creates a conflict
-        String newConflictBody;
-        try {
-            newConflictBody = TextualMerge.merge(firstContent, baseContent, secondContent, JFSTMerge.isWhitespaceIgnored);
-        } catch (TextualMergeException e) {
-            e.printStackTrace();
-            MergeConflict newConflict = new MergeConflict(firstContent + '\n', secondContent + '\n');
-            newConflictBody = newConflict.body;
-        }
+        String newConflictBody = TextualMerge.merge(firstContent, baseContent, secondContent, JFSTMerge.isWhitespaceIgnored);
 
         //second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
         FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflictBody);
@@ -131,20 +124,12 @@ public class RenamingUtils {
         }
     }
 
-    public static String mergeBodies(String leftContent, String baseContent, String rightContent) {
-        String bodyResult;
+    public static String mergeBodies(String leftContent, String baseContent, String rightContent) throws TextualMergeException {
+        String leftBody = RenamingUtils.removeSignature(leftContent);
+        String baseBody = RenamingUtils.removeSignature(baseContent);
+        String rightBody = RenamingUtils.removeSignature(rightContent);
 
-        try {
-            String leftBody = RenamingUtils.removeSignature(leftContent);
-            String baseBody = RenamingUtils.removeSignature(baseContent);
-            String rightBody = RenamingUtils.removeSignature(rightContent);
-            bodyResult = TextualMerge.merge(leftBody, baseBody, rightBody, JFSTMerge.isWhitespaceIgnored);
-        } catch (TextualMergeException e) {
-            e.printStackTrace();
-            bodyResult = new MergeConflict(leftContent + '\n', rightContent + '\n').body;
-        }
-
-        return bodyResult;
+        return TextualMerge.merge(leftBody, baseBody, rightBody, JFSTMerge.isWhitespaceIgnored);
     }
 
     public static Pair<String, String> getRenamingContentOnCorrectOrder(String possibleRenamingContent, String oppositeSideNodeContent, Side renamingSide) {

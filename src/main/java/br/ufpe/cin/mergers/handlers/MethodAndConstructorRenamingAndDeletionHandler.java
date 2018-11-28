@@ -1,6 +1,7 @@
 package br.ufpe.cin.mergers.handlers;
 
 import br.ufpe.cin.app.JFSTMerge;
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.mergers.handlers.mutualrenaming.singlerenaming.MutualRenamingHandler;
 import br.ufpe.cin.mergers.handlers.mutualrenaming.singlerenaming.MutualRenamingHandlerFactory;
 import br.ufpe.cin.mergers.handlers.singlerenaming.SingleRenamingHandler;
@@ -31,7 +32,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         this.mutualRenamingHandler = MutualRenamingHandlerFactory.getHandler(JFSTMerge.renamingStrategy);
     }
 
-    public void handle(MergeContext context) {
+    public void handle(MergeContext context) throws TextualMergeException {
         //when both developers rename the same method/constructor
         handleMutualRenamings(context);
 
@@ -43,7 +44,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         mutualRenamingHandler.handle(context);
     }
 
-    private void handleSingleRenamings(MergeContext context) {
+    private void handleSingleRenamings(MergeContext context) throws TextualMergeException {
         if (context.possibleRenamedLeftNodes.isEmpty() && context.possibleRenamedRightNodes.isEmpty()) return;
 
         //possible renamings or deletions in left
@@ -54,7 +55,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     }
 
     private void handleSingleRenamings(MergeContext context, List<Pair<String, FSTNode>> possibleRenamedNodes,
-                                       List<FSTNode> addedNodes, Side renamingSide) {
+                                       List<FSTNode> addedNodes, Side renamingSide) throws TextualMergeException {
         for (Pair<String, FSTNode> tuple : possibleRenamedNodes) {
             String baseContent = tuple.getLeft();
             FSTNode currentNode = tuple.getRight();
