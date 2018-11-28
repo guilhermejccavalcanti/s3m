@@ -5,6 +5,7 @@ import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringReader;
+import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -14,6 +15,7 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
 import org.apache.commons.lang3.StringUtils;
 
@@ -221,7 +223,10 @@ public final class FilesManager {
 	 */
 	public static String readFileContent(File file) {
 		String content = "";
-		try (BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), StandardCharsets.UTF_8)) {
+		try{
+			String fileEncoding = FilesEncoding.retrieveEncoding(file);
+
+			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding));
 			content = reader.lines().collect(Collectors.joining("\n"));
 		} catch (Exception e) {
 			//System.err.println(e.getMessage());
@@ -309,9 +314,7 @@ public final class FilesManager {
 					file.getParentFile().mkdirs();
 					file.createNewFile();
 				}
-				BufferedWriter writer = Files.newBufferedWriter(Paths.get(filePath));
-				writer.write(content);
-				writer.flush();	writer.close();
+				FileUtils.write(file, content);
 			} catch(NullPointerException ne){
 				//empty, necessary for integration with git version control system
 			} catch(Exception e){

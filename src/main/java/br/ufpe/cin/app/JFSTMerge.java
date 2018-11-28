@@ -3,6 +3,7 @@ package br.ufpe.cin.app;
 import br.ufpe.cin.exceptions.PrintException;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
+import br.ufpe.cin.files.FilesEncoding;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.files.FilesTuple;
 import br.ufpe.cin.logging.LoggerFactory;
@@ -59,13 +60,44 @@ public class JFSTMerge {
 
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).", arity = 1)
 	public static boolean isCryptographed = true;
-
-	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).", arity = 1)
+  
+	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
+
+	@Parameter(names = "--encoding-inference", description = "Tries to infer file encodings to properly merge them. If" +
+			"not enabled, the tool assumes files are encoded in UTF-8.", arity = 1)
+	public static boolean isEncodingInferenceEnabled = true;
+
+	@Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
+			+ "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
+	public static boolean isWhitespaceIgnored = true;
+
+	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
+	public static boolean keepBothVersionsOfRenamedMethod = false;
 
 	@Parameter(names = {"-r", "--renaming"}, description = "Parameter to choose strategy on renaming conflicts.",
             converter = RenamingStrategyConverter.class)
 	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
+
+	@Parameter(names = {"--handle-duplicate-declarations", "-hdd"}, description = "Detects situations where merging developers' contributions adds " +
+			"declarations with the same signature to different areas of the same class.", arity = 1)
+	public static boolean isDuplicatedDeclarationHandlerEnabled = true;
+
+	@Parameter(names = {"--handle-initialization-blocks", "-hib"}, description = "Detects and avoid duplications caused by merge of blocks without identifiers," +
+			"using textual similarity.", arity = 1)
+	public static boolean isInitializationBlocksHandlerEnabled = true;
+
+	@Parameter(names = {"--handle-new-element-referencing-edited-one", "-hnereo"}, description = "Detects cases where a developer" +
+			"add an element that references an edited one.", arity = 1)
+	public static boolean isNewElementReferencingEditedOneHandlerEnabled = true;
+
+	@Parameter(names = {"--handle-method-constructor-renaming-deletion", "-hmcrd"}, description = "Detects and solves conflicts caused by renaming or deletion, where" +
+			"semistructured merge alone is unable to solve.", arity = 1)
+	public static boolean isMethodAndConstructorRenamingAndDeletionHandlerEnabled = true;
+
+	@Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
+			arity = 1)
+	public static boolean isTypeAmbiguityErrorHandlerEnabled = true;
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files.
@@ -158,6 +190,11 @@ public class JFSTMerge {
 	 */
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath) {
 		FilesManager.validateFiles(left, base, right);
+
+		if(isEncodingInferenceEnabled) {
+			FilesEncoding.analyseFiles(left, base, right);
+		}
+
 		if (!isGit) {
 			System.out.println("MERGING FILES: \n" + ((left != null) ? left.getAbsolutePath() : "<empty left>") + "\n" + ((base != null) ? base.getAbsolutePath() : "<empty base>") + "\n" + ((right != null) ? right.getAbsolutePath() : "<empty right>"));
 		}
@@ -264,4 +301,5 @@ public class JFSTMerge {
 			return 0;
 		}
 	}
+
 }

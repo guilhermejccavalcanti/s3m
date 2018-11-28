@@ -1,5 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.TextualMerge;
@@ -89,7 +90,7 @@ public class InitializationBlocksHandler implements ConflictHandler {
             String basecontent = (tp.base != null) ? ((FSTTerminal) tp.base).getBody() : "";
             String rightcontent = (tp.right != null) ? ((FSTTerminal) tp.right).getBody() : "";
 
-            String mergedContent = TextualMerge.merge(leftcontent, basecontent, rightcontent, true);
+            String mergedContent = TextualMerge.merge(leftcontent, basecontent, rightcontent, JFSTMerge.isWhitespaceIgnored);
 
             //5. updating merged AST
             if (tp.left != null && tp.right != null) {
