@@ -235,6 +235,7 @@ public final class SemistructuredMerge {
 
 				if (!terminalA.getMergingMechanism().equals("Default")) {
 					terminalComposed.setBody(markContributions(terminalA.getBody(), terminalB.getBody(),isProcessingBaseTree, terminalA.index, terminalB.index));
+					terminalComposed.setSpecialTokenPrefix(markContributions(terminalA.getSpecialTokenPrefix(), terminalB.getSpecialTokenPrefix(),isProcessingBaseTree, terminalA.index, terminalB.index));
 				}
 				return terminalComposed;
 			}
@@ -296,7 +297,7 @@ public final class SemistructuredMerge {
 	 * After superimposition, the content of a matched node is the content of
 	 * those that originated him (left,base,right). This method merges these
 	 * parents' content. For instance, calling unstructured merge to merge
-	 * methods' body. We use the tags from the method
+	 * methods' body and prefix. We use the tags from the method
 	 * {@link #markContributions(String, String, boolean, int, int)} to guide
 	 * this process.
 	 * @param node to be merged
@@ -307,24 +308,36 @@ public final class SemistructuredMerge {
 			for (FSTNode child : ((FSTNonTerminal) node).getChildren())
 				mergeMatchedContent(child, context);
 		} else if (node instanceof FSTTerminal) {
+
+			/* Merging body. */
 			if (((FSTTerminal) node).getBody().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
-				String body = ((FSTTerminal) node).getBody() + " ";
-				String[] splittedBodyContent = body.split(SemistructuredMerge.MERGE_SEPARATOR);
-
-				String leftContent = splittedBodyContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "").trim();
-				String baseContent = splittedBodyContent[1].trim();
-				String rightContent = splittedBodyContent[2].trim();
-
-				String mergedBodyContent = TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
+				String mergedBodyContent = mergeContent(node, context,((FSTTerminal) node).getBody() + " ", true);
 				((FSTTerminal) node).setBody(mergedBodyContent);
-
-				identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
-
-				identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
 			}
+
+			/* Merging prefix: possible comments. */
+			if(((FSTTerminal) node).getSpecialTokenPrefix().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
+				String mergedPrefixContent = mergeContent(node, context,((FSTTerminal) node).getSpecialTokenPrefix() + " ", false);
+				((FSTTerminal) node).setSpecialTokenPrefix(mergedPrefixContent);
+			}
+
 		} else {
 			System.err.println("Warning: node is neither non-terminal nor terminal!");
 		}
+	}
+
+	private static String mergeContent(FSTNode node, MergeContext context, String nodeField, boolean identifyNodes) throws TextualMergeException {
+		String[] splitContent = nodeField.split(SemistructuredMerge.MERGE_SEPARATOR);
+		String leftContent = splitContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "").trim();
+		String baseContent = splitContent[1].trim();
+		String rightContent = splitContent[2].trim();
+
+		if(identifyNodes) {
+			identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
+			identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
+		}
+
+		return TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
 	}
 
 	/**
