@@ -11,24 +11,27 @@ import org.junit.Test;
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 public class EncodingInferenceParameterTest {
 
     @BeforeClass
-    public static void setUpBeforeClass() throws Exception {
+    public static void setUpBeforeClass() throws UnsupportedEncodingException {
         //hidding sysout output
         @SuppressWarnings("unused")
         PrintStream originalStream = System.out;
         PrintStream hideStream    = new PrintStream(new OutputStream(){
             public void write(int b) {}
-        });
+        }, true, Charset.defaultCharset().displayName());
         System.setOut(hideStream);
     }
 
     @Test
     public void testEncodingInferenceDisabled() {
-        String mergeResult = getMergeResult(false);
-        assertThat(mergeResult).isEmpty();
+        String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(getMergeResult(false));
+        // The first two characters are weird ones.
+        assertThat(mergeResult.substring(2)).isEqualTo("publicclassTest{voidhelloWorld(){System.out.println(\"HelloWorld!\");}}");
     }
 
     @Test

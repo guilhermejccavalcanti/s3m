@@ -5,15 +5,17 @@ import br.ufpe.cin.mergers.util.MergeContext;
 
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.io.UnsupportedEncodingException;
+import java.nio.charset.Charset;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
 public class TestUtils {
-    public static void hideSystemOutput() {
+    public static void hideSystemOutput() throws UnsupportedEncodingException {
         PrintStream hideStream = new PrintStream(new OutputStream() {
             public void write(int b) {
             }
-        });
+        }, true, Charset.defaultCharset().displayName());
         System.setOut(hideStream);
     }
 
