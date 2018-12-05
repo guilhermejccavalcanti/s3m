@@ -3,21 +3,98 @@ package br.ufpe.cin.mergers.util;
 import br.ufpe.cin.files.FilesManager;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
+import gr.uom.java.xmi.UMLModel;
+import gr.uom.java.xmi.UMLModelASTReader;
+import gr.uom.java.xmi.diff.UMLModelDiff;
 import org.apache.commons.lang3.tuple.Pair;
+import org.refactoringminer.api.Refactoring;
+import org.refactoringminer.api.RefactoringType;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
+import java.io.File;
+import java.util.*;
 import java.util.stream.Collectors;
 
 public class RenamingUtils {
+    private static ArrayList<String> getFileNames(File file, boolean firstLevel){
+        ArrayList<String> ret = new ArrayList<>();
+        if (file != null) {
+            if (file.isDirectory()){
+                File[] files = file.listFiles();
+                for (File childFile: files) {
+                    ArrayList<String> aux = getFileNames(childFile, false);
+                    for(String str: aux){
+                        if (firstLevel)
+                            ret.add("/" + str);
+                        else
+                            ret.add(file.getName() + "/" + str);
+                    }
+                }
+            } else {
+                ret.add(file.getName());
+            }
+        }
+        return ret;
+
+    }
+
+    public static List<Refactoring> getRefactorings(File base, File after){
+        if(base.isFile()) base = base.getParentFile();
+        ArrayList<String> baseFiles = getFileNames(base, true);
+
+        if(after.isFile()) after = after.getParentFile();
+        ArrayList<String> afterFiles = getFileNames(after, true);
+
+
+        UMLModel model1 = new UMLModelASTReader(base, baseFiles).getUmlModel();
+        UMLModel model2 = new UMLModelASTReader(after, afterFiles).getUmlModel();
+        UMLModelDiff modelDiff = model1.diff(model2);
+        List<Refactoring> refactorings = modelDiff.getRefactorings();
+        return  refactorings;
+    }
+
     public static boolean hasUnstructuredMergeConflict(MergeContext context, String baseContent) {
         String signature = getTrimmedSignature(baseContent);
 
         return FilesManager.extractMergeConflicts(context.unstructuredOutput).stream()
                 .map(conflict -> FilesManager.getStringContentIntoSingleLineNoSpacing(conflict.body))
                 .anyMatch(conflict -> conflict.contains(signature));
+    }
+
+    public static  List<Pair<Double, String>> getSimilarNodesRMiner(String baseContent, FSTNode currentNode,
+                                                              List<FSTNode> addedNodes, List<Refactoring> refactorings) {
+        List<Pair<Double, String>> similarNodes = new ArrayList<>();
+
+        System.out.println(getSignature(baseContent));
+        HashMap<String, String> renames;
+        for (Refactoring refactoring : refactorings) {
+            if (refactoring.getRefactoringType() == RefactoringType.RENAME_METHOD) {
+                String newSignature = refactoring.toString().split("rename")[0]
+                        .split("Rename Method")[1]
+                        .split("\t")[1];
+                String newType = newSignature.split(":")[1].trim();
+                newSignature = newSignature.split(":")[0].trim();
+                String[] signatureAsArray = newSignature.split(" ",2 );
+                newSignature = signatureAsArray[0] + " " + newType + " " + signatureAsArray[1];
+
+                System.out.println(newSignature.equals(getSignature(baseContent).trim()));
+            }
+        }
+
+
+        //1. getting similar nodes to fulfill renaming conflicts
+        /*for (FSTNode newNode : addedNodes) { // a possible renamed node is seem as "new" node due to superimposition
+            if (!isMethodOrConstructorNode(newNode)) continue;
+            if (!haveSameParent(newNode, currentNode)) continue;
+
+            String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
+            double bodySimilarity = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
+            if (bodySimilarity >= similarityThreshold) {
+                Pair<Double, String> tp = Pair.of(bodySimilarity, possibleRenamingContent);
+                similarNodes.add(tp);
+            }
+        }*/
+
+        return similarNodes;
     }
 
     public static List<Pair<Double, String>> getSimilarNodes(String baseContent, FSTNode currentNode,

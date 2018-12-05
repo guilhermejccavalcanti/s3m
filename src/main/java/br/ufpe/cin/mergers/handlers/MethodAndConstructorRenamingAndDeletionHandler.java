@@ -39,60 +39,12 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         this.mutualRenamingHandler = MutualRenamingHandlerFactory.getHandler(JFSTMerge.renamingStrategy);
     }
 
-    private ArrayList<String> getFileNames(File file, boolean firstLevel){
-        ArrayList<String> ret = new ArrayList<>();
-        if (file != null) {
-            if (file.isDirectory()){
-                File[] files = file.listFiles();
-                for (File childFile: files) {
-                    ArrayList<String> aux = getFileNames(childFile, false);
-                    for(String str: aux){
-                        if (firstLevel)
-                            ret.add("/" + str);
-                        else
-                            ret.add(file.getName() + "/" + str);
-                    }
-                }
-            } else {
-                ret.add(file.getName());
-            }
-        }
-        return ret;
-
-    }
-
-    private boolean hasRenaming(File base, File after){
-        if(base.isFile()) base = base.getParentFile();
-        ArrayList<String> baseFiles = getFileNames(base, true);
-
-        if(after.isFile()) after = after.getParentFile();
-        ArrayList<String> afterFiles = getFileNames(after, true);
-
-
-        UMLModel model1 = new UMLModelASTReader(base, baseFiles).getUmlModel();
-        UMLModel model2 = new UMLModelASTReader(after, afterFiles).getUmlModel();
-        UMLModelDiff modelDiff = model1.diff(model2);
-        List<Refactoring> refactorings = modelDiff.getRefactorings();
-        boolean ret = false;
-        for (int i = 0; i < refactorings.size(); i++){
-            if(refactorings.get(i).getRefactoringType() == RefactoringType.RENAME_METHOD) ret = true;
-        }
-        System.out.println("ret");
-        System.out.println(ret);
-        return ret;
-    }
-
     public void handle(MergeContext context) {
-        boolean leftRenaming = hasRenaming(context.getBase(), context.getLeft());
-        boolean rightRenaming = hasRenaming(context.getBase(), context.getRight());
-
         //when both developers rename the same method/constructor
-        if (leftRenaming && rightRenaming)
-            handleMutualRenamings(context);
+        handleMutualRenamings(context);
 
         //when one of the developers rename a method/constructor
-        if (leftRenaming || rightRenaming)
-            handleSingleRenamings(context);
+        handleSingleRenamings(context);
     }
 
     private void handleMutualRenamings(MergeContext context) {
@@ -111,13 +63,15 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 
     private void handleSingleRenamings(MergeContext context, List<Pair<String, FSTNode>> possibleRenamedNodes,
                                        List<FSTNode> addedNodes, Side renamingSide) {
+        List<Refactoring> refactorings;
+        if (renamingSide.equals(Side.LEFT)) refactorings = RenamingUtils.getRefactorings(context.getBase(), context.getLeft());
+        else refactorings = RenamingUtils.getRefactorings(context.getBase(), context.getRight());
         for (Pair<String, FSTNode> tuple : possibleRenamedNodes) {
             String baseContent = tuple.getLeft();
             FSTNode currentNode = tuple.getRight();
             if (!RenamingUtils.nodeHasConflict(currentNode)) continue;
 
-            List<Pair<Double, String>> similarNodes = RenamingUtils.getSimilarNodes(baseContent, currentNode, addedNodes,
-                    BODY_SIMILARITY_THRESHOLD);
+            List<Pair<Double, String>> similarNodes = RenamingUtils.getSimilarNodesRMiner(baseContent, currentNode, addedNodes, refactorings);
 
             singleRenamingHandler.handle(context, baseContent, currentNode, similarNodes, renamingSide);
         }
