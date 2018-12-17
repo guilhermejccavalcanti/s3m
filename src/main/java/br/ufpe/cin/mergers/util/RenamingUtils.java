@@ -60,39 +60,49 @@ public class RenamingUtils {
                 .anyMatch(conflict -> conflict.contains(signature));
     }
 
+    private static String convertSignatureFromRMiner(String signature) {
+        String signatureType = signature.split(":")[1].trim();
+        signature = signature.split(":")[0].trim();
+        String[] signatureAsArray = signature.split(" ", 2);
+        signature = signatureAsArray[0] + " " + signatureType + " " + signatureAsArray[1];
+        return signature;
+    }
+
     public static  List<Pair<Double, String>> getSimilarNodesRMiner(String baseContent, FSTNode currentNode,
                                                               List<FSTNode> addedNodes, List<Refactoring> refactorings) {
         List<Pair<Double, String>> similarNodes = new ArrayList<>();
 
-        System.out.println(getSignature(baseContent));
+        String oldSignature = getSignature(baseContent).trim();
+        String newSignature = "";
         HashMap<String, String> renames;
         for (Refactoring refactoring : refactorings) {
             if (refactoring.getRefactoringType() == RefactoringType.RENAME_METHOD) {
-                String newSignature = refactoring.toString().split("rename")[0]
+                String renameSignature = refactoring.toString().split("renamed to")[0]
                         .split("Rename Method")[1]
                         .split("\t")[1];
-                String newType = newSignature.split(":")[1].trim();
-                newSignature = newSignature.split(":")[0].trim();
-                String[] signatureAsArray = newSignature.split(" ",2 );
-                newSignature = signatureAsArray[0] + " " + newType + " " + signatureAsArray[1];
-
-                System.out.println(newSignature.equals(getSignature(baseContent).trim()));
+                renameSignature = convertSignatureFromRMiner(renameSignature);
+                if(renameSignature.equals(oldSignature)) {
+                    newSignature = refactoring.toString().split("renamed to")[1].split("in class")[0].trim();
+                    newSignature = convertSignatureFromRMiner(newSignature);
+                    System.out.println(newSignature);
+                    break;
+                }
             }
         }
 
 
         //1. getting similar nodes to fulfill renaming conflicts
-        /*for (FSTNode newNode : addedNodes) { // a possible renamed node is seem as "new" node due to superimposition
+        for (FSTNode newNode : addedNodes) { // a possible renamed node is seem as "new" node due to superimposition
             if (!isMethodOrConstructorNode(newNode)) continue;
             if (!haveSameParent(newNode, currentNode)) continue;
 
             String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
-            double bodySimilarity = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
-            if (bodySimilarity >= similarityThreshold) {
-                Pair<Double, String> tp = Pair.of(bodySimilarity, possibleRenamingContent);
+            if (getSignature(possibleRenamingContent).trim().equals(newSignature)) {
+                System.out.println(newSignature + "!!!!!!!!");
+                Pair<Double, String> tp = Pair.of(1.0, possibleRenamingContent);
                 similarNodes.add(tp);
             }
-        }*/
+        }
 
         return similarNodes;
     }
