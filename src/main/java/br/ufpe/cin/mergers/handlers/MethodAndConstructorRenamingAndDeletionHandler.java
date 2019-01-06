@@ -9,8 +9,16 @@ import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
 import de.ovgu.cide.fstgen.ast.FSTNode;
+import gr.uom.java.xmi.UMLModel;
+import gr.uom.java.xmi.UMLModelASTReader;
+import gr.uom.java.xmi.diff.UMLModelDiff;
 import org.apache.commons.lang3.tuple.Pair;
+import org.refactoringminer.api.Refactoring;
+import org.refactoringminer.api.RefactoringType;
 
+import java.io.File;
+import java.util.ArrayList;
+import java.util.Comparator;
 import java.util.List;
 
 /**
@@ -55,13 +63,15 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 
     private void handleSingleRenamings(MergeContext context, List<Pair<String, FSTNode>> possibleRenamedNodes,
                                        List<FSTNode> addedNodes, Side renamingSide) {
+        List<Refactoring> refactorings;
+        if (renamingSide.equals(Side.LEFT)) refactorings = RenamingUtils.getRefactorings(context.getBase(), context.getLeft());
+        else refactorings = RenamingUtils.getRefactorings(context.getBase(), context.getRight());
         for (Pair<String, FSTNode> tuple : possibleRenamedNodes) {
             String baseContent = tuple.getLeft();
             FSTNode currentNode = tuple.getRight();
             if (!RenamingUtils.nodeHasConflict(currentNode)) continue;
 
-            List<Pair<Double, String>> similarNodes = RenamingUtils.getSimilarNodes(baseContent, currentNode, addedNodes,
-                    BODY_SIMILARITY_THRESHOLD);
+            List<Pair<Double, String>> similarNodes = RenamingUtils.getSimilarNodesRMiner(baseContent, currentNode, addedNodes, refactorings);
 
             singleRenamingHandler.handle(context, baseContent, currentNode, similarNodes, renamingSide);
         }
