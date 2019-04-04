@@ -1,6 +1,7 @@
 package br.ufpe.cin.files;
 
 import java.io.File;
+import java.util.Objects;
 
 import br.ufpe.cin.mergers.util.MergeContext;
 
@@ -99,6 +100,11 @@ public class FilesTuple {
 		} else {
 			return false;
 		}
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(leftFile, baseFile, rightFile, context, outputpath);
 	}
 	
 }

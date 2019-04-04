@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.security.InvalidAlgorithmParameterException;
 import java.security.InvalidKeyException;
 import java.security.NoSuchAlgorithmException;
@@ -44,8 +45,8 @@ public class CryptoUtils {
 			IvParameterSpec ivParams = new IvParameterSpec(iv);
 			cipher.init(Cipher.ENCRYPT_MODE, SECRETKEY, ivParams);
 			
-			byte[] encrypted=cipher.doFinal(input.getBytes());
-			return new String(encrypted);
+			byte[] encrypted=cipher.doFinal(input.getBytes(StandardCharsets.UTF_8));
+			return new String(encrypted, StandardCharsets.UTF_8);
 			
 		} 
 		catch(NoSuchPaddingException | NoSuchAlgorithmException

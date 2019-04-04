@@ -6,6 +6,7 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.StringReader;
 import java.nio.charset.Charset;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,6 +26,7 @@ import br.ufpe.cin.mergers.util.MergeContext;
 
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ast.CompilationUnit;
+import com.github.javaparser.ParseException; 
 
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
@@ -223,14 +225,40 @@ public final class FilesManager {
 	 */
 	public static String readFileContent(File file) {
 		String content = "";
-		try{
-			String fileEncoding = FilesEncoding.retrieveEncoding(file);
 
-			BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding));
+		String fileEncoding = FilesEncoding.retrieveEncoding(file);
+		try(BufferedReader reader = Files.newBufferedReader(Paths.get(file.getAbsolutePath()), Charset.forName(fileEncoding))) {
 			content = reader.lines().collect(Collectors.joining("\n"));
-		} catch (Exception e) {
-			//System.err.println(e.getMessage());
+
+		} catch (IOException e) {
+			System.err.println("Error at reading file. Shutting down.");
+			System.exit(1);
+
+		} catch (NullPointerException e) { // The file has been deleted between directories.
+			return "";
+
+		} catch (UncheckedIOException e) { // The file is encoded with an unsupported text encoding, so we read characters.
+			return readFileContentUnsupportedEncoding(file);
 		}
+
+		return content;
+	}
+
+	private static String readFileContentUnsupportedEncoding(File file) {
+		String content = "";
+		try(InputStreamReader reader = new InputStreamReader(Files.newInputStream(Paths.get(file.getAbsolutePath())), StandardCharsets.UTF_8)) {
+			char[] buffer = new char[4096];
+
+			StringBuilder builder = new StringBuilder();
+			while(reader.read(buffer) > 0)
+				builder.append(buffer);
+
+			content = builder.toString();
+		} catch (IOException e) {
+			System.err.println("Error at reading file. Shutting down.");
+			System.exit(1);
+		}
+
 		return content;
 	}
 
@@ -345,7 +373,7 @@ public final class FilesManager {
 	 * @return
 	 */
 	public static String getStringContentIntoSingleLineNoSpacing(String content) {
-		return (content.replaceAll("\\r\\n|\\r|\\n","")).replaceAll("\\s+","");
+		return (content.replaceAll("\\r\\n|\\r|\\n|\\u0000","")).replaceAll("\\s+","");
 	}
 
 	/**
@@ -536,11 +564,14 @@ public final class FilesManager {
 	 * @return indented sourceCode
 	 */
 	public static String indentCode(String sourceCode){
-		String indentedCode = sourceCode;
+		String indentedCode;
 		try{
-			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes()), StandardCharsets.UTF_8.displayName());
+			String fileEncoding = FilesEncoding.retrieveBaseEncoding();
+			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes(Charset.forName(fileEncoding))), Charset.forName(fileEncoding).displayName());
 			indentedCode = indenter.toString();
-		} catch (Exception e){} //in case of any errors, returns the non-indented sourceCode
+		} catch (ParseException e) { //in case of any errors, returns the non-indented sourceCode.
+			return sourceCode;
+		}
 		return indentedCode;
 	}
 

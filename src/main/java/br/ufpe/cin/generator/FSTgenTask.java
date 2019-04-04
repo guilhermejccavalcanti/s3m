@@ -1,10 +1,7 @@
 package br.ufpe.cin.generator;
 
-import java.io.File;
-import java.io.FileInputStream;
-import java.io.FileNotFoundException;
-import java.io.FileOutputStream;
-import java.io.PrintStream;
+import java.io.*;
+import java.nio.charset.StandardCharsets;
 
 import org.apache.tools.ant.BuildException;
 import org.apache.tools.ant.Task;
@@ -28,7 +25,7 @@ public class FSTgenTask extends Task {
 		try {
 			NGrammar g;
 			g = parseFile(grammarFileName);
-			JavaCCPrintVisitor printVisitor = new JavaCCPrintVisitor(new PrintStream(new FileOutputStream(targetJJFile)));
+			JavaCCPrintVisitor printVisitor = new JavaCCPrintVisitor(new PrintStream(new FileOutputStream(targetJJFile), true, StandardCharsets.UTF_8.displayName()));
 
 			g.accept(new FSTInlineVisitor());
 
@@ -42,9 +39,7 @@ public class FSTgenTask extends Task {
 
 			CreatePrettyPrinterVisitor printer = new CreatePrettyPrinterVisitor(new File(targetJJFile).getParentFile(), targetPackage, autoSpacingPrettyPrinter);
 			g.accept(printer);
-		} catch (FileNotFoundException e1) {
-			throw new BuildException(e1);
-		} catch (ParseException e1) {
+		} catch (FileNotFoundException | ParseException | UnsupportedEncodingException e1) {
 			throw new BuildException(e1);
 		}
 	}

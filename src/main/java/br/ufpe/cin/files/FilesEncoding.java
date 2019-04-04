@@ -18,15 +18,21 @@ public class FilesEncoding {
 
     private static Map<File, String> encodings = new HashMap<File, String>();
     private static final String DEFAULT_ENCODING = "UTF-8";
+    private static String baseEncoding;
     
-    public static void analyseFiles(File... files) {
+    public static void analyseFiles(File left, File base, File right) {
 
         try {
-            for (File file : files) {
-                if (file != null) {
-                    encodings.put(file, detectEncoding(file));
-                }
+            if (left != null)
+                encodings.put(left, detectEncoding(left));
+
+            if (base != null) {
+                baseEncoding = detectEncoding(base);
+                encodings.put(base, baseEncoding);
             }
+
+            if (right != null)
+                encodings.put(right, detectEncoding(right));
 
         } catch (IOException e) {
             System.err.println("An error occurred while opening files for encoding detection. Shutting down.");
@@ -36,6 +42,10 @@ public class FilesEncoding {
 
     public static String retrieveEncoding(File file) {
         return encodings.getOrDefault(file, DEFAULT_ENCODING);
+    }
+
+    static String retrieveBaseEncoding() {
+        return baseEncoding;
     }
 
     private static String detectEncoding(File file) throws IOException {

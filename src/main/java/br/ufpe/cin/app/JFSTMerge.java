@@ -75,6 +75,7 @@ public class JFSTMerge {
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
 
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
 	@Parameter(names = {"-r", "--renaming"}, description = "Parameter to choose strategy on renaming conflicts.",
             converter = RenamingStrategyConverter.class)
 	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
@@ -106,15 +107,15 @@ public class JFSTMerge {
 	 * first revision, base revision, second revision (three-way merge).
 	 * @param revisionsPath file path
 	 */
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public MergeScenario mergeRevisions(String revisionsPath) {
 		//disabling cryptography for performance improvement
 		isCryptographed = false;
 
 		MergeScenario scenario = null;
-		try {
+		try(BufferedReader reader = Files.newBufferedReader(Paths.get(revisionsPath))) {
 			//reading the .revisions file line by line to get revisions directories
 			List<String> listRevisions = new ArrayList<>();
-			BufferedReader reader = Files.newBufferedReader(Paths.get(revisionsPath));
 			listRevisions = reader.lines().collect(Collectors.toList());
 			if (listRevisions.size() != 3)
 				throw new Exception("Invalid .revisions file!");
@@ -193,6 +194,8 @@ public class JFSTMerge {
 
 		if(isEncodingInferenceEnabled) {
 			FilesEncoding.analyseFiles(left, base, right);
+			assert(FilesEncoding.retrieveEncoding(left).equals(FilesEncoding.retrieveEncoding(base)));
+			assert(FilesEncoding.retrieveEncoding(base).equals(FilesEncoding.retrieveEncoding(right)));
 		}
 
 		if (!isGit) {
