@@ -7,24 +7,24 @@ import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
-import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang.StringUtils;
 
 import java.util.List;
 
 public class MergeMethodsSingleRenamingHandler implements SingleRenamingHandler {
     public void handle(MergeContext context, String baseContent, FSTNode conflictNode,
-                       List<Pair<Double, String>> similarNodes, Side renamingSide) {
+                       List<FSTNode> addedNodes, Side renamingSide) {
 
         String conflictNodeContent = ((FSTTerminal) conflictNode).getBody();
         MergeConflict mergeConflict = FilesManager.extractMergeConflicts(conflictNodeContent).get(0);
         String oppositeSideNodeContent = RenamingUtils.getMergeConflictContentOfOppositeSide(mergeConflict, renamingSide);
 
-        if (similarNodes.isEmpty()) {
+        String possibleRenamingContent = RenamingUtils.getMostSimilarNodeContent(baseContent, conflictNode, addedNodes);
+        if (StringUtils.isEmpty(possibleRenamingContent)) {
             ((FSTTerminal) conflictNode).setBody(oppositeSideNodeContent);
             return;
         }
 
-        String possibleRenamingContent = RenamingUtils.getMostSimilarContent(similarNodes);
         String newSignature = RenamingUtils.getSignature(possibleRenamingContent);
         String newBody = RenamingUtils.removeSignature(oppositeSideNodeContent);
 
