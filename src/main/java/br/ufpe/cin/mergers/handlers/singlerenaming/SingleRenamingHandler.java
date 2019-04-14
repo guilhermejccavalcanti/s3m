@@ -9,5 +9,5 @@ import java.util.List;
 
 public interface SingleRenamingHandler {
     void handle(MergeContext context, String baseContent, FSTNode conflictNode,
-                List<Pair<Double, String>> similarNodes, Side newNodeSide);
+                List<FSTNode> addedNodes, Side newNodeSide);
 }

@@ -1,8 +1,10 @@
 package br.ufpe.cin.mergers.util;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
 import java.util.ArrayList;
@@ -20,8 +22,13 @@ public class RenamingUtils {
                 .anyMatch(conflict -> conflict.contains(signature));
     }
 
-    public static List<Pair<Double, String>> getSimilarNodes(String baseContent, FSTNode currentNode,
-                                                             List<FSTNode> addedNodes, double similarityThreshold) {
+    public static String getMostSimilarNodeContent(String baseContent, FSTNode currentNode, List<FSTNode> addedNodes) {
+        List<Pair<Double, String>> similarNodes = getSimilarNodes(baseContent, currentNode, addedNodes);
+
+        return getMostSimilarContent(similarNodes);
+    }
+
+    public static List<Pair<Double, String>> getSimilarNodes(String baseContent, FSTNode currentNode, List<FSTNode> addedNodes) {
         //list of possible nodes renaming a previous one
         List<Pair<Double, String>> similarNodes = new ArrayList<>();
 
@@ -32,7 +39,7 @@ public class RenamingUtils {
 
             String possibleRenamingContent = ((FSTTerminal) newNode).getBody();
             double bodySimilarity = FilesManager.computeStringSimilarity(baseContent, possibleRenamingContent);
-            if (bodySimilarity >= similarityThreshold) {
+            if (bodySimilarity >= JFSTMerge.RENAMING_SIMILARITY_THRESHOLD) {
                 Pair<Double, String> tp = Pair.of(bodySimilarity, possibleRenamingContent);
                 similarNodes.add(tp);
             }
@@ -41,13 +48,24 @@ public class RenamingUtils {
         return similarNodes;
     }
 
+    public static String getMostSimilarContent(List<Pair<Double, String>> similarNodes) {
+        return similarNodes.stream()
+                .max(Comparator.comparing(Pair::getLeft))
+                .map(Pair::getRight)
+                .orElse(StringUtils.EMPTY);
+    }
+
     public static String getTrimmedSignature(String source) {
         String trimmedSource = FilesManager.getStringContentIntoSingleLineNoSpacing(source);
         return getSignature(trimmedSource);
     }
 
     public static String getSignature(String source) {
-        return source.substring(0, (/*is interface?*/(source.contains("{")) ? source.indexOf("{") : source.indexOf(";")));
+        return source.substring(0, hasDefinedBody(source) ? source.indexOf("{") : source.indexOf(";"));
+    }
+
+    public static boolean hasDefinedBody(String methodSource) {
+        return methodSource.contains("{");
     }
 
     public static String getNodeBodyWithoutSignature(FSTNode node) {
@@ -56,19 +74,13 @@ public class RenamingUtils {
                 .map(FSTTerminal::getBody)
                 .map(FilesManager::getStringContentIntoSingleLineNoSpacing)
                 .map(RenamingUtils::removeSignature)
-                .orElse(null);
+                .orElse(StringUtils.EMPTY);
     }
 
     public static String removeSignature(String string) {
-        string = string.replaceFirst("^.[^{]*(?=(\\{))", "");
-        return string;
-    }
+        if (!hasDefinedBody(string)) return StringUtils.EMPTY;
 
-    public static String getMostSimilarContent(List<Pair<Double, String>> similarNodes) {
-        return similarNodes.stream()
-                .max(Comparator.comparing(Pair::getLeft))
-                .map(Pair::getRight)
-                .orElse("");
+        return string.replaceFirst("^.[^{]*(?=(\\{))", "");
     }
 
     public static boolean nodeHasConflict(FSTNode node) {
@@ -148,13 +160,30 @@ public class RenamingUtils {
     }
 
     public static boolean haveDifferentSignature(FSTNode left, FSTNode right) {
-        return !left.getName().equals(right.getName());
+        return !haveEqualSignature(left, right);
     }
 
-    public static boolean haveSameBody(FSTNode left, FSTNode right) {
+    public static boolean haveEqualSignature(FSTNode left, FSTNode right) {
+        return left.getName().equals(right.getName());
+    }
+
+    public static boolean haveDifferentBody(FSTNode left, FSTNode right) {
+        return !haveEqualBody(left, right);
+    }
+
+    public static boolean haveEqualBody(FSTNode left, FSTNode right) {
         String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
         String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
 
         return leftBody.equals(rightBody);
+    }
+
+    public static boolean haveSimilarBody(FSTNode left, FSTNode right) {
+        String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
+        String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
+
+        double bodySimilarity = FilesManager.computeStringSimilarity(leftBody, rightBody);
+
+        return bodySimilarity >= JFSTMerge.RENAMING_SIMILARITY_THRESHOLD;
     }
 }
