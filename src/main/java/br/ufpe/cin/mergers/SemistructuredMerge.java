@@ -332,7 +332,9 @@ public final class SemistructuredMerge {
 	}
 
 	private static boolean matchesWithEqualBody(FSTNode mergeNode, List<FSTNode> addedNodes) {
-		return addedNodes.stream().anyMatch(node -> RenamingUtils.haveEqualBody(mergeNode, node));
+		return addedNodes.stream()
+			.filter(node -> node instanceof FSTTerminal)
+			.anyMatch(node -> RenamingUtils.haveEqualBody(mergeNode, node));
 	}
 
 	private static boolean isInTree(FSTNode node, FSTNode tree) {
