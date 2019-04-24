@@ -300,13 +300,10 @@ public final class SemistructuredMerge {
 
 	private static void identifyRenamingOrDeletionNodes(FSTNode node, MergeContext context) {
 		List<FSTTerminal> terminals = collectTerminals(node);
-		for (FSTTerminal terminal : terminals)
-			identifyRenamingOrDeletion(terminal, context);
-	}
-
-	private static void identifyRenamingOrDeletion(FSTNode node, MergeContext context) {
-		identifyRenamingOrDeletion(Side.LEFT, context, node, context.leftTree, context.addedLeftNodes);
-		identifyRenamingOrDeletion(Side.RIGHT, context, node, context.rightTree, context.addedRightNodes);
+		for (FSTTerminal terminal : terminals) {
+			identifyRenamingOrDeletion(Side.LEFT, context, terminal, context.leftTree, context.addedLeftNodes);
+			identifyRenamingOrDeletion(Side.RIGHT, context, terminal, context.rightTree, context.addedRightNodes);
+		}
 	}
 
 	private static void identifyRenamingOrDeletion(Side contribution, MergeContext context, FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
