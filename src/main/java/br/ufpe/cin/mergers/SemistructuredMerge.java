@@ -3,6 +3,7 @@ package br.ufpe.cin.mergers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -10,12 +11,15 @@ import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.mergers.handlers.*;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.RenamingUtils;
+import br.ufpe.cin.mergers.util.Side;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
 import cide.gparser.ParseException;
@@ -128,9 +132,10 @@ public final class SemistructuredMerge {
 		FSTNode mergeLeftBase = superimpose(left, base, null, context, true);
 		FSTNode mergeLeftBaseRight = superimpose(mergeLeftBase, right, null, context, false);
 		
+		identifyRenamingOrDeletionNodes(mergeLeftBaseRight, context);
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
 		mergeMatchedContent(mergeLeftBaseRight, context);
-		
+
 		context.superImposedTree = mergeLeftBaseRight;
 		
 		return context;
@@ -291,6 +296,64 @@ public final class SemistructuredMerge {
 				}
 			}
 		}
+	}
+
+	private static void identifyRenamingOrDeletionNodes(FSTNode node, MergeContext context) {
+		List<FSTTerminal> terminals = collectTerminals(node);
+		for (FSTTerminal terminal : terminals)
+			identifyRenamingOrDeletion(terminal, context);
+	}
+
+	private static void identifyRenamingOrDeletion(FSTNode node, MergeContext context) {
+		identifyRenamingOrDeletion(Side.LEFT, context, node, context.leftTree, context.addedLeftNodes);
+		identifyRenamingOrDeletion(Side.RIGHT, context, node, context.rightTree, context.addedRightNodes);
+	}
+
+	private static void identifyRenamingOrDeletion(Side contribution, MergeContext context, FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
+
+		if(isRenamingWithoutBodyChanges(node, context.baseTree, contributionTree, addedNodes))
+			context.renamedWithoutBodyChanges.add(Pair.of(contribution, node));
+
+		if(isDeletionOrRenamingWithBodyChanges(node, context.baseTree, contributionTree, addedNodes))
+			context.deletedOrRenamedWithBodyChanges.add(Pair.of(contribution, node));
+	}
+
+	private static boolean isRenamingWithoutBodyChanges(FSTNode node, FSTNode baseTree, FSTNode contributionTree, List<FSTNode> addedNodes) {
+		return isInBase(node, baseTree) && !isInContribution(node, contributionTree) && matchesWithEqualBody(node, addedNodes);
+	}
+
+	private static boolean isDeletionOrRenamingWithBodyChanges(FSTNode node, FSTNode baseTree, FSTNode contributionTree, List<FSTNode> addedNodes) {
+		return isInBase(node, baseTree) && !isInContribution(node, contributionTree) && !matchesWithEqualBody(node, addedNodes);
+	}
+
+	private static boolean isInBase(FSTNode node, FSTNode baseTree) {
+		return isInTree(node, baseTree);
+	}
+
+	private static boolean isInContribution(FSTNode node, FSTNode contributionTree) {
+		return isInTree(node, contributionTree);
+	}
+
+	private static boolean matchesWithEqualBody(FSTNode mergeNode, List<FSTNode> addedNodes) {
+		return addedNodes.stream().anyMatch(node -> RenamingUtils.haveEqualBody(mergeNode, node));
+	}
+
+	private static boolean isInTree(FSTNode node, FSTNode tree) {
+		List<FSTTerminal> terminals = collectTerminals(tree);
+		return terminals.contains(node);		
+	}
+
+	private static List<FSTTerminal> collectTerminals(FSTNode node) {
+		List<FSTTerminal> terminals = new ArrayList<>();
+		if(node instanceof FSTTerminal) 
+			terminals.add((FSTTerminal) node);
+		else if(node instanceof FSTNonTerminal) 
+			for(FSTNode child : ((FSTNonTerminal) node).getChildren()) {
+				terminals.addAll(collectTerminals(child));
+			}
+		else 
+			System.err.println("Warning: node is neither non-terminal nor terminal!");
+		return terminals;
 	}
 
 	/**
