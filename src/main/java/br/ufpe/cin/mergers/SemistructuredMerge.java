@@ -309,11 +309,15 @@ public final class SemistructuredMerge {
 
 	private static void identifyRenamingOrDeletion(Side contribution, MergeContext context, FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
 
-		if(isRenamingWithoutBodyChanges(node, context.baseTree, contributionTree, addedNodes))
-			context.renamedWithoutBodyChanges.add(Pair.of(contribution, node));
+		if(isRenamingWithoutBodyChanges(node, context.baseTree, contributionTree, addedNodes)) {
+			FSTNode baseNode = Traverser.retrieveNodeFromTree(node, context.baseTree);
+			context.renamedWithoutBodyChanges.add(Triple.of(contribution, baseNode, node));
+		}
 
-		if(isDeletionOrRenamingWithBodyChanges(node, context.baseTree, contributionTree, addedNodes))
-			context.deletedOrRenamedWithBodyChanges.add(Pair.of(contribution, node));
+		if(isDeletionOrRenamingWithBodyChanges(node, context.baseTree, contributionTree, addedNodes)) {
+			FSTNode baseNode = Traverser.retrieveNodeFromTree(node, context.baseTree);
+			context.deletedOrRenamedWithBodyChanges.add(Triple.of(contribution, baseNode, node));
+		}
 	}
 
 	private static boolean isRenamingWithoutBodyChanges(FSTNode node, FSTNode baseTree, FSTNode contributionTree, List<FSTNode> addedNodes) {
