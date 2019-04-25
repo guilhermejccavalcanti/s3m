@@ -12,6 +12,7 @@ import br.ufpe.cin.mergers.util.Traverser;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
+import org.javatuples.Quartet;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -45,7 +46,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     }
 
     private void handleMutualRenamings(MergeContext context, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) {
-        List<Triple<FSTNode, FSTNode, FSTNode>> mutualRenamedNodes = getMutualRenamingMatches(context, allRenamedNodes);
+        List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> mutualRenamedNodes = getMutualRenamingMatches(context, allRenamedNodes);
         mutualRenamingHandler.handle(context);
     }
 
@@ -61,7 +62,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 
     private void handleSingleRenamings(MergeContext context, List<Pair<String, FSTNode>> possibleRenamedNodes,
                                        List<FSTNode> addedNodes, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes, Side renamingSide) {
-        List<Triple<FSTNode, FSTNode, FSTNode>> singleRenamedNodes = getSingleRenamingMatches(renamingSide, context, allRenamedNodes);
+        List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> singleRenamingMatches = getSingleRenamingMatches(renamingSide, context, allRenamedNodes);
         for (Pair<String, FSTNode> tuple : possibleRenamedNodes) {
             String baseContent = tuple.getLeft();
             FSTNode currentNode = tuple.getRight();
@@ -72,25 +73,32 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         }
     }
 
-    private List<Triple<FSTNode, FSTNode, FSTNode>> getSingleRenamingMatches(Side renamingSide, MergeContext context,
+    private List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> getSingleRenamingMatches(Side renamingSide, MergeContext context,
             List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) {
         return allRenamedNodes.stream()
                 .filter(triple -> isSingleRenamingNode(triple.getLeft(), triple.getRight(), allRenamedNodes))
-                .map(Triple::getMiddle)
-                .map(node -> (renamingSide.equals(Side.LEFT))
-                        ? Triple.of(getMostAccurateMatch(node, context.addedLeftNodes), node, getCorrespondentNode(node, context.rightTree))
-                        : Triple.of(getCorrespondentNode(node, context.leftTree), node, getMostAccurateMatch(node, context.addedRightNodes)))
+                .map(triple -> retrieveScenarioNodes(renamingSide, context, triple.getMiddle(), triple.getRight()))
                 .collect(Collectors.toList());
     }
 
-    private List<Triple<FSTNode, FSTNode, FSTNode>> getMutualRenamingMatches(MergeContext context, 
+    private List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> getMutualRenamingMatches(MergeContext context, 
             List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) {
         return allRenamedNodes.stream()
-            .filter(triple -> isMutualRenamingNode(triple.getLeft(), triple.getRight(), allRenamedNodes))
-            .map(Triple::getMiddle)
-            .map(node -> Triple.of(getMostAccurateMatch(node, context.addedLeftNodes), node, getMostAccurateMatch(node, context.addedRightNodes)))
-            .collect(Collectors.toList());
+                .filter(triple -> isMutualRenamingNode(triple.getLeft(), triple.getRight(), allRenamedNodes))
+                .map(triple -> retrieveScenarioNodes(context, triple.getMiddle(), triple.getRight()))
+                .collect(Collectors.toList());
     }
+
+    private Quartet<FSTNode, FSTNode, FSTNode, FSTNode> retrieveScenarioNodes(Side renamingSide, MergeContext context, FSTNode baseNode, FSTNode mergeNode) {
+        if(renamingSide.equals(Side.LEFT))
+            return Quartet.with(getMostAccurateMatch(baseNode, context.addedLeftNodes), baseNode, getCorrespondentNode(baseNode, context.rightTree), mergeNode);
+        else
+            return Quartet.with(getCorrespondentNode(baseNode, context.leftTree), baseNode, getMostAccurateMatch(baseNode, context.addedRightNodes), mergeNode);
+    }
+
+    private Quartet<FSTNode, FSTNode, FSTNode, FSTNode> retrieveScenarioNodes(MergeContext context, FSTNode baseNode, FSTNode mergeNode) {
+       return Quartet.with(getMostAccurateMatch(baseNode, context.addedLeftNodes), baseNode, getMostAccurateMatch(baseNode, context.addedRightNodes), mergeNode);
+    }    
 
     private FSTNode getCorrespondentNode(FSTNode node, FSTNode tree) {
         return Traverser.retrieveNodeFromTree(node, tree);
@@ -126,7 +134,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 
     private List<Triple<Side, FSTNode, FSTNode>> unionRenamedNodes(List<Triple<Side, FSTNode, FSTNode>> renamedWithoutBodyChanges, 
             List<Triple<Side, FSTNode, FSTNode>> deletedOrRenamedWithoutBodyChanges) {
-         List<Triple<Side, FSTNode, FSTNode>> unionNodes = new ArrayList<>();
+        List<Triple<Side, FSTNode, FSTNode>> unionNodes = new ArrayList<>();
         renamedWithoutBodyChanges.stream().forEach(triple -> unionNodes.add(triple));
         deletedOrRenamedWithoutBodyChanges.stream().forEach(triple -> unionNodes.add(triple));
         return unionNodes;
