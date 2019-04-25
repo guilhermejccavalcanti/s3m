@@ -96,8 +96,10 @@ public class MergeContext {
 		this.deletedBaseNodes. addAll(otherContext.deletedBaseNodes);
 		this.nodesDeletedByLeft. addAll(otherContext.nodesDeletedByLeft);
 		this.nodesDeletedByRight. addAll(otherContext.nodesDeletedByRight);
-
 		
+		this.renamedWithoutBodyChanges.addAll(otherContext.renamedWithoutBodyChanges);
+		this.deletedOrRenamedWithBodyChanges.addAll(otherContext.deletedOrRenamedWithBodyChanges);
+
 		this.possibleRenamedLeftNodes. addAll(otherContext.possibleRenamedLeftNodes);
 		this.possibleRenamedRightNodes.addAll(otherContext.possibleRenamedRightNodes);
 
