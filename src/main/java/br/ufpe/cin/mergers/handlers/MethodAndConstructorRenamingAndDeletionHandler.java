@@ -10,8 +10,11 @@ import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 /**
  * Renaming or deletions conflicts happen when one developer edits a element renamed or deleted by other.
@@ -30,18 +33,22 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     }
 
     public void handle(MergeContext context) {
+        List<Pair<Side, FSTNode>> allRenamedNodes = unionRenamedNodes(context.renamedWithoutBodyChanges,
+                context.deletedOrRenamedWithBodyChanges);
+
         //when both developers rename the same method/constructor
-        handleMutualRenamings(context);
+        handleMutualRenamings(context, allRenamedNodes);
 
         //when one of the developers rename a method/constructor
-        handleSingleRenamings(context);
+        handleSingleRenamings(context, allRenamedNodes);
     }
 
-    private void handleMutualRenamings(MergeContext context) {
+    private void handleMutualRenamings(MergeContext context, List<Pair<Side, FSTNode>> allRenamedNodes) {
+        List<Triple<FSTNode, FSTNode, FSTNode>> mutualRenamedNodes = getMutualRenamingMatches(context, allRenamedNodes);
         mutualRenamingHandler.handle(context);
     }
 
-    private void handleSingleRenamings(MergeContext context) {
+    private void handleSingleRenamings(MergeContext context, List<Pair<Side, FSTNode>> allRenamedNodes) {
         if (context.possibleRenamedLeftNodes.isEmpty() && context.possibleRenamedRightNodes.isEmpty()) return;
 
         //possible renamings or deletions in left
@@ -61,5 +68,42 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
                 singleRenamingHandler.handle(context, baseContent, currentNode, addedNodes, renamingSide);
             }
         }
+    }
+
+    private List<Triple<FSTNode, FSTNode, FSTNode>> getMutualRenamingMatches(MergeContext context, List<Pair<Side, FSTNode>> allRenamedNodes) {
+        return allRenamedNodes.stream()
+            .filter(pair -> isMutualRenamingNode(pair.getLeft(), pair.getRight(), allRenamedNodes))
+            .map(Pair::getRight)
+            .map(node -> Triple.of(getMostAccurateMatch(node, context.addedLeftNodes), node, getMostAccurateMatch(node, context.addedRightNodes)))
+            .collect(Collectors.toList());
+    }
+
+    private FSTNode getMostAccurateMatch(FSTNode node, List<FSTNode> addedNodes) {
+        for(FSTNode addedNode : addedNodes) {
+            if(RenamingUtils.isMethodOrConstructorNode(addedNode) && areVerySimilarNodes(node, addedNode))
+                return addedNode;
+        }
+        return null;
+    }
+
+    private boolean areVerySimilarNodes(FSTNode node1, FSTNode node2) {
+        return RenamingUtils.haveEqualBody(node1, node2)
+                || (RenamingUtils.haveSimilarBody(node1, node2) && RenamingUtils.haveEqualSignatureButName(node1, node2))
+                || RenamingUtils.oneContainsTheBodyFromTheOther(node1, node2);
+    }
+
+    private boolean isMutualRenamingNode(Side contribution, FSTNode node, List<Pair<Side, FSTNode>> allRenamedNodes) {
+        return allRenamedNodes.stream().anyMatch(pair -> isOppositeContributionSameNode(contribution, node, pair));
+    }
+
+    private boolean isOppositeContributionSameNode(Side contribution, FSTNode node, Pair<Side, FSTNode> pair) {
+        return pair.getLeft().equals(contribution.opposite()) && pair.getRight().equals(node); 
+    }
+
+    private List<Pair<Side, FSTNode>> unionRenamedNodes(List<Pair<Side, FSTNode>> renamedWithoutBodyChanges, List<Pair<Side, FSTNode>> deletedOrRenamedWithoutBodyChanges) {
+        List<Pair<Side, FSTNode>> unionNodes = new ArrayList<>();
+        renamedWithoutBodyChanges.stream().forEach(pair -> unionNodes.add(pair));
+        deletedOrRenamedWithoutBodyChanges.stream().forEach(pair -> unionNodes.add(pair));
+        return unionNodes;
     }
 }
