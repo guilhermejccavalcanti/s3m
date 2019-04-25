@@ -167,6 +167,34 @@ public class RenamingUtils {
         return left.getName().equals(right.getName());
     }
 
+    public static boolean haveEqualSignatureButName(FSTNode left, FSTNode right) {
+        String leftSignature = left.getName();
+        String rightSignature = right.getName();
+        return getPrefix(leftSignature).equals(getPrefix(rightSignature)) && getSuffix(leftSignature).equals(getSuffix(rightSignature));
+    }
+
+    private static String getSuffix(String signature) {
+        return FilesManager.getStringContentIntoSingleLineNoSpacing(signature.substring(signature.indexOf("(")));
+    }
+
+    private static String getPrefix(String signature) {
+        boolean isInName = false;
+        for (int i = signature.indexOf("("); i >= 0; i--) {
+            if(signature.charAt(i) >= 'A' && signature.charAt(i) <= 'z')
+                isInName = true;
+            if(signature.charAt(i) == ' ' && isInName)
+                return FilesManager.getStringContentIntoSingleLineNoSpacing(signature.substring(0, i));
+        }
+        return "";
+    }
+
+    public static boolean oneContainsTheBodyFromTheOther(FSTNode left, FSTNode right) {
+        String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
+        String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
+
+        return leftBody.contains(rightBody) || rightBody.contains(leftBody);
+    }
+
     public static boolean haveDifferentBody(FSTNode left, FSTNode right) {
         return !haveEqualBody(left, right);
     }
