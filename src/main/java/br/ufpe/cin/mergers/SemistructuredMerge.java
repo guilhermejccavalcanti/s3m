@@ -20,6 +20,7 @@ import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
+import br.ufpe.cin.mergers.util.Traverser;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
 import cide.gparser.ParseException;
@@ -299,7 +300,7 @@ public final class SemistructuredMerge {
 	}
 
 	private static void identifyRenamingOrDeletionNodes(FSTNode node, MergeContext context) {
-		List<FSTTerminal> terminals = collectTerminals(node);
+		List<FSTTerminal> terminals = Traverser.collectTerminals(node);
 		for (FSTTerminal terminal : terminals) {
 			identifyRenamingOrDeletion(Side.LEFT, context, terminal, context.leftTree, context.addedLeftNodes);
 			identifyRenamingOrDeletion(Side.RIGHT, context, terminal, context.rightTree, context.addedRightNodes);
@@ -324,35 +325,17 @@ public final class SemistructuredMerge {
 	}
 
 	private static boolean isInBase(FSTNode node, FSTNode baseTree) {
-		return isInTree(node, baseTree);
+		return Traverser.isInTree(node, baseTree);
 	}
 
 	private static boolean isInContribution(FSTNode node, FSTNode contributionTree) {
-		return isInTree(node, contributionTree);
+		return Traverser.isInTree(node, contributionTree);
 	}
 
 	private static boolean matchesWithEqualBody(FSTNode mergeNode, List<FSTNode> addedNodes) {
 		return addedNodes.stream()
 			.filter(node -> node instanceof FSTTerminal)
 			.anyMatch(node -> RenamingUtils.haveEqualBody(mergeNode, node));
-	}
-
-	private static boolean isInTree(FSTNode node, FSTNode tree) {
-		List<FSTTerminal> terminals = collectTerminals(tree);
-		return terminals.contains(node);		
-	}
-
-	private static List<FSTTerminal> collectTerminals(FSTNode node) {
-		List<FSTTerminal> terminals = new ArrayList<>();
-		if(node instanceof FSTTerminal) 
-			terminals.add((FSTTerminal) node);
-		else if(node instanceof FSTNonTerminal) 
-			for(FSTNode child : ((FSTNonTerminal) node).getChildren()) {
-				terminals.addAll(collectTerminals(child));
-			}
-		else 
-			System.err.println("Warning: node is neither non-terminal nor terminal!");
-		return terminals;
 	}
 
 	/**
