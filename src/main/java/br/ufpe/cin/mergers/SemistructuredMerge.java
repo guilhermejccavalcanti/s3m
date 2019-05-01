@@ -321,11 +321,11 @@ public final class SemistructuredMerge {
 	}
 
 	private static boolean isRenamingWithoutBodyChanges(FSTNode node, FSTNode baseTree, FSTNode contributionTree, List<FSTNode> addedNodes) {
-		return isInBase(node, baseTree) && !isInContribution(node, contributionTree) && matchesWithEqualBody(node, addedNodes);
+		return isInBase(node, baseTree) && !isInContribution(node, contributionTree) && matchesWithEqualBody(node, baseTree, addedNodes);
 	}
 
 	private static boolean isDeletionOrRenamingWithBodyChanges(FSTNode node, FSTNode baseTree, FSTNode contributionTree, List<FSTNode> addedNodes) {
-		return isInBase(node, baseTree) && !isInContribution(node, contributionTree) && !matchesWithEqualBody(node, addedNodes);
+		return isInBase(node, baseTree) && !isInContribution(node, contributionTree) && !matchesWithEqualBody(node, baseTree, addedNodes);
 	}
 
 	private static boolean isInBase(FSTNode node, FSTNode baseTree) {
@@ -336,10 +336,11 @@ public final class SemistructuredMerge {
 		return Traverser.isInTree(node, contributionTree);
 	}
 
-	private static boolean matchesWithEqualBody(FSTNode mergeNode, List<FSTNode> addedNodes) {
+	private static boolean matchesWithEqualBody(FSTNode mergeNode, FSTNode baseTree, List<FSTNode> addedNodes) {
+		FSTNode baseNode = Traverser.retrieveNodeFromTree(mergeNode, baseTree);
 		return addedNodes.stream()
 			.filter(node -> node instanceof FSTTerminal)
-			.anyMatch(node -> RenamingUtils.haveEqualBody(mergeNode, node));
+			.anyMatch(node -> RenamingUtils.haveEqualBody(baseNode, node));
 	}
 
 	/**
