@@ -33,6 +33,18 @@ public class Traverser {
         }
         return null;
     }
+    
+    public static boolean removeNode(FSTNode node, FSTNode tree) {
+        if(tree instanceof FSTTerminal && tree.equals(node)) {
+            ((FSTTerminal) tree).getParent().removeChild(node);
+            return true;
+        } else if (tree instanceof FSTNonTerminal) {
+            for (FSTNode child : ((FSTNonTerminal) tree).getChildren())
+                if(removeNode(node, child))
+                    return true;
+        }
+        return false;
+    }
 
     private static List<FSTNode> collectNodes(FSTNode tree) {
        return collectNodes(new ArrayList<FSTNode>(), tree);
@@ -49,6 +61,10 @@ public class Traverser {
             System.err.println("Warning: node is neither non-terminal nor terminal!");
         }
         return nodes;
+    }
+
+    private static boolean containsNode(List<FSTTerminal> nodes, FSTNode node) {
+        return nodes.stream().anyMatch(testNode -> testNode.equals(node) && testNode.getBody().equals(((FSTTerminal) node).getBody()));
     }
 
     

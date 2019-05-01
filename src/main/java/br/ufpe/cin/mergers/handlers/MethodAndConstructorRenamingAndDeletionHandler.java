@@ -1,6 +1,7 @@
 package br.ufpe.cin.mergers.handlers;
 
 import br.ufpe.cin.app.JFSTMerge;
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.mergers.handlers.mutualrenaming.singlerenaming.MutualRenamingHandler;
 import br.ufpe.cin.mergers.handlers.mutualrenaming.singlerenaming.MutualRenamingHandlerFactory;
 import br.ufpe.cin.mergers.handlers.singlerenaming.SingleRenamingHandler;
@@ -34,7 +35,8 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         this.mutualRenamingHandler = MutualRenamingHandlerFactory.getHandler(JFSTMerge.renamingStrategy);
     }
 
-    public void handle(MergeContext context) {
+    @Override
+    public void handle(MergeContext context) throws TextualMergeException {
         List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes = unionRenamedNodes(context.renamedWithoutBodyChanges,
                 context.deletedOrRenamedWithBodyChanges);
 
@@ -50,7 +52,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         mutualRenamingHandler.handle(context);
     }
 
-    private void handleSingleRenamings(MergeContext context, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) {
+    private void handleSingleRenamings(MergeContext context, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) throws TextualMergeException {
         if (context.possibleRenamedLeftNodes.isEmpty() && context.possibleRenamedRightNodes.isEmpty()) return;
 
         //possible renamings or deletions in left
@@ -61,16 +63,11 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     }
 
     private void handleSingleRenamings(MergeContext context, List<Pair<String, FSTNode>> possibleRenamedNodes,
-                                       List<FSTNode> addedNodes, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes, Side renamingSide) {
-        List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> singleRenamingMatches = getSingleRenamingMatches(renamingSide, context, allRenamedNodes);
-        for (Pair<String, FSTNode> tuple : possibleRenamedNodes) {
-            String baseContent = tuple.getLeft();
-            FSTNode currentNode = tuple.getRight();
+                                       List<FSTNode> addedNodes, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes, Side renamingSide) throws TextualMergeException {
 
-            if (RenamingUtils.nodeHasConflict(currentNode)) {
-                singleRenamingHandler.handle(context, baseContent, currentNode, addedNodes, renamingSide);
-            }
-        }
+        List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> singleRenamingMatches = getSingleRenamingMatches(renamingSide, context, allRenamedNodes);
+        for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> tuple : singleRenamingMatches)
+            singleRenamingHandler.handle(context, tuple, renamingSide);
     }
 
     private List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> getSingleRenamingMatches(Side renamingSide, MergeContext context,
@@ -78,6 +75,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         return allRenamedNodes.stream()
                 .filter(triple -> isSingleRenamingNode(triple.getLeft(), triple.getRight(), allRenamedNodes))
                 .map(triple -> retrieveScenarioNodes(renamingSide, context, triple.getMiddle(), triple.getRight()))
+                .filter(quadruple -> quadruple.getValue0() != null || quadruple.getValue2() != null)
                 .collect(Collectors.toList());
     }
 
@@ -86,6 +84,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         return allRenamedNodes.stream()
                 .filter(triple -> isMutualRenamingNode(triple.getLeft(), triple.getRight(), allRenamedNodes))
                 .map(triple -> retrieveScenarioNodes(context, triple.getMiddle(), triple.getRight()))
+                .filter(quadruple -> quadruple.getValue0() != null || quadruple.getValue2() != null)
                 .collect(Collectors.toList());
     }
 
