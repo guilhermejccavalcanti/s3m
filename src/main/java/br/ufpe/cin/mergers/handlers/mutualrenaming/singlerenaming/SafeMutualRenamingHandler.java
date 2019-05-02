@@ -2,6 +2,7 @@ package br.ufpe.cin.mergers.handlers.mutualrenaming.singlerenaming;
 
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
+import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
@@ -13,7 +14,17 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.javatuples.Quartet;
 
+import java.io.File;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.eclipse.jdt.core.dom.ASTNode;
+import org.eclipse.jdt.core.dom.ASTVisitor;
+import org.eclipse.jdt.core.dom.ClassInstanceCreation;
+import org.eclipse.jdt.core.dom.CompilationUnit;
+import br.ufpe.cin.mergers.util.JavaCompiler;
 
 public class SafeMutualRenamingHandler implements MutualRenamingHandler {
     public void handle(MergeContext context) {
@@ -61,8 +72,12 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
             decideWhenBothRenamedWithoutBodyChanges(context, leftNode, rightNode);
         }
 
-        else if((isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) ||                   (isDeletionOrRenamingWithBodyChanges(Side.LEFT, baseNode, context) && isRenamingWithoutBodyChanges(Side.RIGHT, baseNode, context))) {
-            decideWhenTheyRenamedDifferently(context, leftNode, rightNode);
+        else if(isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) {
+            decideWhenTheyRenamedDifferently(context, leftNode, baseNode, rightNode, mergeNode, leftNode.getName(), context.getLeft());
+        }
+        
+        else if(isDeletionOrRenamingWithBodyChanges(Side.LEFT, baseNode, context) && isRenamingWithoutBodyChanges(Side.RIGHT, baseNode, context)) {
+            decideWhenTheyRenamedDifferently(context, leftNode, baseNode, rightNode, mergeNode, rightNode.getName(), context.getRight());
         }
 
         else if(isDeletionOrRenamingWithBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) {
@@ -77,9 +92,13 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
             RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
     }
 
-    private void decideWhenTheyRenamedDifferently(MergeContext context, FSTNode leftNode, FSTNode rightNode) {
+    private void decideWhenTheyRenamedDifferently(MergeContext context, FSTNode leftNode, FSTNode baseNode,
+            FSTNode rightNode, FSTNode mergeNode, String signature, File toCheckReferencesFile) throws TextualMergeException {
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode)) {
-            return;
+            if(thereIsNewReference(toCheckReferencesFile, signature, context.getBase()))
+                RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
+            else 
+                RenamingUtils.runTextualMerge(leftNode, baseNode, rightNode, mergeNode);
         } else 
             RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
     }
@@ -101,7 +120,20 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
                 .anyMatch(triple -> triple.getLeft().equals(renamingSide) && triple.getMiddle().equals(baseNode));
     }
 
-    private boolean thereIsNewReference(MergeContext context, String signature) {
-        return false;
+    private boolean thereIsNewReference(File contributionFile, String signature, File baseFile) {
+        int numberBaseReferences = countReferences(baseFile, signature);
+        int numberContributionReferences = countReferences(contributionFile, signature);
+        return numberContributionReferences > numberBaseReferences + 1; // The declaration is not present in the base, so we add one as a 'handicap'.
+    }
+
+    private static int countReferences(File file, String signature) {
+        String fileSource = FilesManager.readFileContent(file);
+        String methodName = signature.substring(0, signature.indexOf('('));
+        Pattern pattern = Pattern.compile(methodName + "\\(.*\\)");
+        Matcher matcher = pattern.matcher(fileSource);
+
+        int numberReferences = 0;
+        while(matcher.find()) numberReferences++;
+        return numberReferences;
     }
 }
