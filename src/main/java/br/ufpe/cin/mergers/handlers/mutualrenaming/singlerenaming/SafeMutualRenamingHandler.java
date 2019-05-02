@@ -1,30 +1,19 @@
 package br.ufpe.cin.mergers.handlers.mutualrenaming.singlerenaming;
 
-import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
-import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
 import de.ovgu.cide.fstgen.ast.FSTNode;
-import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 import org.javatuples.Quartet;
 
 import java.io.File;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
-
-import org.eclipse.jdt.core.dom.ASTNode;
-import org.eclipse.jdt.core.dom.ASTVisitor;
-import org.eclipse.jdt.core.dom.ClassInstanceCreation;
-import org.eclipse.jdt.core.dom.CompilationUnit;
-import br.ufpe.cin.mergers.util.JavaCompiler;
 
 public class SafeMutualRenamingHandler implements MutualRenamingHandler {
     public void handle(MergeContext context) {
@@ -126,7 +115,7 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
         return numberContributionReferences > numberBaseReferences + 1; // The declaration is not present in the base, so we add one as a 'handicap'.
     }
 
-    private static int countReferences(File file, String signature) {
+    private int countReferences(File file, String signature) {
         String fileSource = FilesManager.readFileContent(file);
         String methodName = signature.substring(0, signature.indexOf('('));
         Pattern pattern = Pattern.compile(methodName + "\\(.*\\)");
