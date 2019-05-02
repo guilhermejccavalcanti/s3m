@@ -1,7 +1,9 @@
 package br.ufpe.cin.mergers.util;
 
 import br.ufpe.cin.app.JFSTMerge;
+import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.TextualMerge;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 import org.apache.commons.lang.StringUtils;
@@ -213,5 +215,20 @@ public class RenamingUtils {
         double bodySimilarity = FilesManager.computeStringSimilarity(leftBody, rightBody);
 
         return bodySimilarity >= JFSTMerge.RENAMING_SIMILARITY_THRESHOLD;
+    }
+
+    public static void runTextualMerge(FSTNode left, FSTNode base, FSTNode right, FSTNode merge) throws TextualMergeException {
+        String leftContent = getNodeContent(left);
+        String baseContent = getNodeContent(base);
+        String rightContent = getNodeContent(right);
+
+        String textualMergeContent = TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
+        ((FSTTerminal) merge).setBody(textualMergeContent);
+    }
+
+    private static String getNodeContent(FSTNode node) {
+        if (node == null)
+            return "";
+        return ((FSTTerminal) node).getBody();
     }
 }
