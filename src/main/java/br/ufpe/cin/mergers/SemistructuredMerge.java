@@ -133,9 +133,9 @@ public final class SemistructuredMerge {
 		FSTNode mergeLeftBase = superimpose(left, base, null, context, true);
 		FSTNode mergeLeftBaseRight = superimpose(mergeLeftBase, right, null, context, false);
 		
-		identifyRenamingOrDeletionNodes(mergeLeftBaseRight, context);
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
 		mergeMatchedContent(mergeLeftBaseRight, context);
+		identifyRenamingOrDeletionNodes(base, context);
 
 		context.superImposedTree = mergeLeftBaseRight;
 		
@@ -309,35 +309,28 @@ public final class SemistructuredMerge {
 
 	private static void identifyRenamingOrDeletion(Side contribution, MergeContext context, FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
 
-		if(isRenamingWithoutBodyChanges(node, context.baseTree, contributionTree, addedNodes)) {
-			FSTNode baseNode = Traverser.retrieveNodeFromTree(node, context.baseTree);
-			context.renamedWithoutBodyChanges.add(Triple.of(contribution, baseNode, node));
+		if(isRenamingWithoutBodyChanges(node, contributionTree, addedNodes)) {
+			context.renamedWithoutBodyChanges.add(Pair.of(contribution, node));
 		}
 
-		if(isDeletionOrRenamingWithBodyChanges(node, context.baseTree, contributionTree, addedNodes)) {
-			FSTNode baseNode = Traverser.retrieveNodeFromTree(node, context.baseTree);
-			context.deletedOrRenamedWithBodyChanges.add(Triple.of(contribution, baseNode, node));
+		if(isDeletionOrRenamingWithBodyChanges(node, contributionTree, addedNodes)) {
+			context.deletedOrRenamedWithBodyChanges.add(Pair.of(contribution, node));
 		}
 	}
 
-	private static boolean isRenamingWithoutBodyChanges(FSTNode node, FSTNode baseTree, FSTNode contributionTree, List<FSTNode> addedNodes) {
-		return isInBase(node, baseTree) && !isInContribution(node, contributionTree) && matchesWithEqualBody(node, baseTree, addedNodes);
+	private static boolean isRenamingWithoutBodyChanges(FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
+		return !isInContribution(node, contributionTree) && matchesWithEqualBody(node, addedNodes);
 	}
 
-	private static boolean isDeletionOrRenamingWithBodyChanges(FSTNode node, FSTNode baseTree, FSTNode contributionTree, List<FSTNode> addedNodes) {
-		return isInBase(node, baseTree) && !isInContribution(node, contributionTree) && !matchesWithEqualBody(node, baseTree, addedNodes);
-	}
-
-	private static boolean isInBase(FSTNode node, FSTNode baseTree) {
-		return Traverser.isInTree(node, baseTree);
+	private static boolean isDeletionOrRenamingWithBodyChanges(FSTNode node,FSTNode contributionTree, List<FSTNode> addedNodes) {
+		return !isInContribution(node, contributionTree) && !matchesWithEqualBody(node, addedNodes);
 	}
 
 	private static boolean isInContribution(FSTNode node, FSTNode contributionTree) {
 		return Traverser.isInTree(node, contributionTree);
 	}
 
-	private static boolean matchesWithEqualBody(FSTNode mergeNode, FSTNode baseTree, List<FSTNode> addedNodes) {
-		FSTNode baseNode = Traverser.retrieveNodeFromTree(mergeNode, baseTree);
+	private static boolean matchesWithEqualBody(FSTNode baseNode, List<FSTNode> addedNodes) {
 		return addedNodes.stream()
 			.filter(node -> node instanceof FSTTerminal)
 			.anyMatch(node -> RenamingUtils.haveEqualBody(baseNode, node));
