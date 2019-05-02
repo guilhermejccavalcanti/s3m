@@ -52,34 +52,38 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
         FSTNode rightNode = scenarioNodes.getValue2();
         FSTNode mergeNode = scenarioNodes.getValue3();
 
-        /* Decision Tree */
-
         if(isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isRenamingWithoutBodyChanges(Side.RIGHT, baseNode, context)) {
-            if(RenamingUtils.haveEqualSignature(leftNode, rightNode)) return;
-            else {
-                RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
-            }
+            decideWhenBothRenamedWithoutBodyChanges(context, leftNode, rightNode);
         }
 
-        else if(isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) {
-            if(RenamingUtils.haveEqualSignature(leftNode, rightNode)) {
-                // check references
-            } else {
-                RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
-            }
-        }
-
-        else if(isDeletionOrRenamingWithBodyChanges(Side.LEFT, baseNode, context) && isRenamingWithoutBodyChanges(Side.RIGHT, baseNode, context)) {
-
+        else if((isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) ||                   (isDeletionOrRenamingWithBodyChanges(Side.LEFT, baseNode, context) && isRenamingWithoutBodyChanges(Side.RIGHT, baseNode, context))) {
+            decideWhenTheyRenamedDifferently(context, leftNode, rightNode);
         }
 
         else if(isDeletionOrRenamingWithBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) {
-            if(RenamingUtils.haveEqualSignature(leftNode, rightNode)) {
-                // run textual merge
-            } else {
-                RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
-            }
+            decideWhenBothDeletedOrRenamedWithBodyChanges(context, leftNode, rightNode, mergeNode);
         }
+    }
+
+    private void decideWhenBothRenamedWithoutBodyChanges(MergeContext context, FSTNode leftNode, FSTNode rightNode) {
+        if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
+            return;
+        else 
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
+    }
+
+    private void decideWhenTheyRenamedDifferently(MergeContext context, FSTNode leftNode, FSTNode rightNode) {
+        if (RenamingUtils.haveEqualSignature(leftNode, rightNode)) {
+            // check references
+        } else 
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
+    }
+
+    private void decideWhenBothDeletedOrRenamedWithBodyChanges(MergeContext context, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
+        if (RenamingUtils.haveEqualSignature(leftNode, rightNode)) {
+            // run textual merge
+        } else
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
     }
 
     private boolean isRenamingWithoutBodyChanges(Side renamingSide, FSTNode baseNode, MergeContext context) {
