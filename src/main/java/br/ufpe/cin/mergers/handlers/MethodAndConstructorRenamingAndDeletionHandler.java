@@ -86,6 +86,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
                 .filter(triple -> isMutualRenamingNode(triple.getLeft(), triple.getRight(), allRenamedNodes))
                 .map(triple -> retrieveScenarioNodes(context, triple.getMiddle(), triple.getRight()))
                 .filter(quadruple -> quadruple.getValue0() != null || quadruple.getValue2() != null)
+                .distinct()
                 .collect(Collectors.toList());
     }
 
