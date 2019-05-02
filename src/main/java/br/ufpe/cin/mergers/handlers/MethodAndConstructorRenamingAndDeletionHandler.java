@@ -49,7 +49,8 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 
     private void handleMutualRenamings(MergeContext context, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) {
         List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> mutualRenamedNodes = getMutualRenamingMatches(context, allRenamedNodes);
-        mutualRenamingHandler.handle(context);
+        for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> tuple : mutualRenamedNodes)
+            mutualRenamingHandler.handle(context, tuple);
     }
 
     private void handleSingleRenamings(MergeContext context, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) throws TextualMergeException {

@@ -4,6 +4,7 @@ import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import org.apache.commons.lang3.tuple.Pair;
+import org.javatuples.Quartet;
 
 import java.util.List;
 
@@ -55,4 +56,10 @@ public class MergeMethodsMutualRenamingHandler implements MutualRenamingHandler 
         leftNewMethodsOrConstructors.remove(leftNode);
         rightNewMethodsOrConstructors.remove(rightNode);
     }
+
+    @Override
+    public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) {
+        // Do nothing (keep both)
+    }
+    
 }
