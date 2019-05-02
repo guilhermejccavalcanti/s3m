@@ -37,7 +37,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 
     @Override
     public void handle(MergeContext context) throws TextualMergeException {
-        List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes = unionRenamedNodes(context.renamedWithoutBodyChanges,
+        List<Pair<Side, FSTNode>> allRenamedNodes = unionRenamedNodes(context.renamedWithoutBodyChanges,
                 context.deletedOrRenamedWithBodyChanges);
 
         //when both developers rename the same method/constructor
@@ -47,13 +47,13 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         handleSingleRenamings(context, allRenamedNodes);
     }
 
-    private void handleMutualRenamings(MergeContext context, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) throws TextualMergeException {
+    private void handleMutualRenamings(MergeContext context, List<Pair<Side, FSTNode>> allRenamedNodes) throws TextualMergeException {
         List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> mutualRenamedNodes = getMutualRenamingMatches(context, allRenamedNodes);
         for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> tuple : mutualRenamedNodes)
             mutualRenamingHandler.handle(context, tuple);
     }
 
-    private void handleSingleRenamings(MergeContext context, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) throws TextualMergeException {
+    private void handleSingleRenamings(MergeContext context, List<Pair<Side, FSTNode>> allRenamedNodes) throws TextualMergeException {
         if (context.possibleRenamedLeftNodes.isEmpty() && context.possibleRenamedRightNodes.isEmpty()) return;
 
         //possible renamings or deletions in left
@@ -64,7 +64,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     }
 
     private void handleSingleRenamings(MergeContext context, List<Pair<String, FSTNode>> possibleRenamedNodes,
-                                       List<FSTNode> addedNodes, List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes, Side renamingSide) throws TextualMergeException {
+                                       List<FSTNode> addedNodes, List<Pair<Side, FSTNode>> allRenamedNodes, Side renamingSide) throws TextualMergeException {
 
         List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> singleRenamingMatches = getSingleRenamingMatches(renamingSide, context, allRenamedNodes);
         for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> tuple : singleRenamingMatches)
@@ -72,34 +72,47 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     }
 
     private List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> getSingleRenamingMatches(Side renamingSide, MergeContext context,
-            List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) {
+            List<Pair<Side, FSTNode>> allRenamedNodes) {
         return allRenamedNodes.stream()
-                .filter(triple -> isSingleRenamingNode(triple.getLeft(), triple.getRight(), allRenamedNodes))
-                .map(triple -> retrieveScenarioNodes(renamingSide, context, triple.getMiddle(), triple.getRight()))
-                .filter(quadruple -> quadruple.getValue0() != null || quadruple.getValue2() != null)
+                .filter(pair -> isSingleRenamingNode(pair.getLeft(), pair.getRight(), allRenamedNodes))
+                .map(pair -> retrieveScenarioNodes(renamingSide, context, pair.getRight()))
+                .filter(triple -> triple.getLeft() != null || triple.getRight() != null)
+                .map(triple -> retrieveMergeNode(context, triple))
                 .collect(Collectors.toList());
     }
 
     private List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> getMutualRenamingMatches(MergeContext context, 
-            List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) {
+            List<Pair<Side, FSTNode>> allRenamedNodes) {
         return allRenamedNodes.stream()
-                .filter(triple -> isMutualRenamingNode(triple.getLeft(), triple.getRight(), allRenamedNodes))
-                .map(triple -> retrieveScenarioNodes(context, triple.getMiddle(), triple.getRight()))
-                .filter(quadruple -> quadruple.getValue0() != null || quadruple.getValue2() != null)
+                .filter(pair -> isMutualRenamingNode(pair.getLeft(), pair.getRight(), allRenamedNodes))
+                .map(pair -> retrieveScenarioNodes(context, pair.getRight()))
+                .filter(triple -> triple.getLeft() != null || triple.getRight() != null)
+                .map(triple -> retrieveMergeNode(context, triple))
                 .distinct()
                 .collect(Collectors.toList());
     }
 
-    private Quartet<FSTNode, FSTNode, FSTNode, FSTNode> retrieveScenarioNodes(Side renamingSide, MergeContext context, FSTNode baseNode, FSTNode mergeNode) {
+    private Triple<FSTNode, FSTNode, FSTNode> retrieveScenarioNodes(Side renamingSide, MergeContext context, FSTNode baseNode) {
         if(renamingSide.equals(Side.LEFT))
-            return Quartet.with(getMostAccurateMatch(baseNode, context.addedLeftNodes), baseNode, getCorrespondentNode(baseNode, context.rightTree), mergeNode);
+            return Triple.of(getMostAccurateMatch(baseNode, context.addedLeftNodes), baseNode, getCorrespondentNode(baseNode, context.rightTree));
         else
-            return Quartet.with(getCorrespondentNode(baseNode, context.leftTree), baseNode, getMostAccurateMatch(baseNode, context.addedRightNodes), mergeNode);
+            return Triple.of(getCorrespondentNode(baseNode, context.leftTree), baseNode, getMostAccurateMatch(baseNode, context.addedRightNodes));
     }
 
-    private Quartet<FSTNode, FSTNode, FSTNode, FSTNode> retrieveScenarioNodes(MergeContext context, FSTNode baseNode, FSTNode mergeNode) {
-       return Quartet.with(getMostAccurateMatch(baseNode, context.addedLeftNodes), baseNode, getMostAccurateMatch(baseNode, context.addedRightNodes), mergeNode);
-    }    
+    private Triple<FSTNode, FSTNode, FSTNode> retrieveScenarioNodes(MergeContext context, FSTNode baseNode) {
+        return Triple.of(getMostAccurateMatch(baseNode, context.addedLeftNodes), baseNode, getMostAccurateMatch(baseNode, context.addedRightNodes));
+    }
+    
+    private Quartet<FSTNode, FSTNode, FSTNode, FSTNode> retrieveMergeNode(MergeContext context, Triple<FSTNode, FSTNode, FSTNode> scenarioNodes) {
+        FSTNode leftNode = scenarioNodes.getLeft();
+        FSTNode baseNode = scenarioNodes.getMiddle();
+        FSTNode rightNode = scenarioNodes.getRight();
+
+        if(leftNode != null)
+            return Quartet.with(leftNode, baseNode, rightNode, getCorrespondentNode(leftNode, context.superImposedTree));
+        else
+            return Quartet.with(leftNode, baseNode, rightNode, getCorrespondentNode(rightNode, context.superImposedTree));
+    }
 
     private FSTNode getCorrespondentNode(FSTNode node, FSTNode tree) {
         return Traverser.retrieveNodeFromTree(node, tree);
@@ -120,24 +133,24 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     }
 
     private boolean isSingleRenamingNode(Side contribution, FSTNode node, 
-            List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) {
+            List<Pair<Side, FSTNode>> allRenamedNodes) {
         return !isMutualRenamingNode(contribution, node, allRenamedNodes);
     }
 
     private boolean isMutualRenamingNode(Side contribution, FSTNode node, 
-            List<Triple<Side, FSTNode, FSTNode>> allRenamedNodes) {
-        return allRenamedNodes.stream().anyMatch(triple -> isOppositeContributionSameNode(contribution, node, triple));
+            List<Pair<Side, FSTNode>> allRenamedNodes) {
+        return allRenamedNodes.stream().anyMatch(pair -> isOppositeContributionSameNode(contribution, node, pair));
     }
 
-    private boolean isOppositeContributionSameNode(Side contribution, FSTNode node, Triple<Side, FSTNode, FSTNode> triple) {
-        return triple.getLeft().equals(contribution.opposite()) && triple.getMiddle().equals(node); 
+    private boolean isOppositeContributionSameNode(Side contribution, FSTNode node, Pair<Side, FSTNode> pair) {
+        return pair.getLeft().equals(contribution.opposite()) && pair.getRight().equals(node); 
     }
 
-    private List<Triple<Side, FSTNode, FSTNode>> unionRenamedNodes(List<Triple<Side, FSTNode, FSTNode>> renamedWithoutBodyChanges, 
-            List<Triple<Side, FSTNode, FSTNode>> deletedOrRenamedWithoutBodyChanges) {
-        List<Triple<Side, FSTNode, FSTNode>> unionNodes = new ArrayList<>();
-        renamedWithoutBodyChanges.stream().forEach(triple -> unionNodes.add(triple));
-        deletedOrRenamedWithoutBodyChanges.stream().forEach(triple -> unionNodes.add(triple));
+    private List<Pair<Side, FSTNode>> unionRenamedNodes(List<Pair<Side, FSTNode>> renamedWithoutBodyChanges, 
+            List<Pair<Side, FSTNode>> deletedOrRenamedWithoutBodyChanges) {
+        List<Pair<Side, FSTNode>> unionNodes = new ArrayList<>();
+        renamedWithoutBodyChanges.stream().forEach(pair -> unionNodes.add(pair));
+        deletedOrRenamedWithoutBodyChanges.stream().forEach(pair -> unionNodes.add(pair));
         return unionNodes;
     }
 }

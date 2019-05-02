@@ -112,12 +112,12 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
 
     private boolean isRenamingWithoutBodyChanges(Side renamingSide, FSTNode baseNode, MergeContext context) {
         return context.renamedWithoutBodyChanges.stream()
-                .anyMatch(triple -> triple.getLeft().equals(renamingSide) && triple.getMiddle().equals(baseNode));
+                .anyMatch(pair -> pair.getLeft().equals(renamingSide) && pair.getRight().equals(baseNode));
     }
 
     private boolean isDeletionOrRenamingWithBodyChanges(Side renamingSide, FSTNode baseNode, MergeContext context) {
         return context.deletedOrRenamedWithBodyChanges.stream()
-                .anyMatch(triple -> triple.getLeft().equals(renamingSide) && triple.getMiddle().equals(baseNode));
+                .anyMatch(pair -> pair.getLeft().equals(renamingSide) && pair.getRight().equals(baseNode));
     }
 
     private boolean thereIsNewReference(File contributionFile, String signature, File baseFile) {
