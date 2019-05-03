@@ -3,15 +3,12 @@ package br.ufpe.cin.mergers;
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
-import java.util.ArrayList;
 import java.util.List;
-import java.util.Map;
 
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.mergers.handlers.*;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
 
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
@@ -135,7 +132,8 @@ public final class SemistructuredMerge {
 		
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
 		mergeMatchedContent(mergeLeftBaseRight, context);
-		identifyRenamingOrDeletionNodes(base, context);
+		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+			identifyRenamingOrDeletionNodes(base, context);
 
 		context.superImposedTree = mergeLeftBaseRight;
 		
