@@ -133,19 +133,14 @@ public class RenamingUtils {
         }
     }
 
-    public static void generateMutualRenamingConflict(MergeContext context, FSTNode left, FSTNode right) {
-        String leftContent = ((FSTTerminal) left).getBody();
-        String rightContent = ((FSTTerminal) right).getBody();
+    public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
+        String leftContent = getNodeContent(leftNode);
+        String rightContent = getNodeContent(rightNode);
 
-        //statistics
         context.renamingConflicts++;
 
-        //first creates a conflict
-        MergeConflict newConflict = new MergeConflict(leftContent + '\n', rightContent + '\n');
-
-        //second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
-        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, newConflict.body);
-        FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
+        MergeConflict conflict = new MergeConflict(leftContent, rightContent);
+        ((FSTTerminal) mergeNode).setBody(conflict.body);
     }
 
     public static String getMergeConflictContentOfOppositeSide(MergeConflict mergeConflict, Side side) {
@@ -166,7 +161,7 @@ public class RenamingUtils {
     }
 
     public static boolean haveEqualSignature(FSTNode left, FSTNode right) {
-        return left.getName().equals(right.getName());
+        return left != null && right != null && left.getName().equals(right.getName());
     }
 
     public static boolean haveEqualSignatureButName(FSTNode left, FSTNode right) {

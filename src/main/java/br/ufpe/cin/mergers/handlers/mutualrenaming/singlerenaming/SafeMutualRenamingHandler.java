@@ -29,7 +29,7 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
                 .filter(pair -> pair.getLeft() != null && pair.getRight() != null)
                 .filter(pair -> RenamingUtils.haveDifferentSignature(pair.getLeft(), pair.getRight()))
                 .forEach(pair -> {
-                    RenamingUtils.generateMutualRenamingConflict(context, pair.getLeft(), pair.getRight());
+                    RenamingUtils.generateMutualRenamingConflict(context, pair.getLeft(), pair.getRight(), null);
                     leftNewMethodsOrConstructors.remove(pair.getLeft());
                     rightNewMethodsOrConstructors.remove(pair.getRight());
                 });
@@ -58,7 +58,7 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
         FSTNode mergeNode = scenarioNodes.getValue3();
 
         if(isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isRenamingWithoutBodyChanges(Side.RIGHT, baseNode, context)) {
-            decideWhenBothRenamedWithoutBodyChanges(context, leftNode, rightNode);
+            decideWhenBothRenamedWithoutBodyChanges(context, leftNode, rightNode, mergeNode);
         }
 
         else if(isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) {
@@ -74,29 +74,29 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
         }
     }
 
-    private void decideWhenBothRenamedWithoutBodyChanges(MergeContext context, FSTNode leftNode, FSTNode rightNode) {
+    private void decideWhenBothRenamedWithoutBodyChanges(MergeContext context, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
             return;
-        else 
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
+        else
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
     }
 
     private void decideWhenTheyRenamedDifferently(MergeContext context, FSTNode leftNode, FSTNode baseNode,
             FSTNode rightNode, FSTNode mergeNode, String signature, File toCheckReferencesFile) throws TextualMergeException {
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode)) {
             if(thereIsNewReference(toCheckReferencesFile, signature, context.getBase()))
-                RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
+                RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
             else 
                 RenamingUtils.runTextualMerge(leftNode, baseNode, rightNode, mergeNode);
         } else 
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
     }
 
     private void decideWhenBothDeletedOrRenamedWithBodyChanges(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode) throws TextualMergeException {
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
             RenamingUtils.runTextualMerge(leftNode, baseNode, rightNode, mergeNode);
         else
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
     }
 
     private boolean isRenamingWithoutBodyChanges(Side renamingSide, FSTNode baseNode, MergeContext context) {

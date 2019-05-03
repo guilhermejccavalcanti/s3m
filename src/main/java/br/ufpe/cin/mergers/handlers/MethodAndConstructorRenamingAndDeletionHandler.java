@@ -40,6 +40,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> renamingMatches = retrieveRenamingMatches(context);
 
         //when both developers rename the same method/constructor
+
         handleMutualRenamings(context, getMutualRenamingMatches(renamingMatches));
 
         //when one of the developers rename a method/constructor
