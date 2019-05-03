@@ -36,16 +36,15 @@ public class SafeSingleRenamingHandler implements SingleRenamingHandler {
     }
 
     @Override
-    public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes,
-            Side renamingSide) throws TextualMergeException {
+    public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) throws TextualMergeException {
 
         FSTNode leftNode = scenarioNodes.getValue0();
         FSTNode baseNode = scenarioNodes.getValue1();
         FSTNode rightNode = scenarioNodes.getValue2();
         FSTNode mergeNode = scenarioNodes.getValue3();
 
-        RenamingUtils.runTextualMerge(leftNode, baseNode, rightNode, mergeNode);
-        removeUnmatchedNode(renamingSide, scenarioNodes, context);        
+        RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
+       // removeUnmatchedNode(renamingSide, scenarioNodes, context);        
     }
 
     private void removeUnmatchedNode(Side renamingSide, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes, MergeContext context) {

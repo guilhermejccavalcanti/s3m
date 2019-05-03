@@ -87,14 +87,14 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
             if(thereIsNewReference(toCheckReferencesFile, signature, context.getBase()))
                 RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
             else 
-                RenamingUtils.runTextualMerge(leftNode, baseNode, rightNode, mergeNode);
+                RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
         } else 
             RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
     }
 
     private void decideWhenBothDeletedOrRenamedWithBodyChanges(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode) throws TextualMergeException {
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
-            RenamingUtils.runTextualMerge(leftNode, baseNode, rightNode, mergeNode);
+            RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
         else
             RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
     }

@@ -40,7 +40,6 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> renamingMatches = retrieveRenamingMatches(context);
 
         //when both developers rename the same method/constructor
-
         handleMutualRenamings(context, getMutualRenamingMatches(renamingMatches));
 
         //when one of the developers rename a method/constructor
@@ -49,26 +48,16 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 
     private void handleMutualRenamings(MergeContext context, 
             List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> mutualRenamingMatches) throws TextualMergeException {
+        
         for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> tuple : mutualRenamingMatches)
             mutualRenamingHandler.handle(context, tuple);
     }
 
     private void handleSingleRenamings(MergeContext context, 
             List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> singleRenamingMatches) throws TextualMergeException {
-//        if (context.possibleRenamedLeftNodes.isEmpty() && context.possibleRenamedRightNodes.isEmpty()) return;
-
-        //possible renamings or deletions in left
-        handleSingleRenamings(context, context.possibleRenamedLeftNodes, context.addedLeftNodes, singleRenamingMatches, Side.LEFT);
-
-        //possible renamings or deletions in right
-        handleSingleRenamings(context, context.possibleRenamedRightNodes, context.addedRightNodes, 
-                singleRenamingMatches, Side.RIGHT);
-    }
-
-    private void handleSingleRenamings(MergeContext context, List<Pair<String, FSTNode>> possibleRenamedNodes,
-                                       List<FSTNode> addedNodes, List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> singleRenamingMatches, Side renamingSide) throws TextualMergeException {
+        
         for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> tuple : singleRenamingMatches)
-            singleRenamingHandler.handle(context, tuple, renamingSide);
+            singleRenamingHandler.handle(context, tuple);
     }
 
     private List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> retrieveRenamingMatches(MergeContext context) {
@@ -94,7 +83,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     }
 
     private Triple<FSTNode, FSTNode, FSTNode> retrieveScenarioNodes(MergeContext context, FSTNode baseNode) {
-        return Triple.of(getMostAccurateMatch(baseNode, context.addedLeftNodes), baseNode, getMostAccurateMatch(baseNode, context.addedRightNodes));
+        return Triple.of(getMostAccurateMatch(baseNode, context.leftTree), baseNode, getMostAccurateMatch(baseNode, context.rightTree));
     }
     
     private Quartet<FSTNode, FSTNode, FSTNode, FSTNode> retrieveScenarioNodesWithMergeNode(MergeContext context, Triple<FSTNode, FSTNode, FSTNode> scenarioNodes) {
@@ -112,16 +101,17 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         return Traverser.retrieveNodeFromTree(node, tree);
     }
 
-    private FSTNode getMostAccurateMatch(FSTNode node, List<FSTNode> addedNodes) {
-        for(FSTNode addedNode : addedNodes) {
-            if(RenamingUtils.isMethodOrConstructorNode(addedNode) && areVerySimilarNodes(node, addedNode))
-                return addedNode;
+    private FSTNode getMostAccurateMatch(FSTNode node, FSTNode contributionTree) {
+        for(FSTNode contributionNode : Traverser.collectTerminals(contributionTree)) {
+            if(RenamingUtils.isMethodOrConstructorNode(contributionNode) && areVerySimilarNodes(node, contributionNode))
+                return contributionNode;
         }
         return null;
     }
 
     private boolean areVerySimilarNodes(FSTNode node1, FSTNode node2) {
-        return RenamingUtils.haveEqualBody(node1, node2)
+        return  RenamingUtils.haveEqualSignature(node1, node2)
+                || RenamingUtils.haveEqualBody(node1, node2)
                 || (RenamingUtils.haveSimilarBody(node1, node2) && RenamingUtils.haveEqualSignatureButName(node1, node2))
                 || RenamingUtils.oneContainsTheBodyFromTheOther(node1, node2);
     }

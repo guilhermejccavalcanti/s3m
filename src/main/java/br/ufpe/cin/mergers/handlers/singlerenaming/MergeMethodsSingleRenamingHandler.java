@@ -41,8 +41,7 @@ public class MergeMethodsSingleRenamingHandler implements SingleRenamingHandler 
     }
 
     @Override
-    public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes,
-            Side renamingSide) {
+    public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) {
 
     }
 }

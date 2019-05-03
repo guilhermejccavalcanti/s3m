@@ -141,6 +141,15 @@ public class RenamingUtils {
 
         MergeConflict conflict = new MergeConflict(leftContent, rightContent);
         ((FSTTerminal) mergeNode).setBody(conflict.body);
+
+        removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
+    }
+
+    public static void removeUnmmatchedNode(FSTNode mergeTree, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
+        if(leftNode.equals(mergeNode) && !rightNode.equals(mergeNode))
+            Traverser.removeNode(rightNode, mergeTree);
+        else if(!leftNode.equals(mergeNode) && rightNode.equals(mergeNode))
+            Traverser.removeNode(leftNode, mergeTree);
     }
 
     public static String getMergeConflictContentOfOppositeSide(MergeConflict mergeConflict, Side side) {
@@ -212,13 +221,18 @@ public class RenamingUtils {
         return bodySimilarity >= JFSTMerge.RENAMING_SIMILARITY_THRESHOLD;
     }
 
-    public static void runTextualMerge(FSTNode left, FSTNode base, FSTNode right, FSTNode merge) throws TextualMergeException {
-        String leftContent = getNodeContent(left);
-        String baseContent = getNodeContent(base);
-        String rightContent = getNodeContent(right);
+    public static void runTextualMerge(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode) throws TextualMergeException {
+        String leftContent = getNodeContent(leftNode);
+        String baseContent = getNodeContent(baseNode);
+        String rightContent = getNodeContent(rightNode);
 
         String textualMergeContent = TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
-        ((FSTTerminal) merge).setBody(textualMergeContent);
+        ((FSTTerminal) mergeNode).setBody(textualMergeContent);
+
+        if(nodeHasConflict(mergeNode))
+            context.renamingConflicts++;
+
+        removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
     }
 
     private static String getNodeContent(FSTNode node) {

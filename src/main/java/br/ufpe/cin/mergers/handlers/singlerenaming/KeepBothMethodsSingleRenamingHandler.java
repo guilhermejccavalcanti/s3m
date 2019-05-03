@@ -25,8 +25,7 @@ public class KeepBothMethodsSingleRenamingHandler implements SingleRenamingHandl
     }
 
     @Override
-    public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes,
-            Side renamingSide) {
+    public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) {
 
     }
 }
