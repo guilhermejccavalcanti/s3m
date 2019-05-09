@@ -5,47 +5,59 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.assertj.core.internal.bytebuddy.dynamic.scaffold.InstrumentedType.Prepareable;
+import org.assertj.core.util.Arrays;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeContext;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
 
-    public void handle(MergeContext context) throws TextualMergeException {
+	// TODO: improve this name and maybe structure!!
+
+	public void handle(MergeContext context) throws TextualMergeException {
         List<FSTNode> leftNodes = findInitializationBlocks(context.addedLeftNodes);
         List<FSTNode> rightNodes = findInitializationBlocks(context.addedRightNodes);
         List<FSTNode> baseNodes = findInitializationBlocks(context.deletedBaseNodes);
-        
-        // TODO: improve this name and maybe structure!!
-        InitializationBlocksHandlerNodes nodes = new InitializationBlocksHandlerNodes();
 
-        preProcessNodes(leftNodes, baseNodes, rightNodes);
+    	InitializationBlocksHandlerNodes preProcessedNodes = preProcessNodes(leftNodes, baseNodes, rightNodes);
         
     	List<FSTNode> finalNodes = new ArrayList<FSTNode>();
 
-    	//for node in baseNodes 
-    	// if node in leftDeletedNodes or node in rightDeletedNodes 
-    	// 		if node in leftEditedNodes or node in rightEditedNodes 
-    	// 			finalNodes.add(result of textualMerge in node changes)
-    	// else if node in leftEditedNodes and node not in rightEditedNodes 
-    	// 		finalNodes.add(node)
-    	// else if node in rightEditedNodes and node not in leftEditedNodes 
-   	    //	    finalNodes.add(node)
-    	// else if node in rightEditedNodes and node in leftEditedNodes 
-    	//    	finalNodes.add(result of textualMerge in node changes)
-    	//
+    	for(FSTNode node : baseNodes) {
+    		if(preProcessedNodes.leftDeletedNodes.contains(node) || preProcessedNodes.rightDeletedNodes.contains(node)) {
+    			if(preProcessedNodes.leftEditedNodes.contains(node) || preProcessedNodes.rightEditedNodes.contains(node)) {
+    				// TODO: check how to get the content from the edition
+    				// finalNodes.add(TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored));
+    			}
+    		} else if(preProcessedNodes.leftEditedNodes.contains(node) &&
+    				!preProcessedNodes.rightEditedNodes.contains(node)) {
+    			finalNodes.add(node);
+    		} else if(preProcessedNodes.rightEditedNodes.contains(node) &&
+    				!preProcessedNodes.leftEditedNodes.contains(node)) {
+    			finalNodes.add(node);
+    		} else if(preProcessedNodes.rightEditedNodes.contains(node) &&
+    				preProcessedNodes.leftEditedNodes.contains(node)) {
+				//finalNodes.add(TextualMerge.merge(leftContent, baseContent, rightContent, ignoreWhiteSpaces));
+    		}
+    	}
     	
-    	//finalNodes.add(leftAddedNodes)
-    	//finalNodes.add(rightAddedNodes)
-        
+    	finalNodes.addAll(preProcessedNodes.leftAddedNodes);
+    	finalNodes.addAll(preProcessedNodes.rightAddedNodes);
     	
     	// TODO: CHECK HOW TO WRITE THE CONTENT IN THE AST IN THE END!!! check methods in FilesManager class
     }
     
-    private static void preProcessNodes(List<FSTNode> leftNodes, List<FSTNode> baseNodes, List<FSTNode> rightNodes) {
+    private static InitializationBlocksHandlerNodes preProcessNodes(List<FSTNode> leftNodes, List<FSTNode> baseNodes,
+    		List<FSTNode> rightNodes) {
+    	
+    	InitializationBlocksHandlerNodes preProcessedNodes = new InitializationBlocksHandlerNodes();
+    	
     	// Finding deleted candidates
     	List<FSTNode> leftDeletedCandidates = new ArrayList<FSTNode>();
     	leftDeletedCandidates.addAll(baseNodes);
@@ -64,17 +76,24 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     	rightAddedCandidates.addAll(rightNodes);
     	rightAddedCandidates.removeAll(baseNodes);
     	
-    	separateNodesIntoEditedOrAdded(leftAddedCandidates, leftDeletedCandidates);
-    	separateNodesIntoEditedOrAdded(rightAddedCandidates, rightDeletedCandidates);
+    	separateNodesIntoEditedOrAdded(leftAddedCandidates, leftDeletedCandidates, preProcessedNodes.leftEditedNodes,
+    			preProcessedNodes.leftAddedNodes);
+    	separateNodesIntoEditedOrAdded(rightAddedCandidates, rightDeletedCandidates, preProcessedNodes.rightEditedNodes,
+    			preProcessedNodes.rightAddedNodes);
     	
+    	
+    	// FIXME: improve this
     	List<FSTNode> leftDeletedNodes = new ArrayList<FSTNode>();
     	leftDeletedNodes.addAll(leftDeletedCandidates);
-    	// leftDeletedNodes.removeAll(leftEditedNodes);
+    	leftDeletedNodes.removeAll(preProcessedNodes.leftEditedNodes);
+    	preProcessedNodes.leftDeletedNodes.addAll(leftDeletedNodes);
     	
     	List<FSTNode> rightDeletedNodes = new ArrayList<FSTNode>();
     	rightDeletedNodes.addAll(rightDeletedCandidates);
-    	// rightDeletedNodes.removeAll(rightEditedNodes);
+    	rightDeletedNodes.removeAll(preProcessedNodes.rightEditedNodes);
+    	preProcessedNodes.rightDeletedNodes.addAll(rightDeletedNodes);
     	
+    	return preProcessedNodes;
     }
   
     private static List<FSTNode> findInitializationBlocks(List<FSTNode> nodes) {
@@ -84,58 +103,47 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     }
     
     private static Pair<FSTNode, Double> maxInsertionLevel(FSTNode node, List<FSTNode> nodes) {
-//      nodeContent = node.split(";")
-//    	for pairNode in nodesList
-//    		pairNodeContent = pairNode.split(";")
-//    	               %insertionPerNode.add((pairNode, pairNodeContent.compare(nodeContent)))
-//    	return maxInsertion%Pair(%insertionPerNode)
-    	
+    	List<Pair<FSTNode, Double>> nodesList = new ArrayList<>();
     	String nodeContent = ((FSTTerminal) node).getBody();
-    	String[] splitNodeContent = nodeContent.split(";");
-    	
+    	List<Object> splitNodeContent = Arrays.asList(nodeContent.split(";"));
+
     	for(FSTNode pairNode : nodes) {
-        	String pairNodeContent = ((FSTTerminal) node).getBody();
-        	String[] splitPairNodeContent = pairNodeContent.split(";");
+        	String pairNodeContent = ((FSTTerminal) pairNode).getBody();
+        	List<Object> splitPairNodeContent = Arrays.asList(pairNodeContent.split(";"));
+        	double insertionLevel = 0;
+        	for(Object content : splitNodeContent) {
+        		for(Object pairContent : splitPairNodeContent) {
+        			if(pairContent.equals(content)) {
+        				insertionLevel++;
+        			}
+        		}
+        	}
         	
-        	// TODO: compute the level of insertion checking line by line if it's equals
-        	
+        	nodesList.add(Pair.of(pairNode, insertionLevel));
     	}
+    	
+    	// TODO: return pair with highest insertion level
 		return null;
     	
     }
     
     private static Pair<FSTNode, Double> maxSimilarity(FSTNode node, List<FSTNode> nodes) {
-//    	nodeContent = node.getContent()
-//    		  	for pairNode in nodesList
-//    		  		pairNodeContent = pairNode.getContent()
-//    		  	               similarityPerNode.add((pairNode, computeStringSimilarity(nodeContent, pairNodeContent)))
-//    		  	return maxSimilarityPair(similarityPerNode)
-//    		    	
     	String nodeContent = ((FSTTerminal) node).getBody();
+    	List<Pair<FSTNode, Double>> nodesList = new ArrayList<>();
     	
     	for(FSTNode pairNode : nodes) {
-        	String pairNodeContent = ((FSTTerminal) node).getBody();
-        	
+        	String pairNodeContent = ((FSTTerminal) pairNode).getBody();
         	double similarity = FilesManager.computeStringSimilarity(nodeContent, pairNodeContent);
-        	
-        	// TODO: check the similarity for with each node to select the node with max similarity
-        	
+        	nodesList.add(Pair.of(pairNode, similarity));
     	}
+    	
+    	// TODO: return pair with highest similarity
 		return null;
     }
     
     // FIXME: fix return type to return the lists of edited and added nodes
-    private static void separateNodesIntoEditedOrAdded(List<FSTNode> addedCandidates, List<FSTNode> deletedCandidates) {
-//for node in addedCandidates
-//  (baseNode, maxInsertion) = maxInsertionLevel(node, deletedCandidates)
-//  (baseNode, maxSimilarity) =  maxSimilarity(node, deletedCandidates) 
-//  if maxInsertion > x% or maxSimilarity > y%  
-//    		editedNodes.add((baseNode, node)) 
-//    	 else
-//         		addedNodes.add((baseNode, null))	
-    	
-    	List<FSTNode> editedNodes = new ArrayList<FSTNode>();
-    	List<FSTNode> addedNodes = new ArrayList<FSTNode>();
+    private static void separateNodesIntoEditedOrAdded(List<FSTNode> addedCandidates, List<FSTNode> deletedCandidates,
+    		List<FSTNode> editedNodes, List<FSTNode> addedNodes) {
 
     	for(FSTNode node : addedCandidates) {
     		Pair<FSTNode, Double> maxInsertionPair = maxInsertionLevel(node, deletedCandidates);
