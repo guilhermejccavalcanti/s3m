@@ -90,6 +90,11 @@ public class JFSTMerge {
 			"using textual similarity.", arity = 1)
 	public static boolean isInitializationBlocksHandlerEnabled = true;
 
+	// TODO: ask Guilherme if it's the correct way to do it
+	@Parameter(names = {"--handle-initialization-blocks-new-approach", "-hibna"}, description = "Detects and avoid duplications caused by merge of blocks without identifiers," +
+			"using textual similarity.", arity = 1)
+	public static boolean isInitializationBlocksHandlerNewApproachEnabled = false;
+
 	@Parameter(names = {"--handle-new-element-referencing-edited-one", "-hnereo"}, description = "Detects cases where a developer" +
 			"add an element that references an edited one.", arity = 1)
 	public static boolean isNewElementReferencingEditedOneHandlerEnabled = true;
@@ -101,6 +106,15 @@ public class JFSTMerge {
 	@Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
 			arity = 1)
 	public static boolean isTypeAmbiguityErrorHandlerEnabled = true;
+	
+	
+	/**
+	 * TODO: javadoc
+	 */
+	public void useInitializationBlocksHandlerNewApproach() {
+		isInitializationBlocksHandlerNewApproachEnabled = true;
+		isInitializationBlocksHandlerEnabled = false;
+	}
 
 	/**
 	 * Merges merge scenarios, indicated by .revisions files.

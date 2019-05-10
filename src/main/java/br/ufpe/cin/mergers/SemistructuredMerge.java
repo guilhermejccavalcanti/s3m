@@ -4,17 +4,24 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
 
-import br.ufpe.cin.app.JFSTMerge;
-import br.ufpe.cin.mergers.handlers.*;
-import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
 
+import com.google.common.collect.ImmutableList;
+
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.handlers.ConflictHandler;
+import br.ufpe.cin.mergers.handlers.DeletionsHandler;
+import br.ufpe.cin.mergers.handlers.DuplicatedDeclarationHandler;
+import br.ufpe.cin.mergers.handlers.InitializationBlocksHandler;
+import br.ufpe.cin.mergers.handlers.InitializationBlocksHandlerNewApproach;
+import br.ufpe.cin.mergers.handlers.MethodAndConstructorRenamingAndDeletionHandler;
+import br.ufpe.cin.mergers.handlers.NewElementReferencingEditedOneHandler;
+import br.ufpe.cin.mergers.handlers.TypeAmbiguityErrorHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
@@ -49,6 +56,9 @@ public final class SemistructuredMerge {
 
 		if(JFSTMerge.isInitializationBlocksHandlerEnabled)
 			builder.add(new InitializationBlocksHandler());
+		
+		if(JFSTMerge.isInitializationBlocksHandlerNewApproachEnabled)
+			builder.add(new InitializationBlocksHandlerNewApproach());
 
 		if(JFSTMerge.isDuplicatedDeclarationHandlerEnabled)
 			builder.add(new DuplicatedDeclarationHandler());
