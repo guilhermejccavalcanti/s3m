@@ -1,3 +1,3 @@
-public class Example {
+public class Test {
 	
 }
