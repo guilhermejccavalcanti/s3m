@@ -1,12 +1,16 @@
 package br.ufpe.cin.mergers.handlers;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
+import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
-import org.assertj.core.internal.bytebuddy.dynamic.scaffold.InstrumentedType.Prepareable;
-import org.assertj.core.util.Arrays;
 
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
@@ -16,9 +20,12 @@ import br.ufpe.cin.mergers.util.MergeContext;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
+/**
+ * TODO: fill it
+ * @author Alice Borner
+ *
+ */
 public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
-
-	// TODO: improve this name and maybe structure!!
 
 	public void handle(MergeContext context) throws TextualMergeException {
         List<FSTNode> leftNodes = findInitializationBlocks(context.addedLeftNodes);
@@ -26,34 +33,42 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
         List<FSTNode> baseNodes = findInitializationBlocks(context.deletedBaseNodes);
 
     	InitializationBlocksHandlerNodes preProcessedNodes = preProcessNodes(leftNodes, baseNodes, rightNodes);
-        
-    	List<FSTNode> finalNodes = new ArrayList<FSTNode>();
-
+       
     	for(FSTNode node : baseNodes) {
-    		if(preProcessedNodes.leftDeletedNodes.contains(node) || preProcessedNodes.rightDeletedNodes.contains(node)) {
-    			if(preProcessedNodes.leftEditedNodes.contains(node) || preProcessedNodes.rightEditedNodes.contains(node)) {
-    				// TODO: check how to get the content from the edition
-    				// finalNodes.add(TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored));
+    		if(preProcessedNodes.rightDeletedNodes.contains(node) || 
+    				preProcessedNodes.leftDeletedNodes.contains(node)) {
+    			if(preProcessedNodes.rightBaseEditedNodeMap.containsKey(node) ||
+    					preProcessedNodes.leftBaseEditedNodeMap.containsKey(node)) {
+    				
+    	           	String mergeContent = getMergeContent(preProcessedNodes.leftBaseEditedNodeMap.get(node), 
+    	           			node,
+    	           			preProcessedNodes.rightBaseEditedNodeMap.get(node));
+    	           	
+    	           	// TODO update AST accordingly
     			}
-    		} else if(preProcessedNodes.leftEditedNodes.contains(node) &&
-    				!preProcessedNodes.rightEditedNodes.contains(node)) {
-    			finalNodes.add(node);
-    		} else if(preProcessedNodes.rightEditedNodes.contains(node) &&
-    				!preProcessedNodes.leftEditedNodes.contains(node)) {
-    			finalNodes.add(node);
-    		} else if(preProcessedNodes.rightEditedNodes.contains(node) &&
-    				preProcessedNodes.leftEditedNodes.contains(node)) {
-				//finalNodes.add(TextualMerge.merge(leftContent, baseContent, rightContent, ignoreWhiteSpaces));
-    		}
+    		} else if(preProcessedNodes.leftBaseEditedNodeMap.containsKey(node) &&
+    				preProcessedNodes.rightBaseEditedNodeMap.containsKey(node)) {
+    			
+    			String mergeContent = getMergeContent(preProcessedNodes.leftBaseEditedNodeMap.get(node), 
+	           			node,
+	           			preProcessedNodes.rightBaseEditedNodeMap.get(node));
+
+    			// TODO update AST accordingly
+
+			}
     	}
-    	
-    	finalNodes.addAll(preProcessedNodes.leftAddedNodes);
-    	finalNodes.addAll(preProcessedNodes.rightAddedNodes);
-    	
-    	// TODO: CHECK HOW TO WRITE THE CONTENT IN THE AST IN THE END!!! check methods in FilesManager class
     }
+	
+	private String getMergeContent(FSTNode leftNode, FSTNode baseNode, FSTNode rightNode) throws TextualMergeException {
+		String leftContent = (leftNode != null) ? ((FSTTerminal) leftNode).getBody() : "";
+        String baseContent = (baseNode != null) ? ((FSTTerminal) baseNode).getBody() : "";
+        String rightContent = (rightNode != null) ? ((FSTTerminal) rightNode).getBody() : "";
+        
+		return TextualMerge.merge(leftContent, baseContent, rightContent, 
+				JFSTMerge.isWhitespaceIgnored);
+	}
     
-    private static InitializationBlocksHandlerNodes preProcessNodes(List<FSTNode> leftNodes, List<FSTNode> baseNodes,
+    private InitializationBlocksHandlerNodes preProcessNodes(List<FSTNode> leftNodes, List<FSTNode> baseNodes,
     		List<FSTNode> rightNodes) {
     	
     	InitializationBlocksHandlerNodes preProcessedNodes = new InitializationBlocksHandlerNodes();
@@ -76,23 +91,19 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     	rightAddedCandidates.addAll(rightNodes);
     	rightAddedCandidates.removeAll(baseNodes);
     	
-    	separateNodesIntoEditedOrAdded(leftAddedCandidates, leftDeletedCandidates, preProcessedNodes.leftEditedNodes,
-    			preProcessedNodes.leftAddedNodes);
-    	separateNodesIntoEditedOrAdded(rightAddedCandidates, rightDeletedCandidates, preProcessedNodes.rightEditedNodes,
-    			preProcessedNodes.rightAddedNodes);
+    	preProcessedNodes.leftBaseEditedNodeMap = defineEditedNodes(leftAddedCandidates, leftDeletedCandidates);
+    	preProcessedNodes.rightBaseEditedNodeMap = defineEditedNodes(rightAddedCandidates, rightDeletedCandidates);
     	
-    	
-    	// FIXME: improve this
     	List<FSTNode> leftDeletedNodes = new ArrayList<FSTNode>();
     	leftDeletedNodes.addAll(leftDeletedCandidates);
-    	leftDeletedNodes.removeAll(preProcessedNodes.leftEditedNodes);
+    	leftDeletedNodes.removeAll(preProcessedNodes.leftBaseEditedNodeMap.keySet());
     	preProcessedNodes.leftDeletedNodes.addAll(leftDeletedNodes);
     	
     	List<FSTNode> rightDeletedNodes = new ArrayList<FSTNode>();
     	rightDeletedNodes.addAll(rightDeletedCandidates);
-    	rightDeletedNodes.removeAll(preProcessedNodes.rightEditedNodes);
+    	rightDeletedNodes.removeAll(preProcessedNodes.rightBaseEditedNodeMap.keySet());
     	preProcessedNodes.rightDeletedNodes.addAll(rightDeletedNodes);
-    	
+
     	return preProcessedNodes;
     }
   
@@ -103,69 +114,80 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     }
     
     private static Pair<FSTNode, Double> maxInsertionLevel(FSTNode node, List<FSTNode> nodes) {
-    	List<Pair<FSTNode, Double>> nodesList = new ArrayList<>();
-    	String nodeContent = ((FSTTerminal) node).getBody();
-    	List<Object> splitNodeContent = Arrays.asList(nodeContent.split(";"));
+    	Map<FSTNode, Double> nodesInsertionLevelMap = new HashMap<>();
+    	String nodeBody = ((FSTTerminal) node).getBody();
+    	String nodeLines = StringUtils.substringBetween(nodeBody, "{", "}");
+    	List<String> splitNodeContent = Arrays.asList(nodeLines.split(";"));
 
     	for(FSTNode pairNode : nodes) {
-        	String pairNodeContent = ((FSTTerminal) pairNode).getBody();
-        	List<Object> splitPairNodeContent = Arrays.asList(pairNodeContent.split(";"));
-        	double insertionLevel = 0;
-        	for(Object content : splitNodeContent) {
-        		for(Object pairContent : splitPairNodeContent) {
-        			if(pairContent.equals(content)) {
-        				insertionLevel++;
-        			}
+        	String pairNodeBody = ((FSTTerminal) pairNode).getBody();
+        	String pairNodeLines = StringUtils.substringBetween(pairNodeBody, "{", "}");
+        	List<String> splitPairNodeContent = Arrays.asList(pairNodeLines.split(";"));
+        	
+        	double numOfInsertions = 0;
+        	for(String content : splitNodeContent) {
+        		for(String pairContent : splitPairNodeContent) {
+        			if(!content.trim().isEmpty() && !pairContent.trim().isEmpty()
+        					&& content.trim().equals(pairContent.trim()))
+        				numOfInsertions++;
         		}
         	}
         	
-        	nodesList.add(Pair.of(pairNode, insertionLevel));
+        	double insertionLevel = numOfInsertions / splitNodeContent.size();
+        	
+        	nodesInsertionLevelMap.put(pairNode, insertionLevel);
     	}
     	
-    	// TODO: return pair with highest insertion level
-		return null;
-    	
+    	FSTNode nodeMaxValue = getNodeWithHighestValue(nodesInsertionLevelMap);
+    	return Pair.of(nodeMaxValue, nodesInsertionLevelMap.get(nodeMaxValue));
     }
     
     private static Pair<FSTNode, Double> maxSimilarity(FSTNode node, List<FSTNode> nodes) {
     	String nodeContent = ((FSTTerminal) node).getBody();
-    	List<Pair<FSTNode, Double>> nodesList = new ArrayList<>();
+    	Map<FSTNode, Double> nodesSimilarityLevelMap = new HashMap<>();
     	
     	for(FSTNode pairNode : nodes) {
         	String pairNodeContent = ((FSTTerminal) pairNode).getBody();
         	double similarity = FilesManager.computeStringSimilarity(nodeContent, pairNodeContent);
-        	nodesList.add(Pair.of(pairNode, similarity));
+        	nodesSimilarityLevelMap.put(pairNode, similarity);
     	}
     	
-    	// TODO: return pair with highest similarity
-		return null;
+    	FSTNode nodeMaxValue = getNodeWithHighestValue(nodesSimilarityLevelMap);
+    	return Pair.of(nodeMaxValue, nodesSimilarityLevelMap.get(nodeMaxValue));
     }
     
-    // FIXME: fix return type to return the lists of edited and added nodes
-    private static void separateNodesIntoEditedOrAdded(List<FSTNode> addedCandidates, List<FSTNode> deletedCandidates,
-    		List<FSTNode> editedNodes, List<FSTNode> addedNodes) {
-
+    private static FSTNode getNodeWithHighestValue(Map<FSTNode, Double> nodesMap) {
+    	if(nodesMap.entrySet().isEmpty())
+    		return null;
+    	
+    	return Collections.max(nodesMap.entrySet(), Comparator.comparingDouble(Map.Entry::getValue))
+    			.getKey();
+    }
+    
+    private Map<FSTNode, FSTNode> defineEditedNodes(List<FSTNode> addedCandidates, List<FSTNode> deletedCandidates) {
+    	Map<FSTNode, FSTNode> editedNodes = new HashMap<FSTNode, FSTNode>();
+    	
     	for(FSTNode node : addedCandidates) {
     		Pair<FSTNode, Double> maxInsertionPair = maxInsertionLevel(node, deletedCandidates);
     		Pair<FSTNode, Double> maxSimilarityPair = maxSimilarity(node, deletedCandidates);
+    		FSTNode baseNode = maxInsertionPair.getKey() != null ? maxInsertionPair.getKey() : maxSimilarityPair.getKey();
     		
-    		// TODO: TEST TO SELECT CORRECT THRESHOLDS!
-    		if(maxInsertionPair.getValue() > 70.0 || maxSimilarityPair.getValue() > 90.0) {
-    			editedNodes.add(node);
-    		} else {
-    			addedNodes.add(node);
-    		}
+    		// TODO: TEST TO SELECT BEST THRESHOLDS!
+    		if(baseNode != null && (maxInsertionPair.getValue() > 0.7 || maxSimilarityPair.getValue() > 0.9)) {
+    			editedNodes.put(baseNode, node);
+    		} 
     	}
+    	
+    	return editedNodes;
+    	
+    	// TODO probably after selecting the edited ones that are not additions I will have to update the AST to remove them
     }
 }
 
-// TODO: think the best way to store these lists
 class InitializationBlocksHandlerNodes {
-    protected List<FSTNode> rightEditedNodes = new ArrayList<FSTNode>();
-	protected List<FSTNode> rightAddedNodes = new ArrayList<FSTNode>();
-	protected List<FSTNode> rightDeletedNodes = new ArrayList<FSTNode>();
+    protected Map<FSTNode, FSTNode> rightBaseEditedNodeMap = new HashMap<FSTNode, FSTNode>();
+    protected List<FSTNode> rightDeletedNodes = new ArrayList<FSTNode>();
 	
-	protected List<FSTNode> leftEditedNodes = new ArrayList<FSTNode>();
-	protected List<FSTNode> leftAddedNodes = new ArrayList<FSTNode>();
-	protected List<FSTNode> leftDeletedNodes = new ArrayList<FSTNode>();
+    protected Map<FSTNode, FSTNode> leftBaseEditedNodeMap = new HashMap<FSTNode, FSTNode>();
+    protected List<FSTNode> leftDeletedNodes = new ArrayList<FSTNode>();
 }
