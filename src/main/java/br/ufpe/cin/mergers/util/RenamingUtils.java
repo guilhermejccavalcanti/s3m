@@ -146,10 +146,12 @@ public class RenamingUtils {
     }
 
     public static void removeUnmmatchedNode(FSTNode mergeTree, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
-        if(leftNode.equals(mergeNode) && !rightNode.equals(mergeNode))
+        if(equalIfExists(leftNode, mergeNode) && !equalIfExists(rightNode, leftNode))
             Traverser.removeNode(rightNode, mergeTree);
-        else if(!leftNode.equals(mergeNode) && rightNode.equals(mergeNode))
-            Traverser.removeNode(leftNode, mergeTree);
+    }
+
+    private static boolean equalIfExists(FSTNode node1, FSTNode node2) {
+        return node1 != null && node1.equals(node2);
     }
 
     public static String getMergeConflictContentOfOppositeSide(MergeConflict mergeConflict, Side side) {

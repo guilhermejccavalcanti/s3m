@@ -2,10 +2,8 @@ package br.ufpe.cin.mergers.handlers;
 
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
-import br.ufpe.cin.mergers.handlers.mutualrenaming.singlerenaming.MutualRenamingHandler;
-import br.ufpe.cin.mergers.handlers.mutualrenaming.singlerenaming.MutualRenamingHandlerFactory;
-import br.ufpe.cin.mergers.handlers.singlerenaming.SingleRenamingHandler;
-import br.ufpe.cin.mergers.handlers.singlerenaming.SingleRenamingHandlerFactory;
+import br.ufpe.cin.mergers.handlers.renaming.RenamingHandler;
+import br.ufpe.cin.mergers.handlers.renaming.RenamingHandlerFactory;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
@@ -29,17 +27,10 @@ import java.util.stream.Collectors;
  * @author Guilherme
  */
 public final class MethodAndConstructorRenamingAndDeletionHandler implements ConflictHandler {
-    private SingleRenamingHandler singleRenamingHandler;
-    private MutualRenamingHandler mutualRenamingHandler;
-
-    private List<Pair<Side, FSTNode>> renamedWithoutBodyChanges;
-    private List<Pair<Side, FSTNode>> deletedOrRenamedWithBodyChanges;
+    private RenamingHandler renamingHandler;
 
     public MethodAndConstructorRenamingAndDeletionHandler() {
-        this.singleRenamingHandler = SingleRenamingHandlerFactory.getHandler(JFSTMerge.renamingStrategy);
-        this.mutualRenamingHandler = MutualRenamingHandlerFactory.getHandler(JFSTMerge.renamingStrategy);
-        this.renamedWithoutBodyChanges = new ArrayList<>();
-        this.deletedOrRenamedWithBodyChanges = new ArrayList<>();
+        this.renamingHandler = RenamingHandlerFactory.getHandler(JFSTMerge.renamingStrategy);
     }
 
     @Override
@@ -51,27 +42,19 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         */
         identifyRenamingOrDeletionNodes(context);
         
+        /* 2. Match Step:
+        *  For each of the base renamed nodes, we find the nodes from the
+        *  left, right and merge trees involved in this renaming.
+        *  If we can't find the left or the right node, we treat them as deleted.
+        */
         List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> renamingMatches = retrieveRenamingMatches(context);
-
-        //when both developers rename the same method/constructor
-        handleMutualRenamings(context, getMutualRenamingMatches(renamingMatches));
-
-        //when one of the developers rename a method/constructor
-        handleSingleRenamings(context, getSingleRenamingMatches(renamingMatches));
-    }
-
-    private void handleMutualRenamings(MergeContext context, 
-            List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> mutualRenamingMatches) throws TextualMergeException {
         
-        for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> tuple : mutualRenamingMatches)
-            mutualRenamingHandler.handle(context, tuple);
-    }
-
-    private void handleSingleRenamings(MergeContext context, 
-            List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> singleRenamingMatches) throws TextualMergeException {
+        /* 3. Handling Step:
+        *  For each of the matches, we simply run a decision tree to decide what do to with them,
+        *  based on their renaming types.
+        */
+        handle(context, renamingMatches);
         
-        for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> tuple : singleRenamingMatches)
-            singleRenamingHandler.handle(context, tuple);
     }
 
     private void identifyRenamingOrDeletionNodes(MergeContext context) {
@@ -85,11 +68,11 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 	private void identifyRenamingOrDeletion(Side contribution, MergeContext context, FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
 
 		if(isRenamingWithoutBodyChanges(node, contributionTree, addedNodes)) {
-			renamedWithoutBodyChanges.add(Pair.of(contribution, node));
+			context.renamedWithoutBodyChanges.add(Pair.of(contribution, node));
 		}
 
 		if(isDeletionOrRenamingWithBodyChanges(node, contributionTree, addedNodes)) {
-			deletedOrRenamedWithBodyChanges.add(Pair.of(contribution, node));
+			context.deletedOrRenamedWithBodyChanges.add(Pair.of(contribution, node));
 		}
 	}
 
@@ -119,18 +102,6 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
             .map(triple -> retrieveScenarioNodesWithMergeNode(context, triple))
             .distinct()
             .collect(Collectors.toList());
-    }
-
-    private List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> getSingleRenamingMatches(List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> renamingMatches) {
-        return renamingMatches.stream()
-                .filter(quadruple -> isSingleRenaming(quadruple))
-                .collect(Collectors.toList());
-    }
-
-    private List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> getMutualRenamingMatches(List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> renamingMatches) {
-        return renamingMatches.stream()
-                .filter(quadruple -> isMutualRenaming(quadruple))
-                .collect(Collectors.toList());
     }
 
     private Triple<FSTNode, FSTNode, FSTNode> retrieveScenarioNodes(MergeContext context, FSTNode baseNode) {
@@ -167,17 +138,6 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
                 || RenamingUtils.oneContainsTheBodyFromTheOther(node1, node2);
     }
 
-    private boolean isSingleRenaming(Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) {
-        return !isMutualRenaming(scenarioNodes);
-    }
-
-    private boolean isMutualRenaming(Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) {
-        FSTNode leftNode = scenarioNodes.getValue0();
-        FSTNode baseNode = scenarioNodes.getValue1();
-        FSTNode rightNode = scenarioNodes.getValue2();
-        return RenamingUtils.haveDifferentSignature(leftNode, baseNode) && RenamingUtils.haveDifferentSignature(rightNode, baseNode);
-    }
-
     private List<Pair<Side, FSTNode>> unionRenamedNodes(List<Pair<Side, FSTNode>> renamedWithoutBodyChanges, 
             List<Pair<Side, FSTNode>> deletedOrRenamedWithBodyChanges) {
         List<Pair<Side, FSTNode>> unionNodes = new ArrayList<>();
@@ -185,4 +145,11 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         deletedOrRenamedWithBodyChanges.stream().forEach(pair -> unionNodes.add(pair));
         return unionNodes;
     }
+
+    private void handle(MergeContext context, List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> renamingMatches)
+            throws TextualMergeException {
+        for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> match : renamingMatches)
+            renamingHandler.handle(context, match);
+    }
+
 }
