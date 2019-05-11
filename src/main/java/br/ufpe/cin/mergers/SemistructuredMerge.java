@@ -336,33 +336,9 @@ public final class SemistructuredMerge {
 
 		if(identifyNodes) {
 			identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
-			identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
 		}
 
 		return TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
-	}
-
-	/**
-	 * Verifies if a node was deleted/renamed in one of the revisions
-	 * @param node
-	 * @param context
-	 * @param leftContent
-	 * @param baseContent
-	 * @param rightContent
-	 */
-	private static void identifyPossibleNodesDeletionOrRenamings(FSTNode node, MergeContext context, String leftContent,String baseContent, String rightContent) {
-		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
-		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
-		String rightContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);
-		if (!baseContenttrim.isEmpty()) {
-			if (!baseContenttrim.equals(leftContenttrim) && rightContenttrim.isEmpty()) {
-				Pair<String, FSTNode> tuple = Pair.of(baseContent, node);
-				context.possibleRenamedRightNodes.add(tuple);
-			} else if (!baseContenttrim.equals(rightContenttrim) && leftContenttrim.isEmpty()) {
-				Pair<String, FSTNode> tuple = Pair.of(baseContent, node);
-				context.possibleRenamedLeftNodes.add(tuple);
-			}
-		}
 	}
 
 	/**

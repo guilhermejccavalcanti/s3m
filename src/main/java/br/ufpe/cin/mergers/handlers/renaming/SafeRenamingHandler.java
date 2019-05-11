@@ -13,9 +13,6 @@ import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 
-/**
- * SafeRenamingHandler
- */
 public class SafeRenamingHandler implements RenamingHandler {
 
     @Override
