@@ -11,6 +11,8 @@ import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
 import br.ufpe.cin.mergers.util.Traverser;
 import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTTerminal;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 import org.javatuples.Quartet;
@@ -30,13 +32,25 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     private SingleRenamingHandler singleRenamingHandler;
     private MutualRenamingHandler mutualRenamingHandler;
 
+    private List<Pair<Side, FSTNode>> renamedWithoutBodyChanges;
+    private List<Pair<Side, FSTNode>> deletedOrRenamedWithBodyChanges;
+
     public MethodAndConstructorRenamingAndDeletionHandler() {
         this.singleRenamingHandler = SingleRenamingHandlerFactory.getHandler(JFSTMerge.renamingStrategy);
         this.mutualRenamingHandler = MutualRenamingHandlerFactory.getHandler(JFSTMerge.renamingStrategy);
+        this.renamedWithoutBodyChanges = new ArrayList<>();
+        this.deletedOrRenamedWithBodyChanges = new ArrayList<>();
     }
 
     @Override
     public void handle(MergeContext context) throws TextualMergeException {
+        
+        /* 1. Identification Step:
+        *  Traverses the base tree looking for renamed or deleted nodes, filling
+        *  the renamedWithoutBodyChanges and deletedOrRenamedWithoutBodyChanges attributes.
+        */
+        identifyRenamingOrDeletionNodes(context);
+        
         List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> renamingMatches = retrieveRenamingMatches(context);
 
         //when both developers rename the same method/constructor
@@ -59,6 +73,43 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
         for (Quartet<FSTNode, FSTNode, FSTNode, FSTNode> tuple : singleRenamingMatches)
             singleRenamingHandler.handle(context, tuple);
     }
+
+    private void identifyRenamingOrDeletionNodes(MergeContext context) {
+		List<FSTTerminal> terminals = Traverser.collectTerminals(context.baseTree);
+		for (FSTTerminal terminal : terminals) {
+			identifyRenamingOrDeletion(Side.LEFT, context, terminal, context.leftTree, context.addedLeftNodes);
+			identifyRenamingOrDeletion(Side.RIGHT, context, terminal, context.rightTree, context.addedRightNodes);
+		}
+	}
+
+	private void identifyRenamingOrDeletion(Side contribution, MergeContext context, FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
+
+		if(isRenamingWithoutBodyChanges(node, contributionTree, addedNodes)) {
+			renamedWithoutBodyChanges.add(Pair.of(contribution, node));
+		}
+
+		if(isDeletionOrRenamingWithBodyChanges(node, contributionTree, addedNodes)) {
+			deletedOrRenamedWithBodyChanges.add(Pair.of(contribution, node));
+		}
+	}
+
+	private boolean isRenamingWithoutBodyChanges(FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
+		return !isInContribution(node, contributionTree) && matchesWithEqualBody(node, addedNodes);
+	}
+
+	private boolean isDeletionOrRenamingWithBodyChanges(FSTNode node,FSTNode contributionTree, List<FSTNode> addedNodes) {
+		return !isInContribution(node, contributionTree) && !matchesWithEqualBody(node, addedNodes);
+	}
+
+	private boolean isInContribution(FSTNode node, FSTNode contributionTree) {
+		return Traverser.isInTree(node, contributionTree);
+	}
+
+	private boolean matchesWithEqualBody(FSTNode baseNode, List<FSTNode> addedNodes) {
+		return addedNodes.stream()
+			.filter(node -> node instanceof FSTTerminal)
+			.anyMatch(node -> RenamingUtils.haveEqualBody(baseNode, node));
+	}
 
     private List<Quartet<FSTNode, FSTNode, FSTNode, FSTNode>> retrieveRenamingMatches(MergeContext context) {
         List<Pair<Side, FSTNode>> renamedNodes = unionRenamedNodes(context.renamedWithoutBodyChanges, context.deletedOrRenamedWithBodyChanges);

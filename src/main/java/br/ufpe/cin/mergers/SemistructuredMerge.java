@@ -131,9 +131,7 @@ public final class SemistructuredMerge {
 		FSTNode mergeLeftBaseRight = superimpose(mergeLeftBase, right, null, context, false);
 		
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
-		mergeMatchedContent(mergeLeftBaseRight, context);
-		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
-			identifyRenamingOrDeletionNodes(base, context);
+		mergeMatchedContent(mergeLeftBaseRight, context);		
 
 		context.superImposedTree = mergeLeftBaseRight;
 		
@@ -295,43 +293,6 @@ public final class SemistructuredMerge {
 				}
 			}
 		}
-	}
-
-	private static void identifyRenamingOrDeletionNodes(FSTNode node, MergeContext context) {
-		List<FSTTerminal> terminals = Traverser.collectTerminals(node);
-		for (FSTTerminal terminal : terminals) {
-			identifyRenamingOrDeletion(Side.LEFT, context, terminal, context.leftTree, context.addedLeftNodes);
-			identifyRenamingOrDeletion(Side.RIGHT, context, terminal, context.rightTree, context.addedRightNodes);
-		}
-	}
-
-	private static void identifyRenamingOrDeletion(Side contribution, MergeContext context, FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
-
-		if(isRenamingWithoutBodyChanges(node, contributionTree, addedNodes)) {
-			context.renamedWithoutBodyChanges.add(Pair.of(contribution, node));
-		}
-
-		if(isDeletionOrRenamingWithBodyChanges(node, contributionTree, addedNodes)) {
-			context.deletedOrRenamedWithBodyChanges.add(Pair.of(contribution, node));
-		}
-	}
-
-	private static boolean isRenamingWithoutBodyChanges(FSTNode node, FSTNode contributionTree, List<FSTNode> addedNodes) {
-		return !isInContribution(node, contributionTree) && matchesWithEqualBody(node, addedNodes);
-	}
-
-	private static boolean isDeletionOrRenamingWithBodyChanges(FSTNode node,FSTNode contributionTree, List<FSTNode> addedNodes) {
-		return !isInContribution(node, contributionTree) && !matchesWithEqualBody(node, addedNodes);
-	}
-
-	private static boolean isInContribution(FSTNode node, FSTNode contributionTree) {
-		return Traverser.isInTree(node, contributionTree);
-	}
-
-	private static boolean matchesWithEqualBody(FSTNode baseNode, List<FSTNode> addedNodes) {
-		return addedNodes.stream()
-			.filter(node -> node instanceof FSTTerminal)
-			.anyMatch(node -> RenamingUtils.haveEqualBody(baseNode, node));
 	}
 
 	/**
