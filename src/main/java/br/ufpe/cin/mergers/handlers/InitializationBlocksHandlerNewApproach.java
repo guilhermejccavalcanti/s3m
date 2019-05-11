@@ -39,33 +39,44 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     				preProcessedNodes.leftDeletedNodes.contains(node)) {
     			if(preProcessedNodes.rightBaseEditedNodeMap.containsKey(node) ||
     					preProcessedNodes.leftBaseEditedNodeMap.containsKey(node)) {
-    				
-    	           	String mergeContent = getMergeContent(preProcessedNodes.leftBaseEditedNodeMap.get(node), 
+    				mergeContentAndUpdateAST(preProcessedNodes.leftBaseEditedNodeMap.get(node), 
     	           			node,
-    	           			preProcessedNodes.rightBaseEditedNodeMap.get(node));
-    	           	
-    	           	// TODO update AST accordingly
+    	           			preProcessedNodes.rightBaseEditedNodeMap.get(node),
+    	           			context);
     			}
     		} else if(preProcessedNodes.leftBaseEditedNodeMap.containsKey(node) &&
     				preProcessedNodes.rightBaseEditedNodeMap.containsKey(node)) {
-    			
-    			String mergeContent = getMergeContent(preProcessedNodes.leftBaseEditedNodeMap.get(node), 
+				
+    			mergeContentAndUpdateAST(preProcessedNodes.leftBaseEditedNodeMap.get(node), 
 	           			node,
-	           			preProcessedNodes.rightBaseEditedNodeMap.get(node));
-
-    			// TODO update AST accordingly
-
+	           			preProcessedNodes.rightBaseEditedNodeMap.get(node),
+	           			context);
 			}
     	}
     }
 	
-	private String getMergeContent(FSTNode leftNode, FSTNode baseNode, FSTNode rightNode) throws TextualMergeException {
+	private void mergeContentAndUpdateAST(FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, MergeContext context) 
+			throws TextualMergeException {
+		
 		String leftContent = (leftNode != null) ? ((FSTTerminal) leftNode).getBody() : "";
         String baseContent = (baseNode != null) ? ((FSTTerminal) baseNode).getBody() : "";
         String rightContent = (rightNode != null) ? ((FSTTerminal) rightNode).getBody() : "";
         
-		return TextualMerge.merge(leftContent, baseContent, rightContent, 
+		String mergedContent = TextualMerge.merge(leftContent, baseContent, rightContent, 
 				JFSTMerge.isWhitespaceIgnored);
+		
+        if (leftNode != null && rightNode != null) {
+            FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, mergedContent);
+            FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
+        } else if (leftNode == null) {
+            FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, rightContent, mergedContent);
+        } else if (rightNode == null) {
+            FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, mergedContent);
+        }
+        
+		//TODO ask Guilherme if this is needed! statistics
+        if (mergedContent.contains("<<<<<<<")) //has conflict
+             context.initializationBlocksConflicts++;
 	}
     
     private InitializationBlocksHandlerNodes preProcessNodes(List<FSTNode> leftNodes, List<FSTNode> baseNodes,
@@ -117,12 +128,12 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     	Map<FSTNode, Double> nodesInsertionLevelMap = new HashMap<>();
     	String nodeBody = ((FSTTerminal) node).getBody();
     	String nodeLines = StringUtils.substringBetween(nodeBody, "{", "}");
-    	List<String> splitNodeContent = Arrays.asList(nodeLines.split(";"));
+    	List<String> splitNodeContent = Arrays.asList(nodeLines.split("\\r?\\n"));
 
     	for(FSTNode pairNode : nodes) {
         	String pairNodeBody = ((FSTTerminal) pairNode).getBody();
         	String pairNodeLines = StringUtils.substringBetween(pairNodeBody, "{", "}");
-        	List<String> splitPairNodeContent = Arrays.asList(pairNodeLines.split(";"));
+        	List<String> splitPairNodeContent = Arrays.asList(pairNodeLines.split("\\r?\\n"));
         	
         	double numOfInsertions = 0;
         	for(String content : splitNodeContent) {
