@@ -75,7 +75,7 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{}");
+		assertThat(mergeResult).contains("publicclassTest{<<<<<<<MINEstatic{inta=4;}=======>>>>>>>YOURS}");
 		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 	
@@ -103,17 +103,7 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-//		static {
-//			<<<<<<< MINE
-//					int a = 3;
-//			=======
-//					int a = 5;
-//			>>>>>>> YOURS
-//				}
-//		
-//		FIXME merge result
-		
-		assertThat(mergeResult).contains("publicclassTest{static{inta=3;}}");
+		assertThat(mergeResult).contains("publicclassTest{static{inta=3;}static{inta=5;}");
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
@@ -169,22 +159,8 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-//		static {
-//			<<<<<<< MINE
-//					int a = 4;
-//			=======
-//					int b = 5;
-//					int c = 5;
-//					int d = 5;
-//					int e = 5;
-//			>>>>>>> YOURS
-//				}
-//
-//		FIXME merge result
-// current result: "publicclassTest{<<<<<<<MINEstatic{inta=4;}=======>>>>>>>YOURSstatic{intb=5;intc=5;intd=5;inte=5;}}"
-// CHECK IF THIS RESULT IS ALSO OK
-		assertThat(mergeResult).contains("publicclassTest{static{inta=4;}}");
-		assertThat(ctx.initializationBlocksConflicts).isZero();
+		assertThat(mergeResult).contains("publicclassTest{<<<<<<<MINEstatic{inta=4;}=======>>>>>>>YOURSstatic{intb=5;intc=5;intd=5;inte=5;}}");
+		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 	
 	@Test
@@ -197,16 +173,7 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-//		static {
-//			int a = 4;
-//			int c = 5;
-//			int d = 5;
-//			int e = 5;
-//		}
-//
-//		FIXME merge result
-		
-		assertThat(mergeResult).contains("publicclassTest{static{inta=4;}}");
+		assertThat(mergeResult).contains("publicclassTest{static{inta=4;intc=5;intd=5;inte=5;}}");
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
@@ -227,33 +194,15 @@ public class InitializationBlocksHandlerNewApproachTest {
 	@Test
 	public void testInitializationBlocksEditionOrAdditionInBothBranchesDependentVars() {
 		MergeContext ctx = 	merge.mergeFiles(
-				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesindependentvars/left/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesindependentvars/base/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesindependentvars/right/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/left/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/base/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/right/Test.java"), 
 				null);
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-//		static int h = 4;
-//		
-//		static {
-//	<<<<<<< MINE
-//			h = 5;
-//			int f = 6;
-//			int g = 6;
-//	=======
-//			int b = 5;
-//			int c = 5;
-//			int g = 5;
-//			int e = h;
-//	>>>>>>> YOURS
-//		}
-
-
-//		FIXME merge result
-		
-		assertThat(mergeResult).contains("publicclassTest{static{inta=4;}}");
-		assertThat(ctx.initializationBlocksConflicts).isZero();
+		assertThat(mergeResult).contains("publicclassTest{staticinth=4;static{<<<<<<<MINEh=5;intf=6;intg=6;=======intb=5;intc=5;intg=5;inte=h;>>>>>>>YOURS}}");
+		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 	
 	@Test
@@ -280,25 +229,7 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		
-//		static {
-//			int var_a = 1;
-//			int var_b = 2;
-//			int var_c = 3;
-//
-//			for (int i = 0; i < 5; i++) {
-//	                              System.out.println("Índice " + i);
-//	                         }  
-//		}
-//		static {
-//			int a = 7;
-//			int b = 8;
-//			int c = 9;
-//		}
-
-//		FIXME merge result
-		
-		assertThat(mergeResult).contains("publicclassTest{static{inta=4;}}");
+		assertThat(mergeResult).contains("publicclassTest{static{intvar_a=1;intvar_b=2;intvar_c=3;for(inti=0;i<5;i++){System.out.println(\"Índice\"+i);}}static{inta=7;intb=8;intc=9;}}");
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
@@ -312,25 +243,7 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		
-//		static {
-//			int d = 4;
-//			int e = 5;
-//			int f = 6;
-//		}
-//
-//		static {
-//			int a = 1;
-//			int b = 2;
-//			int c = 3;
-//			int d = 4;
-//		}
-
-
-//		FIXME merge result
-// current result "publicclassTest{static{inta=1;intb=2;intc=3;intd=4;}static{intd=4;inte=5;intf=6;}}"
-
-		assertThat(mergeResult).contains("publicclassTest{static{inta=1;intb=2;intc=3;intd=4;}static{intd=4;inte=5;intf=6;}}");
+		assertThat(mergeResult).contains("publicclassTest{static{intd=4;inte=5;intf=6;}static{inta=1;intb=2;intc=3;intd=4;}}");
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
@@ -348,7 +261,7 @@ public class InitializationBlocksHandlerNewApproachTest {
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
-	// TODO 
+	@Test
 	public void testInitializationBlocksMultipleBlocksEditionInBothBranchesAndDeletion() {
 		MergeContext ctx = 	merge.mergeFiles(
 				new File("testfiles/initlblocksnewapproach/multipleblockseditiondinbothbranchesanddeletion/left/Test.java"), 
@@ -358,7 +271,7 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{static{intvar_a=4;}}");
-		assertThat(ctx.initializationBlocksConflicts).isZero();
+		assertThat(mergeResult).contains("publicclassTest{<<<<<<<MINEstatic{inta=4;}=======>>>>>>>YOURSstatic{intvar_a=3;}}");
+		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 }
