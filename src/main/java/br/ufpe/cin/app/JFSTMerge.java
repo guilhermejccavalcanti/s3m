@@ -107,15 +107,6 @@ public class JFSTMerge {
 			arity = 1)
 	public static boolean isTypeAmbiguityErrorHandlerEnabled = true;
 	
-	
-	/**
-	 * TODO: javadoc
-	 */
-	public void useInitializationBlocksHandlerNewApproach() {
-		isInitializationBlocksHandlerNewApproachEnabled = true;
-		isInitializationBlocksHandlerEnabled = false;
-	}
-
 	/**
 	 * Merges merge scenarios, indicated by .revisions files.
 	 * This is mainly used for evaluation purposes.
