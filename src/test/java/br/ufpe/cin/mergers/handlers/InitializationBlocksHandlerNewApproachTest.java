@@ -262,18 +262,17 @@ public class InitializationBlocksHandlerNewApproachTest {
 		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 	
-// FIXME merge result is incorrect, check how to deal with dependent variables!!
-//	@Test
-//	public void testInitializationBlocksEditionOrAdditionInBothBranchesDependentVars() {
-//		MergeContext ctx = 	merge.mergeFiles(
-//				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/left/Test.java"), 
-//				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/base/Test.java"), 
-//				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/right/Test.java"), 
-//				null);
-//		
-//		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
-//
-//		assertThat(mergeResult).contains("publicclassTest{staticinth=4;static{<<<<<<<MINEh=5;intf=6;intg=6;=======intb=5;intc=5;intg=5;inte=h;>>>>>>>YOURS}}");
-//		assertThat(ctx.initializationBlocksConflicts).isOne();
-//	}
+	@Test
+	public void testInitializationBlocksEditionOrAdditionInBothBranchesDependentVars() {
+		MergeContext ctx = 	merge.mergeFiles(
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/left/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/base/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/right/Test.java"), 
+				null);
+		
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+
+		assertThat(mergeResult).contains("publicclassTest{staticinth=4;static{<<<<<<<MINEh=5;intf=6;intg=6;=======intb=5;intc=5;intg=5;inte=h;>>>>>>>YOURS}}");
+		assertThat(ctx.initializationBlocksConflicts).isOne();
+	}
 }
