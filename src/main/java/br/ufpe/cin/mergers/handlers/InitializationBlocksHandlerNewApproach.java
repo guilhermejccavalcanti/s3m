@@ -8,6 +8,8 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.commons.lang.StringUtils;
@@ -22,24 +24,36 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 /**
- * TODO: fill it
- * @author Alice Borner
- *
+ * 
+ * TODO: UPDATE DESCRIPTION
+ * Semistructured merge uses elements identifier to match nodes, if a node has no identifier,
+ * the algorithm is unable to match this node. This lead to problems with initialization block
+ * as these elements has no identifier, semistructured merge cannot match them, and therefore creates duplicates.
+ * To avoid this problem, we attempt to match them by textual similarity. 
+ * 
+ * Matching by level of content insertion
+ * If insertion is 100% then split node into 2 different ones to merge them and then join again
+ * Also checks for dependency!
+ * 
+ *  @author Alice Borner
+ *  
  */
 public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
 
     private List<InitializationBlocksHandlerNode> rightEditedNodes = new ArrayList<InitializationBlocksHandlerNode>();
 	private List<FSTNode> rightDeletedNodes = new ArrayList<FSTNode>();
-	
-    private List<InitializationBlocksHandlerNode> leftEditedNodes =  new ArrayList<InitializationBlocksHandlerNode>();
+	private List<FSTNode> rightAddedNodes = new ArrayList<FSTNode>();
+
+	private List<InitializationBlocksHandlerNode> leftEditedNodes =  new ArrayList<InitializationBlocksHandlerNode>();
     private List<FSTNode> leftDeletedNodes = new ArrayList<FSTNode>();
-    
-    private final static String LINE_BREAKER = "\\r?\\n(\\t)*";	
+    private List<FSTNode> leftAddedNodes = new ArrayList<FSTNode>();
+
+    private final static String LINE_BREAKER_REGEX = "\\r?\\n(\\t)*";	
     private final static String INITIALIZATION_BLOCK_IDENTIFIER = "InitializerDecl";	
     private final static String TEMPORARY_STATIC_NEW_BLOCK = "\nstatic {\n";
     private final static String BLOCK_DELIMITER = "}";
+    private final static String STATIC_GLOBAL_VARIABLE_REGEX = "static.*=.*;";
     
-	// TODO add comments
 	public void handle(MergeContext context) throws TextualMergeException {
 		
         List<FSTNode> leftNodes = findInitializationBlocks(context.addedLeftNodes);
@@ -48,20 +62,83 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
 
     	preProcessNodes(leftNodes, baseNodes, rightNodes);
        
-    	for(FSTNode node : baseNodes) {
-    		mergeContentAndUpdateAST(node, context);
+    	for(FSTNode baseNode : baseNodes) {
+    		InitializationBlocksHandlerNode leftNode = getEditedNodeByBaseNode(leftEditedNodes, baseNode);
+    		InitializationBlocksHandlerNode rightNode = getEditedNodeByBaseNode(rightEditedNodes, baseNode);
+    		
+    		mergeContentAndUpdateAST(leftNode, baseNode, rightNode, context);
+    	}
+    	
+    	List<String> staticGlobalVariables = getStaticGlobalVariables(context.getBaseContent());
+    	
+    	if(!staticGlobalVariables.isEmpty()) {
+    		mergePossibleDependentAddedNodes(context, staticGlobalVariables);
     	}
     }
 
-	private void mergeContentAndUpdateAST(FSTNode baseNode, MergeContext context) 
+	private List<String> getStaticGlobalVariables(String baseContent) {
+		
+		List<String> staticGlobalVariables = new ArrayList<String>();
+		Pattern pattern = Pattern.compile(STATIC_GLOBAL_VARIABLE_REGEX);
+        Matcher matcher = pattern.matcher(baseContent);
+
+    	while(matcher.find()) {
+    		String variable = StringUtils.substringBetween(matcher.group(), "static", "=").trim();
+    		String[] split = variable.split(" ");
+    		String variableName = split[1];
+    		staticGlobalVariables.add(variableName);
+    	}
+        
+       return staticGlobalVariables;
+	}
+	
+	private void mergePossibleDependentAddedNodes(MergeContext context, List<String> staticGlobalVariables)
 			throws TextualMergeException {
 		
-		InitializationBlocksHandlerNode leftNode = getEditedNodeByBaseNode(leftEditedNodes, baseNode);
-		InitializationBlocksHandlerNode rightNode = getEditedNodeByBaseNode(rightEditedNodes, baseNode);
+		for(String variable : staticGlobalVariables) {
+			String baseContent = "";
+			String mergedContent = null;
+			FSTNode leftNode = findNodeUsesVariable(context.addedLeftNodes, variable);
+			FSTNode rightNode = findNodeUsesVariable(context.addedRightNodes, variable);
+			
+			if(leftNode != null && rightNode != null) {
+				String leftContent = ((FSTTerminal) leftNode).getBody();
+				String rightContent = ((FSTTerminal) rightNode).getBody();
+				
+				mergedContent = TextualMerge.merge(leftContent, baseContent, rightContent, 
+						JFSTMerge.isWhitespaceIgnored);
+				
+	            FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, mergedContent);
+	            FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
+	            
+				// statistics
+				if (mergedContent != null && mergedContent.contains("<<<<<<<")) //has conflict
+					context.initializationBlocksConflicts++;
+			}
+		}
+	}
 	
+	private FSTNode findNodeUsesVariable(List<FSTNode> nodesList, String variable) {
+		for(FSTNode node : nodesList) {
+			String nodeContent = ((FSTTerminal) node).getBody();
+			Pattern pattern = Pattern.compile(variable);
+	        Matcher matcher = pattern.matcher(nodeContent);
+
+	    	if(matcher.find()) {
+	    		return node;
+	    	}
+		}
+		
+		return null;
+	}
+	
+	private void mergeContentAndUpdateAST(InitializationBlocksHandlerNode leftNode, FSTNode baseNode,
+			InitializationBlocksHandlerNode rightNode, MergeContext context) 
+			throws TextualMergeException {
+		
 		String baseContent = (baseNode != null) ? ((FSTTerminal) baseNode).getBody() : "";
-		String leftContent = (leftNode != null) ? ((FSTTerminal) leftNode.getPairNode()).getBody() : "";
-		String rightContent = (rightNode != null) ? ((FSTTerminal) rightNode.getPairNode()).getBody() : "";
+		String leftContent = (leftNode != null) ? ((FSTTerminal) leftNode.getEditedNode()).getBody() : "";
+		String rightContent = (rightNode != null) ? ((FSTTerminal) rightNode.getEditedNode()).getBody() : "";
 
 		String mergedContent = null;
 		
@@ -71,7 +148,7 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
 		    mergedContent = TextualMerge.merge(leftContent, baseContent, rightContent, 
 					JFSTMerge.isWhitespaceIgnored);
 			
-			if(leftNode.isEditedNode() || rightNode.isEditedNode()) {
+			if(leftNode.isSplitedNode() || rightNode.isSplitedNode()) {
 				mergedContent = mergedContent.replace(BLOCK_DELIMITER + TEMPORARY_STATIC_NEW_BLOCK, "");
 				String originalContent = leftNode.getOriginalNodeContent() != null ? leftNode.getOriginalNodeContent() :
 					rightNode.getOriginalNodeContent();
@@ -94,7 +171,7 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
 	    		mergedContent = TextualMerge.merge(leftContent, baseContent, rightContent, 
 	    				JFSTMerge.isWhitespaceIgnored);
 	    		
-				if(rightNode != null && rightNode.isEditedNode()) {
+				if(rightNode != null && rightNode.isSplitedNode()) {
 					mergedContent = mergedContent.replace(BLOCK_DELIMITER + TEMPORARY_STATIC_NEW_BLOCK, "");
 				}
 				
@@ -114,7 +191,7 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
 				mergedContent = TextualMerge.merge(leftContent, baseContent, rightContent, 
 						JFSTMerge.isWhitespaceIgnored);
 				
-				if(leftNode != null && leftNode.isEditedNode()) {
+				if(leftNode != null && leftNode.isSplitedNode()) {
 					mergedContent = mergedContent.replace(BLOCK_DELIMITER + TEMPORARY_STATIC_NEW_BLOCK, "");
 				}
 				
@@ -151,6 +228,9 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     	
     	setLeftEditedNodes(defineEditedNodes(leftAddedCandidates, leftDeletedCandidates));
     	setRightEditedNodes(defineEditedNodes(rightAddedCandidates, rightDeletedCandidates));
+    	
+    	setLeftAddedNodes(removeContainedNodesFromList(leftAddedCandidates, getBaseNodes(leftEditedNodes)));
+    	setRightAddedNodes(removeContainedNodesFromList(rightAddedCandidates, getBaseNodes(rightEditedNodes)));
     	
     	setLeftDeletedNodes(removeContainedNodesFromList(leftDeletedCandidates, getBaseNodes(leftEditedNodes)));
     	setRightDeletedNodes(removeContainedNodesFromList(rightDeletedCandidates, getBaseNodes(rightEditedNodes)));
@@ -196,12 +276,12 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     	Map<FSTNode, Double> nodesInsertionLevelMap = new HashMap<>();
     	String nodeBody = ((FSTTerminal) node).getBody();
     	String nodeLines = StringUtils.substringBetween(nodeBody, "{", "}").trim();
-    	List<String> splitNodeContent = Arrays.asList(nodeLines.split(LINE_BREAKER));
+    	List<String> splitNodeContent = Arrays.asList(nodeLines.split(LINE_BREAKER_REGEX));
 
     	for(FSTNode pairNode : nodes) {
         	String pairNodeBody = ((FSTTerminal) pairNode).getBody();
         	String pairNodeLines = StringUtils.substringBetween(pairNodeBody, "{", "}").trim();
-        	List<String> splitPairNodeContent = Arrays.asList(pairNodeLines.split(LINE_BREAKER));
+        	List<String> splitPairNodeContent = Arrays.asList(pairNodeLines.split(LINE_BREAKER_REGEX));
         	
         	double numOfInsertions = 0;
         	for(String content : splitNodeContent) {
@@ -245,7 +325,7 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     
     private List<InitializationBlocksHandlerNode> defineEditedNodes(List<FSTNode> addedCandidates, List<FSTNode> deletedCandidates) {
     	List<InitializationBlocksHandlerNode> editedNodes = new ArrayList<InitializationBlocksHandlerNode>();
-    	
+
     	for(FSTNode node : addedCandidates) {
     		Pair<FSTNode, Double> maxInsertionPair = maxInsertionLevel(node, deletedCandidates);
     		Pair<FSTNode, Double> maxSimilarityPair = maxSimilarity(node, deletedCandidates);
@@ -265,7 +345,7 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     			}
     			
     			editedNodes.add(editedNode);
-    		} 
+    		}
     	}
     	
     	return editedNodes;
@@ -275,10 +355,10 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     	StringBuffer finalNodeBody = new StringBuffer();
     	
     	String nodeBody = ((FSTTerminal) node).getBody();
-    	List<String> splitNodeContent = Arrays.asList(nodeBody.split(LINE_BREAKER));
+    	List<String> splitNodeContent = Arrays.asList(nodeBody.split(LINE_BREAKER_REGEX));
     	
     	String baseNodeBody = ((FSTTerminal) baseNode).getBody();
-    	List<String> splitBaseNodeContent = Arrays.asList(baseNodeBody.split(LINE_BREAKER));
+    	List<String> splitBaseNodeContent = Arrays.asList(baseNodeBody.split(LINE_BREAKER_REGEX));
     	
     	finalNodeBody.append(baseNodeBody);
     	finalNodeBody.append(TEMPORARY_STATIC_NEW_BLOCK);
@@ -325,24 +405,41 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
 	public void setLeftDeletedNodes(List<FSTNode> leftDeletedNodes) {
 		this.leftDeletedNodes = leftDeletedNodes;
 	}
+	
+    public List<FSTNode> getRightAddedNodes() {
+		return rightAddedNodes;
+	}
+
+	public void setRightAddedNodes(List<FSTNode> rightAddedNodes) {
+		this.rightAddedNodes = rightAddedNodes;
+	}
+
+	public List<FSTNode> getLeftAddedNodes() {
+		return leftAddedNodes;
+	}
+
+	public void setLeftAddedNodes(List<FSTNode> leftAddedNodes) {
+		this.leftAddedNodes = leftAddedNodes;
+	}
+
 
 }
 
 class InitializationBlocksHandlerNode {
 	private FSTNode baseNode;
-	private FSTNode pairNode;
-	private boolean editedNode = false;
+	private FSTNode editedNode;
+	private boolean splitedNode = false;
 	private String originalNodeContent;
 
-	public InitializationBlocksHandlerNode(FSTNode baseNode, FSTNode pairNode) {
+	public InitializationBlocksHandlerNode(FSTNode baseNode, FSTNode editedNode) {
 		this.baseNode = baseNode;
-		this.pairNode = pairNode;
+		this.editedNode = editedNode;
 	}
 	
-	public InitializationBlocksHandlerNode(FSTNode baseNode, FSTNode pairNode, boolean editedNode,
+	public InitializationBlocksHandlerNode(FSTNode baseNode, FSTNode editedNode, boolean splitedNode,
 			String originalNodeContent) {
-		this(baseNode, pairNode);
-		this.editedNode = editedNode;
+		this(baseNode, editedNode);
+		this.splitedNode = splitedNode;
 		this.originalNodeContent = originalNodeContent;
 	}
 	
@@ -354,20 +451,20 @@ class InitializationBlocksHandlerNode {
 		this.baseNode = baseNode;
 	}
 
-	public FSTNode getPairNode() {
-		return pairNode;
-	}
-
-	public void setPairNode(FSTNode pairNode) {
-		this.pairNode = pairNode;
-	}
-
-	public boolean isEditedNode() {
+	public FSTNode getEditedNode() {
 		return editedNode;
 	}
 
-	public void setEditedNode(boolean editedNode) {
+	public void setEditedNode(FSTNode editedNode) {
 		this.editedNode = editedNode;
+	}
+
+	public boolean isSplitedNode() {
+		return splitedNode;
+	}
+
+	public void setSplitedNode(boolean splitedNode) {
+		this.splitedNode = splitedNode;
 	}
 	
 	public String getOriginalNodeContent() {
