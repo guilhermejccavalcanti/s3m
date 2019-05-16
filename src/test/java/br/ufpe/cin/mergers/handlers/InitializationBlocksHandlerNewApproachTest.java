@@ -30,14 +30,14 @@ public class InitializationBlocksHandlerNewApproachTest {
 		},  true, Charset.defaultCharset().displayName());
 		System.setOut(hideStream);
 	}
-	
-	@Before
+    
+    @Before
 	public void initJFSTMergeWithNewApproachForInitializationHandler() {
 		JFSTMerge.isInitializationBlocksHandlerEnabled = false;
 		JFSTMerge.isInitializationBlocksHandlerNewApproachEnabled = true;
 		merge = new JFSTMerge();
 	}
-	
+    
 	@Test
 	public void testInitializationBlocksBlockAddition() {
 		MergeContext ctx = 	merge.mergeFiles(
@@ -258,8 +258,8 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{<<<<<<<MINEstatic{inta=4;}=======>>>>>>>YOURSstatic{intvar_a=3;}}");
-		assertThat(ctx.initializationBlocksConflicts).isOne();
+		assertThat(mergeResult).contains("publicclassTest{static{intvar_a=4;}}");
+		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
 	@Test
@@ -274,5 +274,19 @@ public class InitializationBlocksHandlerNewApproachTest {
 
 		assertThat(mergeResult).contains("publicclassTest{staticinth=4;static{<<<<<<<MINEh=5;intf=6;intg=6;=======intb=5;intc=5;intg=5;inte=h;>>>>>>>YOURS}}");
 		assertThat(ctx.initializationBlocksConflicts).isOne();
+	}
+	
+	@Test
+	public void testInitializationBlocksRenamingVariablesConflictSolving() {
+		MergeContext ctx = 	merge.mergeFiles(
+				new File("testfiles/initlblocksnewapproach/multipleblocksrenamingvariables/left/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/multipleblocksrenamingvariables/base/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/multipleblocksrenamingvariables/right/Test.java"), 
+				null);
+		
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+
+		assertThat(mergeResult).contains("publicclassTest{static{intvar_a=4;intb=2;}static{intc=2;intvar_d=0;}}");
+		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 }
