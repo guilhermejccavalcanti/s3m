@@ -8,6 +8,7 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.ArrayList;
 import java.util.Comparator;
@@ -176,24 +177,26 @@ public class RenamingUtils {
     }
 
     public static boolean haveEqualSignatureButName(FSTNode left, FSTNode right) {
-        String leftSignature = left.getName();
-        String rightSignature = right.getName();
-        return getPrefix(leftSignature).equals(getPrefix(rightSignature)) && getSuffix(leftSignature).equals(getSuffix(rightSignature));
+        Triple<String, String, String> leftSignature = getSplitSignature(left);
+        Triple<String, String, String> rightSignature = getSplitSignature(right);
+
+        return leftSignature.getLeft().equals(rightSignature.getLeft()) && leftSignature.getRight().equals(rightSignature.getRight());
+    }
+
+    private static Triple<String, String, String> getSplitSignature(FSTNode node) {
+        String[] nodeNameAndArguments = node.getName().split("[()]");
+        String nodeName = nodeNameAndArguments[0];
+        String nodeBody = ((FSTTerminal) node).getBody();
+        String nodeSignature = getSignature(nodeBody);
+        return Triple.of(getPrefix(nodeSignature, nodeName), nodeName, getSuffix(nodeSignature));
     }
 
     private static String getSuffix(String signature) {
         return FilesManager.getStringContentIntoSingleLineNoSpacing(signature.substring(signature.indexOf("(")));
     }
 
-    private static String getPrefix(String signature) {
-        boolean isInName = false;
-        for (int i = signature.indexOf("("); i >= 0; i--) {
-            if(signature.charAt(i) >= 'A' && signature.charAt(i) <= 'z')
-                isInName = true;
-            if(signature.charAt(i) == ' ' && isInName)
-                return FilesManager.getStringContentIntoSingleLineNoSpacing(signature.substring(0, i));
-        }
-        return "";
+    private static String getPrefix(String signature, String name) {
+        return FilesManager.getStringContentIntoSingleLineNoSpacing(signature.substring(0, signature.indexOf(name)));
     }
 
     public static boolean oneContainsTheBodyFromTheOther(FSTNode left, FSTNode right) {
