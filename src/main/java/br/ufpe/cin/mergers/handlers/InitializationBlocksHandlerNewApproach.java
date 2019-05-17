@@ -24,16 +24,10 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 /**
- * 
- * TODO: UPDATE DESCRIPTION
- * Semistructured merge uses elements identifier to match nodes, if a node has no identifier,
- * the algorithm is unable to match this node. This lead to problems with initialization block
- * as these elements has no identifier, semistructured merge cannot match them, and therefore creates duplicates.
- * To avoid this problem, we attempt to match them by textual similarity. 
- * 
- * Matching by level of content insertion
- * If insertion is 100% then split node into 2 different ones to merge them and then join again
- * Also checks for dependency!
+ * As in semistructured merge the ID is used for matching the nodes and initialization blocks don't have it, during
+ * the superimposition of these blocks they are duplicated. This handler matches the nodes mainly by the level of
+ * content insertion compared to the blocks on base, also checking for possible dependency between blocks and solving 
+ * variable renaming conflicts.
  * 
  *  @author Alice Borner
  *  
@@ -54,7 +48,7 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     private final static String NEW_LINE = "\n";
     private final static String STATIC_GLOBAL_VARIABLE_REGEX = "static.*=.*;";
     
-    // conflict
+    // conflict markers
     private final static String CONFLICT_MARKER = "<<<<<<<";
     private final static String CONLFICT_MINE = "<<<<<<< MINE";
     private final static String CONFLICT_YOURS = ">>>>>>> YOURS";
@@ -76,8 +70,8 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     	}
     	
     	List<String> staticGlobalVariables = getGlobalStaticVariables(context.getBaseContent());
-    	
     	if(!staticGlobalVariables.isEmpty() && (!leftAddedNodes.isEmpty() || !rightAddedNodes.isEmpty())) {
+    		// there are static global variables and left/right added blocks, so could be the case of a dependency
     		mergePossibleDependentAddedNodesAndUpdateAST(context, staticGlobalVariables);
     	}
     	
@@ -408,13 +402,19 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
     	((FSTTerminal) node).setBody(finalNodeBody.toString());
     }
     
-	
-	// TODO: refactor this method
 	private String checkVariableRenamingConflict(String mergedContent, String baseContent) {
+
+		String beforeConflict = StringUtils.substringBefore(mergedContent, CONLFICT_MINE);
+		String afterConflict = StringUtils.substringAfter(mergedContent, CONFLICT_YOURS);
+		String conflictContent = StringUtils.substringBetween(mergedContent, beforeConflict, afterConflict).trim();
 		
 		String leftContent = StringUtils.substringBetween(mergedContent, CONLFICT_MINE, CONFLICTS_SEPARATOR).trim();
 		String rightContent = StringUtils.substringBetween(mergedContent, CONFLICTS_SEPARATOR, CONFLICT_YOURS).trim();
 
+		/**
+		 * parts[1] contains the name of the variable and parts[3] the content to be compared later if 
+		 * one branch changed only the name and the other the content. 
+		 */
 		String[] leftParts = leftContent.split(" ");
 		String[] rightParts = rightContent.split(" ");
 		
@@ -422,26 +422,31 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
 		String baseVarRight = findVarInBaseContent(rightParts[0] + ".*" + rightParts[1] + ".*;", baseContent);
 		
 		if(baseVarLeft != null || baseVarRight != null) {
+			// variable from left or right was found in base
+			
 		    String baseVarContent = baseVarLeft != null ? baseVarLeft : baseVarRight;
 			String[] baseParts = baseVarContent.split(" ");
-			String beforeConflict = StringUtils.substringBefore(mergedContent, CONLFICT_MINE);
-			String afterConflict = StringUtils.substringAfter(mergedContent, CONFLICT_YOURS);
-			String conflictContent = StringUtils.substringBetween(mergedContent, beforeConflict, afterConflict).trim();
 			String newVarContent = "";
 			
-			if(baseParts[1].equals(leftParts[1]) && baseParts[3].equals(rightParts[3])) {
+			// if variable name from base and left is the same and value from base and right is the same
+			if(isNameAndContentChangedByDifferentBranches(baseParts, leftParts, rightParts)) 
 				newVarContent = leftParts[0] + " " + rightParts[1] + " " + leftParts[2] + " " + leftParts[3];
-			}
 			
-			if(baseParts[1].equals(rightParts[1]) && baseParts[3].equals(leftParts[3])) {
+			if(isNameAndContentChangedByDifferentBranches(baseParts, rightParts, leftParts)) 
 				newVarContent = leftParts[0] + " " + leftParts[1] + " " + leftParts[2] + " " + rightParts[3];
-			}
 			
 			if(!newVarContent.isEmpty())
 				mergedContent = mergedContent.replace(conflictContent, newVarContent);
 		}
 		
 		return mergedContent;
+	}
+	
+	private boolean isNameAndContentChangedByDifferentBranches(String[] baseParts, String[] nameDiffBranch,
+			String[] contentDiffBranch) {
+		
+		return baseParts[1].equals(nameDiffBranch[1]) && baseParts[3].equals(contentDiffBranch[3])
+				&& !baseParts[1].equals(contentDiffBranch[1]) && !baseParts[3].equals(nameDiffBranch[3]);
 	}
 	
 	private String findVarInBaseContent(String varRegex, String baseContent) {
@@ -451,10 +456,9 @@ public class InitializationBlocksHandlerNewApproach implements ConflictHandler {
         
         String baseVar = null;
         
-        if(matcher.find()) {
+        if(matcher.find()) 
         	baseVar = matcher.group();
-        }
-        
+
         return baseVar;
 	}
 	
