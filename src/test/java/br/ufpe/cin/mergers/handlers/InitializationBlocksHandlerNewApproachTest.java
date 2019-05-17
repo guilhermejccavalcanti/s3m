@@ -160,7 +160,8 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{<<<<<<<MINEstatic{inta=4;}=======>>>>>>>YOURSstatic{intb=5;intc=5;intd=5;inte=5;}}");
+		assertThat(mergeResult).contains("publicclassTest{<<<<<<<MINEstatic{inta=4;}=======>>>>>>>YOURSstatic"
+				+ "{intb=5;intc=5;intd=5;inte=5;}}");
 		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 	
@@ -181,14 +182,18 @@ public class InitializationBlocksHandlerNewApproachTest {
 	@Test
 	public void testInitializationBlocksEditionOrAdditionInBothBranchesIndependentVars() {
 		MergeContext ctx = 	merge.mergeFiles(
-				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesindependentvars/left/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesindependentvars/base/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesindependentvars/right/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesindependentvars/"
+						+ "left/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesindependentvars/"
+						+ "base/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesindependentvars/"
+						+ "right/Test.java"), 
 				null);
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 		
-		assertThat(mergeResult).contains("publicclassTest{static{inth=4;intf=6;intg=6;}static{intb=5;intc=5;intd=5;inte=5;}}");
+		assertThat(mergeResult).contains("publicclassTest{static{inth=4;intf=6;intg=6;}static{intb=5;intc=5;intd=5;"
+				+ "inte=5;}}");
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
@@ -216,7 +221,8 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{static{intvar_a=1;intvar_b=2;intvar_c=3;for(inti=0;i<5;i++){System.out.println(\"Índice\"+i);}}static{inta=7;intb=8;intc=9;}}");
+		assertThat(mergeResult).contains("publicclassTest{static{intvar_a=1;intvar_b=2;intvar_c=3;for(inti=0;i<5;i++)"
+				+ "{System.out.println(\"Índice\"+i);}}static{inta=7;intb=8;intc=9;}}");
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
@@ -230,7 +236,26 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{static{intd=4;inte=5;intf=6;}static{inta=1;intb=2;intc=3;intd=4;}}");
+		assertThat(mergeResult).contains("publicclassTest{static{intd=4;inte=5;intf=6;}static{inta=1;intb=2;intc=3;"
+				+ "intd=4;}}");
+		assertThat(ctx.initializationBlocksConflicts).isZero();
+	}
+	
+	@Test
+	public void testInitializationBlocksMultipleBlocksReorderingWithVariableRenamingConflict() {
+		MergeContext ctx = 	merge.mergeFiles(
+				new File("testfiles/initlblocksnewapproach/multipleblocksreorderingwithvariablerenamingconflict/"
+						+ "left/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/multipleblocksreorderingwithvariablerenamingconflict/"
+						+ "base/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/multipleblocksreorderingwithvariablerenamingconflict/"
+						+ "right/Test.java"), 
+				null);
+		
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+
+		assertThat(mergeResult).contains("publicclassTest{static{intvar_d=5;inte=5;intf=6;}static{inta=1;intb=2;"
+				+ "intc=3;}}");
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
@@ -251,9 +276,12 @@ public class InitializationBlocksHandlerNewApproachTest {
 	@Test
 	public void testInitializationBlocksMultipleBlocksEditionInBothBranchesAndDeletion() {
 		MergeContext ctx = 	merge.mergeFiles(
-				new File("testfiles/initlblocksnewapproach/multipleblockseditiondinbothbranchesanddeletion/left/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/multipleblockseditiondinbothbranchesanddeletion/base/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/multipleblockseditiondinbothbranchesanddeletion/right/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/multipleblockseditiondinbothbranchesanddeletion/"
+						+ "left/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/multipleblockseditiondinbothbranchesanddeletion/"
+						+ "base/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/multipleblockseditiondinbothbranchesanddeletion/"
+						+ "right/Test.java"), 
 				null);
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
@@ -265,18 +293,22 @@ public class InitializationBlocksHandlerNewApproachTest {
 	@Test
 	public void testInitializationBlocksEditionOrAdditionInBothBranchesDependentVars() {
 		MergeContext ctx = 	merge.mergeFiles(
-				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/left/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/base/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/right/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/"
+						+ "left/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/"
+						+ "base/Test.java"), 
+				new File("testfiles/initlblocksnewapproach/editionoradditioninbothbranchesdependentvars/"
+						+ "right/Test.java"), 
 				null);
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{staticinth=4;static{<<<<<<<MINEh=5;intf=6;intg=6;=======intb=5;intc=5;intg=5;inte=h;>>>>>>>YOURS}}");
+		assertThat(mergeResult).contains("publicclassTest{staticinth=4;static{<<<<<<<MINEh=5;intf=6;intg=6;"
+				+ "=======intb=5;intc=5;intg=5;inte=h;>>>>>>>YOURS}}");
 		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 	
-	@Test
+	@Test 
 	public void testInitializationBlocksRenamingVariablesConflictSolving() {
 		MergeContext ctx = 	merge.mergeFiles(
 				new File("testfiles/initlblocksnewapproach/multipleblocksrenamingvariables/left/Test.java"), 
