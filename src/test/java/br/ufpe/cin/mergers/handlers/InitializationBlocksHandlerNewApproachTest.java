@@ -230,7 +230,7 @@ public class InitializationBlocksHandlerNewApproachTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{static{inta=1;intb=2;intc=3;intd=4;}static{intd=4;inte=5;intf=6;}}");
+		assertThat(mergeResult).contains("publicclassTest{static{intd=4;inte=5;intf=6;}static{inta=1;intb=2;intc=3;intd=4;}}");
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
