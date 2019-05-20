@@ -67,12 +67,11 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     		
     		mergeContentAndUpdateAST(leftNode, baseNode, rightNode, context, deletedNodes);
     	}
-    	
-    	List<FSTNode> dependentNodes = getDepedentNodes();
-    	if(!dependentNodes.isEmpty()) {
-    		// there are static global variables and left/right added blocks, so could be the case of a dependency
-    		mergeDependentAddedNodesAndUpdateAST(context, dependentNodes);
-    	}
+
+    	// there are static global variables and left/right added blocks, so could be the case of a dependency
+    	Map<FSTNode, List<FSTNode>> commonVarsNodesMap = getCommonAccessGlobalVariablesNodes(addedNodes);
+    	if(!commonVarsNodesMap.isEmpty())
+    		mergeDependentAddedNodesAndUpdateAST(context, commonVarsNodesMap);
     }
 	
     private List<InitializationBlocksHandlerNode> defineEditedNodes(List<FSTNode> addedCandidates,
@@ -227,27 +226,50 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 			context.initializationBlocksConflicts++;
 		}
 	}
-	
-	private List<FSTNode> getDepedentNodes() {
-		List<FSTNode> dependentNodes = new ArrayList<FSTNode>();
-//		
-//		List<String> globalStaticVar = new ArrayList<String>();
-//		Pattern pattern = Pattern.compile(STATIC_GLOBAL_VARIABLE_REGEX);
-//        Matcher matcher = pattern.matcher(baseContent);
-//
-//    	while(matcher.find()) {
-//    		String variable = StringUtils.substringBetween(matcher.group(), "static", "=").trim();
-//    		String[] parts = variable.split(" ");
-//    		String variableName = parts[1];
-//    		globalStaticVar.add(variableName);
-//    	}
-//        
-       return dependentNodes;
+
+	private Map<FSTNode,List<FSTNode>> getCommonAccessGlobalVariablesNodes(Pair<List<FSTNode>,
+			List<FSTNode>> addedNodes) {
+		
+		Map<FSTNode,List<FSTNode>> commonVarsNodesMap = new HashMap<>();
+		List<FSTNode> leftAddedNodes = addedNodes.getLeft();
+		List<FSTNode> rightAddedNodes = addedNodes.getRight();
+
+		for(FSTNode leftNode : leftAddedNodes) {
+			for(FSTNode rightNode : rightAddedNodes) {
+// TODO: remove! algorithm
+//				leftGlobalVariables = getGlobalVariables(leftNode)
+//				rightGlobalVariables = getGlobalVariables(rightNode)
+//				commonGlobalVariables = leftGlobalVariables.remove(rightGlobalVariables)
+		//
+//				if !commonGlobalVariables.isEmpty()
+//					commonVariablesMap.put(leftNode, addToList(rightNode))
+			}
+		}
+		
+		
+       return commonVarsNodesMap;
 	}
 	
-	private void mergeDependentAddedNodesAndUpdateAST(MergeContext context, List<FSTNode> dependentNodes)
-			throws TextualMergeException {
-//		
+// TODO: remove! algorithm
+//List<Var> getGlobalVariables(node)
+//	for line in node.getLines() 
+//		if(line.isVarAssignment() and !line.isLocalVarDeclarationOrAssignment())
+//			nodeGlobalVariables.add(line.getVar())
+//	return nodeGlobalVariables
+	
+	private void mergeDependentAddedNodesAndUpdateAST(MergeContext context, Map<FSTNode, List<FSTNode>>
+		commonVarsNodesMap) throws TextualMergeException {
+		
+		
+		// TODO: remove! algorithm
+		//for leftConflict in leftConflicts
+		//leftConflictContent = leftConflict.getContent()
+		//for rightConflict in commonVariablesMap.get(leftConflict) 
+		//rightConflictContent.append(rightConflict)
+		//
+		//conflictNode = getConflictNode(leftConflictContent, rightConflictContent)
+		//finalNodes.add(conflictNode)		
+//	TODO: update implementation with new algorithm
 //		for(String variable : dependentNodes) {
 //			String baseContent = "";
 //			String mergedContent = null;
@@ -383,8 +405,9 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	return baseNode;
     }
 
+    // TODO: improve implementation to be more general
     private String checkVariableRenamingConflict(String mergedContent, String baseContent) {
-
+    	
 		String beforeConflict = StringUtils.substringBefore(mergedContent, CONLFICT_MINE);
 		String afterConflict = StringUtils.substringAfter(mergedContent, CONFLICT_YOURS);
 		String conflictContent = StringUtils.substringBetween(mergedContent, beforeConflict, afterConflict).trim();
