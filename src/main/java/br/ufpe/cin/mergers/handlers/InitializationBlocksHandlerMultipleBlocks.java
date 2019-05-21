@@ -35,7 +35,9 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
 public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandler {
     
     private final static String INITIALIZATION_BLOCK_IDENTIFIER = "InitializerDecl";	
-    private final static String LINE_BREAKER_REGEX = "\\r\\n(\\t)*";	
+    private final static String LINE_BREAKER_REGEX = "\\r\\n(\\t)*";
+    private final static String LOCAL_VAR_DECLARATION_REGEX = "^[a-zA-Z_$][a-zA-Z_$0-9]* ([a-zA-Z_$][a-zA-Z_$0-9]*)( *=.*)?;$";
+    private final static String VAR_ASSIGNMENT_SET_REGEX = "^([a-zA-Z_$][a-zA-Z_$0-9]*) ?(=|\\.set).*;$";
     
     // conflict markers
     private final static String CONFLICT_MARKER = "<<<<<<<";
@@ -236,61 +238,57 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 
 		for(FSTNode leftNode : leftAddedNodes) {
 			for(FSTNode rightNode : rightAddedNodes) {
-// TODO: remove! algorithm
-//				leftGlobalVariables = getGlobalVariables(leftNode)
-//				rightGlobalVariables = getGlobalVariables(rightNode)
-//				commonGlobalVariables = leftGlobalVariables.remove(rightGlobalVariables)
-		//
-//				if !commonGlobalVariables.isEmpty()
-//					commonVariablesMap.put(leftNode, addToList(rightNode))
+				String leftContent = ((FSTTerminal) leftNode).getBody();
+				String rightContent = ((FSTTerminal) rightNode).getBody();
+
+				List<String> leftGlobalVariables = getGlobalVariables(leftContent);
+				List<String> rightGlobalVariables = getGlobalVariables(rightContent);
+			    
+				leftGlobalVariables.removeAll(rightGlobalVariables);
+		
+				if(!leftGlobalVariables.isEmpty()) {
+					if(commonVarsNodesMap.get(leftNode) != null) {
+						commonVarsNodesMap.get(leftNode).add(rightNode);
+					} else {
+						List<FSTNode> rightNodes = new ArrayList<FSTNode>();
+						rightNodes.add(rightNode);
+						commonVarsNodesMap.put(leftNode, rightNodes);
+					}
+				}
 			}
 		}
-		
 		
        return commonVarsNodesMap;
 	}
 	
-// TODO: remove! algorithm
-//List<Var> getGlobalVariables(node)
-//	for line in node.getLines() 
-//		if(line.isVarAssignment() and !line.isLocalVarDeclarationOrAssignment())
-//			nodeGlobalVariables.add(line.getVar())
-//	return nodeGlobalVariables
+	private List<String> getGlobalVariables(String nodeContent) {
+		
+		List<String> nodeContentLines = Arrays.asList(nodeContent.split(LINE_BREAKER_REGEX));
+		List<String> nodeGlobalVars = new ArrayList<String>();
+		
+		Pattern pattern = Pattern.compile(LOCAL_VAR_DECLARATION_REGEX);
+		List<String> localVars = new ArrayList<String>();
+
+		for(String line : nodeContentLines) {
+			Matcher matcher = pattern.matcher(line);
+			if(matcher.matches()) 
+				localVars.add(matcher.group(1));
+		}
+		
+		pattern = Pattern.compile(VAR_ASSIGNMENT_SET_REGEX);
+		for(String line : nodeContentLines) {
+			Matcher matcher = pattern.matcher(line);
+			String varName = matcher.group(1);
+			if(matcher.matches() && localVars.contains(varName))
+				nodeGlobalVars.add(varName);
+		}
+		
+		return nodeGlobalVars;
+	}
 	
 	private void mergeDependentAddedNodesAndUpdateAST(MergeContext context, Map<FSTNode, List<FSTNode>>
 		commonVarsNodesMap) throws TextualMergeException {
-		
-		
-		// TODO: remove! algorithm
-		//for leftConflict in leftConflicts
-		//leftConflictContent = leftConflict.getContent()
-		//for rightConflict in commonVariablesMap.get(leftConflict) 
-		//rightConflictContent.append(rightConflict)
-		//
-		//conflictNode = getConflictNode(leftConflictContent, rightConflictContent)
-		//finalNodes.add(conflictNode)		
-//	TODO: update implementation with new algorithm
-//		for(String variable : dependentNodes) {
-//			String baseContent = "";
-//			String mergedContent = null;
-//			FSTNode leftNode = findNodeUsesVariable(context.addedLeftNodes, variable);
-//			FSTNode rightNode = findNodeUsesVariable(context.addedRightNodes, variable);
-//			
-//			if(leftNode != null && rightNode != null) {
-//				String leftContent = ((FSTTerminal) leftNode).getBody();
-//				String rightContent = ((FSTTerminal) rightNode).getBody();
-//				
-//				mergedContent = TextualMerge.merge(leftContent, baseContent, rightContent, 
-//						JFSTMerge.isWhitespaceIgnored);
-//				
-//	            FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, mergedContent);
-//	            FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
-//	            
-//				// statistics
-//				if (mergedContent != null && mergedContent.contains(CONFLICT_MARKER)) //has conflict
-//					context.initializationBlocksConflicts++;
-//			}
-//		}
+		// TODO: implement this
 	}
 	
 	private InitializationBlocksHandlerNode getEditedNodeByBaseNode(List<InitializationBlocksHandlerNode> nodesList,
