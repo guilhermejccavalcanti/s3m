@@ -8,6 +8,7 @@ import java.util.Comparator;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
@@ -51,21 +52,18 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
         List<FSTNode> rightNodes = findInitializationBlocks(context.addedRightNodes);
         List<FSTNode> baseNodes = findInitializationBlocks(context.deletedBaseNodes);
 
-        Pair<List<InitializationBlocksHandlerNode>, List<InitializationBlocksHandlerNode>> editedNodesPair =
-        		selectEditedNodes(leftNodes, baseNodes, rightNodes);
-        
-        List<InitializationBlocksHandlerNode> leftEditedNodes = editedNodesPair.getLeft();
-        List<InitializationBlocksHandlerNode> rightEditedNodes = editedNodesPair.getRight();
+        Map<FSTNode, FSTNode> baseLeftEditedNodesMap = selectEditedNodes(leftNodes, baseNodes);
+        Map<FSTNode, FSTNode> baseRightEditedNodesMap = selectEditedNodes(rightNodes, baseNodes);
 
         Pair<List<FSTNode>, List<FSTNode>> addedNodes = selectAddedNodes(leftNodes, baseNodes, rightNodes,
-        		leftEditedNodes, rightEditedNodes);
+        		baseLeftEditedNodesMap.keySet(), baseRightEditedNodesMap.keySet());
        
         Pair<List<FSTNode>, List<FSTNode>> deletedNodes = selectDeletedNodes(leftNodes, baseNodes, rightNodes,
-        		leftEditedNodes, rightEditedNodes);
+        		baseLeftEditedNodesMap.keySet(), baseRightEditedNodesMap.keySet());
         
     	for(FSTNode baseNode : baseNodes) {
-    		InitializationBlocksHandlerNode leftNode = getEditedNodeByBaseNode(leftEditedNodes, baseNode);
-    		InitializationBlocksHandlerNode rightNode = getEditedNodeByBaseNode(rightEditedNodes, baseNode);
+    		FSTNode leftNode = baseLeftEditedNodesMap.get(baseNode);
+    		FSTNode rightNode = baseRightEditedNodesMap.get(baseNode);
     		
     		mergeContentAndUpdateAST(leftNode, baseNode, rightNode, context, deletedNodes);
     	}
@@ -76,10 +74,10 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     		mergeDependentAddedNodesAndUpdateAST(context, commonVarsNodesMap);
     }
 	
-    private List<InitializationBlocksHandlerNode> defineEditedNodes(List<FSTNode> addedCandidates,
+    private Map<FSTNode, FSTNode> defineEditedNodes(List<FSTNode> addedCandidates,
     		List<FSTNode> deletedCandidates) {
     	
-    	List<InitializationBlocksHandlerNode> editedNodes = new ArrayList<InitializationBlocksHandlerNode>();
+    	Map<FSTNode, FSTNode> baseEditedNodesMap = new HashMap<FSTNode, FSTNode>();
 
     	for(FSTNode node : addedCandidates) {
     		Pair<FSTNode, Double> maxInsertionPair = maxInsertionLevel(node, deletedCandidates);
@@ -87,22 +85,19 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     		FSTNode baseNode = getBaseNode(maxInsertionPair, maxSimilarityPair);
     		
     		if(baseNode != null && (maxInsertionPair.getValue() > 0.7 || maxSimilarityPair.getValue() > 0.5)) {
-    			InitializationBlocksHandlerNode editedNode;
-    				editedNode = new InitializationBlocksHandlerNode(baseNode, node);
-    			editedNodes.add(editedNode);
+    			baseEditedNodesMap.put(baseNode, node);
     		}
     	}
     	
-    	return editedNodes;
+    	return baseEditedNodesMap;
     }
 
-	private void mergeContentAndUpdateAST(InitializationBlocksHandlerNode leftNode, FSTNode baseNode,
-			InitializationBlocksHandlerNode rightNode, MergeContext context, 
+	private void mergeContentAndUpdateAST(FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, MergeContext context, 
 			Pair<List<FSTNode>,List<FSTNode>> deletedNodes) throws TextualMergeException {
 		
 		String baseContent = ((FSTTerminal) baseNode).getBody();
-		String leftContent = (leftNode != null) ? ((FSTTerminal) leftNode.getEditedNode()).getBody() : "";
-		String rightContent = (rightNode != null) ? ((FSTTerminal) rightNode.getEditedNode()).getBody() : "";
+		String leftContent = (leftNode != null) ? ((FSTTerminal) leftNode).getBody() : "";
+		String rightContent = (rightNode != null) ? ((FSTTerminal) rightNode).getBody() : "";
 
 		if(leftNode != null && rightNode != null) {
 			// both branches edited the node
@@ -142,67 +137,55 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 	}
 	
 
-	private Pair<List<InitializationBlocksHandlerNode>, List<InitializationBlocksHandlerNode>> selectEditedNodes
-		(List<FSTNode> leftNodes, List<FSTNode> baseNodes, List<FSTNode> rightNodes) {
+	private Map<FSTNode, FSTNode> selectEditedNodes (List<FSTNode> branchNodes, List<FSTNode> baseNodes) {
     	
     	// Finding deleted candidates
-    	List<FSTNode> leftDeletedCandidates = removeContainedNodesFromList(baseNodes, leftNodes);
-    	List<FSTNode> rightDeletedCandidates = removeContainedNodesFromList(baseNodes, rightNodes);
+    	List<FSTNode> branchDeletedCandidates = removeContainedNodesFromList(baseNodes, branchNodes);
 
     	// Finding added candidates
-    	List<FSTNode> leftAddedCandidates = removeContainedNodesFromList(leftNodes, baseNodes);
-    	List<FSTNode> rightAddedCandidates = removeContainedNodesFromList(rightNodes, baseNodes);
+    	List<FSTNode> branchAddedCandidates = removeContainedNodesFromList(branchNodes, baseNodes);
     	
     	// Defining edited nodes by similarity and/or insertion level
-    	List<InitializationBlocksHandlerNode> leftEditedNodes = defineEditedNodes(leftAddedCandidates,
-    			leftDeletedCandidates);
+    	Map<FSTNode, FSTNode> branchEditedNodes = defineEditedNodes(branchAddedCandidates,
+    			branchDeletedCandidates);
     			
-    	List<InitializationBlocksHandlerNode> rightEditedNodes = defineEditedNodes(rightAddedCandidates,
-    			rightDeletedCandidates);
-    	
-    	return Pair.of(leftEditedNodes, rightEditedNodes);
+    	return branchEditedNodes;
     }
 	
 	private Pair<List<FSTNode>, List<FSTNode>> selectDeletedNodes(List<FSTNode> leftNodes, List<FSTNode> baseNodes,
-			List<FSTNode> rightNodes, List<InitializationBlocksHandlerNode> leftEditedNodes, 
-			List<InitializationBlocksHandlerNode> rightEditedNodes) {
+			List<FSTNode> rightNodes, Set<FSTNode> leftEditedNodes, Set<FSTNode> rightEditedNodes) {
 		
 		// Finding deleted candidates
     	List<FSTNode> leftDeletedCandidates = removeContainedNodesFromList(baseNodes, leftNodes);
     	List<FSTNode> rightDeletedCandidates = removeContainedNodesFromList(baseNodes, rightNodes);
     	
       	// Defining deleted nodes removing edited ones from the candidates list
-    	List<FSTNode> leftDeletedNodes = removeContainedNodesFromList(leftDeletedCandidates,
-    			getBaseNodes(leftEditedNodes));
-    	List<FSTNode> rightDeletedNodes = removeContainedNodesFromList(rightDeletedCandidates,
-    			getBaseNodes(rightEditedNodes));
+    	List<FSTNode> leftDeletedNodes = removeContainedNodesFromList(leftDeletedCandidates, leftEditedNodes);
+    	List<FSTNode> rightDeletedNodes = removeContainedNodesFromList(rightDeletedCandidates, rightEditedNodes);
     	
     	return Pair.of(leftDeletedNodes, rightDeletedNodes);
 	}
 	
 	private Pair<List<FSTNode>, List<FSTNode>> selectAddedNodes(List<FSTNode> leftNodes, List<FSTNode> baseNodes,
-			List<FSTNode> rightNodes, List<InitializationBlocksHandlerNode> leftEditedNodes, 
-			List<InitializationBlocksHandlerNode> rightEditedNodes) {
+			List<FSTNode> rightNodes, Set<FSTNode> leftEditedNodes, Set<FSTNode> rightEditedNodes) {
     	
 		// Finding added candidates
     	List<FSTNode> leftAddedCandidates = removeContainedNodesFromList(leftNodes, baseNodes);
     	List<FSTNode> rightAddedCandidates = removeContainedNodesFromList(rightNodes, baseNodes);
     	
      	// Defining added nodes removing edited ones from the candidates list
-    	List<FSTNode> leftAddedNodes = removeContainedNodesFromList(leftAddedCandidates,
-    			getBaseNodes(leftEditedNodes));
-    	List<FSTNode> rightAddedNodes = removeContainedNodesFromList(rightAddedCandidates,
-    			getBaseNodes(rightEditedNodes));
+    	List<FSTNode> leftAddedNodes = removeContainedNodesFromList(leftAddedCandidates, leftEditedNodes);
+    	List<FSTNode> rightAddedNodes = removeContainedNodesFromList(rightAddedCandidates, rightEditedNodes);
     	
     	return Pair.of(leftAddedNodes, rightAddedNodes);
 	}
 	
 	private void mergeDeletedEditedContentAndUpdateAST(MergeContext context, FSTNode baseNode,
-			List<FSTNode> deletedNodes, InitializationBlocksHandlerNode node, boolean isLeftNode) 
+			List<FSTNode> deletedNodes, FSTNode node, boolean isLeftNode) 
 					throws TextualMergeException {
 		
 		String baseContent = ((FSTTerminal) baseNode).getBody();
-		String editedNodeContent = ((FSTTerminal) node.getEditedNode()).getBody();
+		String editedNodeContent = ((FSTTerminal) node).getBody();
 		String otherNodeContent = baseContent;
 		
 		if(containsNode(deletedNodes, baseNode)) {
@@ -278,8 +261,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		pattern = Pattern.compile(VAR_ASSIGNMENT_SET_REGEX);
 		for(String line : nodeContentLines) {
 			Matcher matcher = pattern.matcher(line);
-			String varName = matcher.group(1);
-			if(matcher.matches() && localVars.contains(varName))
+			String varName = matcher.matches() ? matcher.group(1) : "";
+			if(!varName.isEmpty() && localVars.contains(varName))
 				nodeGlobalVars.add(varName);
 		}
 		
@@ -290,28 +273,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		commonVarsNodesMap) throws TextualMergeException {
 		// TODO: implement this
 	}
-	
-	private InitializationBlocksHandlerNode getEditedNodeByBaseNode(List<InitializationBlocksHandlerNode> nodesList,
-			FSTNode baseNode) {
-		
-		List<InitializationBlocksHandlerNode> nodes = nodesList.stream().filter(node -> node.getBaseNode()
-				.equals(baseNode))
-				.collect(Collectors.toList());
-		
-		if(!nodes.isEmpty())
-			return nodes.get(0);
-		else 
-			return null;
-	}
-    
-    private List<FSTNode> getBaseNodes(List<InitializationBlocksHandlerNode> initializationHandlerNodes) {
-    	
-    	return initializationHandlerNodes.stream().collect(Collectors.mapping(InitializationBlocksHandlerNode
-    			::getBaseNode,
-				Collectors.toList()));
-    }
 
-    private List<FSTNode> removeContainedNodesFromList(Collection<FSTNode> nodesList, 
+	private List<FSTNode> removeContainedNodesFromList(Collection<FSTNode> nodesList, 
     		Collection<FSTNode> nodesToCheck) {
     	
     	return nodesList.stream().filter(node -> !containsNode(nodesToCheck, node)).collect(Collectors.toList());
@@ -462,32 +425,5 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
         	baseVar = matcher.group();
 
         return baseVar;
-	}
-}
-
-class InitializationBlocksHandlerNode {
-	
-	private FSTNode baseNode;
-	private FSTNode editedNode;
-
-	public InitializationBlocksHandlerNode(FSTNode baseNode, FSTNode editedNode) {
-		this.baseNode = baseNode;
-		this.editedNode = editedNode;
-	}
-
-	public FSTNode getBaseNode() {
-		return baseNode;
-	}
-
-	public void setBaseNode(FSTNode baseNode) {
-		this.baseNode = baseNode;
-	}
-
-	public FSTNode getEditedNode() {
-		return editedNode;
-	}
-
-	public void setEditedNode(FSTNode editedNode) {
-		this.editedNode = editedNode;
 	}
 }
