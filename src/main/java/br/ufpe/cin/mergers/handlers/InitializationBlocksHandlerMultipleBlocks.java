@@ -28,8 +28,7 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
 /**
  * As in semistructured merge the ID is used for matching the nodes and initialization blocks don't have it, during
  * the superimposition of these blocks they are duplicated. This handler matches the nodes mainly by the level of
- * content insertion compared to the blocks on base, also checking for possible dependency between blocks and solving 
- * variable renaming conflicts.
+ * content insertion compared to the blocks on base and checking for possible dependency between blocks.
  * 
  *  @author Alice Borner
  *  
@@ -108,11 +107,6 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		    String mergedContent = TextualMerge.merge(leftContent, baseContent, rightContent, 
 					JFSTMerge.isWhitespaceIgnored);
 		    
-			if (mergedContent != null && mergedContent.contains(CONFLICT_MARKER)) {
-				// there is a conflict, check if it's only a renaming conflict to fix it
-				mergedContent = checkVariableRenamingConflict(mergedContent, baseContent);
-			} 
-            
             FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, mergedContent);
             FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
             
@@ -413,65 +407,4 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	
     	return baseNode;
     }
-
-    // TODO: improve implementation to be more general
-    private String checkVariableRenamingConflict(String mergedContent, String baseContent) {
-    	
-		String beforeConflict = StringUtils.substringBefore(mergedContent, CONLFICT_MINE);
-		String afterConflict = StringUtils.substringAfter(mergedContent, CONFLICT_YOURS);
-		String conflictContent = StringUtils.substringBetween(mergedContent, beforeConflict, afterConflict).trim();
-		
-		String leftContent = StringUtils.substringBetween(mergedContent, CONLFICT_MINE, CONFLICTS_SEPARATOR).trim();
-		String rightContent = StringUtils.substringBetween(mergedContent, CONFLICTS_SEPARATOR, CONFLICT_YOURS).trim();
-
-		/**
-		 * parts[1] contains the name of the variable and parts[3] the content to be compared later if 
-		 * one branch changed only the name and the other the content. 
-		 */
-		String[] leftParts = leftContent.split(" ");
-		String[] rightParts = rightContent.split(" ");
-		
-		String baseVarLeft = findVarInBaseContent(leftParts[0] + ".*" + leftParts[1] + ".*;", baseContent);
-		String baseVarRight = findVarInBaseContent(rightParts[0] + ".*" + rightParts[1] + ".*;", baseContent);
-		
-		if(baseVarLeft != null || baseVarRight != null) {
-			// variable from left or right was found in base
-			
-		    String baseVarContent = baseVarLeft != null ? baseVarLeft : baseVarRight;
-			String[] baseParts = baseVarContent.split(" ");
-			String newVarContent = "";
-			
-			// if variable name from base and left is the same and value from base and right is the same
-			if(isNameAndContentChangedByDifferentBranches(baseParts, leftParts, rightParts)) 
-				newVarContent = leftParts[0] + " " + rightParts[1] + " " + leftParts[2] + " " + leftParts[3];
-			
-			if(isNameAndContentChangedByDifferentBranches(baseParts, rightParts, leftParts)) 
-				newVarContent = leftParts[0] + " " + leftParts[1] + " " + leftParts[2] + " " + rightParts[3];
-			
-			if(!newVarContent.isEmpty())
-				mergedContent = mergedContent.replace(conflictContent, newVarContent);
-		}
-		
-		return mergedContent;
-	}
-	
-	private boolean isNameAndContentChangedByDifferentBranches(String[] baseParts, String[] nameDiffBranch,
-			String[] contentDiffBranch) {
-		
-		return baseParts[1].equals(nameDiffBranch[1]) && baseParts[3].equals(contentDiffBranch[3])
-				&& !baseParts[1].equals(contentDiffBranch[1]) && !baseParts[3].equals(nameDiffBranch[3]);
-	}
-	
-	private String findVarInBaseContent(String varRegex, String baseContent) {
-		
-		Pattern pattern = Pattern.compile(varRegex);
-        Matcher matcher = pattern.matcher(baseContent);
-        
-        String baseVar = null;
-        
-        if(matcher.find()) 
-        	baseVar = matcher.group();
-
-        return baseVar;
-	}
 }
