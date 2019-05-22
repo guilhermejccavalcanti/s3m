@@ -221,9 +221,10 @@ public class InitializationBlocksHandlerMultipleBlocksTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{static{intvar_a=1;intvar_b=2;intvar_c=3;for(inti=0;i<5;i++)"
-				+ "{System.out.println(\"Índice\"+i);}}static{inta=7;intb=8;intc=9;}}");
-		assertThat(ctx.initializationBlocksConflicts).isZero();
+		assertThat(mergeResult).contains("publicclassTest{static{<<<<<<<MINEintvar_a=1;intvar_b=2;intvar_c=3;======="
+				+ "inta=1;intb=2;intc=3;for(inti=0;i<5;i++){System.out.println(\"Índice\"+i);}>>>>>>>YOURS}"
+				+ "static{inta=7;intb=8;intc=9;}}");
+		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 	
 	@Test
@@ -237,24 +238,6 @@ public class InitializationBlocksHandlerMultipleBlocksTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
 		assertThat(mergeResult).contains("publicclassTest{static{inta=1;intb=2;intc=3;intd=4;}static{intd=4;inte=5;intf=6;}}");
-		assertThat(ctx.initializationBlocksConflicts).isZero();
-	}
-	
-	@Test
-	public void testInitializationBlocksMultipleBlocksReorderingWithVariableRenamingConflict() {
-		MergeContext ctx = 	merge.mergeFiles(
-				new File("testfiles/initlblocksnewapproach/multipleblocksreorderingwithvariablerenamingconflict/"
-						+ "left/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/multipleblocksreorderingwithvariablerenamingconflict/"
-						+ "base/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/multipleblocksreorderingwithvariablerenamingconflict/"
-						+ "right/Test.java"), 
-				null);
-		
-		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
-
-		assertThat(mergeResult).contains("publicclassTest{static{intvar_d=5;inte=5;intf=6;}static{inta=1;intb=2;"
-				+ "intc=3;}}");
 		assertThat(ctx.initializationBlocksConflicts).isZero();
 	}
 	
@@ -285,8 +268,8 @@ public class InitializationBlocksHandlerMultipleBlocksTest {
 		
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("publicclassTest{static{intvar_a=4;}}");
-		assertThat(ctx.initializationBlocksConflicts).isZero();
+		assertThat(mergeResult).contains("publicclassTest{static{<<<<<<<MINEinta=4;=======intvar_a=3;>>>>>>>YOURS}}");
+		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 	
 	@Test
@@ -307,17 +290,4 @@ public class InitializationBlocksHandlerMultipleBlocksTest {
 		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
 	
-	@Test 
-	public void testInitializationBlocksRenamingVariablesConflictSolving() {
-		MergeContext ctx = 	merge.mergeFiles(
-				new File("testfiles/initlblocksnewapproach/multipleblocksrenamingvariables/left/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/multipleblocksrenamingvariables/base/Test.java"), 
-				new File("testfiles/initlblocksnewapproach/multipleblocksrenamingvariables/right/Test.java"), 
-				null);
-		
-		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
-
-		assertThat(mergeResult).contains("publicclassTest{static{intvar_a=4;intb=2;}static{intc=2;intvar_d=0;}}");
-		assertThat(ctx.initializationBlocksConflicts).isZero();
-	}
 }
