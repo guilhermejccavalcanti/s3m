@@ -6,6 +6,7 @@ import java.util.Collection;
 import java.util.Collections;
 import java.util.Comparator;
 import java.util.HashMap;
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Set;
@@ -35,10 +36,11 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  */
 public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandler {
     
+	// identifiers and regex 
     private final static String INITIALIZATION_BLOCK_IDENTIFIER = "InitializerDecl";	
     private final static String LINE_BREAKER_REGEX = "\\r\\n(\\t)*";
-    private final static String LOCAL_VAR_DECLARATION_REGEX = "^[a-zA-Z_$][a-zA-Z_$0-9]* ([a-zA-Z_$][a-zA-Z_$0-9]*)( *=.*)?;$";
-    private final static String VAR_ASSIGNMENT_SET_REGEX = "^([a-zA-Z_$][a-zA-Z_$0-9]*) ?(=|\\.set).*;$";
+    private final static String VAR_DECLARATION_ASSIGNMENT_REGEX = "^([a-zA-Z_$][a-zA-Z_$0-9]*)? "
+    		+ "*([a-zA-Z_$][a-zA-Z_$0-9]*) *(=|\\.set) *(.*)?;$";
     
     // conflict markers
     private final static String CONFLICT_MARKER = "<<<<<<<";
@@ -68,10 +70,11 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     		mergeContentAndUpdateAST(leftNode, baseNode, rightNode, context, deletedNodes);
     	}
 
-    	// there are static global variables and left/right added blocks, so could be the case of a dependency
     	Map<FSTNode, List<FSTNode>> commonVarsNodesMap = getCommonAccessGlobalVariablesNodes(addedNodes);
-    	if(!commonVarsNodesMap.isEmpty())
+    	if(!commonVarsNodesMap.isEmpty()) {
+    		// there are common global variables being used by left and right added blocks
     		mergeDependentAddedNodesAndUpdateAST(context, commonVarsNodesMap);
+    	}
     }
 	
     private Map<FSTNode, FSTNode> defineEditedNodes(List<FSTNode> addedCandidates,
@@ -113,9 +116,9 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
             FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, mergedContent);
             FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
             
-    		if (mergedContent.contains(CONFLICT_MARKER)) {
-    			context.initializationBlocksConflicts++;
-    		}
+            if (mergedContent.contains(CONFLICT_MARKER)) {
+            	context.initializationBlocksConflicts++;
+            }
             
         } else if(leftNode == null && rightNode == null) {
         	// any branch edited the node, delete one of the nodes content to don't have duplicates
@@ -135,7 +138,6 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 			}
         }
 	}
-	
 
 	private Map<FSTNode, FSTNode> selectEditedNodes (List<FSTNode> branchNodes, List<FSTNode> baseNodes) {
     	
@@ -218,18 +220,21 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		Map<FSTNode,List<FSTNode>> commonVarsNodesMap = new HashMap<>();
 		List<FSTNode> leftAddedNodes = addedNodes.getLeft();
 		List<FSTNode> rightAddedNodes = addedNodes.getRight();
-
+ 
 		for(FSTNode leftNode : leftAddedNodes) {
-			for(FSTNode rightNode : rightAddedNodes) {
-				String leftContent = ((FSTTerminal) leftNode).getBody();
-				String rightContent = ((FSTTerminal) rightNode).getBody();
+			
+			String leftContent = ((FSTTerminal) leftNode).getBody();
+			Set<String> leftGlobalVariables = getGlobalVariables(leftContent);
 
-				List<String> leftGlobalVariables = getGlobalVariables(leftContent);
-				List<String> rightGlobalVariables = getGlobalVariables(rightContent);
+			for(FSTNode rightNode : rightAddedNodes) {
+				
+				String rightContent = ((FSTTerminal) rightNode).getBody();
+				Set<String> rightGlobalVariables = getGlobalVariables(rightContent);
 			    
-				leftGlobalVariables.removeAll(rightGlobalVariables);
+				List<String> commmonVars = leftGlobalVariables.stream().filter(c -> rightGlobalVariables.contains(c))
+						.collect(Collectors.toList());
 		
-				if(!leftGlobalVariables.isEmpty()) {
+				if(!commmonVars.isEmpty()) {
 					if(commonVarsNodesMap.get(leftNode) != null) {
 						commonVarsNodesMap.get(leftNode).add(rightNode);
 					} else {
@@ -244,34 +249,77 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
        return commonVarsNodesMap;
 	}
 	
-	private List<String> getGlobalVariables(String nodeContent) {
+	private Set<String> getGlobalVariables(String nodeContent) {
 		
 		List<String> nodeContentLines = Arrays.asList(nodeContent.split(LINE_BREAKER_REGEX));
-		List<String> nodeGlobalVars = new ArrayList<String>();
+		Set<String> nodeGlobalVars = new HashSet<String>();
+		Set<String> localVars = new HashSet<String>();
 		
-		Pattern pattern = Pattern.compile(LOCAL_VAR_DECLARATION_REGEX);
-		List<String> localVars = new ArrayList<String>();
+		Pattern varPattern = Pattern.compile(VAR_DECLARATION_ASSIGNMENT_REGEX);
 
 		for(String line : nodeContentLines) {
-			Matcher matcher = pattern.matcher(line);
-			if(matcher.matches()) 
-				localVars.add(matcher.group(1));
+			Matcher localVarMatcher = varPattern.matcher(line);
+			if(localVarMatcher.matches() && localVarMatcher.group(1) != null) 
+				localVars.add(localVarMatcher.group(2));
 		}
 		
-		pattern = Pattern.compile(VAR_ASSIGNMENT_SET_REGEX);
 		for(String line : nodeContentLines) {
-			Matcher matcher = pattern.matcher(line);
-			String varName = matcher.matches() ? matcher.group(1) : "";
-			if(!varName.isEmpty() && localVars.contains(varName))
+			Matcher varAssignmentMatcher = varPattern.matcher(line);
+
+			String varName = varAssignmentMatcher.matches() ? varAssignmentMatcher.group(2) : "";
+			String varAssignedValue = varAssignmentMatcher.matches() ? varAssignmentMatcher.group(4) : "";
+
+			if(!varName.isEmpty() && !localVars.contains(varName))
 				nodeGlobalVars.add(varName);
+			if(!varAssignedValue.isEmpty() && isVariable(varAssignedValue) && !localVars.contains(varAssignedValue))
+				nodeGlobalVars.add(varAssignedValue);
 		}
 		
 		return nodeGlobalVars;
 	}
 	
+	private boolean isVariable(String value) {
+		Pattern varPattern = Pattern.compile("[a-zA-Z_$][a-zA-Z_$0-9]*");
+		Matcher varMatcher = varPattern.matcher(value);
+		return varMatcher.matches();
+	}
+	
 	private void mergeDependentAddedNodesAndUpdateAST(MergeContext context, Map<FSTNode, List<FSTNode>>
 		commonVarsNodesMap) throws TextualMergeException {
-		// TODO: implement this
+		
+		for(FSTNode leftNode : commonVarsNodesMap.keySet()) {
+			String leftNodeContent = (leftNode != null) ? ((FSTTerminal) leftNode).getBody() : "";
+			StringBuffer rightConflictContent = new StringBuffer();
+			for(FSTNode rightNode : commonVarsNodesMap.get(leftNode)) {
+				String rightContent = (rightNode != null) ? ((FSTTerminal) rightNode).getBody() : "";
+		    	String nodeBody = StringUtils.substringBetween(rightContent, "{", "}").trim();
+				rightConflictContent.append(nodeBody);
+				FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
+			}
+			
+	    	String leftConflictContent = StringUtils.substringBetween(leftNodeContent, "{", "}").trim();
+			String mergedContent = getConflictNode(leftConflictContent, rightConflictContent.toString());
+			
+			FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftNodeContent, mergedContent);
+			
+			if (mergedContent.contains(CONFLICT_MARKER)) {
+				context.initializationBlocksConflicts++;
+			}
+		}
+	}
+	
+	private String getConflictNode(String leftConflictContent, String rightConflictContent) {
+		StringBuffer conflict = new StringBuffer();
+		
+		conflict.append("static {" + "\n");
+		conflict.append(CONLFICT_MINE + "\n");
+		conflict.append(leftConflictContent + "\n");
+		conflict.append(CONFLICTS_SEPARATOR + "\n");
+		conflict.append(rightConflictContent + "\n");
+		conflict.append(CONFLICT_YOURS + "\n");
+		conflict.append("}");
+		
+		return conflict.toString();
 	}
 
 	private List<FSTNode> removeContainedNodesFromList(Collection<FSTNode> nodesList, 
