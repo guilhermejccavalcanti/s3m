@@ -63,6 +63,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
         		baseLeftEditedNodesMap.keySet(), baseRightEditedNodesMap.keySet());
         
     	for(FSTNode baseNode : baseNodes) {
+    		
     		FSTNode leftNode = baseLeftEditedNodesMap.get(baseNode);
     		FSTNode rightNode = baseRightEditedNodesMap.get(baseNode);
     		
@@ -82,6 +83,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	Map<FSTNode, FSTNode> baseEditedNodesMap = new HashMap<FSTNode, FSTNode>();
 
     	for(FSTNode node : addedCandidates) {
+    		
     		Pair<FSTNode, Double> maxInsertionPair = maxInsertionLevel(node, deletedCandidates);
     		Pair<FSTNode, Double> maxSimilarityPair = maxSimilarity(node, deletedCandidates);
     		FSTNode baseNode = getBaseNode(maxInsertionPair, maxSimilarityPair);
@@ -133,7 +135,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
         }
 	}
 
-	private Map<FSTNode, FSTNode> selectEditedNodes (List<FSTNode> branchNodes, List<FSTNode> baseNodes) {
+	private Map<FSTNode, FSTNode> selectEditedNodes(List<FSTNode> branchNodes, List<FSTNode> baseNodes) {
     	
     	// Finding deleted candidates
     	List<FSTNode> branchDeletedCandidates = removeContainedNodesFromList(baseNodes, branchNodes);
@@ -229,6 +231,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 						.collect(Collectors.toList());
 		
 				if(!commmonVars.isEmpty()) {
+					// if left added node uses the same global variable as the right added node
 					if(commonVarsNodesMap.get(leftNode) != null) {
 						commonVarsNodesMap.get(leftNode).add(rightNode);
 					} else {
@@ -249,32 +252,50 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		Set<String> nodeGlobalVars = new HashSet<String>();
 		Set<String> localVars = new HashSet<String>();
 		
+		/* 
+		 * Compiles the regex for var assignment or declaration. 
+		 *  There are 4 groups in the regex.
+		 *  group(1) - variable type, e.g.: int, double
+		 *  group(2) - variable name
+		 *  group(3) - assignment (=) or call of set method
+		 *  group(4) - variable value
+		 */
 		Pattern varPattern = Pattern.compile(VAR_DECLARATION_ASSIGNMENT_REGEX);
 
 		for(String line : nodeContentLines) {
+			
 			Matcher localVarMatcher = varPattern.matcher(line);
-			if(localVarMatcher.matches() && localVarMatcher.group(1) != null) 
-				localVars.add(localVarMatcher.group(2));
+			String varType = localVarMatcher.matches() ? localVarMatcher.group(1) : "";
+			
+			if(varType != null && !varType.isEmpty()) {
+				String varName = localVarMatcher.group(2);
+				localVars.add(varName);
+			}
 		}
 		
 		for(String line : nodeContentLines) {
+			
 			Matcher varAssignmentMatcher = varPattern.matcher(line);
-
 			String varName = varAssignmentMatcher.matches() ? varAssignmentMatcher.group(2) : "";
 			String varAssignedValue = varAssignmentMatcher.matches() ? varAssignmentMatcher.group(4) : "";
 
-			if(!varName.isEmpty() && !localVars.contains(varName))
+			if(!varName.isEmpty() && !localVars.contains(varName)) {
 				nodeGlobalVars.add(varName);
-			if(!varAssignedValue.isEmpty() && isVariable(varAssignedValue) && !localVars.contains(varAssignedValue))
+			}
+			
+			if(!varAssignedValue.isEmpty() && isVariable(varAssignedValue) && !localVars.contains(varAssignedValue)) {
 				nodeGlobalVars.add(varAssignedValue);
+			}
 		}
 		
 		return nodeGlobalVars;
 	}
 	
 	private boolean isVariable(String value) {
+		
 		Pattern varPattern = Pattern.compile("[a-zA-Z_$][a-zA-Z_$0-9]*");
 		Matcher varMatcher = varPattern.matcher(value);
+		
 		return varMatcher.matches();
 	}
 	
@@ -282,6 +303,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		commonVarsNodesMap) throws TextualMergeException {
 		
 		for(FSTNode leftNode : commonVarsNodesMap.keySet()) {
+			
 			String leftNodeContent = (leftNode != null) ? ((FSTTerminal) leftNode).getBody() : "";
 			StringBuffer rightConflictContent = new StringBuffer();
 			for(FSTNode rightNode : commonVarsNodesMap.get(leftNode)) {
@@ -303,6 +325,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 	}
 	
 	private String getConflictNode(String leftConflictContent, String rightConflictContent) {
+		
 		StringBuffer conflict = new StringBuffer();
 		
 		conflict.append("static {" + "\n");
@@ -325,6 +348,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     private boolean containsNode(Collection<FSTNode> nodes, FSTNode node) {
     	
     	for(FSTNode listNode : nodes) {
+    		
     		String listNodeContent = (listNode != null) ? ((FSTTerminal) listNode).getBody() : "";
             String nodeContent = (node != null) ? ((FSTTerminal) node).getBody() : "";
             
@@ -336,7 +360,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     }
   
     private static List<FSTNode> findInitializationBlocks(List<FSTNode> nodes) {
-        return nodes.stream()
+       
+    	return nodes.stream()
                 .filter(p -> p.getType().equals(INITIALIZATION_BLOCK_IDENTIFIER))
                 .collect(Collectors.toList());
     }
@@ -349,7 +374,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	List<String> splitNodeContent = Arrays.asList(nodeLines.split(LINE_BREAKER_REGEX));
 
     	for(FSTNode pairNode : nodes) {
-        	String pairNodeBody = ((FSTTerminal) pairNode).getBody();
+        	
+    		String pairNodeBody = ((FSTTerminal) pairNode).getBody();
         	String pairNodeLines = StringUtils.substringBetween(pairNodeBody, "{", "}").trim();
         	List<String> splitPairNodeContent = Arrays.asList(pairNodeLines.split(LINE_BREAKER_REGEX));
         	
@@ -377,6 +403,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	Map<FSTNode, Double> nodesSimilarityLevelMap = new HashMap<>();
     	
     	for(FSTNode pairNode : nodes) {
+    		
         	String pairNodeContent = ((FSTTerminal) pairNode).getBody();
         	double similarity = FilesManager.computeStringSimilarity(nodeContent, pairNodeContent);
         	nodesSimilarityLevelMap.put(pairNode, similarity);
