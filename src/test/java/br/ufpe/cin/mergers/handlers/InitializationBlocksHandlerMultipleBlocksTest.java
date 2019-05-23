@@ -293,7 +293,7 @@ public class InitializationBlocksHandlerMultipleBlocksTest {
 	}
 	
 	@Test
-	public void testInitializationBlocksAdditionInBotBranchesDependentVarsUsingSetter() {
+	public void testInitializationBlocksAdditionInBothBranchesDependentVarsUsingSetter() {
 		MergeContext ctx = 	merge.mergeFiles(
 				new File("testfiles/initlblocksmultipleblocks/additioninbothbranchesdependentvarsusingsetter/"
 						+ "left/Test.java"), 
