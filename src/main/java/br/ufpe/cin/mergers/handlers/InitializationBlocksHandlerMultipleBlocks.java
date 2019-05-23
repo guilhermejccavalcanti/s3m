@@ -232,8 +232,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		
 				if(!commmonVars.isEmpty()) {
 					// if left added node uses the same global variable as the right added node
-					if(commonVarsNodesMap.get(leftNode) != null) {
-						commonVarsNodesMap.get(leftNode).add(rightNode);
+					if(!getNodeFromMap(leftNode, commonVarsNodesMap).isEmpty()) {
+						getNodeFromMap(leftNode, commonVarsNodesMap).add(rightNode);
 					} else {
 						List<FSTNode> rightNodes = new ArrayList<FSTNode>();
 						rightNodes.add(rightNode);
@@ -244,6 +244,14 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		}
 		
        return commonVarsNodesMap;
+	}
+	
+	private List<FSTNode> getNodeFromMap(FSTNode node, Map<FSTNode,List<FSTNode>> nodesMap) {
+		
+		FSTTerminal terminalNode = (FSTTerminal) node;
+		
+		return nodesMap.keySet().stream().filter(n -> ((FSTTerminal) n).getBody().
+				equals(terminalNode.getBody())).collect(Collectors.toList());
 	}
 	
 	private Set<String> getGlobalVariables(String nodeContent) {
@@ -394,6 +402,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	}
     	
     	FSTNode nodeMaxValue = getNodeWithHighestValue(nodesInsertionLevelMap);
+    	
     	return Pair.of(nodeMaxValue, nodesInsertionLevelMap.get(nodeMaxValue));
     }
     
@@ -410,6 +419,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	}
     	
     	FSTNode nodeMaxValue = getNodeWithHighestValue(nodesSimilarityLevelMap);
+    	
     	return Pair.of(nodeMaxValue, nodesSimilarityLevelMap.get(nodeMaxValue));
     }
     
