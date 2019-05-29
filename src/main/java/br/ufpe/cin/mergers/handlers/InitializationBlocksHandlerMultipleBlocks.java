@@ -37,7 +37,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     
 	// identifiers and regex 
     private final static String INITIALIZATION_BLOCK_IDENTIFIER = "InitializerDecl";	
-    private final static String LINE_BREAKER_REGEX = "\\r\\n(\\t)*";
+    private final static String LINE_BREAK_REGEX = "\\r?\\n\\t?";
     private final static String VAR_DECLARATION_ASSIGNMENT_REGEX = "^([a-zA-Z_$][a-zA-Z_$0-9]*)? "
     		+ "*([a-zA-Z_$][a-zA-Z_$0-9]*) *(=|\\.set) *(.*)?;$";
     
@@ -57,7 +57,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
         Map<FSTNode, FSTNode> baseRightEditedNodesMap = selectEditedNodes(rightNodes, baseNodes);
 
         Pair<List<FSTNode>, List<FSTNode>> addedNodes = selectAddedNodes(leftNodes, baseNodes, rightNodes,
-        		baseLeftEditedNodesMap.keySet(), baseRightEditedNodesMap.keySet());
+        		baseLeftEditedNodesMap.values(), baseRightEditedNodesMap.values());
        
         Pair<List<FSTNode>, List<FSTNode>> deletedNodes = selectDeletedNodes(leftNodes, baseNodes, rightNodes,
         		baseLeftEditedNodesMap.keySet(), baseRightEditedNodesMap.keySet());
@@ -69,7 +69,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     		
     		mergeContentAndUpdateAST(leftNode, baseNode, rightNode, context, deletedNodes);
     	}
-
+    	
     	Map<FSTNode, List<FSTNode>> commonVarsNodesMap = getCommonAccessGlobalVariablesNodes(addedNodes);
     	if(!commonVarsNodesMap.isEmpty()) {
     		// there are common global variables being used by left and right added blocks
@@ -151,7 +151,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     }
 	
 	private Pair<List<FSTNode>, List<FSTNode>> selectDeletedNodes(List<FSTNode> leftNodes, List<FSTNode> baseNodes,
-			List<FSTNode> rightNodes, Set<FSTNode> leftEditedNodes, Set<FSTNode> rightEditedNodes) {
+			List<FSTNode> rightNodes, Collection<FSTNode> leftEditedNodes, Collection<FSTNode> rightEditedNodes) {
 		
 		// Finding deleted candidates
     	List<FSTNode> leftDeletedCandidates = removeContainedNodesFromList(baseNodes, leftNodes);
@@ -165,7 +165,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 	}
 	
 	private Pair<List<FSTNode>, List<FSTNode>> selectAddedNodes(List<FSTNode> leftNodes, List<FSTNode> baseNodes,
-			List<FSTNode> rightNodes, Set<FSTNode> leftEditedNodes, Set<FSTNode> rightEditedNodes) {
+			List<FSTNode> rightNodes, Collection<FSTNode> leftEditedNodes, Collection<FSTNode> rightEditedNodes) {
     	
 		// Finding added candidates
     	List<FSTNode> leftAddedCandidates = removeContainedNodesFromList(leftNodes, baseNodes);
@@ -256,7 +256,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 	
 	private Set<String> getGlobalVariables(String nodeContent) {
 		
-		List<String> nodeContentLines = Arrays.asList(nodeContent.split(LINE_BREAKER_REGEX));
+		List<String> nodeContentLines = Arrays.asList(nodeContent.split(LINE_BREAK_REGEX));
 		Set<String> nodeGlobalVars = new HashSet<String>();
 		Set<String> localVars = new HashSet<String>();
 		
@@ -272,7 +272,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 
 		for(String line : nodeContentLines) {
 			
-			Matcher localVarMatcher = varPattern.matcher(line);
+			Matcher localVarMatcher = varPattern.matcher(line.trim());
 			String varType = localVarMatcher.matches() ? localVarMatcher.group(1) : "";
 			
 			if(varType != null && !varType.isEmpty()) {
@@ -283,7 +283,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		
 		for(String line : nodeContentLines) {
 			
-			Matcher varAssignmentMatcher = varPattern.matcher(line);
+			Matcher varAssignmentMatcher = varPattern.matcher(line.trim());
 			String varName = varAssignmentMatcher.matches() ? varAssignmentMatcher.group(2) : "";
 			String varAssignedValue = varAssignmentMatcher.matches() ? varAssignmentMatcher.group(4) : "";
 
@@ -367,11 +367,26 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	return false;
     }
   
-    private static List<FSTNode> findInitializationBlocks(List<FSTNode> nodes) {
+    private List<FSTNode> findInitializationBlocks(List<FSTNode> nodes) {
        
-    	return nodes.stream()
+    	List<FSTNode> listOfInitBlocks = nodes.stream()
                 .filter(p -> p.getType().equals(INITIALIZATION_BLOCK_IDENTIFIER))
                 .collect(Collectors.toList());
+    	
+    	List<FSTNode> listWithoutDuplicates = getListWithoutDuplicates(listOfInitBlocks);
+
+    	return listWithoutDuplicates;
+    }
+    
+    private List<FSTNode> getListWithoutDuplicates(List<FSTNode> listOfBlocks) {
+    	List<FSTNode> listWithoutDuplicates = new ArrayList<FSTNode>();
+    	
+    	for(FSTNode node : listOfBlocks) {
+    		if(!containsNode(listWithoutDuplicates, node))
+    			listWithoutDuplicates.add(node);
+    	}
+    	
+    	return listWithoutDuplicates;
     }
     
     private static Pair<FSTNode, Double> maxInsertionLevel(FSTNode node, List<FSTNode> nodes) {
@@ -379,13 +394,13 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	Map<FSTNode, Double> nodesInsertionLevelMap = new HashMap<>();
     	String nodeBody = ((FSTTerminal) node).getBody();
     	String nodeLines = StringUtils.substringBetween(nodeBody, "{", "}").trim();
-    	List<String> splitNodeContent = Arrays.asList(nodeLines.split(LINE_BREAKER_REGEX));
+    	List<String> splitNodeContent = Arrays.asList(nodeLines.split(LINE_BREAK_REGEX));
 
     	for(FSTNode pairNode : nodes) {
         	
     		String pairNodeBody = ((FSTTerminal) pairNode).getBody();
         	String pairNodeLines = StringUtils.substringBetween(pairNodeBody, "{", "}").trim();
-        	List<String> splitPairNodeContent = Arrays.asList(pairNodeLines.split(LINE_BREAKER_REGEX));
+        	List<String> splitPairNodeContent = Arrays.asList(pairNodeLines.split(LINE_BREAK_REGEX));
         	
         	double numOfInsertions = 0;
         	for(String content : splitNodeContent) {
