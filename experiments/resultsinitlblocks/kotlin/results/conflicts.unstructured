@@ -1,0 +1,168 @@
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b10548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a10548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c10548
+<<<<<<< MINE
+import org.jetbrains.jet.lang.CompositeErrorHandler;
+import org.jetbrains.jet.lang.ErrorHandler;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b10548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a10548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c10548
+<<<<<<< MINE
+import org.jetbrains.jet.lang.resolve.calls.CallResolver;
+import org.jetbrains.jet.lang.resolve.calls.OverloadResolutionResult;
+import org.jetbrains.jet.lang.resolve.constants.CompileTimeConstant;
+import org.jetbrains.jet.lang.resolve.constants.CompileTimeConstantResolver;
+import org.jetbrains.jet.lang.resolve.constants.ErrorValue;
+=======
+import org.jetbrains.jet.lang.resolve.constants.*;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b10548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a10548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c10548
+<<<<<<< MINE
+                    if (valueParameters != null) {
+                        type = valueParameters.get(i).getOutType();
+                    }
+                    else {
+                        context.trace.getErrorHandler().genericError(parameter.getNode(), "Cannot infer a type for this parameter. To specify it explicitly use the {(p : Type) => ...} notation");
+                        type = ErrorUtils.createErrorType("Cannot be inferred");
+                    }
+=======
+                    context.trace.getErrorHandler().genericError(parameter.getNode(), "Type inference for parameters is not implemented yet ");
+                    type = ErrorUtils.createErrorType("Not inferred");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b14428;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a14428;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c14428
+<<<<<<< MINE
+import org.jetbrains.jet.lang.cfg.pseudocode.*;
+import org.jetbrains.jet.lang.psi.*;
+import org.jetbrains.jet.plugin.AnalyzerFacade;
+=======
+import org.jetbrains.jet.lang.cfg.pseudocode.Instruction;
+import org.jetbrains.jet.lang.cfg.pseudocode.JetControlFlowDataTraceFactory;
+import org.jetbrains.jet.lang.cfg.pseudocode.JetPseudocodeTrace;
+import org.jetbrains.jet.lang.cfg.pseudocode.Pseudocode;
+import org.jetbrains.jet.lang.psi.JetElement;
+import org.jetbrains.jet.lang.psi.JetExpression;
+import org.jetbrains.jet.lang.psi.JetFile;
+import org.jetbrains.jet.lang.psi.JetNamedDeclaration;
+import org.jetbrains.jet.lang.resolve.java.AnalyzerFacade;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b07548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a07548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c07548
+<<<<<<< MINE
+    DiagnosticFactory<JetTypeProjection> PROJECTION_ON_NON_CLASS_TYPE_ARGUMENT = DiagnosticFactory.create(ERROR, "Projections are not allowed on type arguments of functions and properties"); // TODO : better positioning
+    DiagnosticFactory<JetDelegatorToSuperClass> SUPERTYPE_NOT_INITIALIZED = DiagnosticFactory.create(ERROR, "This type has a constructor, and thus must be initialized here");
+    DiagnosticFactory<JetDelegatorToSuperClass> SUPERTYPE_NOT_INITIALIZED_DEFAULT = DiagnosticFactory.create(ERROR, "Constructor invocation should be explicitly specified");
+    DiagnosticFactory<PsiElement> SECONDARY_CONSTRUCTOR_BUT_NO_PRIMARY = DiagnosticFactory.create(ERROR, "A secondary constructor may appear only in a class that has a primary constructor");
+    DiagnosticFactory<PsiElement> SECONDARY_CONSTRUCTOR_NO_INITIALIZER_LIST = DiagnosticFactory.create(ERROR, "Secondary constructors must have an initializer list");
+    DiagnosticFactory<JetDelegatorByExpressionSpecifier> BY_IN_SECONDARY_CONSTRUCTOR = DiagnosticFactory.create(ERROR, "'by'-clause is only supported for primary constructors");
+    DiagnosticFactory<JetDelegatorToSuperClass> INITIALIZER_WITH_NO_ARGUMENTS = DiagnosticFactory.create(ERROR, "Constructor arguments required");
+    DiagnosticFactory<JetDelegationSpecifier> MANY_CALLS_TO_THIS = DiagnosticFactory.create(ERROR, "Only one call to 'this(...)' is allowed");
+    DiagnosticFactory1<JetModifierListOwner, CallableMemberDescriptor> NOTHING_TO_OVERRIDE = DiagnosticFactory1.create(ERROR, "{0} overrides nothing", PositioningStrategies.POSITION_OVERRIDE_MODIFIER, DescriptorRenderer.TEXT);
+    DiagnosticFactory3<PsiNameIdentifierOwner, CallableMemberDescriptor, CallableMemberDescriptor, DeclarationDescriptor> VIRTUAL_MEMBER_HIDDEN =
+            DiagnosticFactory3.create(ERROR, "''{0}'' hides ''{1}'' in class {2} and needs 'override' modifier", PositioningStrategies.POSITION_NAME_IDENTIFIER, DescriptorRenderer.TEXT, DescriptorRenderer.TEXT, DescriptorRenderer.TEXT);
+    DiagnosticFactory3<JetModifierListOwner, CallableMemberDescriptor, CallableDescriptor, DeclarationDescriptor> CANNOT_OVERRIDE_INVISIBLE_MEMBER =
+            DiagnosticFactory3.create(ERROR, "''{0}'' cannot has no access to ''{1}'' in class {2}, so it cannot override it", PositioningStrategies.POSITION_OVERRIDE_MODIFIER, DescriptorRenderer.TEXT, DescriptorRenderer.TEXT, DescriptorRenderer.TEXT);
+    DiagnosticFactory<JetModifierListOwner> CANNOT_INFER_VISIBILITY = DiagnosticFactory.create(ERROR, "Cannot infer visibility. Please specify it explicitly", PositioningStrategies.POSITION_OVERRIDE_MODIFIER);
+=======
+    SimpleDiagnosticFactory<JetTypeProjection> PROJECTION_ON_NON_CLASS_TYPE_ARGUMENT =
+            SimpleDiagnosticFactory.create(ERROR, PositioningStrategies.PROJECTION_MODIFIER);
+    SimpleDiagnosticFactory<JetDelegatorToSuperClass> SUPERTYPE_NOT_INITIALIZED = SimpleDiagnosticFactory.create(ERROR);
+    SimpleDiagnosticFactory<JetDelegatorToSuperClass> SUPERTYPE_NOT_INITIALIZED_DEFAULT = SimpleDiagnosticFactory.create(ERROR);
+    SimpleDiagnosticFactory<PsiElement> SECONDARY_CONSTRUCTOR_BUT_NO_PRIMARY = SimpleDiagnosticFactory.create(ERROR);
+    SimpleDiagnosticFactory<PsiElement> SECONDARY_CONSTRUCTOR_NO_INITIALIZER_LIST = SimpleDiagnosticFactory.create(ERROR);
+    SimpleDiagnosticFactory<JetDelegatorByExpressionSpecifier> BY_IN_SECONDARY_CONSTRUCTOR = SimpleDiagnosticFactory.create(ERROR);
+    SimpleDiagnosticFactory<JetDelegatorToSuperClass> INITIALIZER_WITH_NO_ARGUMENTS = SimpleDiagnosticFactory.create(ERROR);
+    SimpleDiagnosticFactory<JetDelegationSpecifier> MANY_CALLS_TO_THIS = SimpleDiagnosticFactory.create(ERROR);
+    DiagnosticFactory1<JetModifierListOwner, CallableMemberDescriptor> NOTHING_TO_OVERRIDE =
+            DiagnosticFactory1.create(ERROR, PositioningStrategies.positionModifier(JetTokens.OVERRIDE_KEYWORD));
+    DiagnosticFactory3<PsiNameIdentifierOwner, CallableMemberDescriptor, CallableMemberDescriptor, DeclarationDescriptor>
+            VIRTUAL_MEMBER_HIDDEN = DiagnosticFactory3.create(ERROR, PositioningStrategies.POSITION_NAME_IDENTIFIER);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b07548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a07548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c07548
+<<<<<<< MINE
+    DiagnosticFactory2<JetBinaryExpression, JetBinaryExpression, Boolean> SENSELESS_COMPARISON = DiagnosticFactory2.create(WARNING, "Condition ''{0}'' is always ''{1}''", ELEMENT_TEXT, TO_STRING);
+
+    DiagnosticFactory2<PsiElement, CallableMemberDescriptor, DeclarationDescriptor> OVERRIDING_FINAL_MEMBER = DiagnosticFactory2.create(ERROR, "''{0}'' in ''{1}'' is final and cannot be overridden", NAME, NAME);
+    DiagnosticFactory3<JetModifierListOwner, Visibility, CallableMemberDescriptor, DeclarationDescriptor> CANNOT_WEAKEN_ACCESS_PRIVILEGE = DiagnosticFactory3.create(ERROR, "Cannot weaken access privilege ''{0}'' for ''{1}'' in ''{2}''", PositioningStrategies.POSITION_VISIBILITY_MODIFIER, TO_STRING, NAME, NAME);
+    DiagnosticFactory3<JetModifierListOwner, Visibility, CallableMemberDescriptor, DeclarationDescriptor> CANNOT_CHANGE_ACCESS_PRIVILEGE = DiagnosticFactory3.create(ERROR, "Cannot change access privilege ''{0}'' for ''{1}'' in ''{2}''", PositioningStrategies.POSITION_VISIBILITY_MODIFIER, TO_STRING, NAME, NAME);
+=======
+    DiagnosticFactory2<PsiElement, JetClassOrObject, CallableMemberDescriptor> MANY_IMPL_MEMBER_NOT_IMPLEMENTED =
+            DiagnosticFactory2.create(ERROR);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c10604
+<<<<<<< MINE
+import closurecompiler.internal.com.google.common.collect.Maps;
+=======
+import com.google.common.base.Supplier;
+import com.intellij.openapi.util.io.FileUtil;
+import gnu.trove.THashSet;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c10604
+<<<<<<< MINE
+import org.jetbrains.k2js.facade.K2JSTranslator;
+import org.mozilla.javascript.Context;
+import org.mozilla.javascript.Scriptable;
+import org.mozilla.javascript.ScriptableObject;
+=======
+import org.jetbrains.k2js.test.BasicTest;
+import org.mozilla.javascript.*;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c10604
+<<<<<<< MINE
+
+    public static final String KOTLIN_JS_LIB_COMMON = pathToTestFilesRoot() + "kotlin_lib.js";
+    private static final String KOTLIN_JS_LIB_ECMA_3 = pathToTestFilesRoot() + "kotlin_lib_ecma3.js";
+    private static final String KOTLIN_JS_LIB_ECMA_5 = pathToTestFilesRoot() + "kotlin_lib_ecma5.js";
+=======
+    private static final Set<String> IGNORED_JSLINT_WARNINGS = new THashSet<String>();
+
+    static {
+        // todo dart ast bug
+        IGNORED_JSLINT_WARNINGS.add("Unexpected space between '}' and '('.");
+        // don't read JS, use kotlin and idea debugger ;)
+        IGNORED_JSLINT_WARNINGS.add("Wrap an immediate function invocation in parentheses to assist the reader in understanding that the expression is the result of a function, and not the function itself.");
+    }
+
+    private static final RhinoFunctionManager functionManager = new RhinoFunctionManager(
+            new Supplier<String>() {
+                @Override
+                public String get() {
+                    return fileToString(BasicTest.JSLINT_LIB);
+                }
+            },
+            "JSLINT"
+    );
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c10604
+<<<<<<< MINE
+            @NotNull Context context,
+            @NotNull Scriptable scope) throws Exception {
+        FileReader reader = new FileReader(inputFile);
+        try {
+            context.evaluateReader(scope, reader, inputFile, 1, null);
+        }
+        finally {
+            reader.close();
+        }
+=======
+                                         @NotNull Context context,
+                                         @NotNull Scriptable scope) throws Exception {
+        context.evaluateString(scope, fileToString(inputFile), inputFile, 1, null);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a10604;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c10604
+<<<<<<< MINE
+    }
+
+    @NotNull
+    private static final Map<EcmaVersion, Scriptable> versionToScope = Maps.newHashMap();
+
+    @NotNull
+    public static String getKotlinLibFile(@NotNull EcmaVersion ecmaVersion) {
+        return ecmaVersion == EcmaVersion.v5 ? KOTLIN_JS_LIB_ECMA_5 : KOTLIN_JS_LIB_ECMA_3;
+    }
+
+    static void flushSystemOut(@NotNull Context context, @NotNull Scriptable scope) {
+        context.evaluateString(scope, K2JSTranslator.FLUSH_SYSTEM_OUT, "test", 0, null);
+=======
+        checker.runChecks(context, scope);
+
+        lintIt(context, fileNames.get(fileNames.size() - 1));
+
+        Context.exit();
+>>>>>>> YOURS

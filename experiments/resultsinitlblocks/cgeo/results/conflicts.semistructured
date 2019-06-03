@@ -1,0 +1,2968 @@
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19928;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19928;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19928
+<<<<<<< MINE
+//private final static Pattern patternLogs = Pattern.compile("<table class=\"LogsTable\">(.*?)</table>\\s*<p", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b09064;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a09064;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c09064
+<<<<<<< MINE
+//private final static Pattern patternLogs = Pattern.compile("<table class=\"LogsTable\">(.*?)</table>\\s*<p", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b12768;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a12768;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c12768
+<<<<<<< MINE
+=======
+//private final static Pattern patternLogs = Pattern.compile("<table class=\"LogsTable\">(.*?)</table>\\s*<p", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b20524;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a20524;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c20524
+<<<<<<< MINE
+=======
+/**
+	 * Replace the characters \n, \r and \t with a space
+	 * @param buffer The data
+	 */
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b17804;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a17804;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c17804
+<<<<<<< MINE
+=======
+/**
+	 * Replace the characters \n, \r and \t with a space
+	 * @param buffer The data
+	 */
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b16956;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a16956;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c16956
+<<<<<<< MINE
+=======
+/**
+	 * Replace the characters \n, \r and \t with a space
+	 * @param buffer The data
+	 */
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b16956;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a16956;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c16956
+<<<<<<< MINE
+public static int getIcon(boolean cache, String type, boolean own, boolean found, boolean disabled) {
+		if (gcIcons.isEmpty()) {
+			// default markers
+			gcIcons.put("ape", R.drawable.marker_cache_ape);
+			gcIcons.put("cito", R.drawable.marker_cache_cito);
+			gcIcons.put("earth", R.drawable.marker_cache_earth);
+			gcIcons.put("event", R.drawable.marker_cache_event);
+			gcIcons.put("letterbox", R.drawable.marker_cache_letterbox);
+			gcIcons.put("locationless", R.drawable.marker_cache_locationless);
+			gcIcons.put("mega", R.drawable.marker_cache_mega);
+			gcIcons.put("multi", R.drawable.marker_cache_multi);
+			gcIcons.put("traditional", R.drawable.marker_cache_traditional);
+			gcIcons.put("virtual", R.drawable.marker_cache_virtual);
+			gcIcons.put("webcam", R.drawable.marker_cache_webcam);
+			gcIcons.put("wherigo", R.drawable.marker_cache_wherigo);
+			gcIcons.put("mystery", R.drawable.marker_cache_mystery);
+			gcIcons.put("gchq", R.drawable.marker_cache_gchq);
+			// own cache markers
+			gcIcons.put("ape-own", R.drawable.marker_cache_ape_own);
+			gcIcons.put("cito-own", R.drawable.marker_cache_cito_own);
+			gcIcons.put("earth-own", R.drawable.marker_cache_earth_own);
+			gcIcons.put("event-own", R.drawable.marker_cache_event_own);
+			gcIcons.put("letterbox-own", R.drawable.marker_cache_letterbox_own);
+			gcIcons.put("locationless-own", R.drawable.marker_cache_locationless_own);
+			gcIcons.put("mega-own", R.drawable.marker_cache_mega_own);
+			gcIcons.put("multi-own", R.drawable.marker_cache_multi_own);
+			gcIcons.put("traditional-own", R.drawable.marker_cache_traditional_own);
+			gcIcons.put("virtual-own", R.drawable.marker_cache_virtual_own);
+			gcIcons.put("webcam-own", R.drawable.marker_cache_webcam_own);
+			gcIcons.put("wherigo-own", R.drawable.marker_cache_wherigo_own);
+			gcIcons.put("mystery-own", R.drawable.marker_cache_mystery_own);
+			gcIcons.put("gchq-own", R.drawable.marker_cache_gchq_own);
+			// found cache markers
+			gcIcons.put("ape-found", R.drawable.marker_cache_ape_found);
+			gcIcons.put("cito-found", R.drawable.marker_cache_cito_found);
+			gcIcons.put("earth-found", R.drawable.marker_cache_earth_found);
+			gcIcons.put("event-found", R.drawable.marker_cache_event_found);
+			gcIcons.put("letterbox-found", R.drawable.marker_cache_letterbox_found);
+			gcIcons.put("locationless-found", R.drawable.marker_cache_locationless_found);
+			gcIcons.put("mega-found", R.drawable.marker_cache_mega_found);
+			gcIcons.put("multi-found", R.drawable.marker_cache_multi_found);
+			gcIcons.put("traditional-found", R.drawable.marker_cache_traditional_found);
+			gcIcons.put("virtual-found", R.drawable.marker_cache_virtual_found);
+			gcIcons.put("webcam-found", R.drawable.marker_cache_webcam_found);
+			gcIcons.put("wherigo-found", R.drawable.marker_cache_wherigo_found);
+			gcIcons.put("mystery-found", R.drawable.marker_cache_mystery_found);
+			gcIcons.put("gchq-found", R.drawable.marker_cache_gchq_found);
+			// disabled cache markers
+			gcIcons.put("ape-disabled", R.drawable.marker_cache_ape_disabled);
+			gcIcons.put("cito-disabled", R.drawable.marker_cache_cito_disabled);
+			gcIcons.put("earth-disabled", R.drawable.marker_cache_earth_disabled);
+			gcIcons.put("event-disabled", R.drawable.marker_cache_event_disabled);
+			gcIcons.put("letterbox-disabled", R.drawable.marker_cache_letterbox_disabled);
+			gcIcons.put("locationless-disabled", R.drawable.marker_cache_locationless_disabled);
+			gcIcons.put("mega-disabled", R.drawable.marker_cache_mega_disabled);
+			gcIcons.put("multi-disabled", R.drawable.marker_cache_multi_disabled);
+			gcIcons.put("traditional-disabled", R.drawable.marker_cache_traditional_disabled);
+			gcIcons.put("virtual-disabled", R.drawable.marker_cache_virtual_disabled);
+			gcIcons.put("webcam-disabled", R.drawable.marker_cache_webcam_disabled);
+			gcIcons.put("wherigo-disabled", R.drawable.marker_cache_wherigo_disabled);
+			gcIcons.put("mystery-disabled", R.drawable.marker_cache_mystery_disabled);
+			gcIcons.put("gchq-disabled", R.drawable.marker_cache_gchq_disabled);
+		}
+
+		if (wpIcons.isEmpty()) {
+			wpIcons.put("waypoint", R.drawable.marker_waypoint_waypoint);
+			wpIcons.put("flag", R.drawable.marker_waypoint_flag);
+			wpIcons.put("pkg", R.drawable.marker_waypoint_pkg);
+			wpIcons.put("puzzle", R.drawable.marker_waypoint_puzzle);
+			wpIcons.put("stage", R.drawable.marker_waypoint_stage);
+			wpIcons.put("trailhead", R.drawable.marker_waypoint_trailhead);
+		}
+
+		int icon = -1;
+		String iconTxt = null;
+
+		if (cache) {
+			if (StringUtils.isNotBlank(type)) {
+				if (own) {
+					iconTxt = type + "-own";
+				} else if (found) {
+					iconTxt = type + "-found";
+				} else if (disabled) {
+					iconTxt = type + "-disabled";
+				} else {
+					iconTxt = type;
+				}
+			} else {
+				iconTxt = "traditional";
+			}
+
+			if (gcIcons.containsKey(iconTxt)) {
+				icon = gcIcons.get(iconTxt);
+			} else {
+				icon = gcIcons.get("traditional");
+			}
+		} else {
+			if (StringUtils.isNotBlank(type)) {
+				iconTxt = type;
+			} else {
+				iconTxt = "waypoint";
+			}
+
+			if (wpIcons.containsKey(iconTxt)) {
+				icon = wpIcons.get(iconTxt);
+			} else {
+				icon = wpIcons.get("waypoint");
+			}
+		}
+
+		return icon;
+	}
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19172
+<<<<<<< MINE
+			} else if (StringUtils.isNotBlank(geocode)) {
+=======
+				}
+			} else if (geocode != null) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b20332;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a20332;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c20332
+<<<<<<< MINE
+public cgTrackable searchTrackable(HashMap<String, String> parameters) {
+		final String geocode = parameters.get("geocode");
+		final String guid = parameters.get("guid");
+		final String id = parameters.get("id");
+		cgTrackable trackable = new cgTrackable();
+
+		if (StringUtils.isBlank(geocode) && StringUtils.isBlank(guid) && StringUtils.isBlank(id))  {
+			Log.e(cgSettings.tag, "cgeoBase.searchTrackable: No geocode nor guid nor id given");
+			return null;
+		}
+
+		final String host = "www.geocaching.com";
+		final String path = "/track/details.aspx";
+		final String method = "GET";
+		final HashMap<String, String> params = new HashMap<String, String>();
+		if (StringUtils.isNotBlank(geocode)) {
+			params.put("tracker", geocode);
+		} else if (StringUtils.isNotBlank(guid)) {
+			params.put("guid", guid);
+		} else if (StringUtils.isNotBlank(id)) {
+			params.put("id", id);
+		}
+
+		String page = requestLogged(false, host, path, method, params, false, false, false);
+
+		if (StringUtils.isBlank(page)) {
+			Log.e(cgSettings.tag, "cgeoBase.searchTrackable: No data from server");
+			return trackable;
+		}
+
+		trackable = parseTrackable(page);
+		if (trackable == null) {
+			Log.e(cgSettings.tag, "cgeoBase.searchTrackable: No trackable parsed");
+			return trackable;
+		}
+
+		return trackable;
+	}
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b03592;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a03592;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c03592
+<<<<<<< MINE
+// TODO Use android.util.Pair<Double, String> if needed rather than a Map here.
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c15020
+<<<<<<< MINE
+=======
+public Long searchByNextPage(cgSearchThread thread, Long searchId, int reason, boolean showCaptcha) {
+		final String[] viewstates = app.getViewstates(searchId);
+		cgCacheWrap caches = new cgCacheWrap();
+		String url = app.getUrl(searchId);
+
+		if (StringUtils.isBlank(url)) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByNextPage: No url found");
+			return searchId;
+		}
+
+		if (isEmpty(viewstates)) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByNextPage: No viewstate given");
+			return searchId;
+		}
+
+		String host = "www.geocaching.com";
+		String path = "/";
+		final String method = "POST";
+
+		int dash = -1;
+		if (url.indexOf("http://") > -1) {
+			url = url.substring(7);
+		}
+
+		dash = url.indexOf("/");
+		if (dash > -1) {
+			host = url.substring(0, dash);
+			url = url.substring(dash);
+		} else {
+			host = url;
+			url = "";
+		}
+
+		dash = url.indexOf("?");
+		if (dash > -1) {
+			path = url.substring(0, dash);
+		} else {
+			path = url;
+		}
+
+		final HashMap<String, String> params = new HashMap<String, String>();
+		setViewstates(viewstates, params);
+		params.put("__EVENTTARGET", "ctl00$ContentBody$pgrBottom$ctl08");
+		params.put("__EVENTARGUMENT", "");
+
+		String page = request(false, host, path, method, params, false, false, true).getData();
+		if (checkLogin(page) == false) {
+			int loginState = login();
+			if (loginState == 1) {
+				page = request(false, host, path, method, params, false, false, true).getData();
+			} else if (loginState == -3) {
+				Log.i(cgSettings.tag, "Working as guest.");
+			} else {
+				app.setError(searchId, errorRetrieve.get(loginState));
+				Log.e(cgSettings.tag, "cgeoBase.searchByNextPage: Can not log in geocaching");
+				return searchId;
+			}
+		}
+
+		if (StringUtils.isBlank(page)) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByNextPage: No data from server");
+			return searchId;
+		}
+
+		caches = parseSearch(thread, url, page, showCaptcha);
+		if (caches == null || caches.cacheList == null || caches.cacheList.isEmpty()) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByNextPage: No cache parsed");
+			return searchId;
+		}
+
+		// save to application
+		app.setError(searchId, caches.error);
+		app.setViewstates(searchId, caches.viewstates);
+
+		final ArrayList<cgCache> cacheList = new ArrayList<cgCache>();
+		for (cgCache cache : caches.cacheList) {
+			app.addGeocode(searchId, cache.geocode);
+			cacheList.add(cache);
+		}
+
+		app.addSearch(searchId, cacheList, true, reason);
+
+		return searchId;
+	}
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c15020
+<<<<<<< MINE
+=======
+public Long searchByGeocode(HashMap<String, String> parameters, int reason, boolean forceReload) {
+		final cgSearch search = new cgSearch();
+		String geocode = parameters.get("geocode");
+		String guid = parameters.get("guid");
+
+		if (StringUtils.isBlank(geocode) && StringUtils.isBlank(guid)) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByGeocode: No geocode nor guid given");
+			return null;
+		}
+
+		if (forceReload == false && reason == 0 && (app.isOffline(geocode, guid) || app.isThere(geocode, guid, true, true))) {
+			if (StringUtils.isBlank(geocode) && StringUtils.isNotBlank(guid)) {
+				geocode = app.getGeocode(guid);
+			}
+
+			ArrayList<cgCache> cacheList = new ArrayList<cgCache>();
+			cacheList.add(app.getCacheByGeocode(geocode, true, true, true, true, true, true));
+			search.addGeocode(geocode);
+
+			app.addSearch(search, cacheList, false, reason);
+
+			cacheList.clear();
+			cacheList = null;
+
+			return search.getCurrentId();
+		}
+
+		final String host = "www.geocaching.com";
+		final String path = "/seek/cache_details.aspx";
+		final String method = "GET";
+		final HashMap<String, String> params = new HashMap<String, String>();
+		if (StringUtils.isNotBlank(geocode)) {
+			params.put("wp", geocode);
+		} else if (StringUtils.isNotBlank(guid)) {
+			params.put("guid", guid);
+		}
+		params.put("decrypt", "y");
+		params.put("log", "y"); // download logs (more than 5
+		params.put("numlogs", "35"); // 35 logs
+
+		String page = requestLogged(false, host, path, method, params, false, false, false);
+
+		if (StringUtils.isEmpty(page)) {
+			if (app.isThere(geocode, guid, true, false)) {
+				if (StringUtils.isBlank(geocode) && StringUtils.isNotBlank(guid)) {
+					Log.i(cgSettings.tag, "Loading old cache from cache.");
+
+					geocode = app.getGeocode(guid);
+				}
+
+				final ArrayList<cgCache> cacheList = new ArrayList<cgCache>();
+				cacheList.add(app.getCacheByGeocode(geocode));
+				search.addGeocode(geocode);
+				search.error = null;
+				search.errorRetrieve = 0; // reset errors from previous failed request
+
+				app.addSearch(search, cacheList, false, reason);
+
+				cacheList.clear();
+
+				return search.getCurrentId();
+			}
+
+			Log.e(cgSettings.tag, "cgeoBase.searchByGeocode: No data from server");
+			return null;
+		}
+
+		final cgCacheWrap caches = parseCache(page, reason);
+		if (caches == null || caches.cacheList == null || caches.cacheList.isEmpty()) {
+			if (caches != null && StringUtils.isNotBlank(caches.error)) {
+				search.error = caches.error;
+			}
+			if (caches != null && StringUtils.isNotBlank(caches.url)) {
+				search.url = caches.url;
+			}
+
+			app.addSearch(search, null, true, reason);
+
+			Log.e(cgSettings.tag, "cgeoBase.searchByGeocode: No cache parsed");
+			return null;
+		}
+
+		if (app == null) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByGeocode: No application found");
+			return null;
+		}
+
+		final ArrayList<cgCache> cacheList = new ArrayList<cgCache>();
+		if (caches != null) {
+			if (StringUtils.isNotBlank(caches.error)) {
+				search.error = caches.error;
+			}
+			if (StringUtils.isNotBlank(caches.url)) {
+				search.url = caches.url;
+			}
+			search.viewstates = caches.viewstates;
+			search.totalCnt = caches.totalCnt;
+
+			for (cgCache cache : caches.cacheList) {
+				search.addGeocode(cache.geocode);
+				cacheList.add(cache);
+			}
+		}
+
+		app.addSearch(search, cacheList, true, reason);
+
+		page = null;
+		cacheList.clear();
+
+		return search.getCurrentId();
+	}
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c15020
+<<<<<<< MINE
+=======
+public Long searchByCoords(cgSearchThread thread, HashMap<String, String> parameters, int reason, boolean showCaptcha) {
+		final cgSearch search = new cgSearch();
+		final String latitude = parameters.get("latitude");
+		final String longitude = parameters.get("longitude");
+		cgCacheWrap caches = new cgCacheWrap();
+		String cacheType = parameters.get("cachetype");
+
+		if (StringUtils.isBlank(latitude)) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByCoords: No latitude given");
+			return null;
+		}
+
+		if (StringUtils.isBlank(longitude)) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByCoords: No longitude given");
+			return null;
+		}
+
+		if (StringUtils.isBlank(cacheType)) {
+			cacheType = null;
+		}
+
+		final String host = "www.geocaching.com";
+		final String path = "/seek/nearest.aspx";
+		final String method = "GET";
+		final HashMap<String, String> params = new HashMap<String, String>();
+		if (cacheType != null && cacheIDs.containsKey(cacheType)) {
+			params.put("tx", cacheIDs.get(cacheType));
+		} else {
+			params.put("tx", cacheIDs.get("all"));
+		}
+		params.put("lat", latitude);
+		params.put("lng", longitude);
+
+		final String url = "http://" + host + path + "?" + prepareParameters(params, false, true);
+		String page = requestLogged(false, host, path, method, params, false, false, true);
+
+		if (StringUtils.isBlank(page)) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByCoords: No data from server");
+			return null;
+		}
+
+		caches = parseSearch(thread, url, page, showCaptcha);
+		if (caches == null || caches.cacheList == null || caches.cacheList.isEmpty()) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByCoords: No cache parsed");
+		}
+
+		if (app == null) {
+			Log.e(cgSettings.tag, "cgeoBase.searchByCoords: No application found");
+			return null;
+		}
+
+		final ArrayList<cgCache> cacheList = new ArrayList<cgCache>();
+		if (caches != null) {
+			if (StringUtils.isNotBlank(caches.error)) {
+				search.error = caches.error;
+			}
+			if (StringUtils.isNotBlank(caches.url)) {
+				search.url = caches.url;
+			}
+			search.viewstates = caches.viewstates;
+			search.totalCnt = caches.totalCnt;
+
+			for (cgCache cache : caches.cacheList) {
+				if (settings.excludeDisabled == 0 || (settings.excludeDisabled == 1 && cache.disabled == false)) {
+					search.addGeocode(cache.geocode);
+					cacheList.add(cache);
+				}
+			}
+		}
+
+		app.addSearch(search, cacheList, true, reason);
+
+		return search.getCurrentId();
+	}
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c15020
+<<<<<<< MINE
+=======
+public int postLog(cgeoapplication app, String geocode, String cacheid, String[] viewstates,
+			int logType, int year, int month, int day, String log, ArrayList<cgTrackableLog> trackables) {
+		if (isEmpty(viewstates)) {
+			Log.e(cgSettings.tag, "cgeoBase.postLog: No viewstate given");
+			return 1000;
+		}
+
+		if (logTypes2.containsKey(logType) == false) {
+			Log.e(cgSettings.tag, "cgeoBase.postLog: Unknown logtype");
+			return 1000;
+		}
+
+		if (StringUtils.isBlank(log)) {
+			Log.e(cgSettings.tag, "cgeoBase.postLog: No log text given");
+			return 1001;
+		}
+
+		// fix log (non-Latin characters converted to HTML entities)
+		final int logLen = log.length();
+		final StringBuilder logUpdated = new StringBuilder();
+
+		for (int i = 0; i < logLen; i++) {
+			char c = log.charAt(i);
+
+			if (c > 300) {
+				logUpdated.append("&#");
+				logUpdated.append(Integer.toString((int) c));
+				logUpdated.append(';');
+			} else {
+				logUpdated.append(c);
+			}
+		}
+		log = logUpdated.toString();
+
+		log = log.replace("\n", "\r\n"); // windows' eol
+
+		if (trackables != null) {
+			Log.i(cgSettings.tag, "Trying to post log for cache #" + cacheid + " - action: " + logType + "; date: " + year + "." + month + "." + day + ", log: " + log + "; trackables: " + trackables.size());
+		} else {
+			Log.i(cgSettings.tag, "Trying to post log for cache #" + cacheid + " - action: " + logType + "; date: " + year + "." + month + "." + day + ", log: " + log + "; trackables: 0");
+		}
+
+		final String host = "www.geocaching.com";
+		final String path = "/seek/log.aspx?ID=" + cacheid;
+		final String method = "POST";
+		final HashMap<String, String> params = new HashMap<String, String>();
+
+		setViewstates(viewstates, params);
+		params.put("__EVENTTARGET", "");
+		params.put("__EVENTARGUMENT", "");
+		params.put("__LASTFOCUS", "");
+		params.put("ctl00$ContentBody$LogBookPanel1$ddLogType", Integer.toString(logType));
+		params.put("ctl00$ContentBody$LogBookPanel1$DateTimeLogged", String.format("%02d", month) + "/" + String.format("%02d", day) + "/" + String.format("%04d", year));
+		params.put("ctl00$ContentBody$LogBookPanel1$DateTimeLogged$Month", Integer.toString(month));
+		params.put("ctl00$ContentBody$LogBookPanel1$DateTimeLogged$Day", Integer.toString(day));
+		params.put("ctl00$ContentBody$LogBookPanel1$DateTimeLogged$Year", Integer.toString(year));
+		params.put("ctl00$ContentBody$LogBookPanel1$uxLogInfo", log);
+		params.put("ctl00$ContentBody$LogBookPanel1$LogButton", "Submit Log Entry");
+		params.put("ctl00$ContentBody$uxVistOtherListingGC", "");
+		if (trackables != null && trackables.isEmpty() == false) { //  we have some trackables to proceed
+			final StringBuilder hdnSelected = new StringBuilder();
+
+			for (cgTrackableLog tb : trackables) {
+				final String action = Integer.toString(tb.id) + logTypesTrackableAction.get(tb.action);
+
+				if (tb.action > 0) {
+					hdnSelected.append(action);
+					hdnSelected.append(',');
+				}
+			}
+
+			params.put("ctl00$ContentBody$LogBookPanel1$uxTrackables$hdnSelectedActions", hdnSelected.toString()); // selected trackables
+			params.put("ctl00$ContentBody$LogBookPanel1$uxTrackables$hdnCurrentFilter", "");
+		}
+
+		String page = request(false, host, path, method, params, false, false, false).getData();
+		if (checkLogin(page) == false) {
+			int loginState = login();
+			if (loginState == 1) {
+				page = request(false, host, path, method, params, false, false, false).getData();
+			} else {
+				Log.e(cgSettings.tag, "cgeoBase.postLog: Can not log in geocaching (error: " + loginState + ")");
+				return loginState;
+			}
+		}
+
+		if (StringUtils.isBlank(page)) {
+			Log.e(cgSettings.tag, "cgeoBase.postLog: No data from server");
+			return 1002;
+		}
+
+		// maintenance, archived needs to be confirmed
+		final Pattern pattern = Pattern.compile("<span id=\"ctl00_ContentBody_LogBookPanel1_lbConfirm\"[^>]*>([^<]*<font[^>]*>)?([^<]+)(</font>[^<]*)?</span>", Pattern.CASE_INSENSITIVE);
+		final Matcher matcher = pattern.matcher(page);
+
+		try {
+			if (matcher.find() && matcher.groupCount() > 0) {
+				final String[] viewstatesConfirm = getViewstates(page);
+
+				if (isEmpty(viewstatesConfirm)) {
+					Log.e(cgSettings.tag, "cgeoBase.postLog: No viewstate for confirm log");
+					return 1000;
+				}
+
+				params.clear();
+				setViewstates(viewstatesConfirm, params);
+				params.put("__EVENTTARGET", "");
+				params.put("__EVENTARGUMENT", "");
+				params.put("__LASTFOCUS", "");
+				params.put("ctl00$ContentBody$LogBookPanel1$btnConfirm", "Yes");
+				params.put("ctl00$ContentBody$LogBookPanel1$uxLogInfo", log);
+				params.put("ctl00$ContentBody$uxVistOtherListingGC", "");
+				if (trackables != null && trackables.isEmpty() == false) { //  we have some trackables to proceed
+					final StringBuilder hdnSelected = new StringBuilder();
+
+					for (cgTrackableLog tb : trackables) {
+						String ctl = null;
+						final String action = Integer.toString(tb.id) + logTypesTrackableAction.get(tb.action);
+
+						if (tb.ctl < 10) {
+							ctl = "0" + Integer.toString(tb.ctl);
+						} else {
+							ctl = Integer.toString(tb.ctl);
+						}
+
+						params.put("ctl00$ContentBody$LogBookPanel1$uxTrackables$repTravelBugs$ctl" + ctl + "$ddlAction", action);
+						if (tb.action > 0) {
+							hdnSelected.append(action);
+							hdnSelected.append(',');
+						}
+					}
+
+					params.put("ctl00$ContentBody$LogBookPanel1$uxTrackables$hdnSelectedActions", hdnSelected.toString()); // selected trackables
+					params.put("ctl00$ContentBody$LogBookPanel1$uxTrackables$hdnCurrentFilter", "");
+				}
+
+				page = request(false, host, path, method, params, false, false, false).getData();
+			}
+		} catch (Exception e) {
+			Log.e(cgSettings.tag, "cgeoBase.postLog.confim: " + e.toString());
+		}
+
+		try {
+			final Pattern patternOk = Pattern.compile("<h2[^>]*>[^<]*<span id=\"ctl00_ContentBody_lbHeading\"[^>]*>[^<]*</span>[^<]*</h2>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+			final Matcher matcherOk = patternOk.matcher(page);
+			if (matcherOk.find()) {
+				Log.i(cgSettings.tag, "Log successfully posted to cache #" + cacheid);
+
+				if (app != null && geocode != null) {
+					app.saveVisitDate(geocode);
+				}
+
+				return 1;
+			}
+		} catch (Exception e) {
+			Log.e(cgSettings.tag, "cgeoBase.postLog.check: " + e.toString());
+		}
+
+		Log.e(cgSettings.tag, "cgeoBase.postLog: Failed to post log because of unknown error");
+		return 1000;
+	}
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b03252;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a03252;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c03252
+<<<<<<< MINE
+// TODO Use android.util.Pair<Double, String> if needed rather than a Map here.
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b15456;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a15456;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c15456
+<<<<<<< MINE
+=======
+// TODO Use android.util.Pair<Double, String> if needed rather than a Map here.
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c09076
+<<<<<<< MINE
+=======
+public cgResponse request(final URI uri, String method, String params, int requestId, Boolean xContentType) {
+        URL u = null;
+        int httpCode = -1;
+        String httpMessage = null;
+        String httpLocation = null;
+
+        if (requestId == 0) {
+            requestId = (int) (Math.random() * 1000);
+        }
+
+        if (method == null || (method.equalsIgnoreCase("GET") == false && method.equalsIgnoreCase("POST") == false)) {
+            method = "POST";
+        } else {
+            method = method.toUpperCase();
+        }
+
+        String cookiesDone = CookieJar.getCookiesAsString(prefs);
+
+        URLConnection uc = null;
+        HttpURLConnection connection = null;
+        Integer timeout = 30000;
+        StringBuffer buffer = null;
+
+        for (int i = 0; i < 5; i++) {
+            if (i > 0) {
+                Log.w(cgSettings.tag, "Failed to download data, retrying. Attempt #" + (i + 1));
+            }
+
+            buffer = new StringBuffer();
+            timeout = 30000 + (i * 10000);
+
+            try {
+                if (method.equals("GET")) {
+                    // GET
+                    u = new URI(uri.getScheme(), uri.getAuthority(), uri.getPath(), params, null).toURL();
+                    uc = u.openConnection();
+
+                    uc.setRequestProperty("Host", uri.getHost());
+                    uc.setRequestProperty("Cookie", cookiesDone);
+                    if (xContentType) {
+                        uc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    }
+
+                    if (settings.asBrowser == 1) {
+                        uc.setRequestProperty("Accept", "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
+                        // uc.setRequestProperty("Accept-Encoding", "gzip"); // not supported via cellular network
+                        uc.setRequestProperty("Accept-Charset", "utf-8, iso-8859-1, utf-16, *;q=0.7");
+                        uc.setRequestProperty("Accept-Language", "en-US");
+                        uc.setRequestProperty("User-Agent", idBrowser);
+                        uc.setRequestProperty("Connection", "keep-alive");
+                        uc.setRequestProperty("Keep-Alive", "300");
+                    }
+
+                    connection = (HttpURLConnection) uc;
+                    connection.setReadTimeout(timeout);
+                    connection.setRequestMethod(method);
+                    HttpURLConnection.setFollowRedirects(false);
+                    connection.setDoInput(true);
+                    connection.setDoOutput(false);
+                } else {
+                    // POST
+                    u = uri.toURL();
+                    uc = u.openConnection();
+
+                    uc.setRequestProperty("Host", uri.getHost());
+                    uc.setRequestProperty("Cookie", cookiesDone);
+                    if (xContentType) {
+                        uc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                    }
+
+                    if (settings.asBrowser == 1) {
+                        uc.setRequestProperty("Accept", "application/xml,application/xhtml+xml,text/html;q=0.9,text/plain;q=0.8,image/png,*/*;q=0.5");
+                        // uc.setRequestProperty("Accept-Encoding", "gzip"); // not supported via cellular network
+                        uc.setRequestProperty("Accept-Charset", "utf-8, iso-8859-1, utf-16, *;q=0.7");
+                        uc.setRequestProperty("Accept-Language", "en-US");
+                        uc.setRequestProperty("User-Agent", idBrowser);
+                        uc.setRequestProperty("Connection", "keep-alive");
+                        uc.setRequestProperty("Keep-Alive", "300");
+                    }
+
+                    connection = (HttpURLConnection) uc;
+                    connection.setReadTimeout(timeout);
+                    connection.setRequestMethod(method);
+                    HttpURLConnection.setFollowRedirects(false);
+                    connection.setDoInput(true);
+                    connection.setDoOutput(true);
+
+                    final OutputStream out = connection.getOutputStream();
+                    final OutputStreamWriter wr = new OutputStreamWriter(out);
+                    wr.write(params);
+                    wr.flush();
+                    wr.close();
+                }
+
+                CookieJar.setCookies(prefs, uc);
+
+                InputStream ins = getInputstreamFromConnection(connection);
+                final InputStreamReader inr = new InputStreamReader(ins);
+                final BufferedReader br = new BufferedReader(inr, 16 * 1024);
+
+                readIntoBuffer(br, buffer);
+
+                httpCode = connection.getResponseCode();
+                httpMessage = connection.getResponseMessage();
+                httpLocation = uc.getHeaderField("Location");
+
+                final String paramsLog = params.replaceAll(passMatch, "password=***");
+                Log.i(cgSettings.tag + "|" + requestId, "[" + method + " " + (int) (params.length() / 1024) + "k | " + httpCode + " | " + (int) (buffer.length() / 1024) + "k] Downloaded " + uri + "?" + paramsLog);
+
+                connection.disconnect();
+                br.close();
+                ins.close();
+                inr.close();
+            } catch (IOException e) {
+                Log.e(cgSettings.tag, "cgeoBase.request.IOException", e);
+            } catch (Exception e) {
+                Log.e(cgSettings.tag, "cgeoBase.request", e);
+            }
+
+            if (buffer.length() > 0) {
+                break;
+            }
+        }
+
+        cgResponse response = new cgResponse();
+
+        try {
+            if (httpCode == 302 && httpLocation != null) {
+                final URI newLocation = uri.resolve(httpLocation);
+                response = request(newLocation,
+                        "GET", new HashMap<String, String>(), requestId, false, false, false);
+            } else {
+                if (StringUtils.isNotEmpty(buffer)) {
+                    BaseUtils.replaceWhitespace(buffer);
+                    String data = buffer.toString();
+                    buffer = null;
+
+                    if (data != null) {
+                        response.setData(data);
+                    } else {
+                        response.setData("");
+                    }
+                    response.setStatusCode(httpCode);
+                    response.setStatusMessage(httpMessage);
+                    response.setUrl(u.toString());
+                }
+            }
+        } catch (Exception e) {
+            Log.e(cgSettings.tag, "cgeoBase.page", e);
+        }
+
+        return response;
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c09076
+<<<<<<< MINE
+=======
+public String requestJSONgc(final URI uri, String params) {
+        int httpCode = -1;
+        String httpLocation = null;
+
+        final String cookiesDone = CookieJar.getCookiesAsString(prefs);
+
+        URLConnection uc = null;
+        HttpURLConnection connection = null;
+        Integer timeout = 30000;
+        final StringBuffer buffer = new StringBuffer();
+
+        for (int i = 0; i < 3; i++) {
+            if (i > 0) {
+                Log.w(cgSettings.tag, "Failed to download data, retrying. Attempt #" + (i + 1));
+            }
+
+            buffer.delete(0, buffer.length());
+            timeout = 30000 + (i * 15000);
+
+            try {
+                // POST
+                final URL u = uri.toURL();
+                uc = u.openConnection();
+
+                uc.setRequestProperty("Host", uri.getHost());
+                uc.setRequestProperty("Cookie", cookiesDone);
+                uc.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                uc.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+                uc.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
+                uc.setRequestProperty("Referer", uri.getHost() + "/" + uri.getPath());
+
+                if (settings.asBrowser == 1) {
+                    uc.setRequestProperty("Accept-Charset", "utf-8, iso-8859-1, utf-16, *;q=0.7");
+                    uc.setRequestProperty("Accept-Language", "en-US");
+                    uc.setRequestProperty("User-Agent", idBrowser);
+                    uc.setRequestProperty("Connection", "keep-alive");
+                    uc.setRequestProperty("Keep-Alive", "300");
+                }
+
+                connection = (HttpURLConnection) uc;
+                connection.setReadTimeout(timeout);
+                connection.setRequestMethod("POST");
+                HttpURLConnection.setFollowRedirects(false); // TODO: Fix these (FilCab)
+                connection.setDoInput(true);
+                connection.setDoOutput(true);
+
+                final OutputStream out = connection.getOutputStream();
+                final OutputStreamWriter wr = new OutputStreamWriter(out);
+                wr.write(params);
+                wr.flush();
+                wr.close();
+
+                CookieJar.setCookies(prefs, uc);
+
+                InputStream ins = getInputstreamFromConnection(connection);
+                final InputStreamReader inr = new InputStreamReader(ins);
+                final BufferedReader br = new BufferedReader(inr);
+
+                readIntoBuffer(br, buffer);
+
+                httpCode = connection.getResponseCode();
+                httpLocation = uc.getHeaderField("Location");
+
+                final String paramsLog = params.replaceAll(passMatch, "password=***");
+                Log.i(cgSettings.tag + " | JSON", "[POST " + (int) (params.length() / 1024) + "k | " + httpCode + " | " + (int) (buffer.length() / 1024) + "k] Downloaded " + uri.toString() + "?" + paramsLog);
+
+                connection.disconnect();
+                br.close();
+                ins.close();
+                inr.close();
+            } catch (IOException e) {
+                Log.e(cgSettings.tag, "cgeoBase.requestJSONgc.IOException: " + e.toString());
+            } catch (Exception e) {
+                Log.e(cgSettings.tag, "cgeoBase.requestJSONgc: " + e.toString());
+            }
+
+            if (buffer != null && buffer.length() > 0) {
+                break;
+            }
+        }
+
+        String page = null;
+        if (httpCode == 302 && httpLocation != null) {
+            final URI newLocation = uri.resolve(httpLocation);
+            page = requestJSONgc(newLocation, params);
+        } else {
+            BaseUtils.replaceWhitespace(buffer);
+            page = buffer.toString();
+        }
+
+        if (page != null) {
+            return page;
+        } else {
+            return "";
+        }
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c09076
+<<<<<<< MINE
+=======
+public static String requestJSON(String scheme, String host, String path, String method, String params) {
+        int httpCode = -1;
+        //String httpLocation = null;
+
+        if (method == null) {
+            method = "GET";
+        } else {
+            method = method.toUpperCase();
+        }
+
+        boolean methodPost = false;
+        if (method.equalsIgnoreCase("POST")) {
+            methodPost = true;
+        }
+
+        URLConnection uc = null;
+        HttpURLConnection connection = null;
+        Integer timeout = 30000;
+        final StringBuffer buffer = new StringBuffer();
+
+        for (int i = 0; i < 3; i++) {
+            if (i > 0) {
+                Log.w(cgSettings.tag, "Failed to download data, retrying. Attempt #" + (i + 1));
+            }
+
+            buffer.delete(0, buffer.length());
+            timeout = 30000 + (i * 15000);
+
+            try {
+                try {
+                    URL u = null;
+                    if (methodPost) {
+                        u = new URL(scheme + host + path);
+                    } else {
+                        u = new URL(scheme + host + path + "?" + params);
+                    }
+
+                    if (u.getProtocol().toLowerCase().equals("https")) {
+                        trustAllHosts();
+                        HttpsURLConnection https = (HttpsURLConnection) u.openConnection();
+                        https.setHostnameVerifier(doNotVerify);
+                        uc = https;
+                    } else {
+                        uc = (HttpURLConnection) u.openConnection();
+                    }
+
+                    uc.setRequestProperty("Host", host);
+                    uc.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
+                    if (methodPost) {
+                        uc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                        uc.setRequestProperty("Content-Length", Integer.toString(params.length()));
+                        uc.setRequestProperty("X-HTTP-Method-Override", "GET");
+                    } else {
+                        uc.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                    }
+                    uc.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+
+                    connection = (HttpURLConnection) uc;
+                    connection.setReadTimeout(timeout);
+                    connection.setRequestMethod(method);
+                    HttpURLConnection.setFollowRedirects(false); // TODO: Fix these (FilCab)
+                    connection.setDoInput(true);
+                    if (methodPost) {
+                        connection.setDoOutput(true);
+
+                        final OutputStream out = connection.getOutputStream();
+                        final OutputStreamWriter wr = new OutputStreamWriter(out);
+                        wr.write(params);
+                        wr.flush();
+                        wr.close();
+                    } else {
+                        connection.setDoOutput(false);
+                    }
+
+                    InputStream ins = getInputstreamFromConnection(connection);
+                    final InputStreamReader inr = new InputStreamReader(ins);
+                    final BufferedReader br = new BufferedReader(inr, 1024);
+
+                    readIntoBuffer(br, buffer);
+
+                    httpCode = connection.getResponseCode();
+
+                    final String paramsLog = params.replaceAll(passMatch, "password=***");
+                    Log.i(cgSettings.tag + " | JSON", "[POST " + (int) (params.length() / 1024) + "k | " + httpCode + " | " + (int) (buffer.length() / 1024) + "k] Downloaded " + "http://" + host + path + "?" + paramsLog);
+
+                    connection.disconnect();
+                    br.close();
+                    ins.close();
+                    inr.close();
+                } catch (IOException e) {
+                    httpCode = connection.getResponseCode();
+
+                    Log.e(cgSettings.tag, "cgeoBase.requestJSON.IOException: " + httpCode + ": " + connection.getResponseMessage() + " ~ " + e.toString());
+                }
+            } catch (Exception e) {
+                Log.e(cgSettings.tag, "cgeoBase.requestJSON: " + e.toString());
+            }
+
+            if (StringUtils.isNotBlank(buffer)) {
+                break;
+            }
+
+            if (httpCode == 403) {
+                // we're not allowed to download content, so let's move
+                break;
+            }
+        }
+
+        String page = null;
+        //This is reported as beeing deadCode (httpLocation is always null)
+        //2011-08-09 - 302 is redirect so something should probably be done
+        /*
+         * if (httpCode == 302 && httpLocation != null) {
+         * final Uri newLocation = Uri.parse(httpLocation);
+         * if (newLocation.isRelative()) {
+         * page = requestJSONgc(host, path, params);
+         * } else {
+         * page = requestJSONgc(newLocation.getHost(), newLocation.getPath(), params);
+         * }
+         * } else {
+         */
+        BaseUtils.replaceWhitespace(buffer);
+        page = buffer.toString();
+        //}
+
+        if (page != null) {
+            return page;
+        } else {
+            return "";
+        }
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c09076
+<<<<<<< MINE
+// viewport is defined by center, span and some (10%) reserve on every side
+    /**
+     * Check if coordinates are located in a viewport (defined by its center and span
+     * in each direction). The viewport also includes a 10% extension on each side.
+     *
+     * @param centerLat
+     *            the viewport center latitude
+     * @param centerLon
+     *            the viewport center longitude
+     * @param spanLat
+     *            the latitude span
+     * @param spanLon
+     *            the longitude span
+     * @param coords
+     *            the coordinates to check
+     * @return true if the coordinates are in the viewport
+     */
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b21236;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a21236;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c21236
+<<<<<<< MINE
+public static cgCacheWrap parseCache(final String page, final int reason) {
+        if (StringUtils.isBlank(page)) {
+            Log.e(Settings.tag, "cgeoBase.parseCache: No page given");
+            return null;
+        }
+
+        final cgCacheWrap caches = new cgCacheWrap();
+        final cgCache cache = new cgCache();
+
+        if (page.contains("Cache is Unpublished")) {
+            caches.error = StatusCode.UNPUBLISHED_CACHE;
+            return caches;
+        }
+
+        if (page.contains("Sorry, the owner of this listing has made it viewable to Premium Members only.")) {
+            caches.error = StatusCode.PREMIUM_ONLY;
+            return caches;
+        }
+
+        if (page.contains("has chosen to make this cache listing visible to Premium Members only.")) {
+            caches.error = StatusCode.PREMIUM_ONLY;
+            return caches;
+        }
+
+        cache.disabled = page.contains("<li>This cache is temporarily unavailable.");
+
+        cache.archived = page.contains("<li>This cache has been archived,");
+
+        cache.members = page.contains("<p class=\"Warning\">This is a Premium Member Only cache.</p>");
+
+        cache.reason = reason;
+
+        // cache geocode
+        cache.geocode = BaseUtils.getMatch(page, Constants.PATTERN_GEOCODE, 1, cache.geocode);
+
+        // cache id
+        cache.cacheId = BaseUtils.getMatch(page, Constants.PATTERN_CACHEID, 1, cache.cacheId);
+
+        // cache guid
+        cache.guid = BaseUtils.getMatch(page, Constants.PATTERN_GUID, 1, cache.guid);
+
+        // name
+        cache.name = Html.fromHtml(BaseUtils.getMatch(page, Constants.PATTERN_NAME, 1, cache.name)).toString();
+
+        // owner real name
+        // URLDecoder.decode() neccessary here ?
+        cache.ownerReal = URLDecoder.decode(BaseUtils.getMatch(page, Constants.PATTERN_OWNERREAL, 1, cache.ownerReal));
+
+        final String username = Settings.getUsername();
+        if (cache.ownerReal != null && username != null && cache.ownerReal.equalsIgnoreCase(username)) {
+            cache.own = true;
+        }
+
+        int pos = -1;
+        String tableInside = page;
+
+        pos = tableInside.indexOf("id=\"cacheDetails\"");
+        if (pos == -1) {
+            Log.e(Settings.tag, "cgeoBase.parseCache: ID \"cacheDetails\" not found on page");
+            return null;
+        }
+
+        tableInside = tableInside.substring(pos);
+
+        pos = tableInside.indexOf("<div class=\"CacheInformationTable\"");
+        if (pos == -1) {
+            Log.e(Settings.tag, "cgeoBase.parseCache: ID \"CacheInformationTable\" not found on page");
+            return null;
+        }
+
+        tableInside = tableInside.substring(0, pos);
+
+        if (StringUtils.isNotBlank(tableInside)) {
+            // cache terrain
+            String result = BaseUtils.getMatch(tableInside, Constants.PATTERN_TERRAIN, 1, null);
+            if (result != null) {
+                cache.terrain = new Float(StringUtils.replaceChars(result, '_', '.'));
+            }
+
+            // cache difficulty
+            result = BaseUtils.getMatch(tableInside, Constants.PATTERN_DIFFICULTY, 1, null);
+            if (result != null) {
+                cache.difficulty = new Float(StringUtils.replaceChars(result, '_', '.'));
+            }
+
+            // owner
+            try {
+                final Matcher matcherOwner = patternOwner.matcher(tableInside);
+                if (matcherOwner.find() && matcherOwner.groupCount() > 0) {
+                    cache.owner = Html.fromHtml(matcherOwner.group(2)).toString();
+                }
+            } catch (Exception e) {
+                // failed to parse owner
+                Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache owner");
+            }
+
+            // hidden
+            try {
+                final Matcher matcherHidden = patternHidden.matcher(tableInside);
+                if (matcherHidden.find() && matcherHidden.groupCount() > 0) {
+                    cache.hidden = parseGcCustomDate(matcherHidden.group(1));
+                }
+            } catch (ParseException e) {
+                // failed to parse cache hidden date
+                Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache hidden date");
+            }
+
+            if (cache.hidden == null) {
+                // event date
+                try {
+                    final Matcher matcherHiddenEvent = patternHiddenEvent.matcher(tableInside);
+                    if (matcherHiddenEvent.find() && matcherHiddenEvent.groupCount() > 0) {
+                        cache.hidden = parseGcCustomDate(matcherHiddenEvent.group(1));
+                    }
+                } catch (ParseException e) {
+                    // failed to parse cache event date
+                    Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache event date");
+                }
+            }
+
+            // favourite
+            try {
+                final Matcher matcherFavourite = patternFavourite.matcher(tableInside);
+                if (matcherFavourite.find() && matcherFavourite.groupCount() > 0) {
+                    cache.favouriteCnt = Integer.parseInt(matcherFavourite.group(1));
+                }
+            } catch (Exception e) {
+                // failed to parse favourite count
+                Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse favourite count");
+            }
+
+            // cache size
+            cache.size = CacheSize.FIND_BY_ID.get(BaseUtils.getMatch(tableInside, Constants.PATTERN_SIZE, 1, CacheSize.NOT_CHOSEN.id).toLowerCase());
+        }
+
+        // cache found
+        cache.found = Constants.PATTERN_FOUND.matcher(page).find() || Constants.PATTERN_FOUND_ALTERNATIVE.matcher(page).find();
+
+        // cache type
+        try {
+            final Matcher matcherType = patternType.matcher(page);
+            if (matcherType.find() && matcherType.groupCount() > 0) {
+                cache.type = cacheTypes.get(matcherType.group(1).toLowerCase());
+            }
+        } catch (Exception e) {
+            // failed to parse type
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache type");
+        }
+
+        // on watchlist
+        try {
+            final Matcher matcher = patternOnWatchlist.matcher(page);
+            cache.onWatchlist = matcher.find();
+        } catch (Exception e) {
+            // failed to parse watchlist state
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse watchlist state");
+        }
+
+        // latitude and logitude
+        cache.latlon = BaseUtils.getMatch(page, Constants.PATTERN_LATLON, 1, cache.latlon);
+        if (StringUtils.isNotEmpty(cache.latlon)) {
+            cache.coords = new Geopoint(cache.latlon);
+            cache.reliableLatLon = true;
+        }
+
+        // cache location
+        cache.location = BaseUtils.getMatch(page, Constants.PATTERN_LOCATION, 1, cache.location);
+
+        // cache hint
+        try {
+            final Matcher matcherHint = Constants.PATTERN_HINT.matcher(page);
+            if (matcherHint.find() && matcherHint.group(1) != null) {
+                // replace linebreak and paragraph tags
+                String hint = Pattern.compile("<(br|p)[^>]*>").matcher(matcherHint.group(1)).replaceAll("\n");
+                if (hint != null) {
+                    cache.hint = hint.replaceAll(Pattern.quote("</p>"), "").trim();
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse hint
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache hint");
+        }
+
+        checkFields(cache);
+
+        // cache personal note
+        cache.personalNote = BaseUtils.getMatch(page, Constants.PATTERN_PERSONALNOTE, 1, cache.personalNote);
+
+        // cache short description
+        cache.shortdesc = BaseUtils.getMatch(page, Constants.PATTERN_SHORTDESC, 1, cache.shortdesc);
+
+        // cache description
+        cache.setDescription(BaseUtils.getMatch(page, Constants.PATTERN_DESC, 1, ""));
+
+        // cache attributes
+        try {
+            final Matcher matcherAttributes = patternAttributes.matcher(page);
+            if (matcherAttributes.find() && matcherAttributes.groupCount() > 0) {
+                final String attributesPre = matcherAttributes.group(1);
+                final Matcher matcherAttributesInside = patternAttributesInside.matcher(attributesPre);
+
+                while (matcherAttributesInside.find()) {
+                    if (matcherAttributesInside.groupCount() > 1 && !matcherAttributesInside.group(2).equalsIgnoreCase("blank")) {
+                        if (cache.attributes == null) {
+                            cache.attributes = new ArrayList<String>();
+                        }
+                        // by default, use the tooltip of the attribute
+                        String attribute = matcherAttributesInside.group(2).toLowerCase();
+
+                        // if the image name can be recognized, use the image name as attribute
+                        String imageName = matcherAttributesInside.group(1).trim();
+                        if (imageName.length() > 0) {
+                            int start = imageName.lastIndexOf('/');
+                            int end = imageName.lastIndexOf('.');
+                            if (start >= 0 && end >= 0) {
+                                attribute = imageName.substring(start + 1, end).replace('-', '_').toLowerCase();
+                            }
+                        }
+                        cache.attributes.add(attribute);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse cache attributes
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache attributes");
+        }
+
+        // cache spoilers
+        try {
+            final Matcher matcherSpoilers = patternSpoilers.matcher(page);
+            if (matcherSpoilers.find()) {
+                final Matcher matcherSpoilersInside = patternSpoilersInside.matcher(matcherSpoilers.group(1));
+
+                while (matcherSpoilersInside.find()) {
+                    final cgImage spoiler = new cgImage();
+                    spoiler.url = matcherSpoilersInside.group(1);
+
+                    if (matcherSpoilersInside.group(2) != null) {
+                        spoiler.title = matcherSpoilersInside.group(2);
+                    }
+                    if (matcherSpoilersInside.group(3) != null) {
+                        spoiler.description = matcherSpoilersInside.group(3);
+                    }
+
+                    if (cache.spoilers == null) {
+                        cache.spoilers = new ArrayList<cgImage>();
+                    }
+                    cache.spoilers.add(spoiler);
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse cache spoilers
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache spoilers");
+        }
+
+        // cache inventory
+        try {
+            cache.inventoryItems = 0;
+
+            final Matcher matcherInventory = patternInventory.matcher(page);
+            if (matcherInventory.find()) {
+                if (cache.inventory == null) {
+                    cache.inventory = new ArrayList<cgTrackable>();
+                }
+
+                if (matcherInventory.groupCount() > 1) {
+                    final String inventoryPre = matcherInventory.group(2);
+
+                    if (StringUtils.isNotBlank(inventoryPre)) {
+                        final Matcher matcherInventoryInside = patternInventoryInside.matcher(inventoryPre);
+
+                        while (matcherInventoryInside.find()) {
+                            if (matcherInventoryInside.groupCount() > 0) {
+                                final cgTrackable inventoryItem = new cgTrackable();
+                                inventoryItem.guid = matcherInventoryInside.group(1);
+                                inventoryItem.name = matcherInventoryInside.group(2);
+
+                                cache.inventory.add(inventoryItem);
+                                cache.inventoryItems++;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse cache inventory
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache inventory (2)");
+        }
+
+        // cache logs counts
+        try
+        {
+            final Matcher matcherLogCounts = patternCountLogs.matcher(page);
+
+            if (matcherLogCounts.find())
+            {
+                final Matcher matcherLog = patternCountLog.matcher(matcherLogCounts.group(1));
+
+                while (matcherLog.find())
+                {
+                    String typeStr = matcherLog.group(1);
+                    String countStr = matcherLog.group(2).replaceAll("[.,]", "");
+
+                    if (StringUtils.isNotBlank(typeStr)
+                            && logTypes.containsKey(typeStr.toLowerCase())
+                            && StringUtils.isNotBlank(countStr))
+                    {
+                        cache.logCounts.put(logTypes.get(typeStr.toLowerCase()), Integer.parseInt(countStr));
+                    }
+                }
+            }
+        } catch (Exception e)
+        {
+            // failed to parse logs
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache log count");
+        }
+
+        // cache logs
+        loadLogsFromDetails(page, cache);
+
+        int wpBegin = 0;
+        int wpEnd = 0;
+
+        wpBegin = page.indexOf("<table class=\"Table\" id=\"ctl00_ContentBody_Waypoints\">");
+        if (wpBegin != -1) { // parse waypoints
+            final Pattern patternWpType = Pattern.compile("\\/wpttypes\\/sm\\/(.+)\\.jpg", Pattern.CASE_INSENSITIVE);
+            final Pattern patternWpPrefixOrLookupOrLatlon = Pattern.compile(">([^<]*<[^>]+>)?([^<]+)(<[^>]+>[^<]*)?<\\/td>", Pattern.CASE_INSENSITIVE);
+            final Pattern patternWpName = Pattern.compile(">[^<]*<a[^>]+>([^<]*)<\\/a>", Pattern.CASE_INSENSITIVE);
+            final Pattern patternWpNote = Pattern.compile("colspan=\"6\">(.*)<\\/td>", Pattern.CASE_INSENSITIVE);
+
+            String wpList = page.substring(wpBegin);
+
+            wpEnd = wpList.indexOf("</p>");
+            if (wpEnd > -1 && wpEnd <= wpList.length()) {
+                wpList = wpList.substring(0, wpEnd);
+            }
+
+            if (!wpList.contains("No additional waypoints to display.")) {
+                wpEnd = wpList.indexOf("</table>");
+                wpList = wpList.substring(0, wpEnd);
+
+                wpBegin = wpList.indexOf("<tbody>");
+                wpEnd = wpList.indexOf("</tbody>");
+                if (wpBegin >= 0 && wpEnd >= 0 && wpEnd <= wpList.length()) {
+                    wpList = wpList.substring(wpBegin + 7, wpEnd);
+                }
+
+                final String[] wpItems = wpList.split("<tr");
+
+                String[] wp;
+                for (int j = 1; j < wpItems.length; j++) {
+                    final cgWaypoint waypoint = new cgWaypoint();
+
+                    wp = wpItems[j].split("<td");
+
+                    // waypoint type
+                    try {
+                        final Matcher matcherWpType = patternWpType.matcher(wp[3]);
+                        if (matcherWpType.find() && matcherWpType.groupCount() > 0) {
+                            waypoint.type = matcherWpType.group(1).trim();
+                        }
+                    } catch (Exception e) {
+                        // failed to parse type
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint type");
+                    }
+
+                    // waypoint prefix
+                    try {
+                        final Matcher matcherWpPrefix = patternWpPrefixOrLookupOrLatlon.matcher(wp[4]);
+                        if (matcherWpPrefix.find() && matcherWpPrefix.groupCount() > 1) {
+                            waypoint.setPrefix(matcherWpPrefix.group(2).trim());
+                        }
+                    } catch (Exception e) {
+                        // failed to parse prefix
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint prefix");
+                    }
+
+                    // waypoint lookup
+                    try {
+                        final Matcher matcherWpLookup = patternWpPrefixOrLookupOrLatlon.matcher(wp[5]);
+                        if (matcherWpLookup.find() && matcherWpLookup.groupCount() > 1) {
+                            waypoint.lookup = matcherWpLookup.group(2).trim();
+                        }
+                    } catch (Exception e) {
+                        // failed to parse lookup
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint lookup");
+                    }
+
+                    // waypoint name
+                    try {
+                        final Matcher matcherWpName = patternWpName.matcher(wp[6]);
+                        while (matcherWpName.find()) {
+                            if (matcherWpName.groupCount() > 0) {
+                                waypoint.name = matcherWpName.group(1).trim();
+                                if (StringUtils.isNotBlank(waypoint.name)) {
+                                    waypoint.name = waypoint.name.trim();
+                                }
+                            }
+                            if (matcherWpName.find() && matcherWpName.groupCount() > 0) {
+                                waypoint.name = matcherWpName.group(1).trim();
+                            }
+                        }
+                    } catch (Exception e) {
+                        // failed to parse name
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint name");
+                    }
+
+                    // waypoint latitude and logitude
+                    try {
+                        final Matcher matcherWpLatLon = patternWpPrefixOrLookupOrLatlon.matcher(wp[7]);
+                        if (matcherWpLatLon.find() && matcherWpLatLon.groupCount() > 1) {
+                            String latlon = Html.fromHtml(matcherWpLatLon.group(2)).toString().trim();
+                            if (!StringUtils.containsOnly(latlon, '?')) {
+                                waypoint.latlon = latlon;
+                                waypoint.coords = new Geopoint(latlon);
+                            }
+                        }
+                    } catch (Exception e) {
+                        // failed to parse latitude and/or longitude
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint coordinates");
+                    }
+
+                    j++;
+                    if (wpItems.length > j) {
+                        wp = wpItems[j].split("<td");
+                    }
+
+                    // waypoint note
+                    try {
+                        final Matcher matcherWpNote = patternWpNote.matcher(wp[3]);
+                        if (matcherWpNote.find() && matcherWpNote.groupCount() > 0) {
+                            waypoint.note = matcherWpNote.group(1).trim();
+                        }
+                    } catch (Exception e) {
+                        // failed to parse note
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint note");
+                    }
+
+                    if (cache.waypoints == null) {
+                        cache.waypoints = new ArrayList<cgWaypoint>();
+                    }
+                    cache.waypoints.add(waypoint);
+                }
+            }
+        }
+
+        if (cache.coords != null) {
+            cache.elevation = getElevation(cache.coords);
+        }
+
+        final cgRating rating = GCVote.getRating(cache.guid, cache.geocode);
+        if (rating != null) {
+            cache.rating = rating.rating;
+            cache.votes = rating.votes;
+            cache.myVote = rating.myVote;
+        }
+
+        cache.updated = System.currentTimeMillis();
+        cache.detailedUpdate = System.currentTimeMillis();
+        cache.detailed = true;
+        caches.cacheList.add(cache);
+
+        return caches;
+    }
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b06900;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a06900;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c06900
+<<<<<<< MINE
+=======
+private final static Pattern PATTERN_TRACKABLE_Goal = Pattern.compile("<h3>\\W*Current GOAL[^<]*</h3>[^<]*<div id=\"TrackableGoal\">[^<]*<p>(.*?)</p>[^<]*</div>[^<]*<h3>");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b06900;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a06900;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c06900
+<<<<<<< MINE
+=======
+private final static Pattern PATTERN_TRACKABLE_DetailsImage = Pattern.compile("<h3>\\W*About This Item[^<]*</h3>[^<]*<div id=\"TrackableDetails\">([^<]*<p>([^<]*<img id=\"ctl00_ContentBody_BugDetails_BugImage\" class=\"[^\"]+\" src=\"([^\"]+)\"[^>]*>)?[^<]*</p>)?[^<]*<p[^>]*>(.*)</p>[^<]*</div> <div id=\"ctl00_ContentBody_BugDetails_uxAbuseReport\">");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b06124;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a06124;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c06124
+<<<<<<< MINE
+private final static Pattern PATTERN_TRACKABLE_Log =  Pattern.compile("<tr class=\"Data.+?src=\"/images/icons/([^.]+)\\.gif[^>]+>&nbsp;([^<]+)</td>.+?guid.+?>([^<]+)</a>.+?(?:guid=([^\"]+)\">(<span class=\"Strike\">)?([^<]+)</.+?)?<td colspan=\"4\">(.+?)(?:<ul.+?ul>)?\\s*</td>\\s*</tr>", Pattern.CASE_INSENSITIVE);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b06124;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a06124;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c06124
+<<<<<<< MINE
+=======
+public cgTrackable parseTrackable(String page) {
+        if (StringUtils.isBlank(page)) {
+            Log.e(Settings.tag, "cgeoBase.parseTrackable: No page given");
+            return null;
+        }
+
+        final cgTrackable trackable = new cgTrackable();
+
+        // trackable geocode
+        trackable.setGeocode(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_GEOCODE, true, trackable.getGeocode()).toUpperCase());
+
+        // trackable id
+        trackable.setGuid(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_ID, true, trackable.getGuid()));
+
+        // trackable icon
+        trackable.setIconUrl(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_ICON, true, trackable.getIconUrl()));
+
+        // trackable name
+        trackable.setName(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_NAME, true, trackable.getName()));
+
+        // trackable type
+        if (StringUtils.isNotBlank(trackable.getName())) {
+            trackable.setType(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_TYPE, true, trackable.getType()));
+        }
+
+        // trackable owner name
+        try {
+            final Matcher matcherOwner = GCConstants.PATTERN_TRACKABLE_OWNER.matcher(page);
+            if (matcherOwner.find() && matcherOwner.groupCount() > 0) {
+                trackable.setOwnerGuid(matcherOwner.group(1));
+                trackable.setOwner(matcherOwner.group(2).trim());
+            }
+        } catch (Exception e) {
+            // failed to parse trackable owner name
+            Log.w(Settings.tag, "cgeoBase.parseTrackable: Failed to parse trackable owner name");
+        }
+
+        // trackable origin
+        trackable.setOrigin(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_ORIGIN, true, trackable.getOrigin()));
+
+        // trackable spotted
+        try {
+            final Matcher matcherSpottedCache = GCConstants.PATTERN_TRACKABLE_SPOTTEDCACHE.matcher(page);
+            if (matcherSpottedCache.find() && matcherSpottedCache.groupCount() > 0) {
+                trackable.setSpottedGuid(matcherSpottedCache.group(1));
+                trackable.setSpottedName(matcherSpottedCache.group(2).trim());
+                trackable.setSpottedType(cgTrackable.SPOTTED_CACHE);
+            }
+
+            final Matcher matcherSpottedUser = GCConstants.PATTERN_TRACKABLE_SPOTTEDUSER.matcher(page);
+            if (matcherSpottedUser.find() && matcherSpottedUser.groupCount() > 0) {
+                trackable.setSpottedGuid(matcherSpottedUser.group(1));
+                trackable.setSpottedName(matcherSpottedUser.group(2).trim());
+                trackable.setSpottedType(cgTrackable.SPOTTED_USER);
+            }
+
+            if (BaseUtils.matches(page, GCConstants.PATTERN_TRACKABLE_SPOTTEDUNKNOWN)) {
+                trackable.setSpottedType(cgTrackable.SPOTTED_UNKNOWN);
+            }
+
+            if (BaseUtils.matches(page, GCConstants.PATTERN_TRACKABLE_SPOTTEDOWNER)) {
+                trackable.setSpottedType(cgTrackable.SPOTTED_OWNER);
+            }
+        } catch (Exception e) {
+            // failed to parse trackable last known place
+            Log.w(Settings.tag, "cgeoBase.parseTrackable: Failed to parse trackable last known place");
+        }
+
+        // released
+        try {
+            trackable.setReleased(dateTbIn1.parse(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_RELEASES, false, null)));
+            if (trackable.getReleased() == null) {
+                trackable.setReleased(dateTbIn2.parse(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_RELEASES, false, null)));
+            }
+        } catch (ParseException e1) {
+            trackable.setReleased(null);
+        }
+
+
+        // trackable distance
+        try {
+            trackable.setDistance(DistanceParser.parseDistance(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_DISTANCE, false, null), Settings.isUseMetricUnits()));
+        } catch (NumberFormatException e) {
+            trackable.setDistance(null);
+            throw e;
+        }
+
+        // trackable goal
+        trackable.setGoal(BaseUtils.getMatch(page, GCConstants.PATTERN_TRACKABLE_GOAL, true, trackable.getGoal()));
+
+        // trackable details & image
+        try {
+            final Matcher matcherDetailsImage = GCConstants.PATTERN_TRACKABLE_DETAILSIMAGE.matcher(page);
+            if (matcherDetailsImage.find() && matcherDetailsImage.groupCount() > 0) {
+                final String image = matcherDetailsImage.group(3).trim();
+                final String details = matcherDetailsImage.group(4).trim();
+
+                if (image != null) {
+                    trackable.setImage(image);
+                }
+                if (details != null && !details.equals("No additional details available.")) {
+                    trackable.setDetails(details);
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse trackable details & image
+            Log.w(Settings.tag, "cgeoBase.parseTrackable: Failed to parse trackable details & image");
+        }
+
+        // trackable logs
+        try
+        {
+            final Matcher matcherLogs = GCConstants.PATTERN_TRACKABLE_LOG.matcher(page);
+            /*
+             * 1. Type (img)
+             * 2. Date
+             * 3. Author
+             * 4. Cache-GUID
+             * 5. Cache-name
+             * 6. Logtext
+             */
+            while (matcherLogs.find())
+            {
+                final cgLog logDone = new cgLog();
+
+                if (logTypes.containsKey(matcherLogs.group(1).toLowerCase()))
+                {
+                    logDone.type = logTypes.get(matcherLogs.group(1).toLowerCase().trim());
+                }
+                else
+                {
+                    logDone.type = logTypes.get("icon_note");
+                }
+
+                logDone.author = Html.fromHtml(matcherLogs.group(3)).toString().trim();
+
+                try
+                {
+                    logDone.date = parseGcCustomDate(matcherLogs.group(2)).getTime();
+                } catch (ParseException e) {
+                }
+
+                logDone.log = matcherLogs.group(6).trim();
+
+                if (matcherLogs.group(4) != null && matcherLogs.group(5) != null)
+                {
+                    logDone.cacheGuid = matcherLogs.group(4);
+                    logDone.cacheName = matcherLogs.group(5);
+                }
+
+                trackable.getLogs().add(logDone);
+            }
+        } catch (Exception e) {
+            // failed to parse logs
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache logs");
+        }
+
+        app.saveTrackable(trackable);
+
+        return trackable;
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19852;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19852;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19852
+<<<<<<< MINE
+=======
+public cgCacheWrap parseCache(final String page, final int reason, final Handler handler) {
+        sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_details);
+
+        if (StringUtils.isBlank(page)) {
+            Log.e(Settings.tag, "cgeoBase.parseCache: No page given");
+            return null;
+        }
+
+        final cgCacheWrap caches = new cgCacheWrap();
+        final cgCache cache = new cgCache();
+
+        if (page.contains("Cache is Unpublished")) {
+            caches.error = StatusCode.UNPUBLISHED_CACHE;
+            return caches;
+        }
+
+        if (page.contains("Sorry, the owner of this listing has made it viewable to Premium Members only.")) {
+            caches.error = StatusCode.PREMIUM_ONLY;
+            return caches;
+        }
+
+        if (page.contains("has chosen to make this cache listing visible to Premium Members only.")) {
+            caches.error = StatusCode.PREMIUM_ONLY;
+            return caches;
+        }
+
+        cache.disabled = page.contains("<li>This cache is temporarily unavailable.");
+
+        cache.archived = page.contains("<li>This cache has been archived,");
+
+        cache.members = page.contains("<p class=\"Warning\">This is a Premium Member Only cache.</p>");
+
+        cache.reason = reason;
+
+        // cache geocode
+        cache.geocode = BaseUtils.getMatch(page, Constants.PATTERN_GEOCODE, 1, cache.geocode);
+
+        // cache id
+        cache.cacheId = BaseUtils.getMatch(page, Constants.PATTERN_CACHEID, 1, cache.cacheId);
+
+        // cache guid
+        cache.guid = BaseUtils.getMatch(page, Constants.PATTERN_GUID, 1, cache.guid);
+
+        // name
+        cache.name = Html.fromHtml(BaseUtils.getMatch(page, Constants.PATTERN_NAME, 1, cache.name)).toString();
+
+        // owner real name
+        // URLDecoder.decode() neccessary here ?
+        cache.ownerReal = URLDecoder.decode(BaseUtils.getMatch(page, Constants.PATTERN_OWNERREAL, 1, cache.ownerReal));
+
+        final String username = Settings.getUsername();
+        if (cache.ownerReal != null && username != null && cache.ownerReal.equalsIgnoreCase(username)) {
+            cache.own = true;
+        }
+
+        int pos = -1;
+        String tableInside = page;
+
+        pos = tableInside.indexOf("id=\"cacheDetails\"");
+        if (pos == -1) {
+            Log.e(Settings.tag, "cgeoBase.parseCache: ID \"cacheDetails\" not found on page");
+            return null;
+        }
+
+        tableInside = tableInside.substring(pos);
+
+        pos = tableInside.indexOf("<div class=\"CacheInformationTable\"");
+        if (pos == -1) {
+            Log.e(Settings.tag, "cgeoBase.parseCache: ID \"CacheInformationTable\" not found on page");
+            return null;
+        }
+
+        tableInside = tableInside.substring(0, pos);
+
+        if (StringUtils.isNotBlank(tableInside)) {
+            // cache terrain
+            String result = BaseUtils.getMatch(tableInside, Constants.PATTERN_TERRAIN, 1, null);
+            if (result != null) {
+                cache.terrain = new Float(StringUtils.replaceChars(result, '_', '.'));
+            }
+
+            // cache difficulty
+            result = BaseUtils.getMatch(tableInside, Constants.PATTERN_DIFFICULTY, 1, null);
+            if (result != null) {
+                cache.difficulty = new Float(StringUtils.replaceChars(result, '_', '.'));
+            }
+
+            // owner
+            try {
+                final Matcher matcherOwner = patternOwner.matcher(tableInside);
+                if (matcherOwner.find() && matcherOwner.groupCount() > 0) {
+                    cache.owner = Html.fromHtml(matcherOwner.group(2)).toString();
+                }
+            } catch (Exception e) {
+                // failed to parse owner
+                Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache owner");
+            }
+
+            // hidden
+            try {
+                final Matcher matcherHidden = patternHidden.matcher(tableInside);
+                if (matcherHidden.find() && matcherHidden.groupCount() > 0) {
+                    cache.hidden = parseGcCustomDate(matcherHidden.group(1));
+                }
+            } catch (ParseException e) {
+                // failed to parse cache hidden date
+                Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache hidden date");
+            }
+
+            if (cache.hidden == null) {
+                // event date
+                try {
+                    final Matcher matcherHiddenEvent = patternHiddenEvent.matcher(tableInside);
+                    if (matcherHiddenEvent.find() && matcherHiddenEvent.groupCount() > 0) {
+                        cache.hidden = parseGcCustomDate(matcherHiddenEvent.group(1));
+                    }
+                } catch (ParseException e) {
+                    // failed to parse cache event date
+                    Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache event date");
+                }
+            }
+
+            // favourite
+            try {
+                final Matcher matcherFavourite = patternFavourite.matcher(tableInside);
+                if (matcherFavourite.find() && matcherFavourite.groupCount() > 0) {
+                    cache.favouriteCnt = Integer.parseInt(matcherFavourite.group(1));
+                }
+            } catch (Exception e) {
+                // failed to parse favourite count
+                Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse favourite count");
+            }
+
+            // cache size
+            cache.size = CacheSize.FIND_BY_ID.get(BaseUtils.getMatch(tableInside, Constants.PATTERN_SIZE, 1, CacheSize.NOT_CHOSEN.id).toLowerCase());
+        }
+
+        // cache found
+        cache.found = Constants.PATTERN_FOUND.matcher(page).find() || Constants.PATTERN_FOUND_ALTERNATIVE.matcher(page).find();
+
+        // cache type
+        try {
+            final Matcher matcherType = patternType.matcher(page);
+            if (matcherType.find() && matcherType.groupCount() > 0) {
+                cache.type = cacheTypes.get(matcherType.group(1).toLowerCase());
+            }
+        } catch (Exception e) {
+            // failed to parse type
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache type");
+        }
+
+        // on watchlist
+        try {
+            final Matcher matcher = patternOnWatchlist.matcher(page);
+            cache.onWatchlist = matcher.find();
+        } catch (Exception e) {
+            // failed to parse watchlist state
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse watchlist state");
+        }
+
+        // latitude and longitude
+        cache.latlon = BaseUtils.getMatch(page, Constants.PATTERN_LATLON, 1, cache.latlon);
+        if (StringUtils.isNotEmpty(cache.latlon)) {
+            try {
+                cache.coords = new Geopoint(cache.latlon);
+                cache.reliableLatLon = true;
+            } catch (Geopoint.GeopointException e) {
+                Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache coordinates: " + e.toString());
+            }
+        }
+
+        // cache location
+        cache.location = BaseUtils.getMatch(page, Constants.PATTERN_LOCATION, 1, cache.location);
+
+        // cache hint
+        try {
+            final Matcher matcherHint = Constants.PATTERN_HINT.matcher(page);
+            if (matcherHint.find() && matcherHint.group(1) != null) {
+                // replace linebreak and paragraph tags
+                String hint = Pattern.compile("<(br|p)[^>]*>").matcher(matcherHint.group(1)).replaceAll("\n");
+                if (hint != null) {
+                    cache.hint = hint.replaceAll(Pattern.quote("</p>"), "").trim();
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse hint
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache hint");
+        }
+
+        checkFields(cache);
+
+        // cache personal note
+        cache.personalNote = BaseUtils.getMatch(page, Constants.PATTERN_PERSONALNOTE, 1, cache.personalNote);
+
+        // cache short description
+        cache.shortdesc = BaseUtils.getMatch(page, Constants.PATTERN_SHORTDESC, 1, cache.shortdesc);
+
+        // cache description
+        cache.setDescription(BaseUtils.getMatch(page, Constants.PATTERN_DESC, 1, ""));
+
+        // cache attributes
+        try {
+            final Matcher matcherAttributes = patternAttributes.matcher(page);
+            if (matcherAttributes.find() && matcherAttributes.groupCount() > 0) {
+                final String attributesPre = matcherAttributes.group(1);
+                final Matcher matcherAttributesInside = patternAttributesInside.matcher(attributesPre);
+
+                while (matcherAttributesInside.find()) {
+                    if (matcherAttributesInside.groupCount() > 1 && !matcherAttributesInside.group(2).equalsIgnoreCase("blank")) {
+                        if (cache.attributes == null) {
+                            cache.attributes = new ArrayList<String>();
+                        }
+                        // by default, use the tooltip of the attribute
+                        String attribute = matcherAttributesInside.group(2).toLowerCase();
+
+                        // if the image name can be recognized, use the image name as attribute
+                        String imageName = matcherAttributesInside.group(1).trim();
+                        if (imageName.length() > 0) {
+                            int start = imageName.lastIndexOf('/');
+                            int end = imageName.lastIndexOf('.');
+                            if (start >= 0 && end >= 0) {
+                                attribute = imageName.substring(start + 1, end).replace('-', '_').toLowerCase();
+                            }
+                        }
+                        cache.attributes.add(attribute);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse cache attributes
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache attributes");
+        }
+
+        // cache spoilers
+        try {
+            final Matcher matcherSpoilers = patternSpoilers.matcher(page);
+            if (matcherSpoilers.find()) {
+                sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_spoilers);
+
+                final Matcher matcherSpoilersInside = patternSpoilersInside.matcher(matcherSpoilers.group(1));
+
+                while (matcherSpoilersInside.find()) {
+                    final cgImage spoiler = new cgImage();
+                    spoiler.url = matcherSpoilersInside.group(1);
+
+                    if (matcherSpoilersInside.group(2) != null) {
+                        spoiler.title = matcherSpoilersInside.group(2);
+                    }
+                    if (matcherSpoilersInside.group(3) != null) {
+                        spoiler.description = matcherSpoilersInside.group(3);
+                    }
+
+                    if (cache.spoilers == null) {
+                        cache.spoilers = new ArrayList<cgImage>();
+                    }
+                    cache.spoilers.add(spoiler);
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse cache spoilers
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache spoilers");
+        }
+
+        // cache inventory
+        try {
+            cache.inventoryItems = 0;
+
+            final Matcher matcherInventory = patternInventory.matcher(page);
+            if (matcherInventory.find()) {
+                if (cache.inventory == null) {
+                    cache.inventory = new ArrayList<cgTrackable>();
+                }
+
+                if (matcherInventory.groupCount() > 1) {
+                    final String inventoryPre = matcherInventory.group(2);
+
+                    if (StringUtils.isNotBlank(inventoryPre)) {
+                        final Matcher matcherInventoryInside = patternInventoryInside.matcher(inventoryPre);
+
+                        while (matcherInventoryInside.find()) {
+                            if (matcherInventoryInside.groupCount() > 0) {
+                                final cgTrackable inventoryItem = new cgTrackable();
+                                inventoryItem.setGuid(matcherInventoryInside.group(1));
+                                inventoryItem.setName(matcherInventoryInside.group(2));
+
+                                cache.inventory.add(inventoryItem);
+                                cache.inventoryItems++;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse cache inventory
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache inventory (2)");
+        }
+
+        // cache logs counts
+        try
+        {
+            final Matcher matcherLogCounts = patternCountLogs.matcher(page);
+
+            if (matcherLogCounts.find())
+            {
+                final Matcher matcherLog = patternCountLog.matcher(matcherLogCounts.group(1));
+
+                while (matcherLog.find())
+                {
+                    String typeStr = matcherLog.group(1);
+                    String countStr = matcherLog.group(2).replaceAll("[.,]", "");
+
+                    if (StringUtils.isNotBlank(typeStr)
+                            && logTypes.containsKey(typeStr.toLowerCase())
+                            && StringUtils.isNotBlank(countStr))
+                    {
+                        cache.logCounts.put(logTypes.get(typeStr.toLowerCase()), Integer.parseInt(countStr));
+                    }
+                }
+            }
+        } catch (Exception e)
+        {
+            // failed to parse logs
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache log count");
+        }
+
+        // cache logs
+        sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_logs);
+
+        loadLogsFromDetails(page, cache);
+
+        int wpBegin = 0;
+        int wpEnd = 0;
+
+        wpBegin = page.indexOf("<table class=\"Table\" id=\"ctl00_ContentBody_Waypoints\">");
+        if (wpBegin != -1) { // parse waypoints
+            sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_waypoints);
+
+            final Pattern patternWpType = Pattern.compile("\\/wpttypes\\/sm\\/(.+)\\.jpg", Pattern.CASE_INSENSITIVE);
+            final Pattern patternWpPrefixOrLookupOrLatlon = Pattern.compile(">([^<]*<[^>]+>)?([^<]+)(<[^>]+>[^<]*)?<\\/td>", Pattern.CASE_INSENSITIVE);
+            final Pattern patternWpName = Pattern.compile(">[^<]*<a[^>]+>([^<]*)<\\/a>", Pattern.CASE_INSENSITIVE);
+            final Pattern patternWpNote = Pattern.compile("colspan=\"6\">(.*)<\\/td>", Pattern.CASE_INSENSITIVE);
+
+            String wpList = page.substring(wpBegin);
+
+            wpEnd = wpList.indexOf("</p>");
+            if (wpEnd > -1 && wpEnd <= wpList.length()) {
+                wpList = wpList.substring(0, wpEnd);
+            }
+
+            if (!wpList.contains("No additional waypoints to display.")) {
+                wpEnd = wpList.indexOf("</table>");
+                wpList = wpList.substring(0, wpEnd);
+
+                wpBegin = wpList.indexOf("<tbody>");
+                wpEnd = wpList.indexOf("</tbody>");
+                if (wpBegin >= 0 && wpEnd >= 0 && wpEnd <= wpList.length()) {
+                    wpList = wpList.substring(wpBegin + 7, wpEnd);
+                }
+
+                final String[] wpItems = wpList.split("<tr");
+
+                String[] wp;
+                for (int j = 1; j < wpItems.length; j++) {
+                    final cgWaypoint waypoint = new cgWaypoint();
+
+                    wp = wpItems[j].split("<td");
+
+                    // waypoint type
+                    try {
+                        final Matcher matcherWpType = patternWpType.matcher(wp[3]);
+                        if (matcherWpType.find() && matcherWpType.groupCount() > 0) {
+                            waypoint.type = WaypointType.FIND_BY_ID.get(matcherWpType.group(1).trim());
+                        }
+                    } catch (Exception e) {
+                        // failed to parse type
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint type");
+                    }
+
+                    // waypoint prefix
+                    try {
+                        final Matcher matcherWpPrefix = patternWpPrefixOrLookupOrLatlon.matcher(wp[4]);
+                        if (matcherWpPrefix.find() && matcherWpPrefix.groupCount() > 1) {
+                            waypoint.setPrefix(matcherWpPrefix.group(2).trim());
+                        }
+                    } catch (Exception e) {
+                        // failed to parse prefix
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint prefix");
+                    }
+
+                    // waypoint lookup
+                    try {
+                        final Matcher matcherWpLookup = patternWpPrefixOrLookupOrLatlon.matcher(wp[5]);
+                        if (matcherWpLookup.find() && matcherWpLookup.groupCount() > 1) {
+                            waypoint.lookup = matcherWpLookup.group(2).trim();
+                        }
+                    } catch (Exception e) {
+                        // failed to parse lookup
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint lookup");
+                    }
+
+                    // waypoint name
+                    try {
+                        final Matcher matcherWpName = patternWpName.matcher(wp[6]);
+                        while (matcherWpName.find()) {
+                            if (matcherWpName.groupCount() > 0) {
+                                waypoint.name = matcherWpName.group(1).trim();
+                                if (StringUtils.isNotBlank(waypoint.name)) {
+                                    waypoint.name = waypoint.name.trim();
+                                }
+                            }
+                            if (matcherWpName.find() && matcherWpName.groupCount() > 0) {
+                                waypoint.name = matcherWpName.group(1).trim();
+                            }
+                        }
+                    } catch (Exception e) {
+                        // failed to parse name
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint name");
+                    }
+
+                    // waypoint latitude and logitude
+                    try {
+                        final Matcher matcherWpLatLon = patternWpPrefixOrLookupOrLatlon.matcher(wp[7]);
+                        if (matcherWpLatLon.find() && matcherWpLatLon.groupCount() > 1) {
+                            String latlon = Html.fromHtml(matcherWpLatLon.group(2)).toString().trim();
+                            if (!StringUtils.containsOnly(latlon, '?')) {
+                                waypoint.latlon = latlon;
+                                waypoint.coords = new Geopoint(latlon);
+                            }
+                        }
+                    } catch (Exception e) {
+                        // failed to parse latitude and/or longitude
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint coordinates");
+                    }
+
+                    j++;
+                    if (wpItems.length > j) {
+                        wp = wpItems[j].split("<td");
+                    }
+
+                    // waypoint note
+                    try {
+                        final Matcher matcherWpNote = patternWpNote.matcher(wp[3]);
+                        if (matcherWpNote.find() && matcherWpNote.groupCount() > 0) {
+                            waypoint.note = matcherWpNote.group(1).trim();
+                        }
+                    } catch (Exception e) {
+                        // failed to parse note
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint note");
+                    }
+
+                    if (cache.waypoints == null) {
+                        cache.waypoints = new ArrayList<cgWaypoint>();
+                    }
+                    cache.waypoints.add(waypoint);
+                }
+            }
+        }
+
+        if (Settings.isAdditionalDetails()) {
+            if (cache.coords != null) {
+                cache.elevation = getElevation(cache.coords);
+            }
+
+            sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_gcvote);
+
+            final cgRating rating = GCVote.getRating(cache.guid, cache.geocode);
+            if (rating != null) {
+                cache.rating = rating.rating;
+                cache.votes = rating.votes;
+                cache.myVote = rating.myVote;
+            }
+        }
+
+        cache.updated = System.currentTimeMillis();
+        cache.detailedUpdate = System.currentTimeMillis();
+        cache.detailed = true;
+        caches.cacheList.add(cache);
+
+        return caches;
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b11572;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a11572;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c11572
+<<<<<<< MINE
+=======
+static cgCacheWrap parseCacheFromText(final String page, final int reason, final Handler handler) {
+        sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_details);
+
+        if (StringUtils.isBlank(page)) {
+            Log.e(Settings.tag, "cgeoBase.parseCache: No page given");
+            return null;
+        }
+
+        final cgCacheWrap caches = new cgCacheWrap();
+        final cgCache cache = new cgCache();
+
+        if (page.contains("Cache is Unpublished")) {
+            caches.error = StatusCode.UNPUBLISHED_CACHE;
+            return caches;
+        }
+
+        if (page.contains("Sorry, the owner of this listing has made it viewable to Premium Members only.")) {
+            caches.error = StatusCode.PREMIUM_ONLY;
+            return caches;
+        }
+
+        if (page.contains("has chosen to make this cache listing visible to Premium Members only.")) {
+            caches.error = StatusCode.PREMIUM_ONLY;
+            return caches;
+        }
+
+        cache.disabled = page.contains("<li>This cache is temporarily unavailable.");
+
+        cache.archived = page.contains("<li>This cache has been archived,");
+
+        cache.members = BaseUtils.matches(page, GCConstants.PATTERN_MEMBERS);
+
+        cache.favourite = BaseUtils.matches(page, GCConstants.PATTERN_FAVORITE);
+
+        cache.reason = reason;
+
+        // cache geocode
+        cache.geocode = BaseUtils.getMatch(page, GCConstants.PATTERN_GEOCODE, true, cache.geocode);
+
+        // cache id
+        cache.cacheId = BaseUtils.getMatch(page, GCConstants.PATTERN_CACHEID, true, cache.cacheId);
+
+        // cache guid
+        cache.guid = BaseUtils.getMatch(page, GCConstants.PATTERN_GUID, true, cache.guid);
+
+        // name
+        cache.name = Html.fromHtml(BaseUtils.getMatch(page, GCConstants.PATTERN_NAME, true, cache.name)).toString();
+
+        // owner real name
+        cache.ownerReal = URLDecoder.decode(BaseUtils.getMatch(page, GCConstants.PATTERN_OWNERREAL, true, cache.ownerReal));
+
+        final String username = Settings.getUsername();
+        if (cache.ownerReal != null && username != null && cache.ownerReal.equalsIgnoreCase(username)) {
+            cache.own = true;
+        }
+
+        int pos = -1;
+        String tableInside = page;
+
+        pos = tableInside.indexOf("id=\"cacheDetails\"");
+        if (pos == -1) {
+            Log.e(Settings.tag, "cgeoBase.parseCache: ID \"cacheDetails\" not found on page");
+            return null;
+        }
+
+        tableInside = tableInside.substring(pos);
+
+        pos = tableInside.indexOf("<div class=\"CacheInformationTable\"");
+        if (pos == -1) {
+            Log.e(Settings.tag, "cgeoBase.parseCache: ID \"CacheInformationTable\" not found on page");
+            return null;
+        }
+
+        tableInside = tableInside.substring(0, pos);
+
+        if (StringUtils.isNotBlank(tableInside)) {
+            // cache terrain
+            String result = BaseUtils.getMatch(tableInside, GCConstants.PATTERN_TERRAIN, true, null);
+            if (result != null) {
+                cache.terrain = new Float(StringUtils.replaceChars(result, '_', '.'));
+            }
+
+            // cache difficulty
+            result = BaseUtils.getMatch(tableInside, GCConstants.PATTERN_DIFFICULTY, true, null);
+            if (result != null) {
+                cache.difficulty = new Float(StringUtils.replaceChars(result, '_', '.'));
+            }
+
+            // owner
+            cache.owner = Html.fromHtml(BaseUtils.getMatch(tableInside, GCConstants.PATTERN_OWNER, true, cache.owner)).toString();
+
+            // hidden
+            try {
+                String hiddenString = BaseUtils.getMatch(tableInside, GCConstants.PATTERN_HIDDEN, true, null);
+                if (StringUtils.isNotBlank(hiddenString)) {
+                    cache.hidden = parseGcCustomDate(hiddenString);
+                }
+                if (cache.hidden == null) {
+                    // event date
+                    hiddenString = BaseUtils.getMatch(tableInside, GCConstants.PATTERN_HIDDENEVENT, true, null);
+                    if (StringUtils.isNotBlank(hiddenString)) {
+                        cache.hidden = parseGcCustomDate(hiddenString);
+                    }
+                }
+            } catch (ParseException e) {
+                // failed to parse cache hidden date
+                Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache hidden (event) date");
+            }
+
+            // favourite
+            cache.favouriteCnt = Integer.parseInt(BaseUtils.getMatch(tableInside, GCConstants.PATTERN_FAVORITECOUNT, true, "0"));
+
+            // cache size
+            cache.size = CacheSize.FIND_BY_ID.get(BaseUtils.getMatch(tableInside, GCConstants.PATTERN_SIZE, true, CacheSize.NOT_CHOSEN.id).toLowerCase());
+        }
+
+        // cache found
+        cache.found = BaseUtils.matches(page, GCConstants.PATTERN_FOUND) || BaseUtils.matches(page, GCConstants.PATTERN_FOUND_ALTERNATIVE);
+
+        // cache type
+        cache.type = cacheTypes.get(BaseUtils.getMatch(page, GCConstants.PATTERN_TYPE, true, cache.type).toLowerCase());
+
+        // on watchlist
+        cache.onWatchlist = BaseUtils.matches(page, GCConstants.PATTERN_WATCHLIST);
+
+        // latitude and longitude
+        cache.latlon = BaseUtils.getMatch(page, GCConstants.PATTERN_LATLON, true, cache.latlon);
+        if (StringUtils.isNotEmpty(cache.latlon)) {
+            try {
+                cache.coords = new Geopoint(cache.latlon);
+                cache.reliableLatLon = true;
+            } catch (Geopoint.GeopointException e) {
+                Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache coordinates: " + e.toString());
+            }
+        }
+
+        // cache location
+        cache.location = BaseUtils.getMatch(page, GCConstants.PATTERN_LOCATION, true, cache.location);
+
+        // cache hint
+        try {
+            final Matcher matcherHint = GCConstants.PATTERN_HINT.matcher(page);
+            if (matcherHint.find() && matcherHint.group(1) != null) {
+                // replace linebreak and paragraph tags
+                String hint = Pattern.compile("<(br|p)[^>]*>").matcher(matcherHint.group(1)).replaceAll("\n");
+                if (hint != null) {
+                    cache.hint = hint.replaceAll(Pattern.quote("</p>"), "").trim();
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse hint
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache hint");
+        }
+
+        checkFields(cache);
+
+        // cache personal note
+        cache.personalNote = BaseUtils.getMatch(page, GCConstants.PATTERN_PERSONALNOTE, true, cache.personalNote);
+
+        // cache short description
+        cache.shortdesc = BaseUtils.getMatch(page, GCConstants.PATTERN_SHORTDESC, true, cache.shortdesc);
+
+        // cache description
+        cache.setDescription(BaseUtils.getMatch(page, GCConstants.PATTERN_DESC, true, ""));
+
+        // cache attributes
+        try {
+            final String attributesPre = BaseUtils.getMatch(page, GCConstants.PATTERN_ATTRIBUTES, true, null);
+            if (null != attributesPre) {
+                final Matcher matcherAttributesInside = GCConstants.PATTERN_ATTRIBUTESINSIDE.matcher(attributesPre);
+
+                while (matcherAttributesInside.find()) {
+                    if (matcherAttributesInside.groupCount() > 1 && !matcherAttributesInside.group(2).equalsIgnoreCase("blank")) {
+                        if (cache.attributes == null) {
+                            cache.attributes = new ArrayList<String>();
+                        }
+                        // by default, use the tooltip of the attribute
+                        String attribute = matcherAttributesInside.group(2).toLowerCase();
+
+                        // if the image name can be recognized, use the image name as attribute
+                        String imageName = matcherAttributesInside.group(1).trim();
+                        if (imageName.length() > 0) {
+                            int start = imageName.lastIndexOf('/');
+                            int end = imageName.lastIndexOf('.');
+                            if (start >= 0 && end >= 0) {
+                                attribute = imageName.substring(start + 1, end).replace('-', '_').toLowerCase();
+                            }
+                        }
+                        cache.attributes.add(attribute);
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse cache attributes
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache attributes");
+        }
+
+        // cache spoilers
+        try {
+            final String spoilers = BaseUtils.getMatch(page, GCConstants.PATTERN_SPOILERS, false, null);
+            if (null != spoilers) {
+                sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_spoilers);
+
+                final Matcher matcherSpoilersInside = GCConstants.PATTERN_SPOILERSINSIDE.matcher(spoilers);
+
+                while (matcherSpoilersInside.find()) {
+                    final cgImage spoiler = new cgImage();
+                    spoiler.url = matcherSpoilersInside.group(1);
+
+                    if (matcherSpoilersInside.group(2) != null) {
+                        spoiler.title = matcherSpoilersInside.group(2);
+                    }
+                    if (matcherSpoilersInside.group(3) != null) {
+                        spoiler.description = matcherSpoilersInside.group(3);
+                    }
+
+                    if (cache.spoilers == null) {
+                        cache.spoilers = new ArrayList<cgImage>();
+                    }
+                    cache.spoilers.add(spoiler);
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse cache spoilers
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache spoilers");
+        }
+
+        // cache inventory
+        try {
+            cache.inventoryItems = 0;
+
+            final Matcher matcherInventory = GCConstants.PATTERN_INVENTORY.matcher(page);
+            if (matcherInventory.find()) {
+                if (cache.inventory == null) {
+                    cache.inventory = new ArrayList<cgTrackable>();
+                }
+
+                if (matcherInventory.groupCount() > 1) {
+                    final String inventoryPre = matcherInventory.group(2);
+
+                    if (StringUtils.isNotBlank(inventoryPre)) {
+                        final Matcher matcherInventoryInside = GCConstants.PATTERN_INVENTORYINSIDE.matcher(inventoryPre);
+
+                        while (matcherInventoryInside.find()) {
+                            if (matcherInventoryInside.groupCount() > 0) {
+                                final cgTrackable inventoryItem = new cgTrackable();
+                                inventoryItem.setGuid(matcherInventoryInside.group(1));
+                                inventoryItem.setName(matcherInventoryInside.group(2));
+
+                                cache.inventory.add(inventoryItem);
+                                cache.inventoryItems++;
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // failed to parse cache inventory
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache inventory (2)");
+        }
+
+        // cache logs counts
+        try
+        {
+            final String countlogs = BaseUtils.getMatch(page, GCConstants.PATTERN_COUNTLOGS, true, null);
+            if (null != countlogs) {
+                final Matcher matcherLog = GCConstants.PATTERN_COUNTLOG.matcher(countlogs);
+
+                while (matcherLog.find())
+                {
+                    String typeStr = matcherLog.group(1);
+                    String countStr = matcherLog.group(2).replaceAll("[.,]", "");
+
+                    if (StringUtils.isNotBlank(typeStr)
+                            && logTypes.containsKey(typeStr.toLowerCase())
+                            && StringUtils.isNotBlank(countStr))
+                    {
+                        cache.logCounts.put(logTypes.get(typeStr.toLowerCase()), Integer.parseInt(countStr));
+                    }
+                }
+            }
+        } catch (Exception e)
+        {
+            // failed to parse logs
+            Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse cache log count");
+        }
+
+        int wpBegin = 0;
+        int wpEnd = 0;
+
+        wpBegin = page.indexOf("<table class=\"Table\" id=\"ctl00_ContentBody_Waypoints\">");
+        if (wpBegin != -1) { // parse waypoints
+            sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_waypoints);
+
+            final Pattern patternWpType = Pattern.compile("\\/wpttypes\\/sm\\/(.+)\\.jpg", Pattern.CASE_INSENSITIVE);
+            final Pattern patternWpPrefixOrLookupOrLatlon = Pattern.compile(">([^<]*<[^>]+>)?([^<]+)(<[^>]+>[^<]*)?<\\/td>", Pattern.CASE_INSENSITIVE);
+            final Pattern patternWpName = Pattern.compile(">[^<]*<a[^>]+>([^<]*)<\\/a>", Pattern.CASE_INSENSITIVE);
+            final Pattern patternWpNote = Pattern.compile("colspan=\"6\">(.*)<\\/td>", Pattern.CASE_INSENSITIVE);
+
+            String wpList = page.substring(wpBegin);
+
+            wpEnd = wpList.indexOf("</p>");
+            if (wpEnd > -1 && wpEnd <= wpList.length()) {
+                wpList = wpList.substring(0, wpEnd);
+            }
+
+            if (!wpList.contains("No additional waypoints to display.")) {
+                wpEnd = wpList.indexOf("</table>");
+                wpList = wpList.substring(0, wpEnd);
+
+                wpBegin = wpList.indexOf("<tbody>");
+                wpEnd = wpList.indexOf("</tbody>");
+                if (wpBegin >= 0 && wpEnd >= 0 && wpEnd <= wpList.length()) {
+                    wpList = wpList.substring(wpBegin + 7, wpEnd);
+                }
+
+                final String[] wpItems = wpList.split("<tr");
+
+                String[] wp;
+                for (int j = 1; j < wpItems.length; j++) {
+                    final cgWaypoint waypoint = new cgWaypoint();
+
+                    wp = wpItems[j].split("<td");
+
+                    // waypoint type
+                    try {
+                        final Matcher matcherWpType = patternWpType.matcher(wp[3]);
+                        if (matcherWpType.find() && matcherWpType.groupCount() > 0) {
+                            waypoint.type = WaypointType.FIND_BY_ID.get(matcherWpType.group(1).trim());
+                        }
+                    } catch (Exception e) {
+                        // failed to parse type
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint type");
+                    }
+
+                    // waypoint prefix
+                    try {
+                        final Matcher matcherWpPrefix = patternWpPrefixOrLookupOrLatlon.matcher(wp[4]);
+                        if (matcherWpPrefix.find() && matcherWpPrefix.groupCount() > 1) {
+                            waypoint.setPrefix(matcherWpPrefix.group(2).trim());
+                        }
+                    } catch (Exception e) {
+                        // failed to parse prefix
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint prefix");
+                    }
+
+                    // waypoint lookup
+                    try {
+                        final Matcher matcherWpLookup = patternWpPrefixOrLookupOrLatlon.matcher(wp[5]);
+                        if (matcherWpLookup.find() && matcherWpLookup.groupCount() > 1) {
+                            waypoint.lookup = matcherWpLookup.group(2).trim();
+                        }
+                    } catch (Exception e) {
+                        // failed to parse lookup
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint lookup");
+                    }
+
+                    // waypoint name
+                    try {
+                        final Matcher matcherWpName = patternWpName.matcher(wp[6]);
+                        while (matcherWpName.find()) {
+                            if (matcherWpName.groupCount() > 0) {
+                                waypoint.name = matcherWpName.group(1).trim();
+                                if (StringUtils.isNotBlank(waypoint.name)) {
+                                    waypoint.name = waypoint.name.trim();
+                                }
+                            }
+                            if (matcherWpName.find() && matcherWpName.groupCount() > 0) {
+                                waypoint.name = matcherWpName.group(1).trim();
+                            }
+                        }
+                    } catch (Exception e) {
+                        // failed to parse name
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint name");
+                    }
+
+                    // waypoint latitude and logitude
+                    try {
+                        final Matcher matcherWpLatLon = patternWpPrefixOrLookupOrLatlon.matcher(wp[7]);
+                        if (matcherWpLatLon.find() && matcherWpLatLon.groupCount() > 1) {
+                            String latlon = Html.fromHtml(matcherWpLatLon.group(2)).toString().trim();
+                            if (!StringUtils.startsWith(latlon, "???")) {
+                                waypoint.latlon = latlon;
+                                waypoint.coords = new Geopoint(latlon);
+                            }
+                        }
+                    } catch (Exception e) {
+                        // failed to parse latitude and/or longitude
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint coordinates");
+                    }
+
+                    j++;
+                    if (wpItems.length > j) {
+                        wp = wpItems[j].split("<td");
+                    }
+
+                    // waypoint note
+                    try {
+                        final Matcher matcherWpNote = patternWpNote.matcher(wp[3]);
+                        if (matcherWpNote.find() && matcherWpNote.groupCount() > 0) {
+                            waypoint.note = matcherWpNote.group(1).trim();
+                        }
+                    } catch (Exception e) {
+                        // failed to parse note
+                        Log.w(Settings.tag, "cgeoBase.parseCache: Failed to parse waypoint note");
+                    }
+
+                    if (cache.waypoints == null) {
+                        cache.waypoints = new ArrayList<cgWaypoint>();
+                    }
+                    cache.waypoints.add(waypoint);
+                }
+            }
+        }
+
+        caches.cacheList.add(cache);
+
+        return caches;
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b10056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a10056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c10056
+<<<<<<< MINE
+=======
+private cgBase(final cgeoapplication app) {
+        this.app = app;
+        context = app.getBaseContext();
+        res = app.getBaseContext().getResources();
+
+        // waypoint types
+        for (WaypointType wt : WaypointType.values()) {
+            if (wt != WaypointType.OWN) {
+                waypointTypes.put(wt, res.getString(wt.stringId));
+            }
+        }
+
+        // log types
+
+        logTypes1.put(LOG_FOUND_IT, res.getString(R.string.log_found));
+        logTypes1.put(LOG_DIDNT_FIND_IT, res.getString(R.string.log_dnf));
+        logTypes1.put(LOG_NOTE, res.getString(R.string.log_note));
+        logTypes1.put(LOG_PUBLISH_LISTING, res.getString(R.string.log_published));
+        logTypes1.put(LOG_ENABLE_LISTING, res.getString(R.string.log_enabled));
+        logTypes1.put(LOG_ARCHIVE, res.getString(R.string.log_archived));
+        logTypes1.put(LOG_TEMP_DISABLE_LISTING, res.getString(R.string.log_disabled));
+        logTypes1.put(LOG_NEEDS_ARCHIVE, res.getString(R.string.log_needs_archived));
+        logTypes1.put(LOG_WILL_ATTEND, res.getString(R.string.log_attend));
+        logTypes1.put(LOG_ATTENDED, res.getString(R.string.log_attended));
+        logTypes1.put(LOG_RETRIEVED_IT, res.getString(R.string.log_retrieved));
+        logTypes1.put(LOG_PLACED_IT, res.getString(R.string.log_placed));
+        logTypes1.put(LOG_GRABBED_IT, res.getString(R.string.log_grabbed));
+        logTypes1.put(LOG_NEEDS_MAINTENANCE, res.getString(R.string.log_maintenance_needed));
+        logTypes1.put(LOG_OWNER_MAINTENANCE, res.getString(R.string.log_maintained));
+        logTypes1.put(LOG_UPDATE_COORDINATES, res.getString(R.string.log_update));
+        logTypes1.put(LOG_DISCOVERED_IT, res.getString(R.string.log_discovered));
+        logTypes1.put(LOG_POST_REVIEWER_NOTE, res.getString(R.string.log_reviewed));
+        logTypes1.put(LOG_VISIT, res.getString(R.string.log_taken));
+        logTypes1.put(LOG_WEBCAM_PHOTO_TAKEN, res.getString(R.string.log_webcam));
+        logTypes1.put(LOG_ANNOUNCEMENT, res.getString(R.string.log_announcement));
+
+        logTypes2.put(LOG_FOUND_IT, res.getString(R.string.log_found)); // traditional, multi, mystery, earth, wherigo, virtual, letterbox
+        logTypes2.put(LOG_DIDNT_FIND_IT, res.getString(R.string.log_dnf)); // traditional, multi, mystery, earth, wherigo, virtual, letterbox, webcam
+        logTypes2.put(LOG_NOTE, res.getString(R.string.log_note)); // traditional, multi, mystery, earth, wherigo, virtual, event, letterbox, webcam, trackable
+        logTypes2.put(LOG_PUBLISH_LISTING, res.getString(R.string.log_published)); // X
+        logTypes2.put(LOG_ENABLE_LISTING, res.getString(R.string.log_enabled)); // owner
+        logTypes2.put(LOG_ARCHIVE, res.getString(R.string.log_archived)); // traditional, multi, mystery, earth, event, wherigo, virtual, letterbox, webcam
+        logTypes2.put(LOG_TEMP_DISABLE_LISTING, res.getString(R.string.log_disabled)); // owner
+        logTypes2.put(LOG_NEEDS_ARCHIVE, res.getString(R.string.log_needs_archived)); // traditional, multi, mystery, earth, event, wherigo, virtual, letterbox, webcam
+        logTypes2.put(LOG_WILL_ATTEND, res.getString(R.string.log_attend)); // event
+        logTypes2.put(LOG_ATTENDED, res.getString(R.string.log_attended)); // event
+        logTypes2.put(LOG_WEBCAM_PHOTO_TAKEN, res.getString(R.string.log_webcam)); // webcam
+        logTypes2.put(LOG_RETRIEVED_IT, res.getString(R.string.log_retrieved)); //trackable
+        logTypes2.put(LOG_GRABBED_IT, res.getString(R.string.log_grabbed)); //trackable
+        logTypes2.put(LOG_NEEDS_MAINTENANCE, res.getString(R.string.log_maintenance_needed)); // traditional, mystery, multi, wherigo, virtual, letterbox, webcam
+        logTypes2.put(LOG_OWNER_MAINTENANCE, res.getString(R.string.log_maintained)); // owner
+        logTypes2.put(LOG_DISCOVERED_IT, res.getString(R.string.log_discovered)); //trackable
+        logTypes2.put(LOG_POST_REVIEWER_NOTE, res.getString(R.string.log_reviewed)); // X
+        logTypes2.put(LOG_ANNOUNCEMENT, res.getString(R.string.log_announcement)); // X
+
+        try {
+            final PackageManager manager = app.getPackageManager();
+            final PackageInfo info = manager.getPackageInfo(app.getPackageName(), 0);
+            version = info.versionName;
+        } catch (PackageManager.NameNotFoundException e) {
+            Log.e(Settings.tag, "unable to get version information", e);
+            version = null;
+        }
+
+        if (Settings.isBrowser()) {
+            final long rndBrowser = Math.round(Math.random() * 6);
+            switch ((int) rndBrowser) {
+                case 0:
+                    idBrowser = "Mozilla/5.0 (Windows; U; Windows NT 6.1; en-US) AppleWebKit/533.1 (KHTML, like Gecko) Chrome/5.0.322.2 Safari/533.1";
+                    break;
+                case 1:
+                    idBrowser = "Mozilla/4.0 (compatible; MSIE 8.0; Windows NT 6.1; WOW64; Trident/4.0; SLCC2; .NET CLR 2.0.50727; .NET CLR 3.5.30729; .NET CLR 3.0.30729; Media Center PC 6.0; MDDC)";
+                    break;
+                case 2:
+                    idBrowser = "Mozilla/5.0 (Windows; U; Windows NT 5.1; en-US; rv:1.9.2.3) Gecko/20100401 Firefox/3.6.3";
+                    break;
+                case 3:
+                    idBrowser = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-us) AppleWebKit/531.21.8 (KHTML, like Gecko) Version/4.0.4 Safari/531.21.10";
+                    break;
+                case 4:
+                    idBrowser = "Mozilla/5.0 (iPod; U; CPU iPhone OS 2_2_1 like Mac OS X; en-us) AppleWebKit/525.18.1 (KHTML, like Gecko) Version/3.1.1 Mobile/5H11a Safari/525.20";
+                    break;
+                case 5:
+                    idBrowser = "Mozilla/5.0 (Linux; U; Android 1.1; en-gb; dream) AppleWebKit/525.10+ (KHTML, like Gecko) Version/3.0.4 Mobile Safari/523.12.2";
+                    break;
+                case 6:
+                    idBrowser = "Mozilla/5.0 (X11; U; Linux i686; en-US) AppleWebKit/533.4 (KHTML, like Gecko) Chrome/5.0.375.86 Safari/533.4";
+                    break;
+                default:
+                    idBrowser = "Mozilla/5.0 (Macintosh; U; Intel Mac OS X 10_6_2; en-US) AppleWebKit/532.9 (KHTML, like Gecko) Chrome/5.0.307.11 Safari/532.9";
+                    break;
+            }
+        }
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b12348;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a12348;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c12348
+<<<<<<< MINE
+// TODO Valentine Remove with merge
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b12348;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a12348;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c12348
+<<<<<<< MINE
+// TODO Valentine Remove with merge
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b12348;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a12348;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c12348
+<<<<<<< MINE
+// TODO Valentine Remove with merge
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b12348;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a12348;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c12348
+<<<<<<< MINE
+// TODO Valentine Remove with merge
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b21100;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a21100;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c21100
+<<<<<<< MINE
+public static String requestLogged(final String uri, final Parameters params, boolean xContentType, boolean my, boolean addF) {
+        HttpResponse response = request(uri, params, xContentType, my, addF);
+        String data = getResponseData(response);
+
+        if (!Login.getLoginStatus(data)) {
+            if (Login.login() == StatusCode.NO_ERROR) {
+                response = request(uri, params, xContentType, my, addF);
+                data = getResponseData(response);
+            } else {
+                Log.i("Working as guest.");
+            }
+        }
+        return data;
+    }
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b21100;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a21100;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c21100
+<<<<<<< MINE
+public static Bitmap requestMapTile(final String url, final String referer) {
+        final HttpGet request = new HttpGet(url);
+        request.addHeader("Accept", "image/png,image/*;q=0.8,*/*;q=0.5");
+        request.addHeader("Referer", referer);
+        request.addHeader("X-Requested-With", "XMLHttpRequest");
+        final HttpResponse response = Network.request(request);
+        try {
+            return response != null ? BitmapFactory.decodeStream(response.getEntity().getContent()) : null;
+        } catch (IOException e) {
+            Log.e("cgBase.requestMapTile() " + e.getMessage());
+        }
+        return null;
+    }
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19200;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19200;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19200
+<<<<<<< MINE
+=======
+/**
+     * The Threshold for the showing of child waypoints
+     * 
+     * @return
+     */
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+FOUND_IT(2, "2", "found it", R.string.log_found, R.drawable.mark_green)
+=======
+FOUND_IT(2, "2", "found it", R.string.log_found)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+DIDNT_FIND_IT(3, "3", "didn't find it", R.string.log_dnf, R.drawable.mark_red)
+=======
+DIDNT_FIND_IT(3, "3", "didn't find it", R.string.log_dnf)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+PUBLISH_LISTING(1003, "24", "publish listing", R.string.log_published, R.drawable.mark_green_more)
+=======
+PUBLISH_LISTING(1003, "24", "publish listing", R.string.log_published)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+ENABLE_LISTING(23, "23", "enable listing", R.string.log_enabled, R.drawable.mark_green_more)
+=======
+ENABLE_LISTING(23, "23", "enable listing", R.string.log_enabled)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+ARCHIVE(5, "5", "archive", R.string.log_archived, R.drawable.mark_red_more)
+=======
+ARCHIVE(5, "5", "archive", R.string.log_archived)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+TEMP_DISABLE_LISTING(22, "22", "temporarily disable listing", R.string.log_disabled, R.drawable.mark_red_more)
+=======
+TEMP_DISABLE_LISTING(22, "22", "temporarily disable listing", R.string.log_disabled)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+NEEDS_ARCHIVE(7, "7", "needs archived", R.string.log_needs_archived, R.drawable.mark_red)
+=======
+NEEDS_ARCHIVE(7, "7", "needs archived", R.string.log_needs_archived)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+ATTENDED(10, "10", "attended", R.string.log_attended, R.drawable.mark_green)
+=======
+ATTENDED(10, "10", "attended", R.string.log_attended)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+RETRIEVED_IT(13, "13", "retrieved it", R.string.log_retrieved, R.drawable.mark_green)
+=======
+RETRIEVED_IT(13, "13", "retrieved it", R.string.log_retrieved)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+GRABBED_IT(19, "19", "grabbed it", R.string.log_grabbed, R.drawable.mark_green)
+=======
+GRABBED_IT(19, "19", "grabbed it", R.string.log_grabbed)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+NEEDS_MAINTENANCE(45, "45", "needs maintenance", R.string.log_maintenance_needed, R.drawable.mark_red)
+=======
+NEEDS_MAINTENANCE(45, "45", "needs maintenance", R.string.log_maintenance_needed)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+OWNER_MAINTENANCE(46, "46", "owner maintenance", R.string.log_maintained, R.drawable.mark_green_more)
+=======
+OWNER_MAINTENANCE(46, "46", "owner maintenance", R.string.log_maintained)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+DISCOVERED_IT(48, "48", "discovered it", R.string.log_discovered, R.drawable.mark_green)
+=======
+DISCOVERED_IT(48, "48", "discovered it", R.string.log_discovered)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+POST_REVIEWER_NOTE(18, "18", "post reviewer note", R.string.log_reviewer)
+=======
+POST_REVIEWER_NOTE(18, "68", "post reviewer note", R.string.log_reviewer)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+VISIT(1001, "1001", "visit", R.string.log_tb_visit, R.drawable.mark_green)
+=======
+VISIT(1001, "1001", "visit", R.string.log_tb_visit)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+WEBCAM_PHOTO_TAKEN(11, "11", "webcam photo taken", R.string.log_webcam, R.drawable.mark_green)
+=======
+WEBCAM_PHOTO_TAKEN(11, "11", "webcam photo taken", R.string.log_webcam)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b03576;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a03576;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c03576
+<<<<<<< MINE
+VISIT(1001, "1001", "visit", R.string.log_tb_visit, R.drawable.mark_green)
+=======
+VISIT(1001, "75", "visit", R.string.log_tb_visit)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b21328;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a21328;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c21328
+<<<<<<< MINE
+RETRACT(25, "25", "rectract listing", R.string.log_retractlisting)
+=======
+RETRACT(25, "25", "retract listing", R.string.log_retractlisting)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19172
+<<<<<<< MINE
+/**
+     * Get the result of a GET HTTP request returning a JSON body.
+     *
+     * @param uri the base URI of the GET HTTP request
+     * @param params the query parameters, or <code>null</code> if there are none
+     * @return a JSON object if the request was successful and the body could be decoded, <code>null</code> otherwise
+     */
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19172
+<<<<<<< MINE
+/**
+     * Get the body of a HTTP response.
+     *
+     * {@link BaseUtils#replaceWhitespace(String)} will be called on the result
+     *
+     * @param response a HTTP response, which can be null
+     * @return the body if the response comes from a successful HTTP request, <code>null</code> otherwise
+     */
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19172
+<<<<<<< MINE
+/**
+     * Get the body of a HTTP response.
+     *
+     * @param response a HTTP response, which can be null
+     * @param replaceWhitespace <code>true</code> if {@link BaseUtils#replaceWhitespace(String)}
+     *                          should be called on the body
+     * @return the body if the response comes from a successful HTTP request, <code>null</code> otherwise
+     */
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b14320;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a14320;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c14320
+<<<<<<< MINE
+/**
+     * @return zoom used for the (live) map
+     */
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b09244;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a09244;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c09244
+<<<<<<< MINE
+/**
+     * @return zoom used for the (live) map
+     */
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04176;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04176;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04176
+<<<<<<< MINE
+/**
+     * @return zoom used for the (live) map
+     */
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b17384;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a17384;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c17384
+<<<<<<< MINE
+/**
+     * Checks if the device has network connection.
+     *
+     * @return <code>true</code> if the device is connected to the network.
+     */
+=======
+>>>>>>> YOURS

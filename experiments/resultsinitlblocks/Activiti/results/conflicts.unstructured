@@ -1,0 +1,2028 @@
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b19028;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a19028;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c19028
+<<<<<<< MINE
+import java.util.logging.Logger;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b19028;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a19028;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c19028
+<<<<<<< MINE
+=======
+    } catch (Exception e) {
+      LOGGER.warn("Error parsing child elements for {}", elementName, e);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13880;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13880;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13880
+<<<<<<< MINE
+=======
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.17.0.0"));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b06516;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a06516;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c06516
+<<<<<<< MINE
+  protected static final Map<String, Map<String, String>> databaseSpecificStatements = new HashMap<String, Map<String, String>>();
+
+  public static final Map<String, String> databaseSpecificLimitBeforeStatements = new HashMap<String, String>();
+  public static final Map<String, String> databaseSpecificLimitAfterStatements = new HashMap<String, String>();
+  public static final Map<String, String> databaseSpecificLimitBetweenStatements = new HashMap<String, String>();
+  public static final Map<String, String> databaseSpecificOrderByStatements = new HashMap<String, String>();
+  public static final Map<String, String> databaseOuterJoinLimitBetweenStatements = new HashMap<String, String>();
+  public static final Map<String, String> databaseSpecificLimitBeforeNativeQueryStatements = new HashMap<String, String>();
+
+  static {
+
+    String defaultOrderBy = " order by ${orderBy} ";
+    
+    // h2
+    databaseSpecificLimitBeforeStatements.put("h2", "");
+    databaseSpecificLimitAfterStatements.put("h2", "LIMIT #{maxResults} OFFSET #{firstResult}");
+    databaseSpecificLimitBetweenStatements.put("h2", "");
+    databaseOuterJoinLimitBetweenStatements.put("h2", "");
+    databaseSpecificOrderByStatements.put("h2", defaultOrderBy);
+
+    // hsql
+    databaseSpecificLimitBeforeStatements.put("hsql", "");
+    databaseSpecificLimitAfterStatements.put("hsql", "LIMIT #{maxResults} OFFSET #{firstResult}");
+    databaseSpecificLimitBetweenStatements.put("hsql", "");
+    databaseOuterJoinLimitBetweenStatements.put("hsql", "");
+    databaseSpecificOrderByStatements.put("hsql", defaultOrderBy);
+
+    
+	  //mysql specific
+    databaseSpecificLimitBeforeStatements.put("mysql", "");
+    databaseSpecificLimitAfterStatements.put("mysql", "LIMIT #{maxResults} OFFSET #{firstResult}");
+    databaseSpecificLimitBetweenStatements.put("mysql", "");
+    databaseOuterJoinLimitBetweenStatements.put("mysql", "");
+    databaseSpecificOrderByStatements.put("mysql", defaultOrderBy);
+    addDatabaseSpecificStatement("mysql", "selectProcessDefinitionsByQueryCriteria", "selectProcessDefinitionsByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "selectProcessDefinitionCountByQueryCriteria", "selectProcessDefinitionCountByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "selectDeploymentsByQueryCriteria", "selectDeploymentsByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "selectDeploymentCountByQueryCriteria", "selectDeploymentCountByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "selectModelCountByQueryCriteria", "selectModelCountByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "updateExecutionTenantIdForDeployment", "updateExecutionTenantIdForDeployment_mysql");
+    addDatabaseSpecificStatement("mysql", "updateTaskTenantIdForDeployment", "updateTaskTenantIdForDeployment_mysql");
+    addDatabaseSpecificStatement("mysql", "updateJobTenantIdForDeployment", "updateJobTenantIdForDeployment_mysql");
+
+    // postgres specific
+    databaseSpecificLimitBeforeStatements.put("postgres", "");
+    databaseSpecificLimitAfterStatements.put("postgres", "LIMIT #{maxResults} OFFSET #{firstResult}");
+    databaseSpecificLimitBetweenStatements.put("postgres", "");
+    databaseOuterJoinLimitBetweenStatements.put("postgres", "");
+    databaseSpecificOrderByStatements.put("postgres", defaultOrderBy);
+    addDatabaseSpecificStatement("postgres", "insertByteArray", "insertByteArray_postgres");
+    addDatabaseSpecificStatement("postgres", "bulkInsertByteArray", "bulkInsertByteArray_postgres");
+    addDatabaseSpecificStatement("postgres", "updateByteArray", "updateByteArray_postgres");
+    addDatabaseSpecificStatement("postgres", "selectByteArray", "selectByteArray_postgres");
+    addDatabaseSpecificStatement("postgres", "selectResourceByDeploymentIdAndResourceName", "selectResourceByDeploymentIdAndResourceName_postgres");
+    addDatabaseSpecificStatement("postgres", "selectResourcesByDeploymentId", "selectResourcesByDeploymentId_postgres");
+    addDatabaseSpecificStatement("postgres", "insertIdentityInfo", "insertIdentityInfo_postgres");
+    addDatabaseSpecificStatement("postgres", "bulkInsertIdentityInfo", "bulkInsertIdentityInfo_postgres");
+    addDatabaseSpecificStatement("postgres", "updateIdentityInfo", "updateIdentityInfo_postgres");
+    addDatabaseSpecificStatement("postgres", "selectIdentityInfoById", "selectIdentityInfoById_postgres");
+    addDatabaseSpecificStatement("postgres", "selectIdentityInfoByUserIdAndKey", "selectIdentityInfoByUserIdAndKey_postgres");
+    addDatabaseSpecificStatement("postgres", "selectIdentityInfoByUserId", "selectIdentityInfoByUserId_postgres");
+    addDatabaseSpecificStatement("postgres", "selectIdentityInfoDetails", "selectIdentityInfoDetails_postgres");
+    addDatabaseSpecificStatement("postgres", "insertComment", "insertComment_postgres");
+    addDatabaseSpecificStatement("postgres", "bulkInsertComment", "bulkInsertComment_postgres");
+    addDatabaseSpecificStatement("postgres", "selectComment", "selectComment_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByTaskId", "selectCommentsByTaskId_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByProcessInstanceId", "selectCommentsByProcessInstanceId_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByProcessInstanceIdAndType", "selectCommentsByProcessInstanceIdAndType_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByType", "selectCommentsByType_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByTaskIdAndType", "selectCommentsByTaskIdAndType_postgres");
+    addDatabaseSpecificStatement("postgres", "selectEventsByTaskId", "selectEventsByTaskId_postgres");
+    addDatabaseSpecificStatement("postgres", "insertEventLogEntry", "insertEventLogEntry_postgres");
+    addDatabaseSpecificStatement("postgres", "bulkInsertEventLogEntry", "bulkInsertEventLogEntry_postgres");
+    addDatabaseSpecificStatement("postgres", "selectAllEventLogEntries", "selectAllEventLogEntries_postgres");
+    addDatabaseSpecificStatement("postgres", "selectEventLogEntries", "selectEventLogEntries_postgres");
+    addDatabaseSpecificStatement("postgres", "selectEventLogEntriesByProcessInstanceId", "selectEventLogEntriesByProcessInstanceId_postgres");
+
+    // oracle
+    databaseSpecificLimitBeforeStatements.put("oracle", "select * from ( select a.*, ROWNUM rnum from (");
+    databaseSpecificLimitAfterStatements.put("oracle", "  ) a where ROWNUM < #{lastRow}) where rnum  >= #{firstRow}");
+    databaseSpecificLimitBetweenStatements.put("oracle", "");
+    databaseOuterJoinLimitBetweenStatements.put("oracle", "");
+    databaseSpecificOrderByStatements.put("oracle", defaultOrderBy);
+    addDatabaseSpecificStatement("oracle", "selectExclusiveJobsToExecute", "selectExclusiveJobsToExecute_integerBoolean");
+    addDatabaseSpecificStatement("oracle", "selectUnlockedTimersByDuedate", "selectUnlockedTimersByDuedate_oracle");
+    addDatabaseSpecificStatement("oracle", "insertEventLogEntry", "insertEventLogEntry_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertVariableInstance", "bulkInsertVariableInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertUser", "bulkInsertUser_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertTask", "bulkInsertTask_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertResource", "bulkInsertResource_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertProperty", "bulkInsertProperty_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertProcessDefinition", "bulkInsertProcessDefinition_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertModel", "bulkInsertModel_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMembership", "bulkInsertMembership_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertTimer", "bulkInsertTimer_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMessage", "bulkInsertMessage_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertIdentityInfo", "bulkInsertIdentityInfo_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertIdentityLink", "bulkInsertIdentityLink_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMembership", "bulkInsertMembership_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertTimer", "bulkInsertTimer_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMessage", "bulkInsertMessage_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricVariableInstance", "bulkInsertHistoricVariableInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricTaskInstance", "bulkInsertHistoricTaskInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricProcessInstance", "bulkInsertHistoricProcessInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricIdentityLink", "bulkInsertHistoricIdentityLink_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricDetailVariableInstanceUpdate", "bulkInsertHistoricDetailVariableInstanceUpdate_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricFormProperty", "bulkInsertHistoricFormProperty_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricActivityInstance", "bulkInsertHistoricActivityInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertGroup", "bulkInsertGroup_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertExecution", "bulkInsertExecution_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMessageEventSubscription", "bulkInsertMessageEventSubscription_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertSignalEventSubscription", "bulkInsertSignalEventSubscription_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertCompensateEventSubscription", "bulkInsertCompensateEventSubscription_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertEventLogEntry", "bulkInsertEventLogEntry_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertDeployment", "bulkInsertDeployment_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertComment", "bulkInsertComment_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertByteArray", "bulkInsertByteArray_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertEventLogEntry", "bulkInsertEventLogEntry_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertDeployment", "bulkInsertDeployment_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertComment", "bulkInsertComment_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertByteArray", "bulkInsertByteArray_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertAttachment", "bulkInsertAttachment_oracle");
+
+    // db2
+    databaseSpecificLimitBeforeStatements.put("db2", "SELECT SUB.* FROM (");
+    databaseSpecificLimitAfterStatements.put("db2", ")RES ) SUB WHERE SUB.rnk >= #{firstRow} AND SUB.rnk < #{lastRow}");
+    databaseSpecificLimitBetweenStatements.put("db2", ", row_number() over (ORDER BY ${orderBy}) rnk FROM ( select distinct RES.* ");
+    databaseOuterJoinLimitBetweenStatements.put("db2", ", row_number() over (ORDER BY ${mssqlOrDB2OrderBy}) rnk FROM ( select distinct ");
+    databaseSpecificOrderByStatements.put("db2", "");
+    databaseSpecificLimitBeforeNativeQueryStatements.put("db2", "SELECT SUB.* FROM ( select RES.* , row_number() over (ORDER BY ${orderBy}) rnk FROM (");
+    addDatabaseSpecificStatement("db2", "selectExclusiveJobsToExecute", "selectExclusiveJobsToExecute_integerBoolean");
+    addDatabaseSpecificStatement("db2", "selectExecutionByNativeQuery", "selectExecutionByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricActivityInstanceByNativeQuery", "selectHistoricActivityInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricProcessInstanceByNativeQuery", "selectHistoricProcessInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricTaskInstanceByNativeQuery", "selectHistoricTaskInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectTaskByNativeQuery", "selectTaskByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectProcessDefinitionByNativeQuery", "selectProcessDefinitionByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectDeploymentByNativeQuery", "selectDeploymentByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectGroupByNativeQuery", "selectGroupByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectUserByNativeQuery", "selectUserByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectModelByNativeQuery", "selectModelByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricDetailByNativeQuery", "selectHistoricDetailByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricVariableInstanceByNativeQuery", "selectHistoricVariableInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectTaskWithVariablesByQueryCriteria", "selectTaskWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectProcessInstanceWithVariablesByQueryCriteria", "selectProcessInstanceWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricProcessInstancesWithVariablesByQueryCriteria", "selectHistoricProcessInstancesWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricTaskInstancesWithVariablesByQueryCriteria", "selectHistoricTaskInstancesWithVariablesByQueryCriteria_mssql_or_db2");
+
+    // mssql
+    databaseSpecificLimitBeforeStatements.put("mssql", "SELECT SUB.* FROM (");
+    databaseSpecificLimitAfterStatements.put("mssql", ")RES ) SUB WHERE SUB.rnk >= #{firstRow} AND SUB.rnk < #{lastRow}");
+    databaseSpecificLimitBetweenStatements.put("mssql", ", row_number() over (ORDER BY ${orderBy}) rnk FROM ( select distinct RES.* ");
+    databaseOuterJoinLimitBetweenStatements.put("mssql", ", row_number() over (ORDER BY ${mssqlOrDB2OrderBy}) rnk FROM ( select distinct ");
+    databaseSpecificOrderByStatements.put("mssql", "");
+    databaseSpecificLimitBeforeNativeQueryStatements.put("mssql", "SELECT SUB.* FROM ( select RES.* , row_number() over (ORDER BY ${orderBy}) rnk FROM (");
+    addDatabaseSpecificStatement("mssql", "selectExclusiveJobsToExecute", "selectExclusiveJobsToExecute_integerBoolean");
+    addDatabaseSpecificStatement("mssql", "selectExecutionByNativeQuery", "selectExecutionByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricActivityInstanceByNativeQuery", "selectHistoricActivityInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricProcessInstanceByNativeQuery", "selectHistoricProcessInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricTaskInstanceByNativeQuery", "selectHistoricTaskInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectTaskByNativeQuery", "selectTaskByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectProcessDefinitionByNativeQuery", "selectProcessDefinitionByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectDeploymentByNativeQuery", "selectDeploymentByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectGroupByNativeQuery", "selectGroupByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectUserByNativeQuery", "selectUserByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectModelByNativeQuery", "selectModelByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricDetailByNativeQuery", "selectHistoricDetailByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricVariableInstanceByNativeQuery", "selectHistoricVariableInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectTaskWithVariablesByQueryCriteria", "selectTaskWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectProcessInstanceWithVariablesByQueryCriteria", "selectProcessInstanceWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricProcessInstancesWithVariablesByQueryCriteria", "selectHistoricProcessInstancesWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricTaskInstancesWithVariablesByQueryCriteria", "selectHistoricTaskInstancesWithVariablesByQueryCriteria_mssql_or_db2");
+  }
+  
+  
+  /**
+   * A map {class, boolean}, to indicate whether or not a certain {@link Entity} class can be bulk inserted.
+   */
+  protected static Map<Class<? extends Entity>, Boolean> bulkInsertableMap;
+=======
+  protected static final Map<String, Map<String, String>> databaseSpecificStatements = new HashMap<String, Map<String,String>>();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+import org.apache.commons.io.IOUtils;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+
+    // Check status and size
+    JsonNode dataNode = objectMapper.readTree(response.getEntity().getContent()).get("data");
+    closeResponse(response);
+    assertEquals(0, dataNode.size());
+  }
+
+=======
+    
+    // Check status and size
+    JsonNode dataNode = objectMapper.readTree(response.getEntity().getContent()).get("data");
+    closeResponse(response);
+    assertEquals(0, dataNode.size());
+  }
+  
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+
+=======
+    
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+        taskQuery.taskVariableValueLessThanOrEqual(variable.getName(), actualValue);
+=======
+      	taskQuery.taskVariableValueLessThanOrEqual(variable.getName(), actualValue);
+      	break;
+
+      case LIKE_IGNORE_CASE:
+        if (actualValue instanceof String) {
+          taskQuery.taskVariableValueLikeIgnoreCase(variable.getName(), (String) actualValue);
+        } else {
+          throw new ActivitiIllegalArgumentException("Only string variable values are supported using likeIgnoreCase, but was: " + actualValue.getClass().getName());
+        }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+
+      switch (variable.getVariableOperation()) {
+
+      case EQUALS:
+        if (nameLess) {
+          taskQuery.processVariableValueEquals(actualValue);
+        } else {
+          taskQuery.processVariableValueEquals(variable.getName(), actualValue);
+        }
+        break;
+
+      case EQUALS_IGNORE_CASE:
+        if (actualValue instanceof String) {
+          taskQuery.processVariableValueEqualsIgnoreCase(variable.getName(), (String) actualValue);
+        } else {
+          throw new ActivitiIllegalArgumentException("Only string variable values are supported when ignoring casing, but was: " + actualValue.getClass().getName());
+        }
+        break;
+
+      case NOT_EQUALS:
+        taskQuery.processVariableValueNotEquals(variable.getName(), actualValue);
+        break;
+
+      case NOT_EQUALS_IGNORE_CASE:
+        if (actualValue instanceof String) {
+          taskQuery.processVariableValueNotEqualsIgnoreCase(variable.getName(), (String) actualValue);
+        } else {
+          throw new ActivitiIllegalArgumentException("Only string variable values are supported when ignoring casing, but was: " + actualValue.getClass().getName());
+        }
+        break;
+
+      case GREATER_THAN:
+        taskQuery.processVariableValueGreaterThan(variable.getName(), actualValue);
+        break;
+
+      case GREATER_THAN_OR_EQUALS:
+        taskQuery.processVariableValueGreaterThanOrEqual(variable.getName(), actualValue);
+        break;
+
+      case LESS_THAN:
+        taskQuery.processVariableValueLessThan(variable.getName(), actualValue);
+        break;
+
+      case LESS_THAN_OR_EQUALS:
+        taskQuery.processVariableValueLessThanOrEqual(variable.getName(), actualValue);
+        break;
+
+      case LIKE:
+        if (actualValue instanceof String) {
+          taskQuery.processVariableValueLike(variable.getName(), (String) actualValue);
+        } else {
+          throw new ActivitiIllegalArgumentException("Only string variable values are supported using like, but was: " + actualValue.getClass().getName());
+        }
+        break;
+
+      default:
+        throw new ActivitiIllegalArgumentException("Unsupported variable query operation: " + variable.getVariableOperation());
+=======
+      
+      switch(variable.getVariableOperation()) {
+      
+        case EQUALS:
+          if (nameLess) {
+            taskQuery.processVariableValueEquals(actualValue);
+          } else {
+            taskQuery.processVariableValueEquals(variable.getName(), actualValue);
+          }
+          break;
+          
+        case EQUALS_IGNORE_CASE:
+          if (actualValue instanceof String) {
+            taskQuery.processVariableValueEqualsIgnoreCase(variable.getName(), (String)actualValue);
+          } else {
+            throw new ActivitiIllegalArgumentException("Only string variable values are supported when ignoring casing, but was: " + actualValue.getClass().getName());
+          }
+          break;
+          
+        case NOT_EQUALS:
+          taskQuery.processVariableValueNotEquals(variable.getName(), actualValue);
+          break;
+          
+        case NOT_EQUALS_IGNORE_CASE:
+          if (actualValue instanceof String) {
+            taskQuery.processVariableValueNotEqualsIgnoreCase(variable.getName(), (String)actualValue);
+          } else {
+            throw new ActivitiIllegalArgumentException("Only string variable values are supported when ignoring casing, but was: " + actualValue.getClass().getName());
+          }
+          break;
+          
+        case GREATER_THAN:
+        	taskQuery.processVariableValueGreaterThan(variable.getName(), actualValue);
+        	break;
+        	
+        case GREATER_THAN_OR_EQUALS:
+        	taskQuery.processVariableValueGreaterThanOrEqual(variable.getName(), actualValue);
+        	break;
+        	
+        case LESS_THAN:
+        	taskQuery.processVariableValueLessThan(variable.getName(), actualValue);
+        	break;
+        	
+        case LESS_THAN_OR_EQUALS:
+        	taskQuery.processVariableValueLessThanOrEqual(variable.getName(), actualValue);
+        	break;
+        	
+        case LIKE:
+        	if (actualValue instanceof String) {
+        		taskQuery.processVariableValueLike(variable.getName(), (String) actualValue);
+        	} else {
+        		throw new ActivitiIllegalArgumentException("Only string variable values are supported using like, but was: " + actualValue.getClass().getName());
+        	}
+        	break;
+
+        case LIKE_IGNORE_CASE:
+          if (actualValue instanceof String) {
+            taskQuery.processVariableValueLikeIgnoreCase(variable.getName(), (String) actualValue);
+          } else {
+            throw new ActivitiIllegalArgumentException("Only string variable values are supported using likeIgnoreCase, but was: " + actualValue.getClass().getName());
+          }
+          break;
+
+        default:
+          throw new ActivitiIllegalArgumentException("Unsupported variable query operation: " + variable.getVariableOperation());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+import org.activiti.editor.language.json.model.ModelInfo;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+    if (maxY < 700) {
+      maxY = 700;
+=======
+    private static final List<String> DI_CIRCLES = new ArrayList<String>();
+    private static final List<String> DI_RECTANGLES = new ArrayList<String>();
+    private static final List<String> DI_GATEWAY = new ArrayList<String>();
+
+    static {
+        DI_CIRCLES.add(STENCIL_EVENT_START_ERROR);
+        DI_CIRCLES.add(STENCIL_EVENT_START_MESSAGE);
+        DI_CIRCLES.add(STENCIL_EVENT_START_NONE);
+        DI_CIRCLES.add(STENCIL_EVENT_START_TIMER);
+        DI_CIRCLES.add(STENCIL_EVENT_START_SIGNAL);
+
+        DI_CIRCLES.add(STENCIL_EVENT_BOUNDARY_ERROR);
+        DI_CIRCLES.add(STENCIL_EVENT_BOUNDARY_SIGNAL);
+        DI_CIRCLES.add(STENCIL_EVENT_BOUNDARY_TIMER);
+        DI_CIRCLES.add(STENCIL_EVENT_BOUNDARY_MESSAGE);
+        DI_CIRCLES.add(STENCIL_EVENT_BOUNDARY_CANCEL);
+        DI_CIRCLES.add(STENCIL_EVENT_BOUNDARY_COMPENSATION);
+
+        DI_CIRCLES.add(STENCIL_EVENT_CATCH_MESSAGE);
+        DI_CIRCLES.add(STENCIL_EVENT_CATCH_SIGNAL);
+        DI_CIRCLES.add(STENCIL_EVENT_CATCH_TIMER);
+
+        DI_CIRCLES.add(STENCIL_EVENT_THROW_NONE);
+        DI_CIRCLES.add(STENCIL_EVENT_THROW_SIGNAL);
+
+        DI_CIRCLES.add(STENCIL_EVENT_END_NONE);
+        DI_CIRCLES.add(STENCIL_EVENT_END_ERROR);
+        DI_CIRCLES.add(STENCIL_EVENT_END_CANCEL);
+        DI_CIRCLES.add(STENCIL_EVENT_END_TERMINATE);
+
+        DI_RECTANGLES.add(STENCIL_CALL_ACTIVITY);
+        DI_RECTANGLES.add(STENCIL_SUB_PROCESS);
+        DI_RECTANGLES.add(STENCIL_EVENT_SUB_PROCESS);
+        DI_RECTANGLES.add(STENCIL_TASK_BUSINESS_RULE);
+        DI_RECTANGLES.add(STENCIL_TASK_MAIL);
+        DI_RECTANGLES.add(STENCIL_TASK_MANUAL);
+        DI_RECTANGLES.add(STENCIL_TASK_RECEIVE);
+        DI_RECTANGLES.add(STENCIL_TASK_SCRIPT);
+        DI_RECTANGLES.add(STENCIL_TASK_SEND);
+        DI_RECTANGLES.add(STENCIL_TASK_SERVICE);
+        DI_RECTANGLES.add(STENCIL_TASK_USER);
+        DI_RECTANGLES.add(STENCIL_TASK_CAMEL);
+        DI_RECTANGLES.add(STENCIL_TASK_MULE);
+        DI_RECTANGLES.add(STENCIL_TEXT_ANNOTATION);
+
+        DI_GATEWAY.add(STENCIL_GATEWAY_EVENT);
+        DI_GATEWAY.add(STENCIL_GATEWAY_EXCLUSIVE);
+        DI_GATEWAY.add(STENCIL_GATEWAY_INCLUSIVE);
+        DI_GATEWAY.add(STENCIL_GATEWAY_PARALLEL);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+        if (StringUtils.isNotEmpty(pool.getName())) {
+          poolPropertiesNode.put(PROPERTY_NAME, pool.getName());
+=======
+    }
+
+    private void postProcessElements(FlowElementsContainer parentContainer,  Collection<FlowElement> flowElementList, 
+            Map<String, JsonNode> edgeMap, BpmnModel bpmnModel, Map<String, FlowWithContainer> allFlowMap, List<Gateway> gatewayWithOrderList) {
+
+        for (FlowElement flowElement : flowElementList) {
+            
+            if (flowElement instanceof Event) {
+                Event event = (Event) flowElement;
+                if (CollectionUtils.isNotEmpty(event.getEventDefinitions())) {
+                    EventDefinition eventDef = event.getEventDefinitions().get(0);
+                    if (eventDef instanceof SignalEventDefinition) {
+                        SignalEventDefinition signalEventDef = (SignalEventDefinition) eventDef;
+                        if (StringUtils.isNotEmpty(signalEventDef.getSignalRef())) {
+                            if (bpmnModel.getSignal(signalEventDef.getSignalRef()) == null) {
+                                bpmnModel.addSignal(new Signal(signalEventDef.getSignalRef(), signalEventDef.getSignalRef()));
+                            }
+                        }
+                        
+                    } else if (eventDef instanceof MessageEventDefinition) {
+                        MessageEventDefinition messageEventDef = (MessageEventDefinition) eventDef;
+                        if (StringUtils.isNotEmpty(messageEventDef.getMessageRef())) {
+                            if (bpmnModel.getMessage(messageEventDef.getMessageRef()) == null) {
+                                bpmnModel.addMessage(new Message(messageEventDef.getMessageRef(), messageEventDef.getMessageRef(), null));
+                            }
+                        }
+                    }
+                }
+            }
+            
+            if (flowElement instanceof BoundaryEvent) {
+                BoundaryEvent boundaryEvent = (BoundaryEvent) flowElement;
+                Activity activity = retrieveAttachedRefObject(boundaryEvent.getAttachedToRefId(), parentContainer.getFlowElements());
+              
+                if (activity == null) {
+                    LOGGER.warn("Boundary event " + boundaryEvent.getId() + " is not attached to any activity");
+                } else {
+                    boundaryEvent.setAttachedToRef(activity);
+                    activity.getBoundaryEvents().add(boundaryEvent);
+                }
+                
+            } else if (flowElement instanceof Gateway) {
+                if (flowElement.getExtensionElements().containsKey("EDITOR_FLOW_ORDER")) {
+                    gatewayWithOrderList.add((Gateway) flowElement);
+                }
+                
+            } else if (flowElement instanceof SubProcess) {
+                SubProcess subProcess = (SubProcess) flowElement;
+                postProcessElements(subProcess, subProcess.getFlowElements(), edgeMap, bpmnModel, allFlowMap, gatewayWithOrderList);
+                
+            } else if (flowElement instanceof SequenceFlow) {
+                SequenceFlow sequenceFlow = (SequenceFlow) flowElement;
+                FlowElement sourceFlowElement = parentContainer.getFlowElement(sequenceFlow.getSourceRef());
+                if (sourceFlowElement != null && sourceFlowElement instanceof FlowNode) {
+                    
+                    FlowWithContainer flowWithContainer = new FlowWithContainer(sequenceFlow, parentContainer);
+                    if (sequenceFlow.getExtensionElements().get("EDITOR_RESOURCEID") != null && sequenceFlow.getExtensionElements().get("EDITOR_RESOURCEID").size() > 0) {
+                        allFlowMap.put(sequenceFlow.getExtensionElements().get("EDITOR_RESOURCEID").get(0).getElementText(), flowWithContainer);
+                        sequenceFlow.getExtensionElements().remove("EDITOR_RESOURCEID");
+                    }
+                    
+                    ((FlowNode) sourceFlowElement).getOutgoingFlows().add(sequenceFlow);
+                    JsonNode edgeNode = edgeMap.get(sequenceFlow.getId());
+                    if (edgeNode != null) {
+                      boolean isDefault = JsonConverterUtil.getPropertyValueAsBoolean(PROPERTY_SEQUENCEFLOW_DEFAULT, edgeNode);
+                      if (isDefault) {
+                          if (sourceFlowElement instanceof Activity) {
+                              ((Activity) sourceFlowElement).setDefaultFlow(sequenceFlow.getId());
+                          } else if (sourceFlowElement instanceof Gateway) {
+                              ((Gateway) sourceFlowElement).setDefaultFlow(sequenceFlow.getId());
+                          }
+                      }
+                    }
+                }
+                FlowElement targetFlowElement = parentContainer.getFlowElement(sequenceFlow.getTargetRef());
+                if (targetFlowElement != null && targetFlowElement instanceof FlowNode) {
+                    ((FlowNode) targetFlowElement).getIncomingFlows().add(sequenceFlow);
+                }
+            }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+import java.util.List;
+import java.util.Map;
+=======
+import java.sql.Connection;
+import java.sql.DatabaseMetaData;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.Collections;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.activiti.engine.ActivitiException;
+import org.activiti.engine.history.HistoricActivityInstance;
+import org.activiti.engine.history.HistoricDetail;
+import org.activiti.engine.history.HistoricFormProperty;
+import org.activiti.engine.history.HistoricProcessInstance;
+import org.activiti.engine.history.HistoricTaskInstance;
+import org.activiti.engine.history.HistoricVariableInstance;
+import org.activiti.engine.history.HistoricVariableUpdate;
+import org.activiti.engine.identity.Group;
+import org.activiti.engine.identity.User;
+import org.activiti.engine.impl.TablePageQueryImpl;
+import org.activiti.engine.impl.db.PersistentObject;
+import org.activiti.engine.impl.persistence.AbstractManager;
+import org.activiti.engine.management.TableMetaData;
+import org.activiti.engine.management.TablePage;
+import org.activiti.engine.repository.Deployment;
+import org.activiti.engine.repository.Model;
+import org.activiti.engine.repository.ProcessDefinition;
+import org.activiti.engine.runtime.Execution;
+import org.activiti.engine.runtime.Job;
+import org.activiti.engine.runtime.ProcessInstance;
+import org.activiti.engine.task.Task;
+import org.apache.ibatis.session.RowBounds;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  String getTableName(Class<?> entityClass, boolean withPrefix);
+=======
+  public List<String> getTablesPresentInDatabase() {
+    List<String> tableNames = new ArrayList<String>();
+    Connection connection = null;
+    try {
+      connection = getDbSqlSession().getSqlSession().getConnection();
+      DatabaseMetaData databaseMetaData = connection.getMetaData();
+      ResultSet tables = null;
+      try {
+        log.debug("retrieving activiti tables from jdbc metadata");
+        String databaseTablePrefix = getDbSqlSession().getDbSqlSessionFactory().getDatabaseTablePrefix();
+        String tableNameFilter = databaseTablePrefix+"ACT_%";
+        if ("postgres".equals(getDbSqlSession().getDbSqlSessionFactory().getDatabaseType())) {
+          tableNameFilter = databaseTablePrefix+"act\\_%";
+        }
+        if ("oracle".equals(getDbSqlSession().getDbSqlSessionFactory().getDatabaseType())) {
+          tableNameFilter = databaseTablePrefix+"ACT" + databaseMetaData.getSearchStringEscape() + "_%";
+        }
+        
+        String catalog = null;
+        if (getProcessEngineConfiguration().getDatabaseCatalog() != null && getProcessEngineConfiguration().getDatabaseCatalog().length() > 0) {
+          catalog = getProcessEngineConfiguration().getDatabaseCatalog();
+        }
+        
+        String schema = null;
+        if (getProcessEngineConfiguration().getDatabaseSchema() != null && getProcessEngineConfiguration().getDatabaseSchema().length() > 0) {
+          if ("oracle".equals(getDbSqlSession().getDbSqlSessionFactory().getDatabaseType())) {
+            schema = getProcessEngineConfiguration().getDatabaseSchema().toUpperCase();
+          } else {
+            schema = getProcessEngineConfiguration().getDatabaseSchema();
+          }
+        }
+        
+        tables = databaseMetaData.getTables(catalog, schema, tableNameFilter, getDbSqlSession().JDBC_METADATA_TABLE_TYPES);
+        while (tables.next()) {
+          String tableName = tables.getString("TABLE_NAME");
+          tableName = tableName.toUpperCase();
+          tableNames.add(tableName);
+          log.debug("  retrieved activiti table name {}", tableName);
+        }
+      } finally {
+        tables.close();
+      }
+    } catch (Exception e) {
+      throw new ActivitiException("couldn't get activiti table names using metadata: "+e.getMessage(), e); 
+    }
+    return tableNames;
+  }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  TableMetaData getTableMetaData(String tableName);
+=======
+  protected long getTableCount(String tableName) {
+    log.debug("selecting table count for {}", tableName);
+    Long count = (Long) getDbSqlSession().selectOne("selectTableCount",
+            Collections.singletonMap("tableName", tableName));
+    return count;
+  }
+
+  @SuppressWarnings("unchecked")
+  public TablePage getTablePage(TablePageQueryImpl tablePageQuery, int firstResult, int maxResults) {
+
+    TablePage tablePage = new TablePage();
+
+    @SuppressWarnings("rawtypes")
+    List tableData = getDbSqlSession().getSqlSession()
+      .selectList("selectTableData", tablePageQuery, new RowBounds(firstResult, maxResults));
+
+    tablePage.setTableName(tablePageQuery.getTableName());
+    tablePage.setTotal(getTableCount(tablePageQuery.getTableName()));
+    tablePage.setRows((List<Map<String,Object>>)tableData);
+    tablePage.setFirstResult(firstResult);
+    
+    return tablePage;
+  }
+  
+  public String getTableName(Class<?> entityClass, boolean withPrefix) {
+    String databaseTablePrefix = getDbSqlSession().getDbSqlSessionFactory().getDatabaseTablePrefix();
+    String tableName = null;
+    
+    if (PersistentObject.class.isAssignableFrom(entityClass)) {
+      tableName = persistentObjectToTableNameMap.get(entityClass);
+    }
+    else {
+      tableName = apiTypeToTableNameMap.get(entityClass);
+    }
+    if (withPrefix) {
+      return databaseTablePrefix + tableName;
+    }
+    else {
+      return tableName;
+    }
+  }
+
+  public TableMetaData getTableMetaData(String tableName) {
+    TableMetaData result = new TableMetaData();
+    try {
+      result.setTableName(tableName);
+      DatabaseMetaData metaData = getDbSqlSession()
+        .getSqlSession()
+        .getConnection()
+        .getMetaData();
+
+      if ("postgres".equals(getDbSqlSession().getDbSqlSessionFactory().getDatabaseType())) {
+        tableName = tableName.toLowerCase();
+      }
+      
+      String catalog = null;
+      if (getProcessEngineConfiguration().getDatabaseCatalog() != null && getProcessEngineConfiguration().getDatabaseCatalog().length() > 0) {
+        catalog = getProcessEngineConfiguration().getDatabaseCatalog();
+      }
+      
+      String schema = null;
+      if (getProcessEngineConfiguration().getDatabaseSchema() != null && getProcessEngineConfiguration().getDatabaseSchema().length() > 0) {
+        if ("oracle".equals(getDbSqlSession().getDbSqlSessionFactory().getDatabaseType())) {
+          schema = getProcessEngineConfiguration().getDatabaseSchema().toUpperCase();
+        } else {
+          schema = getProcessEngineConfiguration().getDatabaseSchema();
+        }
+      }
+
+      ResultSet resultSet = metaData.getColumns(catalog, schema, tableName, null);
+      while(resultSet.next()) {
+        boolean wrongSchema = false;
+        if (schema != null && schema.length() > 0) {
+          for (int i = 0; i < resultSet.getMetaData().getColumnCount(); i++) {
+            String columnName = resultSet.getMetaData().getColumnName(i+1);
+            if ("TABLE_SCHEM".equalsIgnoreCase(columnName) || "TABLE_SCHEMA".equalsIgnoreCase(columnName)) {
+              if (schema.equalsIgnoreCase(resultSet.getString(resultSet.getMetaData().getColumnName(i+1))) == false) {
+                wrongSchema = true;
+              }
+              break;
+            }
+          }
+        }
+        
+        if (wrongSchema == false) {
+          String name = resultSet.getString("COLUMN_NAME").toUpperCase();
+          String type = resultSet.getString("TYPE_NAME").toUpperCase();
+          result.addColumnMetaData(name, type);
+        }
+      }
+      
+    } catch (SQLException e) {
+      throw new ActivitiException("Could not retrieve database metadata: " + e.getMessage());
+    }
+
+    if(result.getColumnNames().isEmpty()) {
+      // According to API, when a table doesn't exist, null should be returned
+      result = null;
+    }
+    return result;
+  }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+import org.activiti.engine.impl.persistence.entity.AttachmentEntityImpl;
+import org.activiti.engine.impl.persistence.entity.ByteArrayEntityImpl;
+import org.activiti.engine.impl.persistence.entity.CommentEntityImpl;
+import org.activiti.engine.impl.persistence.entity.CompensateEventSubscriptionEntityImpl;
+import org.activiti.engine.impl.persistence.entity.DeadLetterJobEntityImpl;
+import org.activiti.engine.impl.persistence.entity.DeploymentEntityImpl;
+import org.activiti.engine.impl.persistence.entity.Entity;
+import org.activiti.engine.impl.persistence.entity.EventLogEntryEntityImpl;
+import org.activiti.engine.impl.persistence.entity.EventSubscriptionEntityImpl;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntityImpl;
+import org.activiti.engine.impl.persistence.entity.GroupEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricActivityInstanceEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricDetailAssignmentEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricDetailEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricDetailTransitionInstanceEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricDetailVariableInstanceUpdateEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricFormPropertyEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricIdentityLinkEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricProcessInstanceEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricScopeInstanceEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricTaskInstanceEntityImpl;
+import org.activiti.engine.impl.persistence.entity.HistoricVariableInstanceEntityImpl;
+import org.activiti.engine.impl.persistence.entity.IdentityInfoEntityImpl;
+import org.activiti.engine.impl.persistence.entity.IdentityLinkEntityImpl;
+import org.activiti.engine.impl.persistence.entity.JobEntityImpl;
+import org.activiti.engine.impl.persistence.entity.MembershipEntityImpl;
+import org.activiti.engine.impl.persistence.entity.MessageEventSubscriptionEntityImpl;
+import org.activiti.engine.impl.persistence.entity.ModelEntityImpl;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntityImpl;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionInfoEntityImpl;
+import org.activiti.engine.impl.persistence.entity.PropertyEntityImpl;
+import org.activiti.engine.impl.persistence.entity.ResourceEntityImpl;
+import org.activiti.engine.impl.persistence.entity.SignalEventSubscriptionEntityImpl;
+import org.activiti.engine.impl.persistence.entity.SuspendedJobEntityImpl;
+import org.activiti.engine.impl.persistence.entity.TaskEntityImpl;
+import org.activiti.engine.impl.persistence.entity.TimerJobEntityImpl;
+import org.activiti.engine.impl.persistence.entity.UserEntityImpl;
+import org.activiti.engine.impl.persistence.entity.VariableInstanceEntityImpl;
+
+=======
+import org.activiti.engine.impl.persistence.entity.AttachmentEntity;
+import org.activiti.engine.impl.persistence.entity.ByteArrayEntity;
+import org.activiti.engine.impl.persistence.entity.CommentEntity;
+import org.activiti.engine.impl.persistence.entity.CompensateEventSubscriptionEntity;
+import org.activiti.engine.impl.persistence.entity.DeploymentEntity;
+import org.activiti.engine.impl.persistence.entity.EventLogEntryEntity;
+import org.activiti.engine.impl.persistence.entity.EventSubscriptionEntity;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+import org.activiti.engine.impl.persistence.entity.GroupEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricActivityInstanceEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricDetailAssignmentEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricDetailEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricDetailTransitionInstanceEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricDetailVariableInstanceUpdateEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricFormPropertyEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricIdentityLinkEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricProcessInstanceEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricScopeInstanceEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricTaskInstanceEntity;
+import org.activiti.engine.impl.persistence.entity.HistoricVariableInstanceEntity;
+import org.activiti.engine.impl.persistence.entity.IdentityInfoEntity;
+import org.activiti.engine.impl.persistence.entity.IdentityLinkEntity;
+import org.activiti.engine.impl.persistence.entity.JobEntity;
+import org.activiti.engine.impl.persistence.entity.MembershipEntity;
+import org.activiti.engine.impl.persistence.entity.MessageEntity;
+import org.activiti.engine.impl.persistence.entity.MessageEventSubscriptionEntity;
+import org.activiti.engine.impl.persistence.entity.ModelEntity;
+import org.activiti.engine.impl.persistence.entity.ProcessDefinitionEntity;
+import org.activiti.engine.impl.persistence.entity.PropertyEntity;
+import org.activiti.engine.impl.persistence.entity.ResourceEntity;
+import org.activiti.engine.impl.persistence.entity.SignalEventSubscriptionEntity;
+import org.activiti.engine.impl.persistence.entity.TaskEntity;
+import org.activiti.engine.impl.persistence.entity.TimerEntity;
+import org.activiti.engine.impl.persistence.entity.UserEntity;
+import org.activiti.engine.impl.persistence.entity.VariableInstanceEntity;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+	public static List<Class<? extends Entity>> DELETE_ORDER = new ArrayList<Class<? extends Entity>>();
+	public static List<Class<? extends Entity>> INSERT_ORDER = new ArrayList<Class<? extends Entity>>();
+	
+	static {
+		
+		/*
+		 * In the comments below:
+		 * 
+		 * 'FK to X' : X should be BELOW the entity
+		 * 
+		 * 'FK from X': X should be ABOVE the entity
+		 * 
+		 */
+	
+		/* No FK */
+		DELETE_ORDER.add(PropertyEntityImpl.class);
+		
+		/* No FK */
+		DELETE_ORDER.add(AttachmentEntityImpl.class);
+		
+		/* No FK */
+		DELETE_ORDER.add(CommentEntityImpl.class);
+		
+		/* No FK */
+		DELETE_ORDER.add(EventLogEntryEntityImpl.class);
+		
+		/*
+		 * FK to Deployment
+		 * FK to ByteArray 
+		 */
+		DELETE_ORDER.add(ModelEntityImpl.class); 
+		
+		/*
+		 * FK to ByteArray
+		 */
+		DELETE_ORDER.add(JobEntityImpl.class);
+		DELETE_ORDER.add(TimerJobEntityImpl.class);
+		DELETE_ORDER.add(SuspendedJobEntityImpl.class);
+		DELETE_ORDER.add(DeadLetterJobEntityImpl.class);
+		
+		/*
+		 * FK to ByteArray
+		 * FK to Exeution
+		 */
+		DELETE_ORDER.add(VariableInstanceEntityImpl.class);
+		
+		/* 
+		 * FK to ByteArray
+		 * FK to ProcessDefinition
+		 */
+		DELETE_ORDER.add(ProcessDefinitionInfoEntityImpl.class);
+		
+		/*
+		 * FK from ModelEntity
+		 * FK from JobEntity
+		 * FK from VariableInstanceEntity
+		 * 
+		 * FK to DeploymentEntity
+		 */
+		DELETE_ORDER.add(ByteArrayEntityImpl.class);
+		
+		/*
+		 * FK from ModelEntity
+		 * FK from JobEntity
+		 * FK from VariableInstanceEntity
+		 * 
+		 * FK to DeploymentEntity
+		 */
+		DELETE_ORDER.add(ResourceEntityImpl.class);
+		
+		/*
+		 * FK from ByteArray
+		 */
+		DELETE_ORDER.add(DeploymentEntityImpl.class);
+		
+		/*
+		 * FK to Execution
+		 */
+		DELETE_ORDER.add(EventSubscriptionEntityImpl.class);
+		
+		/*
+		 * FK to Execution
+		 */
+		DELETE_ORDER.add(CompensateEventSubscriptionEntityImpl.class);
+		
+		/*
+		 * FK to Execution
+		 */
+		DELETE_ORDER.add(MessageEventSubscriptionEntityImpl.class);
+		
+		/*
+		 * FK to Execution
+		 */
+		DELETE_ORDER.add(SignalEventSubscriptionEntityImpl.class);
+		
+		
+		/*
+		 * FK to process definition
+		 * FK to Execution
+		 * FK to Task
+		 */
+		DELETE_ORDER.add(IdentityLinkEntityImpl.class);
+		
+		/*
+		 * FK from IdentityLink
+		 * 
+		 * FK to Execution
+		 * FK to process definition
+		 */
+		DELETE_ORDER.add(TaskEntityImpl.class);
+		
+		/*
+		 * FK from VariableInstance 
+		 * FK from EventSubscription
+		 * FK from IdentityLink
+		 * FK from Task
+		 * 
+		 * FK to ProcessDefinition
+		 */
+		DELETE_ORDER.add(ExecutionEntityImpl.class);
+		
+		/*
+		 * FK from Task
+		 * FK from IdentityLink
+		 * FK from execution
+		 */
+		DELETE_ORDER.add(ProcessDefinitionEntityImpl.class);
+		
+		/*
+	   * FK to User
+	   * FK to Group
+	   */
+		DELETE_ORDER.add(MembershipEntityImpl.class);
+		
+		/*
+		 * Fk from Membership
+		 */
+		DELETE_ORDER.add(UserEntityImpl.class);
+	  
+	  /*
+	   * FK from Membership
+	   */
+		DELETE_ORDER.add(GroupEntityImpl.class);
+	  
+	  
+	  // History entities have no FK's
+	  
+		DELETE_ORDER.add(HistoricIdentityLinkEntityImpl.class);
+	  
+		DELETE_ORDER.add(IdentityInfoEntityImpl.class);
+	  
+		DELETE_ORDER.add(HistoricActivityInstanceEntityImpl.class);
+		DELETE_ORDER.add(HistoricProcessInstanceEntityImpl.class);
+		DELETE_ORDER.add(HistoricTaskInstanceEntityImpl.class);
+		DELETE_ORDER.add(HistoricScopeInstanceEntityImpl.class);
+	  
+		DELETE_ORDER.add(HistoricVariableInstanceEntityImpl.class);
+	  
+		DELETE_ORDER.add(HistoricDetailAssignmentEntityImpl.class);
+		DELETE_ORDER.add(HistoricDetailTransitionInstanceEntityImpl.class);
+		DELETE_ORDER.add(HistoricDetailVariableInstanceUpdateEntityImpl.class);
+		DELETE_ORDER.add(HistoricFormPropertyEntityImpl.class);
+		DELETE_ORDER.add(HistoricDetailEntityImpl.class);
+		
+		INSERT_ORDER = new ArrayList<Class<? extends Entity>>(DELETE_ORDER);
+=======
+	public static List<Class<? extends PersistentObject>> DELETE_ORDER = new ArrayList<Class<? extends PersistentObject>>();
+	public static List<Class<? extends PersistentObject>> INSERT_ORDER = new ArrayList<Class<? extends PersistentObject>>();
+	
+	static {
+		
+		/*
+		 * In the comments below:
+		 * 
+		 * 'FK to X' : X should be BELOW the entity
+		 * 
+		 * 'FK from X': X should be ABOVE the entity
+		 * 
+		 */
+	
+		/* No FK */
+		DELETE_ORDER.add(PropertyEntity.class);
+		
+		/* No FK */
+		DELETE_ORDER.add(AttachmentEntity.class);
+		
+		/* No FK */
+		DELETE_ORDER.add(CommentEntity.class);
+		
+		/* No FK */
+		DELETE_ORDER.add(EventLogEntryEntity.class);
+		
+		/*
+		 * FK to Deployment
+		 * FK to ByteArray 
+		 */
+		DELETE_ORDER.add(ModelEntity.class); 
+		
+		/* Subclass of JobEntity */
+		DELETE_ORDER.add(MessageEntity.class);
+		
+		/* Subclass of TimerEntity */
+		DELETE_ORDER.add(TimerEntity.class);
+		
+		/*
+		 * FK to ByteArray
+		 */
+		DELETE_ORDER.add(JobEntity.class);
+		
+		/*
+		 * FK to ByteArray
+		 * FK to Exeution
+		 */
+		DELETE_ORDER.add(VariableInstanceEntity.class);
+		
+		/*
+		 * FK from ModelEntity
+		 * FK from JobEntity
+		 * FK from VariableInstanceEntity
+		 * 
+		 * FK to DeploymentEntity
+		 */
+		DELETE_ORDER.add(ByteArrayEntity.class);
+		
+		/*
+		 * FK from ModelEntity
+		 * FK from JobEntity
+		 * FK from VariableInstanceEntity
+		 * 
+		 * FK to DeploymentEntity
+		 */
+		DELETE_ORDER.add(ResourceEntity.class);
+		
+		/*
+		 * FK from ByteArray
+		 */
+		DELETE_ORDER.add(DeploymentEntity.class);
+		
+		/*
+		 * FK to Execution
+		 */
+		DELETE_ORDER.add(EventSubscriptionEntity.class);
+		
+		/*
+		 * FK to Execution
+		 */
+		DELETE_ORDER.add(CompensateEventSubscriptionEntity.class);
+		
+		/*
+		 * FK to Execution
+		 */
+		DELETE_ORDER.add(MessageEventSubscriptionEntity.class);
+		
+		/*
+		 * FK to Execution
+		 */
+		DELETE_ORDER.add(SignalEventSubscriptionEntity.class);
+		
+		
+		/*
+		 * FK to process definition
+		 * FK to Execution
+		 * FK to Task
+		 */
+		DELETE_ORDER.add(IdentityLinkEntity.class);
+		
+		/*
+		 * FK from IdentityLink
+		 * 
+		 * FK to Execution
+		 * FK to process definition
+		 */
+		DELETE_ORDER.add(TaskEntity.class);
+		
+		/*
+		 * FK from VariableInstance 
+		 * FK from EventSubscription
+		 * FK from IdentityLink
+		 * FK from Task
+		 * 
+		 * FK to ProcessDefinition
+		 */
+		DELETE_ORDER.add(ExecutionEntity.class);
+		
+		/*
+		 * FK from Task
+		 * FK from IdentityLink
+		 * FK from execution
+		 */
+		DELETE_ORDER.add(ProcessDefinitionEntity.class);
+		
+		/*
+	   * FK to User
+	   * FK to Group
+	   */
+		DELETE_ORDER.add(MembershipEntity.class);
+		
+		/*
+		 * Fk from Membership
+		 */
+		DELETE_ORDER.add(UserEntity.class);
+	  
+	  /*
+	   * FK from Membership
+	   */
+		DELETE_ORDER.add(GroupEntity.class);
+	  
+	  
+	  // History entities have no FK's
+	  
+		DELETE_ORDER.add(HistoricIdentityLinkEntity.class);
+	  
+		DELETE_ORDER.add(IdentityInfoEntity.class);
+	  
+		DELETE_ORDER.add(HistoricActivityInstanceEntity.class);
+		DELETE_ORDER.add(HistoricProcessInstanceEntity.class);
+		DELETE_ORDER.add(HistoricTaskInstanceEntity.class);
+		DELETE_ORDER.add(HistoricScopeInstanceEntity.class);
+	  
+		DELETE_ORDER.add(HistoricVariableInstanceEntity.class);
+	  
+		DELETE_ORDER.add(HistoricDetailAssignmentEntity.class);
+		DELETE_ORDER.add(HistoricDetailTransitionInstanceEntity.class);
+		DELETE_ORDER.add(HistoricDetailVariableInstanceUpdateEntity.class);
+		DELETE_ORDER.add(HistoricFormPropertyEntity.class);
+		DELETE_ORDER.add(HistoricDetailEntity.class);
+		
+		INSERT_ORDER = new ArrayList<Class<? extends PersistentObject>>(DELETE_ORDER);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+import org.activiti.engine.impl.persistence.entity.Entity;
+import org.activiti.engine.impl.persistence.entity.EventLogEntryEntityImpl;
+=======
+import org.activiti.engine.impl.persistence.entity.EventLogEntryEntity;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  /**
+   * A map {class, boolean}, to indicate whether or not a certain {@link Entity} class can be bulk inserted.
+   */
+  protected static Map<Class<? extends Entity>, Boolean> bulkInsertableMap;
+=======
+  static {
+    
+    String defaultOrderBy = " order by ${orderByColumns} ";
+    
+    // h2
+    databaseSpecificLimitBeforeStatements.put("h2", "");
+    databaseSpecificLimitAfterStatements.put("h2", "LIMIT #{maxResults} OFFSET #{firstResult}");
+    databaseSpecificLimitBetweenStatements.put("h2", "");
+    databaseOuterJoinLimitBetweenStatements.put("h2", "");
+    databaseSpecificOrderByStatements.put("h2", defaultOrderBy);
+
+    // hsql
+    databaseSpecificLimitBeforeStatements.put("hsql", "");
+    databaseSpecificLimitAfterStatements.put("hsql", "LIMIT #{maxResults} OFFSET #{firstResult}");
+    databaseSpecificLimitBetweenStatements.put("hsql", "");
+    databaseOuterJoinLimitBetweenStatements.put("hsql", "");
+    databaseSpecificOrderByStatements.put("hsql", defaultOrderBy);
+
+    
+	  //mysql specific
+    databaseSpecificLimitBeforeStatements.put("mysql", "");
+    databaseSpecificLimitAfterStatements.put("mysql", "LIMIT #{maxResults} OFFSET #{firstResult}");
+    databaseSpecificLimitBetweenStatements.put("mysql", "");
+    databaseOuterJoinLimitBetweenStatements.put("mysql", "");
+    databaseSpecificOrderByStatements.put("mysql", defaultOrderBy);
+    addDatabaseSpecificStatement("mysql", "selectProcessDefinitionsByQueryCriteria", "selectProcessDefinitionsByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "selectProcessDefinitionCountByQueryCriteria", "selectProcessDefinitionCountByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "selectDeploymentsByQueryCriteria", "selectDeploymentsByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "selectDeploymentCountByQueryCriteria", "selectDeploymentCountByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "selectModelCountByQueryCriteria", "selectModelCountByQueryCriteria_mysql");
+    addDatabaseSpecificStatement("mysql", "updateExecutionTenantIdForDeployment", "updateExecutionTenantIdForDeployment_mysql");
+    addDatabaseSpecificStatement("mysql", "updateTaskTenantIdForDeployment", "updateTaskTenantIdForDeployment_mysql");
+    addDatabaseSpecificStatement("mysql", "updateJobTenantIdForDeployment", "updateJobTenantIdForDeployment_mysql");
+    
+    //postgres specific
+    databaseSpecificLimitBeforeStatements.put("postgres", "");
+    databaseSpecificLimitAfterStatements.put("postgres", "LIMIT #{maxResults} OFFSET #{firstResult}");
+    databaseSpecificLimitBetweenStatements.put("postgres", "");
+    databaseOuterJoinLimitBetweenStatements.put("postgres", "");
+    databaseSpecificOrderByStatements.put("postgres", defaultOrderBy);
+    addDatabaseSpecificStatement("postgres", "insertByteArray", "insertByteArray_postgres");
+    addDatabaseSpecificStatement("postgres", "bulkInsertByteArray", "bulkInsertByteArray_postgres");
+    addDatabaseSpecificStatement("postgres", "updateByteArray", "updateByteArray_postgres");
+    addDatabaseSpecificStatement("postgres", "selectByteArray", "selectByteArray_postgres");
+    addDatabaseSpecificStatement("postgres", "selectResourceByDeploymentIdAndResourceName", "selectResourceByDeploymentIdAndResourceName_postgres");
+    addDatabaseSpecificStatement("postgres", "selectResourcesByDeploymentId", "selectResourcesByDeploymentId_postgres");
+    addDatabaseSpecificStatement("postgres", "insertIdentityInfo", "insertIdentityInfo_postgres");
+    addDatabaseSpecificStatement("postgres", "bulkInsertIdentityInfo", "bulkInsertIdentityInfo_postgres");
+    addDatabaseSpecificStatement("postgres", "updateIdentityInfo", "updateIdentityInfo_postgres");
+    addDatabaseSpecificStatement("postgres", "selectIdentityInfoById", "selectIdentityInfoById_postgres");
+    addDatabaseSpecificStatement("postgres", "selectIdentityInfoByUserIdAndKey", "selectIdentityInfoByUserIdAndKey_postgres");
+    addDatabaseSpecificStatement("postgres", "selectIdentityInfoByUserId", "selectIdentityInfoByUserId_postgres");
+    addDatabaseSpecificStatement("postgres", "selectIdentityInfoDetails", "selectIdentityInfoDetails_postgres");
+    addDatabaseSpecificStatement("postgres", "insertComment", "insertComment_postgres");
+    addDatabaseSpecificStatement("postgres", "bulkInsertComment", "bulkInsertComment_postgres");
+    addDatabaseSpecificStatement("postgres", "selectComment", "selectComment_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByTaskId", "selectCommentsByTaskId_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByProcessInstanceId", "selectCommentsByProcessInstanceId_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByProcessInstanceIdAndType", "selectCommentsByProcessInstanceIdAndType_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByType", "selectCommentsByType_postgres");
+    addDatabaseSpecificStatement("postgres", "selectCommentsByTaskIdAndType", "selectCommentsByTaskIdAndType_postgres");
+    addDatabaseSpecificStatement("postgres", "selectEventsByTaskId", "selectEventsByTaskId_postgres");
+    addDatabaseSpecificStatement("postgres", "insertEventLogEntry", "insertEventLogEntry_postgres");
+    addDatabaseSpecificStatement("postgres", "bulkInsertEventLogEntry", "bulkInsertEventLogEntry_postgres");
+    addDatabaseSpecificStatement("postgres", "selectAllEventLogEntries", "selectAllEventLogEntries_postgres");
+    addDatabaseSpecificStatement("postgres", "selectEventLogEntries", "selectEventLogEntries_postgres");
+    addDatabaseSpecificStatement("postgres", "selectEventLogEntriesByProcessInstanceId", "selectEventLogEntriesByProcessInstanceId_postgres");
+        
+    // oracle
+    databaseSpecificLimitBeforeStatements.put("oracle", "select * from ( select a.*, ROWNUM rnum from (");
+    databaseSpecificLimitAfterStatements.put("oracle", "  ) a where ROWNUM < #{lastRow}) where rnum  >= #{firstRow}");
+    databaseSpecificLimitBetweenStatements.put("oracle", "");
+    databaseOuterJoinLimitBetweenStatements.put("oracle", "");
+    databaseSpecificOrderByStatements.put("oracle", defaultOrderBy);
+    addDatabaseSpecificStatement("oracle", "selectExclusiveJobsToExecute", "selectExclusiveJobsToExecute_integerBoolean");
+    addDatabaseSpecificStatement("oracle", "selectUnlockedTimersByDuedate", "selectUnlockedTimersByDuedate_oracle");
+    addDatabaseSpecificStatement("oracle", "insertEventLogEntry", "insertEventLogEntry_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertVariableInstance", "bulkInsertVariableInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertUser", "bulkInsertUser_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertTask", "bulkInsertTask_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertResource", "bulkInsertResource_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertProperty", "bulkInsertProperty_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertProcessDefinition", "bulkInsertProcessDefinition_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertModel", "bulkInsertModel_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMembership", "bulkInsertMembership_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertTimer", "bulkInsertTimer_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMessage", "bulkInsertMessage_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertIdentityInfo", "bulkInsertIdentityInfo_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertIdentityLink", "bulkInsertIdentityLink_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMembership", "bulkInsertMembership_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertTimer", "bulkInsertTimer_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMessage", "bulkInsertMessage_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricVariableInstance", "bulkInsertHistoricVariableInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricTaskInstance", "bulkInsertHistoricTaskInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricProcessInstance", "bulkInsertHistoricProcessInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricIdentityLink", "bulkInsertHistoricIdentityLink_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricDetailVariableInstanceUpdate", "bulkInsertHistoricDetailVariableInstanceUpdate_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricFormProperty", "bulkInsertHistoricFormProperty_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertHistoricActivityInstance", "bulkInsertHistoricActivityInstance_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertGroup", "bulkInsertGroup_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertExecution", "bulkInsertExecution_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertMessageEventSubscription", "bulkInsertMessageEventSubscription_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertSignalEventSubscription", "bulkInsertSignalEventSubscription_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertCompensateEventSubscription", "bulkInsertCompensateEventSubscription_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertEventLogEntry", "bulkInsertEventLogEntry_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertDeployment", "bulkInsertDeployment_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertComment", "bulkInsertComment_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertByteArray", "bulkInsertByteArray_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertEventLogEntry", "bulkInsertEventLogEntry_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertDeployment", "bulkInsertDeployment_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertComment", "bulkInsertComment_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertByteArray", "bulkInsertByteArray_oracle");
+    addDatabaseSpecificStatement("oracle", "bulkInsertAttachment", "bulkInsertAttachment_oracle");
+
+    // db2
+    databaseSpecificLimitBeforeStatements.put("db2", "SELECT SUB.* FROM (");
+    databaseSpecificLimitAfterStatements.put("db2", ")RES ) SUB WHERE SUB.rnk >= #{firstRow} AND SUB.rnk < #{lastRow}");
+    databaseSpecificLimitBetweenStatements.put("db2", ", row_number() over (ORDER BY ${orderByColumns}) rnk FROM ( select distinct RES.* ");
+    databaseOuterJoinLimitBetweenStatements.put("db2", ", row_number() over (ORDER BY ${mssqlOrDB2OrderBy}) rnk FROM ( select distinct ");
+    databaseSpecificOrderByStatements.put("db2", "");
+    databaseSpecificLimitBeforeNativeQueryStatements.put("db2", "SELECT SUB.* FROM ( select RES.* , row_number() over (ORDER BY ${orderByColumns}) rnk FROM (");
+    addDatabaseSpecificStatement("db2", "selectExclusiveJobsToExecute", "selectExclusiveJobsToExecute_integerBoolean");
+    addDatabaseSpecificStatement("db2", "selectExecutionByNativeQuery", "selectExecutionByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricActivityInstanceByNativeQuery", "selectHistoricActivityInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricProcessInstanceByNativeQuery", "selectHistoricProcessInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricTaskInstanceByNativeQuery", "selectHistoricTaskInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectTaskByNativeQuery", "selectTaskByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectProcessDefinitionByNativeQuery", "selectProcessDefinitionByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectDeploymentByNativeQuery", "selectDeploymentByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectGroupByNativeQuery", "selectGroupByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectUserByNativeQuery", "selectUserByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectModelByNativeQuery", "selectModelByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricDetailByNativeQuery", "selectHistoricDetailByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricVariableInstanceByNativeQuery", "selectHistoricVariableInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectTaskWithVariablesByQueryCriteria", "selectTaskWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectProcessInstanceWithVariablesByQueryCriteria", "selectProcessInstanceWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricProcessInstancesWithVariablesByQueryCriteria", "selectHistoricProcessInstancesWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("db2", "selectHistoricTaskInstancesWithVariablesByQueryCriteria", "selectHistoricTaskInstancesWithVariablesByQueryCriteria_mssql_or_db2");
+
+    // mssql
+    databaseSpecificLimitBeforeStatements.put("mssql", "SELECT SUB.* FROM (");
+    databaseSpecificLimitAfterStatements.put("mssql", ")RES ) SUB WHERE SUB.rnk >= #{firstRow} AND SUB.rnk < #{lastRow}");
+    databaseSpecificLimitBetweenStatements.put("mssql", ", row_number() over (ORDER BY ${orderByColumns}) rnk FROM ( select distinct RES.* ");
+    databaseOuterJoinLimitBetweenStatements.put("mssql", ", row_number() over (ORDER BY ${mssqlOrDB2OrderBy}) rnk FROM ( select distinct ");
+    databaseSpecificOrderByStatements.put("mssql", "");
+    databaseSpecificLimitBeforeNativeQueryStatements.put("mssql", "SELECT SUB.* FROM ( select RES.* , row_number() over (ORDER BY ${orderByColumns}) rnk FROM (");
+    addDatabaseSpecificStatement("mssql", "selectExclusiveJobsToExecute", "selectExclusiveJobsToExecute_integerBoolean");
+    addDatabaseSpecificStatement("mssql", "selectExecutionByNativeQuery", "selectExecutionByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricActivityInstanceByNativeQuery", "selectHistoricActivityInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricProcessInstanceByNativeQuery", "selectHistoricProcessInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricTaskInstanceByNativeQuery", "selectHistoricTaskInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectTaskByNativeQuery", "selectTaskByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectProcessDefinitionByNativeQuery", "selectProcessDefinitionByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectDeploymentByNativeQuery", "selectDeploymentByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectGroupByNativeQuery", "selectGroupByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectUserByNativeQuery", "selectUserByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectModelByNativeQuery", "selectModelByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricDetailByNativeQuery", "selectHistoricDetailByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricVariableInstanceByNativeQuery", "selectHistoricVariableInstanceByNativeQuery_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectTaskWithVariablesByQueryCriteria", "selectTaskWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectProcessInstanceWithVariablesByQueryCriteria", "selectProcessInstanceWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricProcessInstancesWithVariablesByQueryCriteria", "selectHistoricProcessInstancesWithVariablesByQueryCriteria_mssql_or_db2");
+    addDatabaseSpecificStatement("mssql", "selectHistoricTaskInstancesWithVariablesByQueryCriteria", "selectHistoricTaskInstancesWithVariablesByQueryCriteria_mssql_or_db2");
+  }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  
+  public Class<?> getSessionType() {
+=======
+
+
+  public Class< ? > getSessionType() {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  	bulkInsertableMap = new HashMap<Class<? extends Entity>, Boolean>();
+  	
+  	for (Class<? extends Entity> clazz : EntityDependencyOrder.INSERT_ORDER) {
+  		bulkInsertableMap.put(clazz, Boolean.TRUE);
+  	}
+
+  	// Only Oracle is making a fuss in one specific case right now
+		if ("oracle".equals(databaseType)) {
+			bulkInsertableMap.put(EventLogEntryEntityImpl.class, Boolean.FALSE);
+		}
+  }
+  
+  public Boolean isBulkInsertable(Class<? extends Entity> entityClass) {
+  	return bulkInsertableMap != null && bulkInsertableMap.containsKey(entityClass) && bulkInsertableMap.get(entityClass) == true;
+=======
+  	bulkInsertableMap = new HashMap<Class<? extends PersistentObject>, Boolean>();
+  	
+  	for (Class<? extends PersistentObject> clazz : EntityDependencyOrder.INSERT_ORDER) {
+  		bulkInsertableMap.put(clazz, Boolean.TRUE);
+  	}
+
+  	// Only Oracle is making a fuss in one specific case right now
+		if ("oracle".equals(databaseType)) {
+			bulkInsertableMap.put(EventLogEntryEntity.class, Boolean.FALSE);
+		}
+  }
+  
+  public Boolean isBulkInsertable(Class<? extends PersistentObject> persistentObjectClass) {
+  	return bulkInsertableMap != null && bulkInsertableMap.containsKey(persistentObjectClass) && bulkInsertableMap.get(persistentObjectClass) == true;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  public boolean isTablePrefixIsSchema() {
+    return tablePrefixIsSchema;
+  }
+=======
+	public int getMaxNrOfStatementsInBulkInsert() {
+		return maxNrOfStatementsInBulkInsert;
+	}
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  public int getMaxNrOfStatementsInBulkInsert() {
+    return maxNrOfStatementsInBulkInsert;
+  }
+
+  public void setMaxNrOfStatementsInBulkInsert(int maxNrOfStatementsInBulkInsert) {
+    this.maxNrOfStatementsInBulkInsert = maxNrOfStatementsInBulkInsert;
+  }
+
+=======
+	public void setMaxNrOfStatementsInBulkInsert(int maxNrOfStatementsInBulkInsert) {
+		this.maxNrOfStatementsInBulkInsert = maxNrOfStatementsInBulkInsert;
+	}
+	
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+import java.util.Set;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+import org.activiti.engine.impl.persistence.cache.CachedEntity;
+import org.activiti.engine.impl.persistence.cache.EntityCache;
+import org.activiti.engine.impl.persistence.entity.Entity;
+import org.activiti.engine.impl.persistence.entity.ExecutionEntity;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  protected static final String LAST_V5_VERSION = "5.99.0.0";
+  
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+    /* Previous */
+
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.7"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.8"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.9"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.10"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.11"));
+
+    // 5.12.1 was a bugfix release on 5.12 and did NOT change the version in ACT_GE_PROPERTY
+    // On top of that, DB2 create script for 5.12.1 was shipped with a 'T' suffix ...
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.12", Arrays.asList("5.12.1", "5.12T")));
+
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.13"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.14"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.15"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.15.1"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.16"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.16.1"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.16.2-SNAPSHOT"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.16.2"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.16.3.0"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.16.4.0"));
+
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.17.0.0"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.17.0.1"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.17.0.2"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.18.0.0"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.18.0.1"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.20.0.0"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.20.0.1"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.20.0.2"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.21.0.0"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("5.22.0.0"));
+    
+    /*
+     * Version 5.18.0.1 is the latest v5 version in the list here, although if you would look at the v5 code,
+     * you'll see there are a few other releases afterwards.
+     * 
+     * The reasoning is as follows: after 5.18.0.1, no database changes were done anymore.
+     * And if there would be database changes, they would have been part of both 5.x _and_ 6.x upgrade scripts.
+     * The logic below will assume it's one of these releases in case it isn't found in the list here
+     * and do the upgrade from the 'virtual' release 5.99.0.0 to make sure th v6 changes are applied.
+     */
+    
+
+    // This is the latest version of the 5 branch. It's a 'virtual' version cause it doesn't exist, but it is
+    // there to make sure all previous version can upgrade to the 6 version correctly.
+    ACTIVITI_VERSIONS.add(new ActivitiVersion(LAST_V5_VERSION));
+    
+    // Version 6
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("6.0.0.0"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("6.0.0.1"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("6.0.0.2"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("6.0.0.3"));
+    ACTIVITI_VERSIONS.add(new ActivitiVersion("6.0.0.4"));
+    
+    /* Current */
+    ACTIVITI_VERSIONS.add(new ActivitiVersion(ProcessEngine.VERSION));
+=======
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.17.0.0"));
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.17.0.1"));
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.17.0.2"));
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.18.0.0"));
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.18.0.1"));
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.20.0.0"));
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.20.0.1"));
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.20.0.2"));
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.21.0.0"));
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion("5.22.0.0"));
+	  
+	  /* Current */
+	  ACTIVITI_VERSIONS.add(new ActivitiVersion(ProcessEngine.VERSION));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  protected EntityCache entityCache;
+  
+  protected Map<Class<? extends Entity>, Map<String, Entity>> insertedObjects 
+    = new HashMap<Class<? extends Entity>, Map<String, Entity>>();
+  protected Map<Class<? extends Entity>, Map<String, Entity>> deletedObjects 
+    = new HashMap<Class<? extends Entity>, Map<String, Entity>>();
+  protected Map<Class<? extends Entity>, List<BulkDeleteOperation>> bulkDeleteOperations
+    = new HashMap<Class<? extends Entity>, List<BulkDeleteOperation>>();
+  protected List<Entity> updatedObjects = new ArrayList<Entity>();
+ 
+=======
+  protected Map<Class<? extends PersistentObject>, List<PersistentObject>> insertedObjects = new HashMap<Class<? extends PersistentObject>, List<PersistentObject>>();
+  protected Map<Class<?>, Map<String, CachedObject>> cachedObjects = new HashMap<Class<?>, Map<String,CachedObject>>();
+  protected List<DeleteOperation> deleteOperations = new ArrayList<DeleteOperation>();
+  protected List<DeserializedObject> deserializedObjects = new ArrayList<DeserializedObject>();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+
+  public DbSqlSession(DbSqlSessionFactory dbSqlSessionFactory, EntityCache entityCache) {
+=======
+  
+  public DbSqlSession(DbSqlSessionFactory dbSqlSessionFactory) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+    this.sqlSession = dbSqlSessionFactory.getSqlSessionFactory().openSession();
+    this.entityCache = entityCache;
+    this.connectionMetadataDefaultCatalog = dbSqlSessionFactory.getDatabaseCatalog();
+    this.connectionMetadataDefaultSchema = dbSqlSessionFactory.getDatabaseSchema();
+=======
+    this.sqlSession = dbSqlSessionFactory
+      .getSqlSessionFactory()
+      .openSession();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+    Class<? extends Entity> clazz = entity.getClass();
+    if (!insertedObjects.containsKey(clazz)) {
+    	insertedObjects.put(clazz, new LinkedHashMap<String, Entity>()); // order of insert is important, hence LinkedHashMap
+    }
+    
+    insertedObjects.get(clazz).put(entity.getId(), entity);
+    entityCache.put(entity, false); // False -> entity is inserted, so always changed
+    entity.setInserted(true);
+=======
+    Class<? extends PersistentObject> clazz = persistentObject.getClass();
+    if (!insertedObjects.containsKey(clazz)) {
+    	insertedObjects.put(clazz, new ArrayList<PersistentObject>());
+    }
+    
+    insertedObjects.get(clazz).add(persistentObject);
+    cachePut(persistentObject, false);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  // delete
+  // ///////////////////////////////////////////////////////////////////
+=======
+  public interface DeleteOperation {
+  	
+  	/**
+  	 * @return The persistent object class that is being deleted.
+  	 *         Null in case there are multiple objects of different types!
+  	 */
+  	Class<? extends PersistentObject> getPersistentObjectClass();
+    
+    boolean sameIdentity(PersistentObject other);
+
+    void clearCache();
+    
+    void execute();
+    
+  }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  public void delete(String statement, Object parameter, Class<? extends Entity> entityClass) {
+    if (!bulkDeleteOperations.containsKey(entityClass)) {
+      bulkDeleteOperations.put(entityClass, new ArrayList<BulkDeleteOperation>(1));
+=======
+  public class BulkDeleteOperation implements DeleteOperation {
+    private String statement;
+    private Object parameter;
+    
+    public BulkDeleteOperation(String statement, Object parameter) {
+      this.statement = dbSqlSessionFactory.mapStatement(statement);
+      this.parameter = parameter;
+    }
+    
+    @Override
+    public Class<? extends PersistentObject> getPersistentObjectClass() {
+    	return null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+=======
+  
+  /**
+   * A {@link DeleteOperation} that checks for concurrent modifications if the persistent object implements {@link HasRevision}.
+   * That is, it employs optimisting concurrency control. Used when the persistent object has been fetched already.
+   */
+  public class CheckedDeleteOperation implements DeleteOperation {
+    protected final PersistentObject persistentObject;
+    
+    public CheckedDeleteOperation(PersistentObject persistentObject) {
+      this.persistentObject = persistentObject;
+    }
+    
+    @Override
+    public Class<? extends PersistentObject> getPersistentObjectClass() {
+    	return persistentObject.getClass();
+    }
+    
+    @Override
+    public boolean sameIdentity(PersistentObject other) {
+      return persistentObject.getClass().equals(other.getClass())
+          && persistentObject.getId().equals(other.getId());
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  protected void removeUnnecessaryOperations() {
+=======
+  protected List<DeleteOperation> removeUnnecessaryOperations() {
+    List<DeleteOperation> removedDeleteOperations = new ArrayList<DeleteOperation>();
+
+    for (Iterator<DeleteOperation> deleteIterator = deleteOperations.iterator(); deleteIterator.hasNext();) {
+    	
+      DeleteOperation deleteOperation = deleteIterator.next();
+      Class<? extends PersistentObject> deletedPersistentObjectClass = deleteOperation.getPersistentObjectClass();
+      
+      List<PersistentObject> insertedObjectsOfSameClass = insertedObjects.get(deletedPersistentObjectClass);
+      if (insertedObjectsOfSameClass != null && insertedObjectsOfSameClass.size() > 0) {
+      	
+	      for (Iterator<PersistentObject> insertIterator = insertedObjectsOfSameClass.iterator(); insertIterator.hasNext();) {
+	        PersistentObject insertedObject = insertIterator.next();
+	        
+	        // if the deleted object is inserted,
+	        if (deleteOperation.sameIdentity(insertedObject)) {
+	          // remove the insert and the delete, they cancel each other
+	          insertIterator.remove();
+	          deleteIterator.remove();
+	          // add removed operations to be able to fire events
+	          removedDeleteOperations.add( deleteOperation);
+	        }
+	      }
+	      
+	      if (insertedObjects.get(deletedPersistentObjectClass).size() == 0) {
+	      	insertedObjects.remove(deletedPersistentObjectClass);
+	      }
+	      
+      }
+      
+      // in any case, remove the deleted object from the cache
+      deleteOperation.clearCache();
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+    for (Class<? extends Entity> entityClass : deletedObjects.keySet()) {
+=======
+    for (Class<? extends PersistentObject> persistentObjectClass : insertedObjects.keySet()) {
+    	for (PersistentObject insertedObject : insertedObjects.get(persistentObjectClass)) {
+    		cacheRemove(insertedObject.getClass(), insertedObject.getId());
+    	}
+    }
+
+    return removedDeleteOperations;
+  }
+  
+//  
+//  [Joram] Put this in comments. Had all kinds of errors.
+//  
+//  /**
+//   * Optimizes the given delete operations:
+//   * for example, if there are two deletes for two different variables, merges this into
+//   * one bulk delete which improves performance
+//   */
+//  protected List<DeleteOperation> optimizeDeleteOperations(List<DeleteOperation> deleteOperations) {
+//  	
+//  	// No optimization possible for 0 or 1 operations
+//  	if (!isOptimizeDeleteOperationsEnabled || deleteOperations.size() <= 1) {
+//  		return deleteOperations;
+//  	}
+//  	
+//  	List<DeleteOperation> optimizedDeleteOperations = new ArrayList<DbSqlSession.DeleteOperation>();
+//  	boolean[] checkedIndices = new boolean[deleteOperations.size()];
+//  	for (int i=0; i<deleteOperations.size(); i++) {
+//  		
+//  		if (checkedIndices[i] == true) {
+//  			continue;
+//  		}
+//  		
+//  		DeleteOperation deleteOperation = deleteOperations.get(i);
+//  		boolean couldOptimize = false;
+//  		if (deleteOperation instanceof CheckedDeleteOperation) {
+//  			
+//  			PersistentObject persistentObject = ((CheckedDeleteOperation) deleteOperation).getPersistentObject();
+//  			if (persistentObject instanceof BulkDeleteable) {
+//				String bulkDeleteStatement = dbSqlSessionFactory.getBulkDeleteStatement(persistentObject.getClass());
+//				bulkDeleteStatement = dbSqlSessionFactory.mapStatement(bulkDeleteStatement);
+//				if (bulkDeleteStatement != null) {
+//					BulkCheckedDeleteOperation bulkCheckedDeleteOperation = null;
+//					
+//					// Find all objects of the same type
+//					for (int j=0; j<deleteOperations.size(); j++) {
+//						DeleteOperation otherDeleteOperation = deleteOperations.get(j);
+//						if (j != i && checkedIndices[j] == false && otherDeleteOperation instanceof CheckedDeleteOperation) {
+//							PersistentObject otherPersistentObject = ((CheckedDeleteOperation) otherDeleteOperation).getPersistentObject();
+//							if (otherPersistentObject.getClass().equals(persistentObject.getClass())) {
+//	  							if (bulkCheckedDeleteOperation == null) {
+//	  								bulkCheckedDeleteOperation = new BulkCheckedDeleteOperation(persistentObject.getClass());
+//	  								bulkCheckedDeleteOperation.addPersistentObject(persistentObject);
+//	  								optimizedDeleteOperations.add(bulkCheckedDeleteOperation);
+//	  							}
+//	  							couldOptimize = true;
+//	  							bulkCheckedDeleteOperation.addPersistentObject(otherPersistentObject);
+//	  							checkedIndices[j] = true;
+//							} else {
+//							    // We may only optimize subsequent delete operations of the same type, to prevent messing up 
+//							    // the order of deletes of related entities which may depend on the referenced entity being deleted before
+//							    break;
+//							}
+//						}
+//						
+//					}
+//				}
+//  			}
+//  		}
+//  		
+//   		if (!couldOptimize) {
+//  			optimizedDeleteOperations.add(deleteOperation);
+//  		}
+//  		checkedIndices[i]=true;
+//  		
+//  	}
+//  	return optimizedDeleteOperations;
+//  }
+
+  protected void flushDeserializedObjects() {
+    for (DeserializedObject deserializedObject: deserializedObjects) {
+      deserializedObject.flush();
+    }
+  }
+
+  public List<PersistentObject> getUpdatedObjects() {
+    List<PersistentObject> updatedObjects = new ArrayList<PersistentObject>();
+    for (Class<?> clazz: cachedObjects.keySet()) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+    
+    if (insertedObjects.size() == 0) {
+      return;
+    }
+  	
+  	// Handle in entity dependency order
+    for (Class<? extends Entity> entityClass : EntityDependencyOrder.INSERT_ORDER) {
+      if (insertedObjects.containsKey(entityClass)) {
+        flushInsertEntities(entityClass, insertedObjects.get(entityClass).values());
+      	insertedObjects.remove(entityClass);
+=======
+  	
+  	// Handle in entity dependency order
+    for (Class<? extends PersistentObject> persistentObjectClass : EntityDependencyOrder.INSERT_ORDER) {
+      if (insertedObjects.containsKey(persistentObjectClass)) {
+      	flushPersistentObjects(persistentObjectClass, insertedObjects.get(persistentObjectClass));
+      	insertedObjects.remove(persistentObjectClass);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+	    for (Class<? extends Entity> entityClass : insertedObjects.keySet()) {
+      	flushInsertEntities(entityClass, insertedObjects.get(entityClass).values());
+=======
+	    for (Class<? extends PersistentObject> persistentObjectClass : insertedObjects.keySet()) {
+      	flushPersistentObjects(persistentObjectClass, insertedObjects.get(persistentObjectClass));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+	protected void flushInsertEntities(Class<? extends Entity> entityClass, Collection<Entity> entitiesToInsert) {
+	  if (entitiesToInsert.size() == 1) {
+	  	flushRegularInsert(entitiesToInsert.iterator().next(), entityClass);
+	  } else if (Boolean.FALSE.equals(dbSqlSessionFactory.isBulkInsertable(entityClass))) {
+	  	for (Entity entity : entitiesToInsert) {
+	  		flushRegularInsert(entity, entityClass);
+	  	}
+	  }	else {
+	  	flushBulkInsert(entitiesToInsert, entityClass);
+	  }
+  }
+	
+	protected Collection<Entity> orderExecutionEntities(Map<String, Entity> executionEntities, boolean parentBeforeChildExecution) {
+	  
+	  // For insertion: parent executions should go before child executions
+	  
+	  List<Entity> result = new ArrayList<Entity>(executionEntities.size());
+	  
+	  // Gather parent-child relationships
+	  Map<String, String> childToParentExecutionMapping = new HashMap<String, String>();
+	  Map<String, List<ExecutionEntity>> parentToChildrenMapping = new HashMap<String, List<ExecutionEntity>>();
+    
+	  Collection<Entity> executionCollection = executionEntities.values();
+    Iterator<Entity> executionIterator = executionCollection.iterator();
+    while (executionIterator.hasNext()) {
+      ExecutionEntity currentExecutionEntity = (ExecutionEntity) executionIterator.next();
+      String parentId = currentExecutionEntity.getParentId();
+      String superExecutionId = currentExecutionEntity.getSuperExecutionId();
+
+      String parentKey = parentId != null ? parentId : superExecutionId;
+      childToParentExecutionMapping.put(currentExecutionEntity.getId(), parentKey);
+      
+      if (!parentToChildrenMapping.containsKey(parentKey)) {
+        parentToChildrenMapping.put(parentKey, new ArrayList<ExecutionEntity>());
+      }
+      parentToChildrenMapping.get(parentKey).add(currentExecutionEntity);
+    }
+    
+    // Loop over all entities, and insert in the correct order
+    Set<String> handledExecutionIds = new HashSet<String>(executionEntities.size());
+    executionIterator = executionCollection.iterator();
+    while (executionIterator.hasNext()) {
+      ExecutionEntity currentExecutionEntity = (ExecutionEntity) executionIterator.next();
+      String executionId = currentExecutionEntity.getId();
+      
+      if (!handledExecutionIds.contains(executionId)) {
+        String parentId = childToParentExecutionMapping.get(executionId);
+        if (parentId != null) {
+          while (parentId != null) {
+            String newParentId = childToParentExecutionMapping.get(parentId);
+            if (newParentId == null) {
+              break;
+            }
+            parentId = newParentId;
+          }
+        }
+        
+        if (parentId == null) {
+          parentId = executionId;
+        }
+
+        if (executionEntities.containsKey(parentId) && !handledExecutionIds.contains(parentId)) {
+          handledExecutionIds.add(parentId);
+          if (parentBeforeChildExecution) {
+            result.add(executionEntities.get(parentId));
+          } else {
+            result.add(0, executionEntities.get(parentId));
+          }
+        }
+        
+        collectChildExecutionsForInsertion(result, parentToChildrenMapping, handledExecutionIds, parentId, parentBeforeChildExecution);
+        
+      }
+    }
+    
+    return result;
+	}
+
+  protected void collectChildExecutionsForInsertion(List<Entity> result, Map<String, List<ExecutionEntity>> parentToChildrenMapping, 
+      Set<String> handledExecutionIds, String parentId, boolean parentBeforeChildExecution) {
+    List<ExecutionEntity> childExecutionEntities = parentToChildrenMapping.get(parentId);
+    
+    if (childExecutionEntities == null) {
+      return;
+    }
+    
+    for (ExecutionEntity childExecutionEntity : childExecutionEntities) {
+      handledExecutionIds.add(childExecutionEntity.getId());
+      if (parentBeforeChildExecution) {
+        result.add(childExecutionEntity);
+      } else {
+        result.add(0, childExecutionEntity);
+      }
+      
+      collectChildExecutionsForInsertion(result, parentToChildrenMapping, handledExecutionIds, childExecutionEntity.getId(), parentBeforeChildExecution);
+    }
+  }
+	
+  protected void flushRegularInsert(Entity entity, Class<? extends Entity> clazz) {
+  	 String insertStatement = dbSqlSessionFactory.getInsertStatement(entity);
+     insertStatement = dbSqlSessionFactory.mapStatement(insertStatement);
+
+     if (insertStatement==null) {
+       throw new ActivitiException("no insert statement for " + entity.getClass() + " in the ibatis mapping files");
+     }
+     
+     log.debug("inserting: {}", entity);
+     sqlSession.insert(insertStatement, entity);
+     
+     // See https://activiti.atlassian.net/browse/ACT-1290
+     if (entity instanceof HasRevision) {
+       incrementRevision(entity);
+     }
+  }
+
+  protected void flushBulkInsert(Collection<Entity> entities, Class<? extends Entity> clazz) {
+=======
+	protected void flushPersistentObjects(Class<? extends PersistentObject> persistentObjectClass, List<PersistentObject> persistentObjectsToInsert) {
+	  if (persistentObjectsToInsert.size() == 1) {
+	  	flushRegularInsert(persistentObjectsToInsert.get(0), persistentObjectClass);
+	  } else if (Boolean.FALSE.equals(dbSqlSessionFactory.isBulkInsertable(persistentObjectClass))) {
+	  	for (PersistentObject persistentObject : persistentObjectsToInsert) {
+	  		flushRegularInsert(persistentObject, persistentObjectClass);
+	  	}
+	  }	else {
+	  	flushBulkInsert(insertedObjects.get(persistentObjectClass), persistentObjectClass);
+	  }
+  }
+  
+  protected void flushRegularInsert(PersistentObject persistentObject, Class<? extends PersistentObject> clazz) {
+  	 String insertStatement = dbSqlSessionFactory.getInsertStatement(persistentObject);
+     insertStatement = dbSqlSessionFactory.mapStatement(insertStatement);
+
+     if (insertStatement==null) {
+       throw new ActivitiException("no insert statement for " + persistentObject.getClass() + " in the ibatis mapping files");
+     }
+     
+     log.debug("inserting: {}", persistentObject);
+     sqlSession.insert(insertStatement, persistentObject);
+     
+     // See https://activiti.atlassian.net/browse/ACT-1290
+     if (persistentObject instanceof HasRevision) {
+       ((HasRevision) persistentObject).setRevision(((HasRevision) persistentObject).getRevisionNext());
+     }
+  }
+
+  protected void flushBulkInsert(List<PersistentObject> persistentObjectList, Class<? extends PersistentObject> clazz) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+      throw new ActivitiException("no insert statement for " + entities.iterator().next().getClass() + " in the ibatis mapping files");
+=======
+      throw new ActivitiException("no insert statement for " + persistentObjectList.get(0).getClass() + " in the ibatis mapping files");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+    Iterator<Entity> entityIterator = entities.iterator();
+    Boolean hasRevision = null;
+    
+    while (entityIterator.hasNext()) {
+      List<Entity> subList = new ArrayList<Entity>();
+      int index = 0;
+      while (entityIterator.hasNext() && index < dbSqlSessionFactory.getMaxNrOfStatementsInBulkInsert()) {
+        Entity entity = entityIterator.next();
+        subList.add(entity);
+        
+        if (hasRevision == null) {
+          hasRevision = entity instanceof HasRevision;
+        }
+        index++;
+=======
+    if (persistentObjectList.size() <= dbSqlSessionFactory.getMaxNrOfStatementsInBulkInsert()) {
+      sqlSession.insert(insertStatement, persistentObjectList);
+    } else {
+      
+      for (int start = 0; start < persistentObjectList.size(); start += dbSqlSessionFactory.getMaxNrOfStatementsInBulkInsert()) {
+        List<PersistentObject> subList = persistentObjectList.subList(start, 
+            Math.min(start + dbSqlSessionFactory.getMaxNrOfStatementsInBulkInsert(), persistentObjectList.size()));
+        sqlSession.insert(insertStatement, subList);
+      }
+      
+    }
+
+    if (persistentObjectList.get(0) instanceof HasRevision) {
+      for (PersistentObject insertedObject: persistentObjectList) {
+        ((HasRevision) insertedObject).setRevision(((HasRevision) insertedObject).getRevisionNext());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+      }
+
+=======
+      } 
+      
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  protected void flushDeletes() {
+    
+    if (deletedObjects.size() == 0 && bulkDeleteOperations.size() == 0) {
+      return;
+    }
+    
+    // Handle in entity dependency order
+    for (Class<? extends Entity> entityClass : EntityDependencyOrder.DELETE_ORDER) {
+      if (deletedObjects.containsKey(entityClass)) {
+        flushDeleteEntities(entityClass, deletedObjects.get(entityClass).values());
+        deletedObjects.remove(entityClass);
+      }
+      flushBulkDeletes(entityClass);
+    }
+    
+    // Next, in case of custom entities or we've screwed up and forgotten some entity
+    if (deletedObjects.size() > 0) {
+      for (Class<? extends Entity> entityClass : deletedObjects.keySet()) {
+        flushDeleteEntities(entityClass, deletedObjects.get(entityClass).values());
+        flushBulkDeletes(entityClass);
+      }
+    }
+    
+    deletedObjects.clear();
+=======
+  protected void flushDeletes(List<DeleteOperation> removedOperations) {
+    flushRegularDeletes();
+    deleteOperations.clear();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+  protected void flushBulkDeletes(Class<? extends Entity> entityClass) {
+    // Bulk deletes
+    if (bulkDeleteOperations.containsKey(entityClass)) {
+      for (BulkDeleteOperation bulkDeleteOperation : bulkDeleteOperations.get(entityClass)) {
+        bulkDeleteOperation.execute(sqlSession);
+      }
+    }
+  }
+
+  protected void flushDeleteEntities(Class<? extends Entity> entityClass, Collection<Entity> entitiesToDelete) {
+    for (Entity entity : entitiesToDelete) {
+      String deleteStatement = dbSqlSessionFactory.getDeleteStatement(entity.getClass());
+      deleteStatement = dbSqlSessionFactory.mapStatement(deleteStatement);
+      if (deleteStatement == null) {
+        throw new ActivitiException("no delete statement for " + entity.getClass() + " in the ibatis mapping files");
+      }
+
+      // It only makes sense to check for optimistic locking exceptions
+      // for objects that actually have a revision
+      if (entity instanceof HasRevision) {
+        int nrOfRowsDeleted = sqlSession.delete(deleteStatement, entity);
+        if (nrOfRowsDeleted == 0) {
+          throw new ActivitiOptimisticLockingException(entity + " was updated by another transaction concurrently");
+        }
+      } else {
+        sqlSession.delete(deleteStatement, entity);
+      }
+=======
+  protected void flushRegularDeletes() {
+  	for (DeleteOperation delete : deleteOperations) {
+      log.debug("executing: {}", delete);
+      delete.execute();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+            Statement jdbcStatement = connection.createStatement();
+=======
+            Statement jdbcStatement = null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+=======
+              try{
+                jdbcStatement.close();
+              } catch (Exception ex){ /* ignored */ }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+        if (xtr.isStartElement() == false) {
+          continue;
+        }
+=======
+				if (xtr.isStartElement() == false) {
+					continue;
+				}
+>>>>>>> YOURS

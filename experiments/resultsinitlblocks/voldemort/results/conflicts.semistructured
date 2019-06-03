@@ -1,0 +1,233 @@
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b05988;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a05988;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c05988
+<<<<<<< MINE
+        case 0: return GET;
+        case 1: return GET_ALL;
+        case 2: return PUT;
+        case 3: return DELETE;
+        default: return null;
+=======
+                case 0:
+                    return GET;
+                case 1:
+                    return GET_ALL;
+                case 2:
+                    return PUT;
+                case 3:
+                    return DELETE;
+                case 4:
+                    return GET_VERSION;
+                default:
+                    return null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b05988;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a05988;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c05988
+<<<<<<< MINE
+private static final RequestType[] VALUES = {
+      GET, GET_ALL, PUT, DELETE, 
+    };
+=======
+private static final RequestType[] VALUES = { GET, GET_ALL, PUT, DELETE, GET_VERSION, };
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b01524;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a01524;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c01524
+<<<<<<< MINE
+        case 0: return GET;
+        case 1: return GET_ALL;
+        case 2: return PUT;
+        case 3: return DELETE;
+        case 4: return GET_VERSION;
+        case 5: return GET_UNCHECKED;
+        default: return null;
+=======
+                case 0:
+                    return GET;
+                case 1:
+                    return GET_ALL;
+                case 2:
+                    return PUT;
+                case 3:
+                    return DELETE;
+                case 4:
+                    return GET_VERSION;
+                default:
+                    return null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b01524;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a01524;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c01524
+<<<<<<< MINE
+private static final RequestType[] VALUES = {
+      GET, GET_ALL, PUT, DELETE, GET_VERSION, GET_UNCHECKED, 
+    };
+=======
+private static final RequestType[] VALUES = { GET, GET_ALL, PUT, DELETE, GET_VERSION, };
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b01524;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a01524;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c01524
+<<<<<<< MINE
+        case 0: return GET_METADATA;
+        case 1: return UPDATE_METADATA;
+        case 2: return UPDATE_PARTITION_ENTRIES;
+        case 3: return FETCH_PARTITION_ENTRIES;
+        case 4: return DELETE_PARTITION_ENTRIES;
+        case 5: return INITIATE_FETCH_AND_UPDATE;
+        case 6: return ASYNC_OPERATION_STATUS;
+        case 7: return INITIATE_REBALANCE_NODE;
+        default: return null;
+=======
+                case 0:
+                    return GET_METADATA;
+                case 1:
+                    return UPDATE_METADATA;
+                case 2:
+                    return UPDATE_PARTITION_ENTRIES;
+                case 3:
+                    return FETCH_PARTITION_ENTRIES;
+                case 4:
+                    return DELETE_PARTITION_ENTRIES;
+                case 5:
+                    return INITIATE_FETCH_AND_UPDATE;
+                case 6:
+                    return ASYNC_OPERATION_STATUS;
+                default:
+                    return null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b01524;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a01524;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c01524
+<<<<<<< MINE
+private static final AdminRequestType[] VALUES = {
+      GET_METADATA, UPDATE_METADATA, UPDATE_PARTITION_ENTRIES, FETCH_PARTITION_ENTRIES, DELETE_PARTITION_ENTRIES, INITIATE_FETCH_AND_UPDATE, ASYNC_OPERATION_STATUS, INITIATE_REBALANCE_NODE, 
+    };
+=======
+private static final AdminRequestType[] VALUES = { GET_METADATA, UPDATE_METADATA,
+                UPDATE_PARTITION_ENTRIES, FETCH_PARTITION_ENTRIES, DELETE_PARTITION_ENTRIES,
+                INITIATE_FETCH_AND_UPDATE, ASYNC_OPERATION_STATUS, };
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+      }
+      if (hasRequestRouteType()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeInt32Size(8, getRequestRouteType());
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+        case 7: return INITIATE_REBALANCE_NODE;
+        case 8: return ASYNC_OPERATION_STOP;
+        case 9: return ASYNC_OPERATION_LIST;
+=======
+        case 7: return TRUNCATE_ENTRIES;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+=======
+      if (!hasCount) return false;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+=======
+      if (!hasRequestId) return false;
+      if (!hasDescription) return false;
+      if (!hasStatus) return false;
+      if (!hasComplete) return false;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+      if (hasInitiateRebalanceNode()) {
+        if (!getInitiateRebalanceNode().isInitialized()) return false;
+      }
+      if (hasAsyncOperationStop()) {
+        if (!getAsyncOperationStop().isInitialized()) return false;
+      }
+      if (hasAsyncOperationList()) {
+        if (!getAsyncOperationList().isInitialized()) return false;
+=======
+      if (hasTruncateEntries()) {
+        if (!getTruncateEntries().isInitialized()) return false;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+      if (hasInitiateRebalanceNode()) {
+        output.writeMessage(9, getInitiateRebalanceNode());
+      }
+      if (hasAsyncOperationStop()) {
+        output.writeMessage(10, getAsyncOperationStop());
+      }
+      if (hasAsyncOperationList()) {
+        output.writeMessage(11, getAsyncOperationList());
+=======
+      if (hasTruncateEntries()) {
+        output.writeMessage(9, getTruncateEntries());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+      if (hasInitiateRebalanceNode()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(9, getInitiateRebalanceNode());
+      }
+      if (hasAsyncOperationStop()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(10, getAsyncOperationStop());
+      }
+      if (hasAsyncOperationList()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(11, getAsyncOperationList());
+=======
+      if (hasTruncateEntries()) {
+        size += com.google.protobuf.CodedOutputStream
+          .computeMessageSize(9, getTruncateEntries());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+        if (other.hasInitiateRebalanceNode()) {
+          mergeInitiateRebalanceNode(other.getInitiateRebalanceNode());
+        }
+        if (other.hasAsyncOperationStop()) {
+          mergeAsyncOperationStop(other.getAsyncOperationStop());
+        }
+        if (other.hasAsyncOperationList()) {
+          mergeAsyncOperationList(other.getAsyncOperationList());
+=======
+        if (other.hasTruncateEntries()) {
+          mergeTruncateEntries(other.getTruncateEntries());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+              voldemort.client.protocol.pb.VAdminProto.InitiateRebalanceNodeRequest.Builder subBuilder = voldemort.client.protocol.pb.VAdminProto.InitiateRebalanceNodeRequest.newBuilder();
+              if (hasInitiateRebalanceNode()) {
+                subBuilder.mergeFrom(getInitiateRebalanceNode());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setInitiateRebalanceNode(subBuilder.buildPartial());
+              break;
+            }
+            case 82: {
+              voldemort.client.protocol.pb.VAdminProto.AsyncOperationStopRequest.Builder subBuilder = voldemort.client.protocol.pb.VAdminProto.AsyncOperationStopRequest.newBuilder();
+              if (hasAsyncOperationStop()) {
+                subBuilder.mergeFrom(getAsyncOperationStop());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setAsyncOperationStop(subBuilder.buildPartial());
+              break;
+            }
+            case 90: {
+              voldemort.client.protocol.pb.VAdminProto.AsyncOperationListRequest.Builder subBuilder = voldemort.client.protocol.pb.VAdminProto.AsyncOperationListRequest.newBuilder();
+              if (hasAsyncOperationList()) {
+                subBuilder.mergeFrom(getAsyncOperationList());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setAsyncOperationList(subBuilder.buildPartial());
+=======
+              voldemort.client.protocol.pb.VAdminProto.TruncateEntriesRequest.Builder subBuilder = voldemort.client.protocol.pb.VAdminProto.TruncateEntriesRequest.newBuilder();
+              if (hasTruncateEntries()) {
+                subBuilder.mergeFrom(getTruncateEntries());
+              }
+              input.readMessage(subBuilder, extensionRegistry);
+              setTruncateEntries(subBuilder.buildPartial());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b01420;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a01420;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c01420
+<<<<<<< MINE
+      if (hasInitiateRebalanceNodeOnDonor()) {
+        output.writeMessage(27, getInitiateRebalanceNodeOnDonor());
+      }
+      if (hasDeleteStoreRebalanceState()) {
+        output.writeMessage(28, getDeleteStoreRebalanceState());
+=======
+      if (hasRepairJob()) {
+        output.writeMessage(27, getRepairJob());
+>>>>>>> YOURS

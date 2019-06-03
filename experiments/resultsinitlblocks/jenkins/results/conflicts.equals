@@ -1,0 +1,394 @@
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editioninbothbranches\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editioninbothbranches\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editioninbothbranches\right\Test.java
+<<<<<<< MINE
+		int a = 4;
+=======
+		int a = 5;
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\multipleblockseditiondinbothbranchesanddeletion\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\multipleblockseditiondinbothbranchesanddeletion\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\multipleblockseditiondinbothbranchesanddeletion\right\Test.java
+<<<<<<< MINE
+		int a = 4;
+=======
+		int var_a = 3;
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionandcontentinsertion\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionandcontentinsertion\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionandcontentinsertion\right\Test.java
+<<<<<<< MINE
+		int a = 4;
+=======
+		int a = 3;
+        int c = 5;
+        int d = 5;
+        int e = 5;
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\right\Test.java
+<<<<<<< MINE
+static {
+		int a = 4;
+	}
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\additioninbothbranchesdependentvarsusingsetter\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\additioninbothbranchesdependentvarsusingsetter\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\additioninbothbranchesdependentvarsusingsetter\right\Test.java
+<<<<<<< MINE
+h = 5;
+		int f = 6;
+		int g = 6;
+=======
+int b = 5;
+		int c = 5;
+		int g = 5;
+		h.setValue(8);
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\multipleblockseditioninbothbranchesblocks\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\multipleblockseditioninbothbranchesblocks\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\multipleblockseditioninbothbranchesblocks\right\Test.java
+<<<<<<< MINE
+		int var_a = 1;
+		int var_b = 2;
+		int var_c = 3;
+                      
+=======
+		int a = 1;
+		int b = 2;
+		int c = 3;
+                       
+		for (int i = 0; i < 5; i++) {
+            System.out.println("Índice " + i);
+        }
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionoradditioninbothbranchesdependentvars\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionoradditioninbothbranchesdependentvars\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionoradditioninbothbranchesdependentvars\right\Test.java
+<<<<<<< MINE
+h = 5;
+		int f = 6;
+		int g = 6;
+=======
+int b = 5;
+		int c = 5;
+		int g = 5;
+		int e = h;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\test\Left.java;C:\Users\Alice Borner\Desktop\test\Base.java;C:\Users\Alice Borner\Desktop\test\Right.java
+<<<<<<< MINE
+        if (StringUtils.isBlank(input)) {
+            throw new ParseException("Input is null", 0);
+        }
+
+        final String trimmed = input.trim();
+
+        if (GC_CUSTOM_DATE_FORMATS.containsKey(format)) {
+            try {
+                return GC_CUSTOM_DATE_FORMATS.get(format).parse(trimmed);
+            } catch (final ParseException ignored) {
+            }
+        }
+
+        for (final SimpleDateFormat sdf : GC_CUSTOM_DATE_FORMATS.values()) {
+            try {
+                return sdf.parse(trimmed);
+            } catch (final ParseException ignored) {
+            }
+        }
+
+        throw new ParseException("No matching pattern", 0);
+=======
+        return new SimpleDateFormat(format).parse(input.trim());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\test\Left.java;C:\Users\Alice Borner\Desktop\test\Base.java;C:\Users\Alice Borner\Desktop\test\Right.java
+<<<<<<< MINE
+        if (StringUtils.isBlank(input)) {
+            throw new ParseException("Input is null", 0);
+        }
+
+        final String trimmed = input.trim();
+
+        if (GC_CUSTOM_DATE_FORMATS.containsKey(format)) {
+            try {
+                return GC_CUSTOM_DATE_FORMATS.get(format).parse(trimmed);
+            } catch (final ParseException ignored) {
+            }
+        }
+
+        for (final SimpleDateFormat sdf : GC_CUSTOM_DATE_FORMATS.values()) {
+            try {
+                return sdf.parse(trimmed);
+            } catch (final ParseException ignored) {
+            }
+        }
+
+        throw new ParseException("No matching pattern", 0);
+=======
+        return new SimpleDateFormat(format).parse(input.trim());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\test\Left.java;C:\Users\Alice Borner\Desktop\test\Base.java;C:\Users\Alice Borner\Desktop\test\Right.java
+<<<<<<< MINE
+        if (StringUtils.isBlank(input)) {
+            throw new ParseException("Input is null", 0);
+        }
+
+        final String trimmed = input.trim();
+
+        if (GC_CUSTOM_DATE_FORMATS.containsKey(format)) {
+            try {
+                return GC_CUSTOM_DATE_FORMATS.get(format).parse(trimmed);
+            } catch (final ParseException ignored) {
+            }
+        }
+
+        for (final SimpleDateFormat sdf : GC_CUSTOM_DATE_FORMATS.values()) {
+            try {
+                return sdf.parse(trimmed);
+            } catch (final ParseException ignored) {
+            }
+        }
+
+        throw new ParseException("No matching pattern", 0);
+=======
+        return new SimpleDateFormat(format).parse(input.trim());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11288;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11288;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11288
+<<<<<<< MINE
+        EnvVars env = getCharacteristicEnvVars();
+        Computer c = Computer.currentComputer();
+        if (c!=null)
+            env = c.getEnvironment().overrideAll(env);
+=======
+        Computer currentComputer = Computer.currentComputer();
+        EnvVars env = new EnvVars();
+        if (currentComputer != null) {
+        	// currentComputer == null when this is called outside a running build
+        	env.overrideAll(currentComputer.getEnvironment());;
+        }
+        env.overrideAll(getCharacteristicEnvVars());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02156;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02156;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02156
+<<<<<<< MINE
+public Node reconfigure(StaplerRequest req, JSONObject form) throws FormException {
+        return form==null ? null : getDescriptor().newInstance(req, form);
+=======
+public Node reconfigure(final StaplerRequest req, JSONObject form) throws FormException {
+        if (form==null)     return null;
+
+        final JSONObject jsonForProperties = form.optJSONObject("nodeProperties");
+        BindInterceptor old = req.setBindListener(new BindInterceptor() {
+            @Override
+            public Object onConvert(Type targetType, Class targetTypeErasure, Object jsonSource) {
+                if (jsonForProperties!=jsonSource)  return DEFAULT;
+
+                try {
+                    DescribableList<NodeProperty<?>, NodePropertyDescriptor> tmp = new DescribableList<NodeProperty<?>, NodePropertyDescriptor>(Saveable.NOOP,getNodeProperties().toList());
+                    tmp.rebuild(req, jsonForProperties, NodeProperty.all());
+                    return tmp.toList();
+                } catch (FormException e) {
+                    throw new IllegalArgumentException(e);
+                } catch (IOException e) {
+                    throw new IllegalArgumentException(e);
+                }
+            }
+        });
+
+        try {
+            return getDescriptor().newInstance(req, form);
+        } finally {
+            req.setBindListener(old);
+        }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b05984;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a05984;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c05984
+<<<<<<< MINE
+        connector.setHeaderBufferSize(12*1024); // use a bigger buffer as Stapler traces can get pretty large on deeply nested URL
+
+        server.setThreadPool(new ThreadPoolImpl(new ThreadPoolExecutor(1, 10, 10L, TimeUnit.SECONDS, new SynchronousQueue<Runnable>(),new ThreadFactory() {
+=======
+
+        server.setThreadPool(new ThreadPoolImpl(new ThreadPoolExecutor(10, 10, 10L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(),new ThreadFactory() {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b04836;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a04836;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c04836
+<<<<<<< MINE
+ * This class is re-implemented in 1.415. The class was originally introduced in 1.139
+ *
+=======
+ * @author
+ *     Stephen Connolly
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06872
+<<<<<<< MINE
+ * This class is re-implemented in 1.415. The class was originally introduced in 1.139
+ *
+=======
+ * @author
+ *     Stephen Connolly
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03024;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03024;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03024
+<<<<<<< MINE
+            || rest.matches("/computer/[^/]+/slave-agent[.]jnlp") && "true".equals(Stapler.getCurrentRequest().getParameter("encrypt"))
+=======
+            || rest.matches("/computer/.+/slave-agent[.]jnlp") && "true".equals(Stapler.getCurrentRequest().getParameter("encrypt"))
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b04024;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a04024;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c04024
+<<<<<<< MINE
+            for (Target t : orderedTargets()) {
+=======
+            for (Target t : targets) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b08328;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a08328;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c08328
+<<<<<<< MINE
+                throw new IOException("Failed to download from "+src,e);
+=======
+                throw new IOException2("Failed to download from "+src,e);
+            } finally {
+                IOUtils.closeQuietly(in);
+                IOUtils.closeQuietly(out);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b13244;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a13244;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c13244
+<<<<<<< MINE
+            while (relative.startsWith("/")) relative = relative.substring(1);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c05332
+<<<<<<< MINE
+            while (relative.startsWith("/")) relative = relative.substring(1);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10004
+<<<<<<< MINE
+            while (relative.startsWith("/")) relative = relative.substring(1);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06680;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06680;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06680
+<<<<<<< MINE
+                    doQuietDown(true, 0);
+=======
+                    while (isQuietingDown && (overallLoad.computeSnapshot().getBusyExecutors() > 0)) {
+                        Thread.sleep(5000);
+                    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01136
+<<<<<<< MINE
+            while (relative.startsWith("/")) relative = relative.substring(1);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11048
+<<<<<<< MINE
+            while (relative.startsWith("/")) relative = relative.substring(1);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03172
+<<<<<<< MINE
+     * @since 1.598
+=======
+     * @since TODO
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+            while (relative.startsWith("/")) relative = relative.substring(1);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+public void setNodes(final List<? extends Node> n) throws IOException {
+        nodes.setNodes(n);
+=======
+public void setNodes(final List<? extends Node> nodes) throws IOException {
+        Jenkins.this.slaves = new NodeList(nodes);
+        updateComputerList();
+        trimLabels();
+        save();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+            String logFile = parent.createTempFile("install", "log").getRemote();
+=======
+            String logFile = new FilePath(launcher.getChannel(), expectedLocation).getParent().createTempFile("install", "log").getRemote();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b12964;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a12964;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c12964
+<<<<<<< MINE
+     * @since 1.615
+=======
+     * @since TODO
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06520
+<<<<<<< MINE
+            while (relative.startsWith("/")) relative = relative.substring(1);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07380
+<<<<<<< MINE
+            while (relative.startsWith("/")) relative = relative.substring(1);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06928;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06928;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06928
+<<<<<<< MINE
+     * @since 1.615
+=======
+     * @since TODO
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06664;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06664;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06664
+<<<<<<< MINE
+     * @since 1.615
+=======
+     * @since TODO
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06076;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06076;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06076
+<<<<<<< MINE
+        Jenkins h = Jenkins.getInstanceOrNull(); // this code might run on slaves
+        ProxyConfiguration p = h!=null ? h.proxy : null;
+=======
+        final ProxyConfiguration p = get();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b08808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a08808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c08808
+<<<<<<< MINE
+        Jenkins h = Jenkins.getInstanceOrNull(); // this code might run on slaves
+        final ProxyConfiguration p = h!=null ? h.proxy : null;
+=======
+        final ProxyConfiguration p = get();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07780;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07780;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07780
+<<<<<<< MINE
+        if(ver.equals("?") || SystemProperties.getBoolean("hudson.script.noCache"))
+=======
+        if(ver.equals(UNCOMPUTED_VERSION) || Boolean.getBoolean("hudson.script.noCache"))
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10656;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10656;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10656
+<<<<<<< MINE
+     * @since 2.24
+=======
+     * @since TODO
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01808
+<<<<<<< MINE
+     * @since 2.24
+=======
+     * @since TODO
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06588;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06588;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06588
+<<<<<<< MINE
+     * @since TODO
+=======
+     * @since 2.24
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06008;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06008;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06008
+<<<<<<< MINE
+            IdStrategy strategy = idStrategy();
+            File[] subdirs = getRootDir().listFiles((FileFilter) DirectoryFileFilter.INSTANCE);
+            if (subdirs != null) {
+                for (File subdir : subdirs) {
+                    if (subdir.equals(getRootDir())) {
+                        continue; // ignore the parent directory in case of stray config.xml
+                    }
+                    File configFile = new File(subdir, "config.xml");
+                    if (configFile.exists()) {
+                        String name = strategy.idFromFilename(subdir.getName());
+                        getOrCreate(name, /* <init> calls load(), probably clobbering this anyway */name, true, configFile);
+                    }
+                }
+=======
+            for (String userId : UserIdMapper.getInstance().getConvertedUserIds()) {
+                User user = new User(userId, userId);
+                getInstance().byName.putIfAbsent(idStrategy().keyFor(userId), user);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11556;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11556;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11556
+<<<<<<< MINE
+                return null;
+=======
+                // work around Stapler bug when returning null from getTarget()
+                try {
+                    Stapler.getCurrentResponse().sendError(SC_NOT_FOUND); // send same response body Stapler would send
+                } catch (IOException ex) {
+                    throw HttpResponses.notFound();
+                }
+>>>>>>> YOURS

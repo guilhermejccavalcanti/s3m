@@ -1,0 +1,4334 @@
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionoradditioninbothbranchesindependentvars\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionoradditioninbothbranchesindependentvars\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionoradditioninbothbranchesindependentvars\right\Test.java
+<<<<<<< MINE
+		int h = 4;
+		int f = 6;
+		int g = 6;
+=======
+		int b = 5;
+        int c = 5;
+        int d = 5;
+        int e = 5;
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\additionofsimilarblocks\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\additionofsimilarblocks\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\additionofsimilarblocks\right\Test.java
+<<<<<<< MINE
+		int a = 3;
+=======
+		int a = 5;
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\multipleblocksreordering\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\multipleblocksreordering\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\multipleblocksreordering\right\Test.java
+<<<<<<< MINE
+	
+	static {
+		int a = 1;
+		int b = 2;
+		int c = 3;
+		int d = 4;
+	}
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\additionofsimilarblocksdiffvars\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\additionofsimilarblocksdiffvars\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\additionofsimilarblocksdiffvars\right\Test.java
+<<<<<<< MINE
+		int a = 3;
+=======
+		int b = 5;
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionandblockaddition\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionandblockaddition\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionandblockaddition\right\Test.java
+<<<<<<< MINE
+		int a = 4;
+=======
+		int b = 5;
+        int c = 5;
+        int d = 5;
+        int e = 5;
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\right\Test.java
+<<<<<<< MINE
+	static {
+		int a = 4;
+	}
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\right\Test.java
+<<<<<<< MINE
+	static {
+		int a = 4;
+	}
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\left\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\base\Test.java;C:\Users\Alice Borner\jFSTMerge\testfiles\initlblocksmultipleblocks\editionanddeletion\right\Test.java
+<<<<<<< MINE
+	static {
+		int a = 4;
+	}
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03540;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03540;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03540
+<<<<<<< MINE
+=======
+import hudson.remoting.Which;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b04196;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a04196;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c04196
+<<<<<<< MINE
+=======
+import hudson.slaves.ComputerConnector;
+import hudson.tasks.Builder;
+import hudson.tasks.BuildWrapper;
+import hudson.tasks.BuildWrapperDescriptor;
+import hudson.tasks.Publisher;
+import hudson.tools.ToolProperty;
+import hudson.remoting.Which;
+import hudson.Launcher.LocalLauncher;
+import hudson.matrix.MatrixProject;
+import hudson.matrix.MatrixBuild;
+import hudson.matrix.MatrixRun;
+import hudson.maven.MavenModuleSet;
+import hudson.maven.MavenEmbedder;
+import hudson.model.Node.Mode;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b04196;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a04196;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c04196
+<<<<<<< MINE
+=======
+
+import net.sf.json.JSONObject;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b12808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a12808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c12808
+<<<<<<< MINE
+    protected User configRoundtrip(User u) throws Exception {
+        submit(createWebClient().goTo(u.getUrl()+"/configure").getFormByName("config"));
+        return u;
+=======
+    protected <V extends View> V configRoundtrip(V view) throws Exception {
+        submit(createWebClient().getPage(view, "configure").getFormByName("viewConfig"));
+        return view;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02156;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02156;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02156
+<<<<<<< MINE
+=======
+    protected <N extends Node> N configRoundtrip(N node) throws Exception {
+        submit(createWebClient().goTo("/computer/"+node.getNodeName()+"/configure").getFormByName("config"));
+        return (N)hudson.getNode(node.getNodeName());
+    }
+
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02156;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02156;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02156
+<<<<<<< MINE
+=======
+import org.kohsuke.stapler.BindInterceptor;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02524;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02524;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02524
+<<<<<<< MINE
+=======
+    /**
+     * Live view of recent {@link LogRecord}s produced by Hudson.
+     */
+    public static List<LogRecord> logRecords = Collections.emptyList(); // initialized to dummy value to avoid NPE
+
+    /**
+     * Thread-safe reusable {@link XStream}.
+     */
+    public static final XStream XSTREAM = new XStream2();
+
+    /**
+     * Alias to {@link #XSTREAM} so that one can access additional methods on {@link XStream2} more easily.
+     */
+    public static final XStream2 XSTREAM2 = (XStream2)XSTREAM;
+
+    private static final int TWICE_CPU_NUM = Runtime.getRuntime().availableProcessors() * 2;
+
+    /**
+     * Thread pool used to load configuration in parallel, to improve the start up time.
+     * <p>
+     * The idea here is to overlap the CPU and I/O, so we want more threads than CPU numbers.
+     */
+    /*package*/ transient final ExecutorService threadPoolForLoad = new ThreadPoolExecutor(
+        TWICE_CPU_NUM, TWICE_CPU_NUM,
+        5L, TimeUnit.SECONDS, new LinkedBlockingQueue<Runnable>(), new DaemonThreadFactory());
+
+
+    private static void computeVersion(ServletContext context) {
+        // set the version
+        Properties props = new Properties();
+        try {
+            InputStream is = Hudson.class.getResourceAsStream("hudson-version.properties");
+            if(is!=null)
+                props.load(is);
+        } catch (IOException e) {
+            e.printStackTrace(); // if the version properties is missing, that's OK.
+        }
+        String ver = props.getProperty("version");
+        if(ver==null)   ver="?";
+        VERSION = ver;
+        context.setAttribute("version",ver);
+        VERSION_HASH = Util.getDigestOf(ver).substring(0, 8);
+
+        if(ver.equals("?") || Boolean.getBoolean("hudson.script.noCache"))
+            RESOURCE_PATH = "";
+        else
+            RESOURCE_PATH = "/static/"+VERSION_HASH;
+
+        VIEW_RESOURCE_PATH = "/resources/"+ VERSION_HASH;
+    }
+
+    /**
+     * Version number of this Hudson.
+     */
+    public static String VERSION="?";
+
+    /**
+     * Parses {@link #VERSION} into {@link VersionNumber}, or null if it's not parseable as a version number
+     * (such as when Hudson is run with "mvn hudson-dev:run")
+     */
+    public static VersionNumber getVersion() {
+        try {
+            return new VersionNumber(VERSION);
+        } catch (NumberFormatException e) {
+            try {
+                // for non-released version of Hudson, this looks like "1.345 (private-foobar), so try to approximate.
+                int idx = VERSION.indexOf(' ');
+                if (idx>0)
+                    return new VersionNumber(VERSION.substring(0,idx));
+            } catch (NumberFormatException _) {
+                // fall through
+            }
+
+            // totally unparseable
+            return null;
+        } catch (IllegalArgumentException e) {
+            // totally unparseable
+            return null;
+        }
+    }
+
+    /**
+     * Hash of {@link #VERSION}.
+     */
+    public static String VERSION_HASH;
+
+    /**
+     * Prefix to static resources like images and javascripts in the war file.
+     * Either "" or strings like "/static/VERSION", which avoids Hudson to pick up
+     * stale cache when the user upgrades to a different version.
+     * <p>
+     * Value computed in {@link WebAppMain}.
+     */
+    public static String RESOURCE_PATH = "";
+
+    /**
+     * Prefix to resources alongside view scripts.
+     * Strings like "/resources/VERSION", which avoids Hudson to pick up
+     * stale cache when the user upgrades to a different version.
+     * <p>
+     * Value computed in {@link WebAppMain}.
+     */
+    public static String VIEW_RESOURCE_PATH = "/resources/TBD";
+
+    public static boolean PARALLEL_LOAD = !"false".equals(System.getProperty(Hudson.class.getName()+".parallelLoad"));
+    public static boolean KILL_AFTER_LOAD = Boolean.getBoolean(Hudson.class.getName()+".killAfterLoad");
+    public static boolean LOG_STARTUP_PERFORMANCE = Boolean.getBoolean(Hudson.class.getName()+".logStartupPerformance");
+    private static final boolean CONSISTENT_HASH = true; // Boolean.getBoolean(Hudson.class.getName()+".consistentHash");
+    /**
+     * Enabled by default as of 1.337. Will keep it for a while just in case we have some serious problems.
+     */
+    public static boolean FLYWEIGHT_SUPPORT = !"false".equals(System.getProperty(Hudson.class.getName()+".flyweightSupport"));
+
+    /**
+     * Tentative switch to activate the concurrent build behavior.
+     * When we merge this back to the trunk, this allows us to keep
+     * this feature hidden for a while until we iron out the kinks.
+     * @see AbstractProject#isConcurrentBuild()
+     */
+    public static boolean CONCURRENT_BUILD = true;
+
+    /**
+     * Switch to enable people to use a shorter workspace name.
+     */
+    private static final String WORKSPACE_DIRNAME = System.getProperty(Hudson.class.getName()+".workspaceDirName","workspace");
+
+    /**
+     * Automatically try to launch a slave when Hudson is initialized or a new slave is created.
+     */
+    public static boolean AUTOMATIC_SLAVE_LAUNCH = true;
+
+    private static final Logger LOGGER = Logger.getLogger(Hudson.class.getName());
+
+    private static final Pattern ICON_SIZE = Pattern.compile("\\d+x\\d+");
+
+    public static final PermissionGroup PERMISSIONS = Permission.HUDSON_PERMISSIONS;
+    public static final Permission ADMINISTER = Permission.HUDSON_ADMINISTER;
+    public static final Permission READ = new Permission(PERMISSIONS,"Read",Messages._Hudson_ReadPermission_Description(),Permission.READ);
+
+    /**
+     * {@link Authentication} object that represents the anonymous user.
+     * Because Acegi creates its own {@link AnonymousAuthenticationToken} instances, the code must not
+     * expect the singleton semantics. This is just a convenient instance.
+     *
+     * @since 1.343
+     */
+    public static final Authentication ANONYMOUS = new AnonymousAuthenticationToken(
+            "anonymous","anonymous",new GrantedAuthority[]{new GrantedAuthorityImpl("anonymous")});
+
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06872
+<<<<<<< MINE
+import static hudson.Util.fixEmpty;
+
+public class Hudson extends Jenkins {
+=======
+/**
+ * Root object of the system.
+ *
+ * @author Kohsuke Kawaguchi
+ */
+@ExportedBean
+public class Hudson extends Node implements ModifiableItemGroup<TopLevelItem>, StaplerProxy, StaplerFallback, ViewGroup, AccessControlled, DescriptorByNameOwner {
+    private transient final Queue queue;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06872
+<<<<<<< MINE
+     * List of registered {@link hudson.model.listeners.ItemListener}s.
+=======
+     * Stores various objects scoped to {@link Hudson}.
+     */
+    public transient final Lookup lookup = new Lookup();
+
+    /**
+     * {@link Computer}s in this Hudson system. Read-only.
+     */
+    private transient final Map<Node,Computer> computers = new CopyOnWriteMap.Hash<Node,Computer>();
+
+    /**
+     * We update this field to the current version of Hudson whenever we save {@code config.xml}.
+     * This can be used to detect when an upgrade happens from one version to next.
+     *
+     * <p>
+     * Since this field is introduced starting 1.301, "1.0" is used to represent every version
+     * up to 1.300. This value may also include non-standard versions like "1.301-SNAPSHOT" or
+     * "?", etc., so parsing needs to be done with a care.
+     *
+     * @since 1.301
+     */
+    // this field needs to be at the very top so that other components can look at this value even during unmarshalling
+    private String version = "1.0";
+
+    /**
+     * Number of executors of the master node.
+     */
+    private int numExecutors = 2;
+
+    /**
+     * Job allocation strategy.
+     */
+    private Mode mode = Mode.NORMAL;
+
+    /**
+     * False to enable anyone to do anything.
+     * Left as a field so that we can still read old data that uses this flag.
+     *
+     * @see #authorizationStrategy
+     * @see #securityRealm
+     */
+    private Boolean useSecurity;
+
+    /**
+     * Controls how the
+     * <a href="http://en.wikipedia.org/wiki/Authorization">authorization</a>
+     * is handled in Hudson.
+     * <p>
+     * This ultimately controls who has access to what.
+     *
+     * Never null.
+     */
+    private volatile AuthorizationStrategy authorizationStrategy = AuthorizationStrategy.UNSECURED;
+
+    /**
+     * Controls a part of the
+     * <a href="http://en.wikipedia.org/wiki/Authentication">authentication</a>
+     * handling in Hudson.
+     * <p>
+     * Intuitively, this corresponds to the user database.
+     *
+     * See {@link HudsonFilter} for the concrete authentication protocol.
+     *
+     * Never null. Always use {@link #setSecurityRealm(SecurityRealm)} to
+     * update this field.
+     *
+     * @see #getSecurity()
+     * @see #setSecurityRealm(SecurityRealm)
+     */
+    private volatile SecurityRealm securityRealm = SecurityRealm.NO_AUTHENTICATION;
+
+    /**
+     * Message displayed in the top page.
+     */
+    private String systemMessage;
+
+    private MarkupFormatter markupFormatter;
+
+    /**
+     * Root directory of the system.
+     */
+    public transient final File root;
+
+    /**
+     * Where are we in the initialization?
+     */
+    private transient volatile InitMilestone initLevel = InitMilestone.STARTED;
+
+    /**
+     * All {@link Item}s keyed by their {@link Item#getName() name}s.
+     */
+    /*package*/ transient final Map<String,TopLevelItem> items = new CopyOnWriteMap.Tree<String,TopLevelItem>(CaseInsensitiveComparator.INSTANCE);
+
+    /**
+     * The sole instance.
+     */
+    private static Hudson theInstance;
+
+    private transient volatile boolean isQuietingDown;
+    private transient volatile boolean terminating;
+
+    private List<JDK> jdks = new ArrayList<JDK>();
+
+    private transient volatile DependencyGraph dependencyGraph;
+
+    /**
+     * Currently active Views tab bar.
+     */
+    private volatile ViewsTabBar viewsTabBar = new DefaultViewsTabBar();
+
+    /**
+     * Currently active My Views tab bar.
+     */
+    private volatile MyViewsTabBar myViewsTabBar = new DefaultMyViewsTabBar();
+
+    /**
+     * All {@link ExtensionList} keyed by their {@link ExtensionList#extensionType}.
+     */
+    private transient final Memoizer<Class,ExtensionList> extensionLists = new Memoizer<Class,ExtensionList>() {
+        public ExtensionList compute(Class key) {
+            return ExtensionList.create(Hudson.this,key);
+        }
+    };
+
+    /**
+     * All {@link DescriptorExtensionList} keyed by their {@link DescriptorExtensionList#describableType}.
+     */
+    private transient final Memoizer<Class,DescriptorExtensionList> descriptorLists = new Memoizer<Class,DescriptorExtensionList>() {
+        public DescriptorExtensionList compute(Class key) {
+            return DescriptorExtensionList.createDescriptorList(Hudson.this,key);
+        }
+    };
+
+    /**
+     * Active {@link Cloud}s.
+     */
+    public final CloudList clouds = new CloudList(this);
+
+    public static class CloudList extends DescribableList<Cloud,Descriptor<Cloud>> {
+        public CloudList(Hudson h) {
+            super(h);
+        }
+
+        public CloudList() {// needed for XStream deserialization
+        }
+
+        public Cloud getByName(String name) {
+            for (Cloud c : this)
+                if (c.name.equals(name))
+                    return c;
+            return null;
+        }
+
+        @Override
+        protected void onModified() throws IOException {
+            super.onModified();
+            Hudson.getInstance().trimLabels();
+        }
+    }
+
+    /**
+     * Set of installed cluster nodes.
+     * <p>
+     * We use this field with copy-on-write semantics.
+     * This field has mutable list (to keep the serialization look clean),
+     * but it shall never be modified. Only new completely populated slave
+     * list can be set here.
+     * <p>
+     * The field name should be really {@code nodes}, but again the backward compatibility
+     * prevents us from renaming.
+     */
+    private volatile NodeList slaves;
+
+    /**
+     * Quiet period.
+     *
+     * This is {@link Integer} so that we can initialize it to '5' for upgrading users.
+     */
+    /*package*/ Integer quietPeriod;
+
+    /**
+     * Global default for {@link AbstractProject#getScmCheckoutRetryCount()}
+     */
+    /*package*/ int scmCheckoutRetryCount;
+
+    /**
+     * {@link View}s.
+     */
+    private final CopyOnWriteArrayList<View> views = new CopyOnWriteArrayList<View>();
+
+    /**
+     * Name of the primary view.
+     * <p>
+     * Start with null, so that we can upgrade pre-1.269 data well.
+     * @since 1.269
+     */
+    private volatile String primaryView;
+
+    private transient final ViewGroupMixIn viewGroupMixIn = new ViewGroupMixIn(this) {
+        protected List<View> views() { return views; }
+        protected String primaryView() { return primaryView; }
+        protected void primaryView(String name) { primaryView=name; }
+    };
+
+
+    private transient final FingerprintMap fingerprintMap = new FingerprintMap();
+
+    /**
+     * Loaded plugins.
+     */
+    public transient final PluginManager pluginManager;
+
+    public transient volatile TcpSlaveAgentListener tcpSlaveAgentListener;
+
+    private transient UDPBroadcastThread udpBroadcastThread;
+
+    private transient DNSMultiCast dnsMultiCast;
+
+    /**
+     * List of registered {@link ItemListener}s.
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06872
+<<<<<<< MINE
+=======
+    }
+
+    /**
+     * Gets the plugin object from its short name.
+     *
+     * <p>
+     * This allows URL <tt>hudson/plugin/ID</tt> to be served by the views
+     * of the plugin class.
+     */
+    public Plugin getPlugin(String shortName) {
+        PluginWrapper p = pluginManager.getPlugin(shortName);
+        if(p==null)     return null;
+        return p.getPlugin();
+    }
+
+    /**
+     * Gets the plugin object from its class.
+     *
+     * <p>
+     * This allows easy storage of plugin information in the plugin singleton without
+     * every plugin reimplementing the singleton pattern.
+     *
+     * @param clazz The plugin class (beware class-loader fun, this will probably only work
+     * from within the hpi that defines the plugin class, it may or may not work in other cases)
+     *
+     * @return The plugin instance.
+     */
+    @SuppressWarnings("unchecked")
+    public <P extends Plugin> P getPlugin(Class<P> clazz) {
+        PluginWrapper p = pluginManager.getPlugin(clazz);
+        if(p==null)     return null;
+        return (P) p.getPlugin();
+    }
+
+    /**
+     * Gets the plugin objects from their super-class.
+     *
+     * @param clazz The plugin class (beware class-loader fun)
+     *
+     * @return The plugin instances.
+     */
+    public <P extends Plugin> List<P> getPlugins(Class<P> clazz) {
+        List<P> result = new ArrayList<P>();
+        for (PluginWrapper w: pluginManager.getPlugins(clazz)) {
+            result.add((P)w.getPlugin());
+        }
+        return Collections.unmodifiableList(result);
+    }
+
+    /**
+     * Synonym to {@link #getNodeDescription()}.
+     */
+    public String getSystemMessage() {
+        return systemMessage;
+    }
+
+    /**
+     * Gets the markup formatter used in the system.
+     *
+     * @return
+     *      never null.
+     * @since 1.391
+     */
+    public MarkupFormatter getMarkupFormatter() {
+        return markupFormatter!=null ? markupFormatter : RawHtmlMarkupFormatter.INSTANCE;
+    }
+
+    /**
+     * Sets the markup formatter used in the system globally.
+     *
+     * @since 1.391
+     */
+    public void setMarkupFormatter(MarkupFormatter f) {
+        this.markupFormatter = f;
+    }
+
+    /**
+     * Sets the system message.
+     */
+    public void setSystemMessage(String message) throws IOException {
+        this.systemMessage = message;
+        save();
+    }
+
+    public FederatedLoginService getFederatedLoginService(String name) {
+        for (FederatedLoginService fls : FederatedLoginService.all()) {
+            if (fls.getUrlName().equals(name))
+                return fls;
+        }
+        return null;
+    }
+
+    public List<FederatedLoginService> getFederatedLoginServices() {
+        return FederatedLoginService.all();
+    }
+
+    public Launcher createLauncher(TaskListener listener) {
+        return new LocalLauncher(listener).decorateFor(this);
+    }
+
+    private final transient Object updateComputerLock = new Object();
+
+    /**
+     * Updates {@link #computers} by using {@link #getSlaves()}.
+     *
+     * <p>
+     * This method tries to reuse existing {@link Computer} objects
+     * so that we won't upset {@link Executor}s running in it.
+     */
+    private void updateComputerList() throws IOException {
+        synchronized(updateComputerLock) {// just so that we don't have two code updating computer list at the same time
+            Map<String,Computer> byName = new HashMap<String,Computer>();
+            for (Computer c : computers.values()) {
+                if(c.getNode()==null)
+                    continue;   // this computer is gone
+                byName.put(c.getNode().getNodeName(),c);
+            }
+
+            Set<Computer> old = new HashSet<Computer>(computers.values());
+            Set<Computer> used = new HashSet<Computer>();
+
+            updateComputer(this, byName, used);
+            for (Node s : getNodes())
+                updateComputer(s, byName, used);
+
+            // find out what computers are removed, and kill off all executors.
+            // when all executors exit, it will be removed from the computers map.
+            // so don't remove too quickly
+            old.removeAll(used);
+            for (Computer c : old) {
+                c.kill();
+            }
+        }
+        getQueue().scheduleMaintenance();
+        for (ComputerListener cl : ComputerListener.all())
+            cl.onConfigurationChange();
+    }
+
+    private void updateComputer(Node n, Map<String,Computer> byNameMap, Set<Computer> used) {
+        Computer c;
+        c = byNameMap.get(n.getNodeName());
+        if (c!=null) {
+            c.setNode(n); // reuse
+        } else {
+            if(n.getNumExecutors()>0) {
+                computers.put(n,c=n.createComputer());
+                if (!n.holdOffLaunchUntilSave && AUTOMATIC_SLAVE_LAUNCH) {
+                    RetentionStrategy retentionStrategy = c.getRetentionStrategy();
+                    if (retentionStrategy != null) {
+                        // if there is a retention strategy, it is responsible for deciding to start the computer
+                        retentionStrategy.start(c);
+                    } else {
+                        // we should never get here, but just in case, we'll fall back to the legacy behaviour
+                        c.connect(true);
+                    }
+                }
+            }
+        }
+        used.add(c);
+    }
+
+    /*package*/ void removeComputer(Computer computer) {
+        for (Entry<Node, Computer> e : computers.entrySet()) {
+            if (e.getValue() == computer) {
+                computers.remove(e.getKey());
+                return;
+            }
+        }
+        throw new IllegalStateException("Trying to remove unknown computer");
+    }
+
+    public String getFullName() {
+        return "";
+    }
+
+    public String getFullDisplayName() {
+        return "";
+    }
+
+    /**
+     * Returns the transient {@link Action}s associated with the top page.
+     *
+     * <p>
+     * Adding {@link Action} is primarily useful for plugins to contribute
+     * an item to the navigation bar of the top page. See existing {@link Action}
+     * implementation for it affects the GUI.
+     *
+     * <p>
+     * To register an {@link Action}, implement {@link RootAction} extension point, or write code like
+     * {@code Hudson.getInstance().getActions().add(...)}.
+     *
+     * @return
+     *      Live list where the changes can be made. Can be empty but never null.
+     * @since 1.172
+     */
+    public List<Action> getActions() {
+        return actions;
+    }
+
+    public List<Action> getViewActions() {
+        return getActions();
+    }
+
+    /**
+     * Gets just the immediate children of {@link Hudson}.
+     *
+     * @see #getAllItems(Class)
+     */
+    @Exported(name="jobs")
+    public List<TopLevelItem> getItems() {
+        List<TopLevelItem> viewableItems = new ArrayList<TopLevelItem>();
+        for (TopLevelItem item : items.values()) {
+            if (item.hasPermission(Item.READ))
+                viewableItems.add(item);
+        }
+
+        return viewableItems;
+    }
+
+    /**
+     * Returns the read-only view of all the {@link TopLevelItem}s keyed by their names.
+     * <p>
+     * This method is efficient, as it doesn't involve any copying.
+     *
+     * @since 1.296
+     */
+    public Map<String,TopLevelItem> getItemMap() {
+        return Collections.unmodifiableMap(items);
+    }
+
+    /**
+     * Gets just the immediate children of {@link Hudson} but of the given type.
+     */
+    public <T> List<T> getItems(Class<T> type) {
+        List<T> r = new ArrayList<T>();
+        for (TopLevelItem i : getItems())
+            if (type.isInstance(i))
+                 r.add(type.cast(i));
+        return r;
+    }
+
+    /**
+     * Gets all the {@link Item}s recursively in the {@link ItemGroup} tree
+     * and filter them by the given type.
+     */
+    public <T extends Item> List<T> getAllItems(Class<T> type) {
+        List<T> r = new ArrayList<T>();
+
+        Stack<ItemGroup> q = new Stack<ItemGroup>();
+        q.push(this);
+
+        while(!q.isEmpty()) {
+            ItemGroup<?> parent = q.pop();
+            for (Item i : parent.getItems()) {
+                if(type.isInstance(i)) {
+                    if (i.hasPermission(Item.READ))
+                        r.add(type.cast(i));
+                }
+                if(i instanceof ItemGroup)
+                    q.push((ItemGroup)i);
+            }
+        }
+
+        return r;
+    }
+
+    /**
+     * Gets all the items recursively.
+     *
+     * @since 1.402
+     */
+    public List<Item> getAllItems() {
+        return getAllItems(Item.class);
+    }
+
+    /**
+     * Gets the list of all the projects.
+     *
+     * <p>
+     * Since {@link Project} can only show up under {@link Hudson},
+     * no need to search recursively.
+     */
+    public List<Project> getProjects() {
+        return Util.createSubList(items.values(), Project.class);
+    }
+
+    /**
+     * Gets the names of all the {@link Job}s.
+     */
+    public Collection<String> getJobNames() {
+        List<String> names = new ArrayList<String>();
+        for (Job j : getAllItems(Job.class))
+            names.add(j.getFullName());
+        return names;
+    }
+
+    /**
+     * Gets the names of all the {@link TopLevelItem}s.
+     */
+    public Collection<String> getTopLevelItemNames() {
+        List<String> names = new ArrayList<String>();
+        for (TopLevelItem j : items.values())
+            names.add(j.getName());
+        return names;
+    }
+
+    public synchronized View getView(String name) {
+        return viewGroupMixIn.getView(name);
+    }
+
+    /**
+     * Gets the read-only list of all {@link View}s.
+     */
+    @Exported
+    public synchronized Collection<View> getViews() {
+        return viewGroupMixIn.getViews();
+    }
+
+    public void addView(View v) throws IOException {
+        viewGroupMixIn.addView(v);
+    }
+
+    public boolean canDelete(View view) {
+        return viewGroupMixIn.canDelete(view);
+    }
+
+    public synchronized void deleteView(View view) throws IOException {
+        viewGroupMixIn.deleteView(view);
+    }
+
+    public void onViewRenamed(View view, String oldName, String newName) {
+        viewGroupMixIn.onViewRenamed(view,oldName,newName);
+    }
+
+    /**
+     * Returns the primary {@link View} that renders the top-page of Hudson.
+     */
+    @Exported
+    public View getPrimaryView() {
+        return viewGroupMixIn.getPrimaryView();
+    }
+
+    public ViewsTabBar getViewsTabBar() {
+        return viewsTabBar;
+    }
+
+    public Hudson getItemGroup() {
+        return this;
+    }
+
+    public MyViewsTabBar getMyViewsTabBar() {
+        return myViewsTabBar;
+    }
+
+    /**
+     * Returns true if the current running Hudson is upgraded from a version earlier than the specified version.
+     *
+     * <p>
+     * This method continues to return true until the system configuration is saved, at which point
+     * {@link #version} will be overwritten and Hudson forgets the upgrade history.
+     *
+     * <p>
+     * To handle SNAPSHOTS correctly, pass in "1.N.*" to test if it's upgrading from the version
+     * equal or younger than N. So say if you implement a feature in 1.301 and you want to check
+     * if the installation upgraded from pre-1.301, pass in "1.300.*"
+     *
+     * @since 1.301
+     */
+    public boolean isUpgradedFromBefore(VersionNumber v) {
+        try {
+            return new VersionNumber(version).isOlderThan(v);
+        } catch (IllegalArgumentException e) {
+            // fail to parse this version number
+            return false;
+        }
+    }
+
+    /**
+     * Gets the read-only list of all {@link Computer}s.
+     */
+    public Computer[] getComputers() {
+        Computer[] r = computers.values().toArray(new Computer[computers.size()]);
+        Arrays.sort(r,new Comparator<Computer>() {
+            final Collator collator = Collator.getInstance();
+            public int compare(Computer lhs, Computer rhs) {
+                if(lhs.getNode()==Hudson.this)  return -1;
+                if(rhs.getNode()==Hudson.this)  return 1;
+                return collator.compare(lhs.getDisplayName(), rhs.getDisplayName());
+            }
+        });
+        return r;
+    }
+
+    /*package*/ Computer getComputer(Node n) {
+        return computers.get(n);
+    }
+
+    @CLIResolver
+    public Computer getComputer(@Argument(required=true,metaVar="NAME",usage="Node name") String name) {
+        if(name.equals("(master)"))
+            name = "";
+
+        for (Computer c : computers.values()) {
+            if(c.getName().equals(name))
+                return c;
+        }
+        return null;
+    }
+
+    /**
+     * @deprecated
+     *      UI method. Not meant to be used programatically.
+     */
+    public ComputerSet getComputer() {
+        return new ComputerSet();
+    }
+
+
+    /**
+     * Gets the label that exists on this system by the name.
+     *
+     * @return null if name is null.
+     * @see Label#parseExpression(String) (String)
+     */
+    public Label getLabel(String expr) {
+        if(expr==null)  return null;
+        while(true) {
+            Label l = labels.get(expr);
+            if(l!=null)
+                return l;
+
+            // non-existent
+            try {
+                labels.putIfAbsent(expr,Label.parseExpression(expr));
+            } catch (ANTLRException e) {
+                // laxly accept it as a single label atom for backward compatibility
+                return getLabelAtom(expr);
+            }
+        }
+    }
+
+    /**
+     * Returns the label atom of the given name.
+     */
+    public LabelAtom getLabelAtom(String name) {
+        if (name==null)  return null;
+
+        while(true) {
+            Label l = labels.get(name);
+            if(l!=null)
+                return (LabelAtom)l;
+
+            // non-existent
+            LabelAtom la = new LabelAtom(name);
+            if (labels.putIfAbsent(name, la)==null)
+                la.load();
+        }
+    }
+
+    /**
+     * Gets all the active labels in the current system.
+     */
+    public Set<Label> getLabels() {
+        Set<Label> r = new TreeSet<Label>();
+        for (Label l : labels.values()) {
+            if(!l.isEmpty())
+                r.add(l);
+        }
+        return r;
+    }
+
+    public Set<LabelAtom> getLabelAtoms() {
+        Set<LabelAtom> r = new TreeSet<LabelAtom>();
+        for (Label l : labels.values()) {
+            if(!l.isEmpty() && l instanceof LabelAtom)
+                r.add((LabelAtom)l);
+        }
+        return r;
+    }
+
+    public Queue getQueue() {
+        return queue;
+    }
+
+    @Override
+    public String getDisplayName() {
+        return Messages.Hudson_DisplayName();
+    }
+
+    public List<JDK> getJDKs() {
+        if(jdks==null)
+            jdks = new ArrayList<JDK>();
+        return jdks;
+    }
+
+    /**
+     * Gets the JDK installation of the given name, or returns null.
+     */
+    public JDK getJDK(String name) {
+        if(name==null) {
+            // if only one JDK is configured, "default JDK" should mean that JDK.
+            List<JDK> jdks = getJDKs();
+            if(jdks.size()==1)  return jdks.get(0);
+            return null;
+        }
+        for (JDK j : getJDKs()) {
+            if(j.getName().equals(name))
+                return j;
+        }
+        return null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06872
+<<<<<<< MINE
+=======
+    }
+
+    /**
+     * Adds one more {@link Node} to Hudson.
+     */
+    public synchronized void addNode(Node n) throws IOException {
+        if(n==null)     throw new IllegalArgumentException();
+        ArrayList<Node> nl = new ArrayList<Node>(this.slaves);
+        if(!nl.contains(n)) // defensive check
+            nl.add(n);
+        setNodes(nl);
+    }
+
+    /**
+     * Removes a {@link Node} from Hudson.
+     */
+    public synchronized void removeNode(Node n) throws IOException {
+        Computer c = n.toComputer();
+        if (c!=null)
+            c.disconnect(OfflineCause.create(Messages._Hudson_NodeBeingRemoved()));
+
+        ArrayList<Node> nl = new ArrayList<Node>(this.slaves);
+        nl.remove(n);
+        setNodes(nl);
+    }
+
+    public void setNodes(List<? extends Node> nodes) throws IOException {
+        // make sure that all names are unique
+        Set<String> names = new HashSet<String>();
+        for (Node n : nodes)
+            if(!names.add(n.getNodeName()))
+                throw new IllegalArgumentException(n.getNodeName()+" is defined more than once");
+        this.slaves = new NodeList(nodes);
+        updateComputerList();
+        trimLabels();
+        save();
+    }
+
+    public DescribableList<NodeProperty<?>, NodePropertyDescriptor> getNodeProperties() {
+    	return nodeProperties;
+    }
+
+    public DescribableList<NodeProperty<?>, NodePropertyDescriptor> getGlobalNodeProperties() {
+    	return globalNodeProperties;
+    }
+
+    /**
+     * Resets all labels and remove invalid ones.
+     */
+    private void trimLabels() {
+        for (Iterator<Label> itr = labels.values().iterator(); itr.hasNext();) {
+            Label l = itr.next();
+            l.reset();
+            if(l.isEmpty())
+                itr.remove();
+        }
+    }
+
+    /**
+     * Binds {@link AdministrativeMonitor}s to URL.
+     */
+    public AdministrativeMonitor getAdministrativeMonitor(String id) {
+        for (AdministrativeMonitor m : administrativeMonitors)
+            if(m.id.equals(id))
+                return m;
+        return null;
+    }
+
+    public NodeDescriptor getDescriptor() {
+        return DescriptorImpl.INSTANCE;
+    }
+
+    public static final class DescriptorImpl extends NodeDescriptor {
+        @Extension
+        public static final DescriptorImpl INSTANCE = new DescriptorImpl();
+
+        public String getDisplayName() {
+            throw new UnsupportedOperationException();
+        }
+
+        @Override
+        public boolean isInstantiable() {
+            return false;
+        }
+
+        public FormValidation doCheckNumExecutors(@QueryParameter String value) {
+            return FormValidation.validateNonNegativeInteger(value);
+        }
+
+        // to route /descriptor/FQCN/xxx to getDescriptor(FQCN).xxx
+        public Object getDynamic(String token) {
+            return Hudson.getInstance().getDescriptor(token);
+        }
+    }
+
+    /**
+     * Gets the system default quiet period.
+     */
+    public int getQuietPeriod() {
+        return quietPeriod!=null ? quietPeriod : 5;
+    }
+
+    /**
+     * Gets the global SCM check out retry count.
+     */
+    public int getScmCheckoutRetryCount() {
+        return scmCheckoutRetryCount;
+    }
+
+
+
+    /**
+     * @deprecated
+     *      Why are you calling a method that always returns ""?
+     *      Perhaps you meant {@link #getRootUrl()}.
+     */
+    public String getUrl() {
+        return "";
+    }
+
+    @Override
+    public String getSearchUrl() {
+        return "";
+    }
+
+    @Override
+    public SearchIndexBuilder makeSearchIndex() {
+        return super.makeSearchIndex()
+            .add("configure", "config","configure")
+            .add("manage")
+            .add("log")
+            .add(getPrimaryView().makeSearchIndex())
+            .add(new CollectionSearchIndex() {// for computers
+                protected Computer get(String key) { return getComputer(key); }
+                protected Collection<Computer> all() { return computers.values(); }
+            })
+            .add(new CollectionSearchIndex() {// for users
+                protected User get(String key) { return User.get(key,false); }
+                protected Collection<User> all() { return User.getAll(); }
+            })
+            .add(new CollectionSearchIndex() {// for views
+                protected View get(String key) { return getView(key); }
+                protected Collection<View> all() { return views; }
+            });
+    }
+
+    public String getUrlChildPrefix() {
+        return "job";
+    }
+
+    /**
+     * Gets the absolute URL of Hudson,
+     * such as "http://localhost/hudson/".
+     *
+     * <p>
+     * This method first tries to use the manually configured value, then
+     * fall back to {@link StaplerRequest#getRootPath()}.
+     * It is done in this order so that it can work correctly even in the face
+     * of a reverse proxy.
+     *
+     * @return
+     *      This method returns null if this parameter is not configured by the user.
+     *      The caller must gracefully deal with this situation.
+     *      The returned URL will always have the trailing '/'.
+     * @since 1.66
+     * @see Descriptor#getCheckUrl(String)
+     * @see #getRootUrlFromRequest()
+     */
+    public String getRootUrl() {
+        // for compatibility. the actual data is stored in Mailer
+        String url = Mailer.descriptor().getUrl();
+        if(url!=null)   return url;
+
+        StaplerRequest req = Stapler.getCurrentRequest();
+        if(req!=null)
+            return getRootUrlFromRequest();
+        return null;
+    }
+
+    /**
+     * Gets the absolute URL of Hudson top page, such as "http://localhost/hudson/".
+     *
+     * <p>
+     * Unlike {@link #getRootUrl()}, which uses the manually configured value,
+     * this one uses the current request to reconstruct the URL. The benefit is
+     * that this is immune to the configuration mistake (users often fail to set the root URL
+     * correctly, especially when a migration is involved), but the downside
+     * is that unless you are processing a request, this method doesn't work.
+     *
+     * @since 1.263
+     */
+    public String getRootUrlFromRequest() {
+        StaplerRequest req = Stapler.getCurrentRequest();
+        StringBuilder buf = new StringBuilder();
+        buf.append(req.getScheme()+"://");
+        buf.append(req.getServerName());
+        if(req.getServerPort()!=80)
+            buf.append(':').append(req.getServerPort());
+        buf.append(req.getContextPath()).append('/');
+        return buf.toString();
+    }
+
+    public File getRootDir() {
+        return root;
+    }
+
+    public FilePath getWorkspaceFor(TopLevelItem item) {
+        return new FilePath(new File(item.getRootDir(), WORKSPACE_DIRNAME));
+    }
+
+    public FilePath getRootPath() {
+        return new FilePath(getRootDir());
+    }
+
+    @Override
+    public FilePath createPath(String absolutePath) {
+        return new FilePath((VirtualChannel)null,absolutePath);
+    }
+
+    public ClockDifference getClockDifference() {
+        return ClockDifference.ZERO;
+    }
+
+    /**
+     * For binding {@link LogRecorderManager} to "/log".
+     * Everything below here is admin-only, so do the check here.
+     */
+    public LogRecorderManager getLog() {
+        checkPermission(ADMINISTER);
+        return log;
+    }
+
+    /**
+     * A convenience method to check if there's some security
+     * restrictions in place.
+     */
+    @Exported
+    public boolean isUseSecurity() {
+        return securityRealm!=SecurityRealm.NO_AUTHENTICATION || authorizationStrategy!=AuthorizationStrategy.UNSECURED;
+    }
+
+    /**
+     * If true, all the POST requests to Hudson would have to have crumb in it to protect
+     * Hudson from CSRF vulnerabilities.
+     */
+    @Exported
+    public boolean isUseCrumbs() {
+        return crumbIssuer!=null;
+    }
+
+    /**
+     * Returns the constant that captures the three basic security modes
+     * in Hudson.
+     */
+    public SecurityMode getSecurity() {
+        // fix the variable so that this code works under concurrent modification to securityRealm.
+        SecurityRealm realm = securityRealm;
+
+        if(realm==SecurityRealm.NO_AUTHENTICATION)
+            return SecurityMode.UNSECURED;
+        if(realm instanceof LegacySecurityRealm)
+            return SecurityMode.LEGACY;
+        return SecurityMode.SECURED;
+    }
+
+    /**
+     * @return
+     *      never null.
+     */
+    public SecurityRealm getSecurityRealm() {
+        return securityRealm;
+    }
+
+    public void setSecurityRealm(SecurityRealm securityRealm) {
+        if(securityRealm==null)
+            securityRealm= SecurityRealm.NO_AUTHENTICATION;
+        this.securityRealm = securityRealm;
+        // reset the filters and proxies for the new SecurityRealm
+        try {
+            HudsonFilter filter = HudsonFilter.get(servletContext);
+            if (filter == null) {
+                // Fix for #3069: This filter is not necessarily initialized before the servlets.
+                // when HudsonFilter does come back, it'll initialize itself.
+                LOGGER.fine("HudsonFilter has not yet been initialized: Can't perform security setup for now");
+            } else {
+                LOGGER.fine("HudsonFilter has been previously initialized: Setting security up");
+                filter.reset(securityRealm);
+                LOGGER.fine("Security is now fully set up");
+            }
+        } catch (ServletException e) {
+            // for binary compatibility, this method cannot throw a checked exception
+            throw new AcegiSecurityException("Failed to configure filter",e) {};
+        }
+    }
+
+    public void setAuthorizationStrategy(AuthorizationStrategy a) {
+        if (a == null)
+            a = AuthorizationStrategy.UNSECURED;
+        authorizationStrategy = a;
+    }
+
+    public Lifecycle getLifecycle() {
+        return Lifecycle.get();
+    }
+
+    /**
+     * Returns {@link ExtensionList} that retains the discovered instances for the given extension type.
+     *
+     * @param extensionType
+     *      The base type that represents the extension point. Normally {@link ExtensionPoint} subtype
+     *      but that's not a hard requirement.
+     * @return
+     *      Can be an empty list but never null.
+     */
+    @SuppressWarnings({"unchecked"})
+    public <T> ExtensionList<T> getExtensionList(Class<T> extensionType) {
+        return extensionLists.get(extensionType);
+    }
+
+    /**
+     * Used to bind {@link ExtensionList}s to URLs.
+     *
+     * @since 1.349
+     */
+    public ExtensionList getExtensionList(String extensionType) throws ClassNotFoundException {
+        return getExtensionList(pluginManager.uberClassLoader.loadClass(extensionType));
+    }
+
+    /**
+     * Returns {@link ExtensionList} that retains the discovered {@link Descriptor} instances for the given
+     * kind of {@link Describable}.
+     *
+     * @return
+     *      Can be an empty list but never null.
+     */
+    @SuppressWarnings({"unchecked"})
+    public <T extends Describable<T>,D extends Descriptor<T>> DescriptorExtensionList<T,D> getDescriptorList(Class<T> type) {
+        return descriptorLists.get(type);
+    }
+
+    /**
+     * Returns the root {@link ACL}.
+     *
+     * @see AuthorizationStrategy#getRootACL()
+     */
+    @Override
+    public ACL getACL() {
+        return authorizationStrategy.getRootACL();
+    }
+
+    /**
+     * @return
+     *      never null.
+     */
+    public AuthorizationStrategy getAuthorizationStrategy() {
+        return authorizationStrategy;
+    }
+
+    /**
+     * Returns true if Hudson is quieting down.
+     * <p>
+     * No further jobs will be executed unless it
+     * can be finished while other current pending builds
+     * are still in progress.
+     */
+    public boolean isQuietingDown() {
+        return isQuietingDown;
+    }
+
+    /**
+     * Returns true if the container initiated the termination of the web application.
+     */
+    public boolean isTerminating() {
+        return terminating;
+    }
+
+    /**
+     * Gets the initialization milestone that we've already reached.
+     *
+     * @return
+     *      {@link InitMilestone#STARTED} even if the initialization hasn't been started, so that this method
+     *      never returns null.
+     */
+    public InitMilestone getInitLevel() {
+        return initLevel;
+    }
+
+    public void setNumExecutors(int n) throws IOException {
+        this.numExecutors = n;
+        save();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06872
+<<<<<<< MINE
+=======
+    }
+
+    public final <T extends Item> T getItem(String relativeName, Item context, Class<T> type) {
+        return getItem(relativeName,context!=null?context.getParent():null,type);
+    }
+
+    public File getRootDirFor(TopLevelItem child) {
+        return getRootDirFor(child.getName());
+    }
+
+    private File getRootDirFor(String name) {
+        return new File(new File(getRootDir(),"jobs"), name);
+    }
+
+    /**
+     * Gets the {@link Item} object by its full name.
+     * Full names are like path names, where each name of {@link Item} is
+     * combined by '/'.
+     *
+     * @return
+     *      null if either such {@link Item} doesn't exist under the given full name,
+     *      or it exists but it's no an instance of the given type.
+     */
+    public <T extends Item> T getItemByFullName(String fullName, Class<T> type) {
+        StringTokenizer tokens = new StringTokenizer(fullName,"/");
+        ItemGroup parent = this;
+
+        if(!tokens.hasMoreTokens()) return null;    // for example, empty full name.
+
+        while(true) {
+            Item item = parent.getItem(tokens.nextToken());
+            if(!tokens.hasMoreTokens()) {
+                if(type.isInstance(item))
+                    return type.cast(item);
+                else
+                    return null;
+            }
+
+            if(!(item instanceof ItemGroup))
+                return null;    // this item can't have any children
+
+            parent = (ItemGroup) item;
+        }
+    }
+
+    public Item getItemByFullName(String fullName) {
+        return getItemByFullName(fullName,Item.class);
+    }
+
+    /**
+     * Gets the user of the given name.
+     *
+     * @return
+     *      This method returns a non-null object for any user name, without validation.
+     */
+    public User getUser(String name) {
+        return User.get(name);
+    }
+
+    /**
+     * Creates a new job.
+     *
+     * @throws IllegalArgumentException
+     *      if the project of the given name already exists.
+     */
+    public synchronized TopLevelItem createProject( TopLevelItemDescriptor type, String name ) throws IOException {
+        return createProject(type, name, true);
+    }
+
+    /**
+     * Creates a new job.
+     * @param type Descriptor for job type
+     * @param name Name for job
+     * @param notify Whether to fire onCreated method for all ItemListeners
+     * @throws IllegalArgumentException
+     *      if a project of the give name already exists.
+     */
+    public synchronized TopLevelItem createProject( TopLevelItemDescriptor type, String name, boolean notify ) throws IOException {
+        return itemGroupMixIn.createProject(type,name,notify);
+    }
+
+    /**
+     * Overwrites the existing item by new one.
+     *
+     * <p>
+     * This is a short cut for deleting an existing job and adding a new one.
+     */
+    public synchronized void putItem(TopLevelItem item) throws IOException, InterruptedException {
+        String name = item.getName();
+        TopLevelItem old = items.get(name);
+        if (old ==item)  return; // noop
+
+        checkPermission(Item.CREATE);
+        if (old!=null)
+            old.delete();
+        items.put(name,item);
+        ItemListener.fireOnCreated(item);
+    }
+
+    /**
+     * Creates a new job.
+     *
+     * <p>
+     * This version infers the descriptor from the type of the top-level item.
+     *
+     * @throws IllegalArgumentException
+     *      if the project of the given name already exists.
+     */
+    public synchronized <T extends TopLevelItem> T createProject( Class<T> type, String name ) throws IOException {
+        return type.cast(createProject((TopLevelItemDescriptor)getDescriptor(type),name));
+    }
+
+    /**
+     * Called by {@link Job#renameTo(String)} to update relevant data structure.
+     * assumed to be synchronized on Hudson by the caller.
+     */
+    public void onRenamed(TopLevelItem job, String oldName, String newName) throws IOException {
+        items.remove(oldName);
+        items.put(newName,job);
+
+        for (View v : views)
+            v.onJobRenamed(job, oldName, newName);
+        save();
+    }
+
+    /**
+     * Called in response to {@link Job#doDoDelete(StaplerRequest, StaplerResponse)}
+     */
+    public void onDeleted(TopLevelItem item) throws IOException {
+        for (ItemListener l : ItemListener.all())
+            l.onDeleted(item);
+
+        items.remove(item.getName());
+        for (View v : views)
+            v.onJobRenamed(item, item.getName(), null);
+        save();
+    }
+
+    public FingerprintMap getFingerprintMap() {
+        return fingerprintMap;
+    }
+
+    // if no finger print matches, display "not found page".
+    public Object getFingerprint( String md5sum ) throws IOException {
+        Fingerprint r = fingerprintMap.get(md5sum);
+        if(r==null)     return new NoFingerprintMatch(md5sum);
+        else            return r;
+    }
+
+    /**
+     * Gets a {@link Fingerprint} object if it exists.
+     * Otherwise null.
+     */
+    public Fingerprint _getFingerprint( String md5sum ) throws IOException {
+        return fingerprintMap.get(md5sum);
+    }
+
+    /**
+     * The file we save our configuration.
+     */
+    private XmlFile getConfigFile() {
+        return new XmlFile(XSTREAM, new File(root,"config.xml"));
+    }
+
+    public int getNumExecutors() {
+        return numExecutors;
+    }
+
+    public Mode getMode() {
+        return mode;
+    }
+
+    public String getLabelString() {
+        return fixNull(label).trim();
+    }
+
+    @Override
+    public LabelAtom getSelfLabel() {
+        return getLabelAtom("master");
+    }
+
+    public Computer createComputer() {
+        return new MasterComputer();
+    }
+
+    private synchronized TaskBuilder loadTasks() throws IOException {
+        File projectsDir = new File(root,"jobs");
+        if(!projectsDir.isDirectory() && !projectsDir.mkdirs()) {
+            if(projectsDir.exists())
+                throw new IOException(projectsDir+" is not a directory");
+            throw new IOException("Unable to create "+projectsDir+"\nPermission issue? Please create this directory manually.");
+        }
+        File[] subdirs = projectsDir.listFiles(new FileFilter() {
+            public boolean accept(File child) {
+                return child.isDirectory() && Items.getConfigFile(child).exists();
+            }
+        });
+
+        TaskGraphBuilder g = new TaskGraphBuilder();
+        Handle loadHudson = g.requires(EXTENSIONS_AUGMENTED).attains(JOB_LOADED).add("Loading global config", new Executable() {
+            public void run(Reactor session) throws Exception {
+                XmlFile cfg = getConfigFile();
+                if (cfg.exists()) {
+                    // reset some data that may not exist in the disk file
+                    // so that we can take a proper compensation action later.
+                    primaryView = null;
+                    views.clear();
+
+                    // load from disk
+                    cfg.unmarshal(Hudson.this);
+                }
+
+                // if we are loading old data that doesn't have this field
+                if (slaves == null) slaves = new NodeList();
+
+                clouds.setOwner(Hudson.this);
+                items.clear();
+            }
+        });
+
+        for (final File subdir : subdirs) {
+            g.requires(loadHudson).attains(JOB_LOADED).notFatal().add("Loading job "+subdir.getName(),new Executable() {
+                public void run(Reactor session) throws Exception {
+                    TopLevelItem item = (TopLevelItem) Items.load(Hudson.this, subdir);
+                    items.put(item.getName(), item);
+                }
+            });
+        }
+
+        g.requires(JOB_LOADED).add("Finalizing set up",new Executable() {
+            public void run(Reactor session) throws Exception {
+                rebuildDependencyGraph();
+
+                {// recompute label objects - populates the labels mapping.
+                    for (Node slave : slaves)
+                        // Note that not all labels are visible until the slaves have connected.
+                        slave.getAssignedLabels();
+                    getAssignedLabels();
+                }
+
+                // initialize views by inserting the default view if necessary
+                // this is both for clean Hudson and for backward compatibility.
+                if(views.size()==0 || primaryView==null) {
+                    View v = new AllView(Messages.Hudson_ViewName());
+                    v.owner = Hudson.this;
+                    views.add(0,v);
+                    primaryView = v.getViewName();
+                }
+
+                // read in old data that doesn't have the security field set
+                if(authorizationStrategy==null) {
+                    if(useSecurity==null || !useSecurity)
+                        authorizationStrategy = AuthorizationStrategy.UNSECURED;
+                    else
+                        authorizationStrategy = new LegacyAuthorizationStrategy();
+                }
+                if(securityRealm==null) {
+                    if(useSecurity==null || !useSecurity)
+                        setSecurityRealm(SecurityRealm.NO_AUTHENTICATION);
+                    else
+                        setSecurityRealm(new LegacySecurityRealm());
+                } else {
+                    // force the set to proxy
+                    setSecurityRealm(securityRealm);
+                }
+
+                if(useSecurity!=null && !useSecurity) {
+                    // forced reset to the unsecure mode.
+                    // this works as an escape hatch for people who locked themselves out.
+                    authorizationStrategy = AuthorizationStrategy.UNSECURED;
+                    setSecurityRealm(SecurityRealm.NO_AUTHENTICATION);
+                }
+
+                // Initialize the filter with the crumb issuer
+                setCrumbIssuer(crumbIssuer);
+
+                // auto register root actions
+                for (Action a : getExtensionList(RootAction.class))
+                    if (!actions.contains(a)) actions.add(a);
+            }
+        });
+
+        return g;
+    }
+
+    /**
+     * Save the settings to a file.
+     */
+    public synchronized void save() throws IOException {
+        if(BulkChange.contains(this))   return;
+        getConfigFile().write(this);
+        SaveableListener.fireOnChange(this, getConfigFile());
+    }
+
+
+    /**
+     * Called to shut down the system.
+     */
+    public void cleanUp() {
+        Set<Future<?>> pending = new HashSet<Future<?>>();
+        terminating = true;
+        for( Computer c : computers.values() ) {
+            c.interrupt();
+            c.kill();
+            pending.add(c.disconnect(null));
+        }
+        if(udpBroadcastThread!=null)
+            udpBroadcastThread.shutdown();
+        if(dnsMultiCast!=null)
+            dnsMultiCast.close();
+        ExternalJob.reloadThread.interrupt();
+        Trigger.timer.cancel();
+        // TODO: how to wait for the completion of the last job?
+        Trigger.timer = null;
+        if(tcpSlaveAgentListener!=null)
+            tcpSlaveAgentListener.shutdown();
+
+        if(pluginManager!=null) // be defensive. there could be some ugly timing related issues
+            pluginManager.stop();
+
+        if(getRootDir().exists())
+            // if we are aborting because we failed to create JENKINS_HOME,
+            // don't try to save. Issue #536
+            getQueue().save();
+
+        threadPoolForLoad.shutdown();
+        for (Future<?> f : pending)
+            try {
+                f.get(10, TimeUnit.SECONDS);    // if clean up operation didn't complete in time, we fail the test
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                break;  // someone wants us to die now. quick!
+            } catch (ExecutionException e) {
+                LOGGER.log(Level.WARNING, "Failed to shut down properly",e);
+            } catch (TimeoutException e) {
+                LOGGER.log(Level.WARNING, "Failed to shut down properly",e);
+            }
+
+        LogFactory.releaseAll();
+
+        theInstance = null;
+    }
+
+    public Object getDynamic(String token) {
+        for (Action a : getActions()) {
+            String url = a.getUrlName();
+            if (url==null)  continue;
+            if (url.equals(token) || url.equals('/' + token))
+                return a;
+        }
+        for (Action a : getManagementLinks())
+            if(a.getUrlName().equals(token))
+                return a;
+        return null;
+    }
+
+
+//
+//
+// actions
+//
+//
+    /**
+     * Accepts submission from the configuration page.
+     */
+    public synchronized void doConfigSubmit( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException, FormException {
+        BulkChange bc = new BulkChange(this);
+        try {
+            checkPermission(ADMINISTER);
+
+            JSONObject json = req.getSubmittedForm();
+
+            // keep using 'useSecurity' field as the main configuration setting
+            // until we get the new security implementation working
+            // useSecurity = null;
+            if (json.has("use_security")) {
+                useSecurity = true;
+                JSONObject security = json.getJSONObject("use_security");
+                setSecurityRealm(SecurityRealm.all().newInstanceFromRadioList(security,"realm"));
+                setAuthorizationStrategy(AuthorizationStrategy.all().newInstanceFromRadioList(security, "authorization"));
+
+                if (security.has("markupFormatter")) {
+                    markupFormatter = req.bindJSON(MarkupFormatter.class,security.getJSONObject("markupFormatter"));
+                } else {
+                    markupFormatter = null;
+                }
+            } else {
+                useSecurity = null;
+                setSecurityRealm(SecurityRealm.NO_AUTHENTICATION);
+                authorizationStrategy = AuthorizationStrategy.UNSECURED;
+                markupFormatter = null;
+            }
+
+            if (json.has("csrf")) {
+            	JSONObject csrf = json.getJSONObject("csrf");
+                setCrumbIssuer(CrumbIssuer.all().newInstanceFromRadioList(csrf, "issuer"));
+            } else {
+            	setCrumbIssuer(null);
+            }
+
+            if (json.has("viewsTabBar")) {
+                viewsTabBar = req.bindJSON(ViewsTabBar.class,json.getJSONObject("viewsTabBar"));
+            } else {
+                viewsTabBar = new DefaultViewsTabBar();
+            }
+
+            if (json.has("myViewsTabBar")) {
+                myViewsTabBar = req.bindJSON(MyViewsTabBar.class,json.getJSONObject("myViewsTabBar"));
+            } else {
+                myViewsTabBar = new DefaultMyViewsTabBar();
+            }
+
+            primaryView = json.has("primaryView") ? json.getString("primaryView") : getViews().iterator().next().getViewName();
+
+            noUsageStatistics = json.has("usageStatisticsCollected") ? null : true;
+
+            {
+                String v = req.getParameter("slaveAgentPortType");
+                if(!isUseSecurity() || v==null || v.equals("random"))
+                    slaveAgentPort = 0;
+                else
+                if(v.equals("disable"))
+                    slaveAgentPort = -1;
+                else {
+                    try {
+                        slaveAgentPort = Integer.parseInt(req.getParameter("slaveAgentPort"));
+                    } catch (NumberFormatException e) {
+                        throw new FormException(Messages.Hudson_BadPortNumber(req.getParameter("slaveAgentPort")),"slaveAgentPort");
+                    }
+                }
+
+                // relaunch the agent
+                if(tcpSlaveAgentListener==null) {
+                    if(slaveAgentPort!=-1)
+                        tcpSlaveAgentListener = new TcpSlaveAgentListener(slaveAgentPort);
+                } else {
+                    if(tcpSlaveAgentListener.configuredPort!=slaveAgentPort) {
+                        tcpSlaveAgentListener.shutdown();
+                        tcpSlaveAgentListener = null;
+                        if(slaveAgentPort!=-1)
+                            tcpSlaveAgentListener = new TcpSlaveAgentListener(slaveAgentPort);
+                    }
+                }
+            }
+
+            numExecutors = json.getInt("numExecutors");
+            if(req.hasParameter("master.mode"))
+                mode = Mode.valueOf(req.getParameter("master.mode"));
+            else
+                mode = Mode.NORMAL;
+
+            label = json.optString("labelString","");
+
+            quietPeriod = json.getInt("quiet_period");
+
+            scmCheckoutRetryCount = json.getInt("retry_count");
+
+            systemMessage = Util.nullify(req.getParameter("system_message"));
+
+            jdks.clear();
+            jdks.addAll(req.bindJSONToList(JDK.class,json.get("jdks")));
+
+            boolean result = true;
+            for( Descriptor<?> d : Functions.getSortedDescriptorsForGlobalConfig() )
+                result &= configureDescriptor(req,json,d);
+
+            for( JSONObject o : StructuredForm.toList(json,"plugin"))
+                pluginManager.getPlugin(o.getString("name")).getPlugin().configure(req, o);
+
+            clouds.rebuildHetero(req,json, Cloud.all(), "cloud");
+
+            JSONObject np = json.getJSONObject("globalNodeProperties");
+            if (!np.isNullObject()) {
+                globalNodeProperties.rebuild(req, np, NodeProperty.for_(this));
+            }
+
+            version = VERSION;
+
+            save();
+            updateComputerList();
+            if(result)
+                rsp.sendRedirect(req.getContextPath()+'/');  // go to the top page
+            else
+                rsp.sendRedirect("configure"); // back to config
+        } finally {
+            bc.commit();
+        }
+    }
+
+    /**
+     * Gets the {@link CrumbIssuer} currently in use.
+     *
+     * @return null if none is in use.
+     */
+    public CrumbIssuer getCrumbIssuer() {
+        return crumbIssuer;
+    }
+
+    public void setCrumbIssuer(CrumbIssuer issuer) {
+        crumbIssuer = issuer;
+    }
+
+    public synchronized void doTestPost( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException {
+        rsp.sendRedirect("foo");
+    }
+
+    private boolean configureDescriptor(StaplerRequest req, JSONObject json, Descriptor<?> d) throws FormException {
+        // collapse the structure to remain backward compatible with the JSON structure before 1.
+        String name = d.getJsonSafeClassName();
+        JSONObject js = json.has(name) ? json.getJSONObject(name) : new JSONObject(); // if it doesn't have the property, the method returns invalid null object.
+        json.putAll(js);
+        return d.configure(req, js);
+    }
+
+    /**
+     * Accepts submission from the configuration page.
+     */
+    public synchronized void doConfigExecutorsSubmit( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException {
+        checkPermission(ADMINISTER);
+
+        BulkChange bc = new BulkChange(this);
+        try {
+            JSONObject json = req.getSubmittedForm();
+
+            setNumExecutors(Integer.parseInt(req.getParameter("numExecutors")));
+            if(req.hasParameter("master.mode"))
+                mode = Mode.valueOf(req.getParameter("master.mode"));
+            else
+                mode = Mode.NORMAL;
+
+            setNodes(req.bindJSONToList(Slave.class,json.get("slaves")));
+        } finally {
+            bc.commit();
+        }
+
+        rsp.sendRedirect(req.getContextPath() + '/');  // go to the top page
+    }
+
+    /**
+     * Accepts the new description.
+     */
+    public synchronized void doSubmitDescription( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException {
+        getPrimaryView().doSubmitDescription(req, rsp);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06872;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06872
+<<<<<<< MINE
+=======
+    }
+
+    public synchronized HttpRedirect doQuietDown() throws IOException {
+        try {
+            return doQuietDown(false,0);
+        } catch (InterruptedException e) {
+            throw new AssertionError(); // impossible
+        }
+    }
+
+    @CLIMethod(name="quiet-down")
+    public HttpRedirect doQuietDown(
+            @Option(name="-block",usage="Block until the system really quiets down and no builds are running") @QueryParameter boolean block,
+            @Option(name="-timeout",usage="If non-zero, only block up to the specified number of milliseconds") @QueryParameter int timeout) throws InterruptedException, IOException {
+        synchronized (this) {
+            checkPermission(ADMINISTER);
+            isQuietingDown = true;
+        }
+        if (block) {
+            if (timeout > 0) timeout += System.currentTimeMillis();
+            while (isQuietingDown
+                   && (timeout <= 0 || System.currentTimeMillis() < timeout)
+                   && !RestartListener.isAllReady()) {
+                Thread.sleep(1000);
+            }
+        }
+        return new HttpRedirect(".");
+    }
+
+    @CLIMethod(name="cancel-quiet-down")
+    public synchronized HttpRedirect doCancelQuietDown() {
+        checkPermission(ADMINISTER);
+        isQuietingDown = false;
+        getQueue().scheduleMaintenance();
+        return new HttpRedirect(".");
+    }
+
+    /**
+     * Backward compatibility. Redirect to the thread dump.
+     */
+    public void doClassicThreadDump(StaplerResponse rsp) throws IOException, ServletException {
+        rsp.sendRedirect2("threadDump");
+    }
+
+    public synchronized TopLevelItem doCreateItem( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException {
+        return itemGroupMixIn.createTopLevelItem(req, rsp);
+    }
+
+    /**
+     * Creates a new job from its configuration XML. The type of the job created will be determined by
+     * what's in this XML.
+     * @since 1.319
+     */
+    public TopLevelItem createProjectFromXML(String name, InputStream xml) throws IOException {
+        return itemGroupMixIn.createProjectFromXML(name, xml);
+    }
+
+    /**
+     * Copys a job.
+     *
+     * @param src
+     *      A {@link TopLevelItem} to be copied.
+     * @param name
+     *      Name of the newly created project.
+     * @return
+     *      Newly created {@link TopLevelItem}.
+     */
+    @SuppressWarnings({"unchecked"})
+    public <T extends TopLevelItem> T copy(T src, String name) throws IOException {
+        return itemGroupMixIn.copy(src, name);
+    }
+
+    // a little more convenient overloading that assumes the caller gives us the right type
+    // (or else it will fail with ClassCastException)
+    public <T extends AbstractProject<?,?>> T copy(T src, String name) throws IOException {
+        return (T)copy((TopLevelItem)src,name);
+    }
+
+    public synchronized void doCreateView( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException, FormException {
+        checkPermission(View.CREATE);
+        addView(View.create(req,rsp, this));
+    }
+
+    /**
+     * Check if the given name is suitable as a name
+     * for job, view, etc.
+     *
+     * @throws ParseException
+     *      if the given name is not good
+     */
+    public static void checkGoodName(String name) throws Failure {
+        if(name==null || name.length()==0)
+            throw new Failure(Messages.Hudson_NoName());
+
+        for( int i=0; i<name.length(); i++ ) {
+            char ch = name.charAt(i);
+            if(Character.isISOControl(ch)) {
+                throw new Failure(Messages.Hudson_ControlCodeNotAllowed(toPrintableName(name)));
+            }
+            if("?*/\\%!@#$^&|<>[]:;".indexOf(ch)!=-1)
+                throw new Failure(Messages.Hudson_UnsafeChar(ch));
+        }
+
+        // looks good
+    }
+
+    /**
+     * Makes sure that the given name is good as a job name.
+     * @return trimmed name if valid; throws ParseException if not
+     */
+    private String checkJobName(String name) throws Failure {
+        checkGoodName(name);
+        name = name.trim();
+        if(getItem(name)!=null)
+            throw new Failure(Messages.Hudson_JobAlreadyExists(name));
+        // looks good
+        return name;
+    }
+
+    private static String toPrintableName(String name) {
+        StringBuilder printableName = new StringBuilder();
+        for( int i=0; i<name.length(); i++ ) {
+            char ch = name.charAt(i);
+            if(Character.isISOControl(ch))
+                printableName.append("\\u").append((int)ch).append(';');
+            else
+                printableName.append(ch);
+        }
+        return printableName.toString();
+    }
+
+    /**
+     * Checks if the user was successfully authenticated.
+     *
+     * @see BasicAuthenticationFilter
+     */
+    public void doSecured( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException {
+        if(req.getUserPrincipal()==null) {
+            // authentication must have failed
+            rsp.setStatus(HttpServletResponse.SC_UNAUTHORIZED);
+            return;
+        }
+
+        // the user is now authenticated, so send him back to the target
+        String path = req.getContextPath()+req.getOriginalRestOfPath();
+        String q = req.getQueryString();
+        if(q!=null)
+            path += '?'+q;
+
+        rsp.sendRedirect2(path);
+    }
+
+    /**
+     * Called once the user logs in. Just forward to the top page.
+     */
+    public void doLoginEntry( StaplerRequest req, StaplerResponse rsp ) throws IOException {
+        if(req.getUserPrincipal()==null) {
+            rsp.sendRedirect2("noPrincipal");
+            return;
+        }
+
+        String from = req.getParameter("from");
+        if(from!=null && from.startsWith("/") && !from.equals("/loginError")) {
+            rsp.sendRedirect2(from);    // I'm bit uncomfortable letting users redircted to other sites, make sure the URL falls into this domain
+            return;
+        }
+
+        String url = AbstractProcessingFilter.obtainFullRequestUrl(req);
+        if(url!=null) {
+            // if the login redirect is initiated by Acegi
+            // this should send the user back to where s/he was from.
+            rsp.sendRedirect2(url);
+            return;
+        }
+
+        rsp.sendRedirect2(".");
+    }
+
+    /**
+     * Logs out the user.
+     */
+    public void doLogout( StaplerRequest req, StaplerResponse rsp ) throws IOException, ServletException {
+        securityRealm.doLogout(req, rsp);
+    }
+
+    /**
+     * Serves jar files for JNLP slave agents.
+     */
+    public Slave.JnlpJar getJnlpJars(String fileName) {
+        return new Slave.JnlpJar(fileName);
+    }
+
+    public Slave.JnlpJar doJnlpJars(StaplerRequest req) {
+        return new Slave.JnlpJar(req.getRestOfPath());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06796;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06796;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06796
+<<<<<<< MINE
+        for(TopLevelItem item : getItems()) {
+            if(Functions.toEmailSafeString(item.getName()).equalsIgnoreCase(match)) {
+=======
+        for (Entry<String, TopLevelItem> e : items.entrySet()) {
+            if(Functions.toEmailSafeString(e.getKey()).equalsIgnoreCase(match)) {
+                TopLevelItem item = e.getValue();
+                return item.hasPermission(Item.READ) ? item : null;
+            }
+        }
+        return null;
+    }
+
+    /**
+     * {@inheritDoc}.
+     *
+     * Note that the look up is case-insensitive.
+     */
+    public TopLevelItem getItem(String name) {
+        if (name==null)     return null;
+    	TopLevelItem item = items.get(name);
+        if (item==null || !item.hasPermission(Item.READ))
+            return null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01784;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01784;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01784
+<<<<<<< MINE
+import antlr.ANTLRException;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.thoughtworks.xstream.XStream;
+import hudson.BulkChange;
+import hudson.DNSMultiCast;
+import hudson.DescriptorExtensionList;
+import hudson.Extension;
+import hudson.ExtensionList;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01784;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01784;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01784
+<<<<<<< MINE
+     * Stores various objects scoped to {@link Hudson}.
+     */
+    public transient final Lookup lookup = new Lookup();
+
+    // TODO: fix scope
+    public transient Injector container;
+
+    /**
+     * {@link Computer}s in this Hudson system. Read-only.
+     */
+    private transient final Map<Node,Computer> computers = new CopyOnWriteMap.Hash<Node,Computer>();
+
+    /**
+     * We update this field to the current version of Hudson whenever we save {@code config.xml}.
+     * This can be used to detect when an upgrade happens from one version to next.
+     *
+     * <p>
+     * Since this field is introduced starting 1.301, "1.0" is used to represent every version
+     * up to 1.300. This value may also include non-standard versions like "1.301-SNAPSHOT" or
+     * "?", etc., so parsing needs to be done with a care.
+     *
+     * @since 1.301
+     */
+    // this field needs to be at the very top so that other components can look at this value even during unmarshalling
+    private String version = "1.0";
+    
+    /**
+     * Number of executors of the master node.
+     */
+    private int numExecutors = 2;
+
+    /**
+     * Job allocation strategy.
+     */
+    private Mode mode = Mode.NORMAL;
+
+    /**
+     * False to enable anyone to do anything.
+     * Left as a field so that we can still read old data that uses this flag.
+     *
+     * @see #authorizationStrategy
+     * @see #securityRealm
+     */
+    private Boolean useSecurity;
+
+    /**
+     * Controls how the
+     * <a href="http://en.wikipedia.org/wiki/Authorization">authorization</a>
+     * is handled in Hudson.
+     * <p>
+     * This ultimately controls who has access to what.
+     *
+     * Never null.
+     */
+    private volatile AuthorizationStrategy authorizationStrategy = AuthorizationStrategy.UNSECURED;
+
+    /**
+     * Controls a part of the
+     * <a href="http://en.wikipedia.org/wiki/Authentication">authentication</a>
+     * handling in Hudson.
+     * <p>
+     * Intuitively, this corresponds to the user database.
+     *
+     * See {@link HudsonFilter} for the concrete authentication protocol.
+     *
+     * Never null. Always use {@link #setSecurityRealm(SecurityRealm)} to
+     * update this field.
+     *
+     * @see #getSecurity()
+     * @see #setSecurityRealm(SecurityRealm)
+     */
+    private volatile SecurityRealm securityRealm = SecurityRealm.NO_AUTHENTICATION;
+
+    /**
+     * Message displayed in the top page.
+     */
+    private String systemMessage;
+
+    /**
+     * Root directory of the system.
+     */
+    public transient final File root;
+
+    /**
+     * Where are we in the initialization?
+     */
+    private transient volatile InitMilestone initLevel = InitMilestone.STARTED;
+
+    /**
+     * All {@link Item}s keyed by their {@link Item#getName() name}s.
+     */
+    /*package*/ transient final Map<String,TopLevelItem> items = new CopyOnWriteMap.Tree<String,TopLevelItem>(CaseInsensitiveComparator.INSTANCE);
+
+    /**
+     * The sole instance.
+     */
+    private static Hudson theInstance;
+
+    private transient volatile boolean isQuietingDown;
+    private transient volatile boolean terminating;
+
+    private List<JDK> jdks = new ArrayList<JDK>();
+
+    private transient volatile DependencyGraph dependencyGraph;
+
+    /**
+     * Currently active Views tab bar.
+     */
+    private volatile ViewsTabBar viewsTabBar = new DefaultViewsTabBar();
+
+    /**
+     * Currently active My Views tab bar.
+     */
+    private volatile MyViewsTabBar myViewsTabBar = new DefaultMyViewsTabBar();
+
+    /**
+     * All {@link ExtensionList} keyed by their {@link ExtensionList#extensionType}.
+     */
+    private transient final Memoizer<Class,ExtensionList> extensionLists = new Memoizer<Class,ExtensionList>() {
+        public ExtensionList compute(Class key) {
+            return ExtensionList.create(Hudson.this,key);
+        }
+    };
+
+    /**
+     * All {@link DescriptorExtensionList} keyed by their {@link DescriptorExtensionList#describableType}.
+     */
+    private transient final Memoizer<Class,DescriptorExtensionList> descriptorLists = new Memoizer<Class,DescriptorExtensionList>() {
+        public DescriptorExtensionList compute(Class key) {
+            return DescriptorExtensionList.createDescriptorList(Hudson.this,key);
+        }
+    };
+
+    /**
+     * Active {@link Cloud}s.
+     */
+    public final CloudList clouds = new CloudList(this);
+
+    public static class CloudList extends DescribableList<Cloud,Descriptor<Cloud>> {
+        public CloudList(Hudson h) {
+            super(h);
+        }
+
+        public CloudList() {// needed for XStream deserialization
+        }
+
+        public Cloud getByName(String name) {
+            for (Cloud c : this)
+                if (c.name.equals(name))
+                    return c;
+            return null;
+        }
+
+        @Override
+        protected void onModified() throws IOException {
+            super.onModified();
+            Hudson.getInstance().trimLabels();
+        }
+    }
+
+    /**
+     * Set of installed cluster nodes.
+     * <p>
+     * We use this field with copy-on-write semantics.
+     * This field has mutable list (to keep the serialization look clean),
+     * but it shall never be modified. Only new completely populated slave
+     * list can be set here.
+     * <p>
+     * The field name should be really {@code nodes}, but again the backward compatibility
+     * prevents us from renaming.
+     */
+    private volatile NodeList slaves;
+
+    /**
+     * Quiet period.
+     *
+     * This is {@link Integer} so that we can initialize it to '5' for upgrading users.
+     */
+    /*package*/ Integer quietPeriod;
+    
+    /**
+     * Global default for {@link AbstractProject#getScmCheckoutRetryCount()}  
+     */
+    /*package*/ int scmCheckoutRetryCount;
+
+    /**
+     * {@link View}s.
+     */
+    private final CopyOnWriteArrayList<View> views = new CopyOnWriteArrayList<View>();
+
+    /**
+     * Name of the primary view.
+     * <p>
+     * Start with null, so that we can upgrade pre-1.269 data well.
+     * @since 1.269
+     */
+    private volatile String primaryView;
+
+    private transient final FingerprintMap fingerprintMap = new FingerprintMap();
+
+    /**
+     * Loaded plugins.
+     */
+    public transient final PluginManager pluginManager;
+
+    public transient volatile TcpSlaveAgentListener tcpSlaveAgentListener;
+
+    private transient UDPBroadcastThread udpBroadcastThread;
+
+    private transient DNSMultiCast dnsMultiCast;
+
+    /**
+     * List of registered {@link ItemListener}s.
+=======
+     * List of registered {@link hudson.model.listeners.ItemListener}s.
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b12520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a12520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c12520
+<<<<<<< MINE
+            if (jenkins!=null) {
+                for (EndOfTestListener tl : jenkins.getExtensionList(EndOfTestListener.class))
+                    tl.onTearDown();
+            }
+=======
+            if (jenkins!=null)
+                for (EndOfTestListener tl : jenkins.getExtensionList(EndOfTestListener.class))
+                    tl.onTearDown();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07904;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07904;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07904
+<<<<<<< MINE
+import hudson.ExtensionList;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07904;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07904;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07904
+<<<<<<< MINE
+import jenkins.model.ArtifactManager;
+import jenkins.model.StandardArtifactManager;
+=======
+import jenkins.model.RunAction2;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11276;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11276;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11276
+<<<<<<< MINE
+import jenkins.model.ArtifactManager;
+import jenkins.model.StandardArtifactManager;
+=======
+import jenkins.model.PeepholePermalink;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b08828;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a08828;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c08828
+<<<<<<< MINE
+import hudson.model.listeners.ItemListener;
+=======
+import hudson.remoting.Callable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b04024;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a04024;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c04024
+<<<<<<< MINE
+    Target[] orderedTargets() {
+        // will contain targets ordered by reverse name length (place specific targets at the beginning)
+        Target[] ts = targets.toArray(new Target[]{});
+
+        Arrays.sort(ts, new Comparator<Target>() {
+            public int compare(Target left, Target right) {
+                return right.getName().length() - left.getName().length();
+            }
+        });
+
+        return ts;
+    }
+
+    @Restricted(NoExternalUse.class)
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11232;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11232;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11232
+<<<<<<< MINE
+            tag("iframe",   "src");
+=======
+            tag("link",     "type","rel");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b12680;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a12680;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c12680
+<<<<<<< MINE
+import hudson.tasks.BuildTrigger;
+=======
+import hudson.util.OneShotEvent;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b08328;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a08328;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c08328
+<<<<<<< MINE
+import hudson.util.NamingThreadFactory;
+=======
+import hudson.util.IOException2;
+import hudson.util.IOUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b12692;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a12692;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c12692
+<<<<<<< MINE
+        buf.append(scheme+"://");
+        buf.append(req.getServerName());
+        int forwardedPort = req.getIntHeader("X-Forwarded-Port");
+        int port = forwardedPort == -1 ? req.getServerPort() : forwardedPort;
+        if (port != ("https".equals(scheme) ? 443 : 80)) {
+=======
+        if(("http".equals(scheme) && port != 80) || ("https".equals(scheme) && port != 443)) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11480;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11480;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11480
+<<<<<<< MINE
+            tag("link",     "type","rel");
+=======
+            tag("iframe",   "src");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b08508;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a08508;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c08508
+<<<<<<< MINE
+            tag("iframe",   "src");
+=======
+            tag("link",     "type","rel");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b08508;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a08508;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c08508
+<<<<<<< MINE
+
+import static hudson.Util.*;
+import static hudson.init.InitMilestone.*;
+import hudson.util.LogTaskListener;
+import static java.util.logging.Level.*;
+import static javax.servlet.http.HttpServletResponse.*;
+=======
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02500;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02500;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02500
+<<<<<<< MINE
+import hudson.model.Run;
+import hudson.tasks.junit.History;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b13244;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a13244;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c13244
+<<<<<<< MINE
+            if (expectedContentType != null) {
+                assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+            }
+=======
+            assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11552;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11552;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11552
+<<<<<<< MINE
+import jenkins.security.SecurityListener;
+=======
+import jenkins.security.MasterToSlaveCallable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11552;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11552;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11552
+<<<<<<< MINE
+=======
+import jenkins.security.SlaveToMasterCallable;
+import org.apache.commons.io.FileUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c05332
+<<<<<<< MINE
+            tag("iframe",   "src");
+=======
+            tag("link",     "type","rel");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c05332
+<<<<<<< MINE
+            if (expectedContentType != null) {
+                assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+            }
+=======
+            assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c05332
+<<<<<<< MINE
+
+import static hudson.Util.*;
+import static hudson.init.InitMilestone.*;
+import hudson.util.LogTaskListener;
+import static java.util.logging.Level.*;
+import static javax.servlet.http.HttpServletResponse.*;
+=======
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c05332
+<<<<<<< MINE
+import jenkins.security.SecurityListener;
+=======
+import jenkins.security.MasterToSlaveCallable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a05332;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c05332
+<<<<<<< MINE
+=======
+import jenkins.security.SlaveToMasterCallable;
+import org.apache.commons.io.FileUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11960;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11960;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11960
+<<<<<<< MINE
+import hudson.console.ModelHyperlinkNote;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10004
+<<<<<<< MINE
+            tag("iframe",   "src");
+=======
+            tag("link",     "type","rel");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10004
+<<<<<<< MINE
+            if (expectedContentType != null) {
+                assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+            }
+=======
+            assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10004
+<<<<<<< MINE
+
+import static hudson.Util.*;
+import static hudson.init.InitMilestone.*;
+import hudson.util.LogTaskListener;
+import static java.util.logging.Level.*;
+import static javax.servlet.http.HttpServletResponse.*;
+=======
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10004
+<<<<<<< MINE
+import jenkins.security.SecurityListener;
+=======
+import jenkins.security.MasterToSlaveCallable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10004
+<<<<<<< MINE
+=======
+import jenkins.security.SlaveToMasterCallable;
+import org.apache.commons.io.FileUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10004;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10004
+<<<<<<< MINE
+import hudson.console.ModelHyperlinkNote;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01136
+<<<<<<< MINE
+            tag("iframe",   "src");
+=======
+            tag("link",     "type","rel");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01136
+<<<<<<< MINE
+            if (expectedContentType != null) {
+                assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+            }
+=======
+            assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01136
+<<<<<<< MINE
+
+import static hudson.Util.*;
+import static hudson.init.InitMilestone.*;
+import hudson.util.LogTaskListener;
+import static java.util.logging.Level.*;
+import static javax.servlet.http.HttpServletResponse.*;
+=======
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01136
+<<<<<<< MINE
+import jenkins.security.SecurityListener;
+=======
+import jenkins.security.MasterToSlaveCallable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01136
+<<<<<<< MINE
+=======
+import jenkins.security.SlaveToMasterCallable;
+import org.apache.commons.io.FileUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01136
+<<<<<<< MINE
+        File[] subdirs = projectsDir.listFiles();
+=======
+        File[] subdirs = projectsDir.listFiles(); 
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01136;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01136
+<<<<<<< MINE
+=======
+import jenkins.model.Jenkins;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11048
+<<<<<<< MINE
+            tag("iframe",   "src");
+=======
+            tag("link",     "type","rel");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11048
+<<<<<<< MINE
+            if (expectedContentType != null) {
+                assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+            }
+=======
+            assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11048
+<<<<<<< MINE
+
+import static hudson.Util.*;
+import static hudson.init.InitMilestone.*;
+import hudson.util.LogTaskListener;
+import static java.util.logging.Level.*;
+import static javax.servlet.http.HttpServletResponse.*;
+=======
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11048
+<<<<<<< MINE
+import jenkins.security.SecurityListener;
+=======
+import jenkins.security.MasterToSlaveCallable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11048
+<<<<<<< MINE
+=======
+import jenkins.security.SlaveToMasterCallable;
+import org.apache.commons.io.FileUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11048
+<<<<<<< MINE
+import hudson.console.ModelHyperlinkNote;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11048
+<<<<<<< MINE
+        File[] subdirs = projectsDir.listFiles();
+=======
+        File[] subdirs = projectsDir.listFiles(); 
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11048
+<<<<<<< MINE
+=======
+import jenkins.model.Jenkins;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03172
+<<<<<<< MINE
+import hudson.console.ModelHyperlinkNote;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03172
+<<<<<<< MINE
+     * @since 1.600
+     */
+=======
+     */
+    //TODO: Remove Restricted and add @since when merging to stable-rc
+    @Restricted(NoExternalUse.class)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03172
+<<<<<<< MINE
+                if (top.timestamp.compareTo(new GregorianCalendar()) > 0)
+                    break; // finished moving all ready items from queue
+
+                top.leave(this);
+                Task p = top.task;
+                if (!isBuildBlocked(top) && allowNewBuildableTask(p)) {
+                    // ready to be executed immediately
+                    Runnable r = makeBuildable(new BuildableItem(top));
+                    if (r != null) {
+                        r.run();
+                    } else {
+                        new BlockedItem(top).enter(this);
+                    }
+                } else {
+                    // this can't be built now because another build is in progress
+                    // set this project aside.
+                    new BlockedItem(top).enter(this);
+=======
+        {// blocked -> buildable
+            for (BlockedItem p : new ArrayList<BlockedItem>(blockedProjects.values())) {// copy as we'll mutate the list
+                if (!isBuildBlocked(p) && allowNewBuildableTask(p.task)) {
+                    // ready to be executed
+                    Runnable r = makeBuildable(new BuildableItem(p));
+                    if (r != null) {
+                        p.leave(this);
+                        r.run();
+                    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03172;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03172
+<<<<<<< MINE
+                MappingWorksheet ws = new MappingWorksheet(p, candidates);
+                Mapping m = loadBalancer.map(p.task, ws);
+                if (m == null) {
+                    // if we couldn't find the executor that fits,
+                    // just leave it in the buildables list and
+                    // check if we can execute other projects
+                    LOGGER.log(Level.FINER, "Failed to map {0} to executors. candidates={1} parked={2}",
+                            new Object[]{p, candidates, parked.values()});
+                    continue;
+                }
+=======
+            top.leave(this);
+            Task p = top.task;
+            if (!isBuildBlocked(top) && allowNewBuildableTask(p)) {
+                // ready to be executed immediately
+                Runnable r = makeBuildable(new BuildableItem(top));
+                if (r != null) {
+                    r.run();
+                } else {
+                    new BlockedItem(top).enter(this);
+                }
+            } else {
+                // this can't be built now because another build is in progress
+                // set this project aside.
+                new BlockedItem(top).enter(this);
+            }
+        }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+            tag("iframe",   "src");
+=======
+            tag("link",     "type","rel");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+            if (expectedContentType != null) {
+                assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+            }
+=======
+            assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+
+import static hudson.Util.*;
+import static hudson.init.InitMilestone.*;
+import hudson.util.LogTaskListener;
+import static java.util.logging.Level.*;
+import static javax.servlet.http.HttpServletResponse.*;
+=======
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+import jenkins.security.SecurityListener;
+=======
+import jenkins.security.MasterToSlaveCallable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+=======
+import jenkins.security.SlaveToMasterCallable;
+import org.apache.commons.io.FileUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+        File[] subdirs = projectsDir.listFiles(); 
+=======
+        File[] subdirs = projectsDir.listFiles();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+import jenkins.model.Jenkins;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02668;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02668
+<<<<<<< MINE
+=======
+                // JENKINS-8043: some slaves (eg. swarm slaves) are not saved into the config file
+                // and will get overwritten when reloading. Make a backup copy now, and re-add them later
+                NodeList oldSlaves = slaves;
+
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b12964;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a12964;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c12964
+<<<<<<< MINE
+     * Invokes the supplied {@link Runnable} if the {@link Queue} lock was obtained without blocking.
+     *
+     * @param runnable the operation to perform.
+     * @return {@code true} if the lock was available and the operation was performed.
+     * @since 1.618
+     */
+    public static boolean tryWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        if (queue == null) {
+            runnable.run();
+            return true;
+        } else {
+            return queue._tryWithLock(runnable);
+        }
+    }
+    /**
+     * Wraps a {@link Runnable} with the  {@link Queue} lock held. 
+     *
+     * @param runnable the operation to wrap.
+     * @since 1.618
+     */
+    public static Runnable wrapWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? runnable : new LockedRunnable(runnable);
+    }
+
+    /**
+     * Wraps a {@link hudson.remoting.Callable} with the  {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.618
+     */
+    public static <V, T extends Throwable> hudson.remoting.Callable<V, T> wrapWithLock(hudson.remoting.Callable<V, T> callable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? callable : new LockedHRCallable<>(callable);
+    }
+
+    /**
+     * Wraps a {@link java.util.concurrent.Callable} with the {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.618
+=======
+     * Some operations require to be performed with the {@link Queue} lock held. Use one of these methods rather
+     * than locking directly on Queue in order to allow for future refactoring.
+     * @param runnable the operation to perform.
+     * @return {@code true} if the lock available and the operation performed. 
+     * @since 1.FIXME
+     */
+    public static boolean tryWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        if (queue == null) {
+            runnable.run();
+            return true;
+        } else {
+            return queue._tryWithLock(runnable);
+        }
+    }
+    /**
+     * Wraps a {@link Runnable} with the  {@link Queue} lock held. 
+     *
+     * @param runnable the operation to wrap.
+     * @since 1.FIXME
+     */
+    public static Runnable wrapWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? runnable : new LockedRunnable(runnable);
+    }
+
+    /**
+     * Wraps a {@link hudson.remoting.Callable} with the  {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.FIXME
+     */
+    public static <V, T extends Throwable> hudson.remoting.Callable<V, T> wrapWithLock(hudson.remoting.Callable<V, T> callable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? callable : new LockedHRCallable<V, T>(callable);
+    }
+
+    /**
+     * Wraps a {@link java.util.concurrent.Callable} with the {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.FIXME
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06520
+<<<<<<< MINE
+            tag("iframe",   "src");
+=======
+            tag("link",     "type","rel");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06520
+<<<<<<< MINE
+            if (expectedContentType != null) {
+                assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+            }
+=======
+            assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06520
+<<<<<<< MINE
+
+import static hudson.Util.*;
+import static hudson.init.InitMilestone.*;
+import hudson.util.LogTaskListener;
+import static java.util.logging.Level.*;
+import static javax.servlet.http.HttpServletResponse.*;
+=======
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06520
+<<<<<<< MINE
+import jenkins.security.SecurityListener;
+=======
+import jenkins.security.MasterToSlaveCallable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06520
+<<<<<<< MINE
+=======
+import jenkins.security.SlaveToMasterCallable;
+import org.apache.commons.io.FileUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06520
+<<<<<<< MINE
+        File[] subdirs = projectsDir.listFiles(); 
+=======
+        File[] subdirs = projectsDir.listFiles();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06520
+<<<<<<< MINE
+import jenkins.model.Jenkins;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07380
+<<<<<<< MINE
+            tag("iframe",   "src");
+=======
+            tag("link",     "type","rel");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07380
+<<<<<<< MINE
+            if (expectedContentType != null) {
+                assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+            }
+=======
+            assertThat(p.getWebResponse().getContentType(), is(expectedContentType));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07380
+<<<<<<< MINE
+
+import static hudson.Util.*;
+import static hudson.init.InitMilestone.*;
+import hudson.util.LogTaskListener;
+import static java.util.logging.Level.*;
+import static javax.servlet.http.HttpServletResponse.*;
+=======
+import javax.annotation.CheckForNull;
+import javax.annotation.Nonnull;
+import javax.annotation.Nullable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07380
+<<<<<<< MINE
+import jenkins.security.SecurityListener;
+=======
+import jenkins.security.MasterToSlaveCallable;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07380
+<<<<<<< MINE
+=======
+import jenkins.security.SlaveToMasterCallable;
+import org.apache.commons.io.FileUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07380
+<<<<<<< MINE
+        File[] subdirs = projectsDir.listFiles(); 
+=======
+        File[] subdirs = projectsDir.listFiles();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07380;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07380
+<<<<<<< MINE
+import jenkins.model.Jenkins;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06692;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06692;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06692
+<<<<<<< MINE
+import hudson.console.ModelHyperlinkNote;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02500;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02500;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02500
+<<<<<<< MINE
+import hudson.console.ModelHyperlinkNote;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06928;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06928;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06928
+<<<<<<< MINE
+     * Invokes the supplied {@link Runnable} if the {@link Queue} lock was obtained without blocking.
+     *
+     * @param runnable the operation to perform.
+     * @return {@code true} if the lock was available and the operation was performed.
+     * @since 1.618
+     */
+    public static boolean tryWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        if (queue == null) {
+            runnable.run();
+            return true;
+        } else {
+            return queue._tryWithLock(runnable);
+        }
+    }
+    /**
+     * Wraps a {@link Runnable} with the  {@link Queue} lock held. 
+     *
+     * @param runnable the operation to wrap.
+     * @since 1.618
+     */
+    public static Runnable wrapWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? runnable : new LockedRunnable(runnable);
+    }
+
+    /**
+     * Wraps a {@link hudson.remoting.Callable} with the  {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.618
+     */
+    public static <V, T extends Throwable> hudson.remoting.Callable<V, T> wrapWithLock(hudson.remoting.Callable<V, T> callable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? callable : new LockedHRCallable<>(callable);
+    }
+
+    /**
+     * Wraps a {@link java.util.concurrent.Callable} with the {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.618
+=======
+     * Some operations require to be performed with the {@link Queue} lock held. Use one of these methods rather
+     * than locking directly on Queue in order to allow for future refactoring.
+     * @param runnable the operation to perform.
+     * @return {@code true} if the lock available and the operation performed. 
+     * @since 1.FIXME
+     */
+    public static boolean tryWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        if (queue == null) {
+            runnable.run();
+            return true;
+        } else {
+            return queue._tryWithLock(runnable);
+        }
+    }
+    /**
+     * Wraps a {@link Runnable} with the  {@link Queue} lock held. 
+     *
+     * @param runnable the operation to wrap.
+     * @since 1.FIXME
+     */
+    public static Runnable wrapWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? runnable : new LockedRunnable(runnable);
+    }
+
+    /**
+     * Wraps a {@link hudson.remoting.Callable} with the  {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.FIXME
+     */
+    public static <V, T extends Throwable> hudson.remoting.Callable<V, T> wrapWithLock(hudson.remoting.Callable<V, T> callable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? callable : new LockedHRCallable<V, T>(callable);
+    }
+
+    /**
+     * Wraps a {@link java.util.concurrent.Callable} with the {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.FIXME
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06664;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06664;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06664
+<<<<<<< MINE
+     * Invokes the supplied {@link Runnable} if the {@link Queue} lock was obtained without blocking.
+     *
+     * @param runnable the operation to perform.
+     * @return {@code true} if the lock was available and the operation was performed.
+     * @since 1.618
+     */
+    public static boolean tryWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        if (queue == null) {
+            runnable.run();
+            return true;
+        } else {
+            return queue._tryWithLock(runnable);
+        }
+    }
+    /**
+     * Wraps a {@link Runnable} with the  {@link Queue} lock held. 
+     *
+     * @param runnable the operation to wrap.
+     * @since 1.618
+     */
+    public static Runnable wrapWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? runnable : new LockedRunnable(runnable);
+    }
+
+    /**
+     * Wraps a {@link hudson.remoting.Callable} with the  {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.618
+     */
+    public static <V, T extends Throwable> hudson.remoting.Callable<V, T> wrapWithLock(hudson.remoting.Callable<V, T> callable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? callable : new LockedHRCallable<>(callable);
+    }
+
+    /**
+     * Wraps a {@link java.util.concurrent.Callable} with the {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.618
+=======
+     * Some operations require to be performed with the {@link Queue} lock held. Use one of these methods rather
+     * than locking directly on Queue in order to allow for future refactoring.
+     * @param runnable the operation to perform.
+     * @return {@code true} if the lock available and the operation performed. 
+     * @since 1.FIXME
+     */
+    public static boolean tryWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        if (queue == null) {
+            runnable.run();
+            return true;
+        } else {
+            return queue._tryWithLock(runnable);
+        }
+    }
+    /**
+     * Wraps a {@link Runnable} with the  {@link Queue} lock held. 
+     *
+     * @param runnable the operation to wrap.
+     * @since 1.FIXME
+     */
+    public static Runnable wrapWithLock(Runnable runnable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? runnable : new LockedRunnable(runnable);
+    }
+
+    /**
+     * Wraps a {@link hudson.remoting.Callable} with the  {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.FIXME
+     */
+    public static <V, T extends Throwable> hudson.remoting.Callable<V, T> wrapWithLock(hudson.remoting.Callable<V, T> callable) {
+        final Jenkins jenkins = Jenkins.getInstance();
+        final Queue queue = jenkins == null ? null : jenkins.getQueue();
+        return queue == null ? callable : new LockedHRCallable<V, T>(callable);
+    }
+
+    /**
+     * Wraps a {@link java.util.concurrent.Callable} with the {@link Queue} lock held. 
+     *
+     * @param callable the operation to wrap.
+     * @since 1.FIXME
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06664;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06664;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06664
+<<<<<<< MINE
+import com.gargoylesoftware.htmlunit.html.DomNodeUtil;
+import com.gargoylesoftware.htmlunit.html.HtmlFormUtil;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01188;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01188;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01188
+<<<<<<< MINE
+=======
+import org.acegisecurity.AccessDeniedException;
+import org.acegisecurity.Authentication;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01188;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01188;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01188
+<<<<<<< MINE
+    public @CheckForNull BuildPtr getOriginal() {
+        return original;
+=======
+    public BuildPtr getOriginal() {
+        if (original != null && original.hasPermissionToDiscoverBuild()) {
+            return original;
+        }
+        return null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11980;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11980;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11980
+<<<<<<< MINE
+=======
+    /**
+     * A Stub class for {@link Task} which exposes only the name of the Task to be displayed when the user
+     * has DISCOVERY permissions only.
+     */
+    @Restricted(NoExternalUse.class)
+    @ExportedBean(defaultVisibility = 999)
+    public static class StubTask {
+
+        private String name;
+
+        public StubTask(@Nonnull Queue.Task base) {
+            this.name = base.getName();
+        }
+
+        @Exported
+        public String getName() {
+            return name;
+        }
+    }
+
+    /**
+     * A Stub class for {@link Item} which exposes only the name of the Task to be displayed when the user
+     * has DISCOVERY permissions only.
+     */
+    @Restricted(NoExternalUse.class)
+    @ExportedBean(defaultVisibility = 999)
+    public class StubItem {
+
+        @Exported public StubTask task;
+
+        public StubItem(StubTask task) {
+            this.task = task;
+        }
+
+    }
+    
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03000;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03000;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03000
+<<<<<<< MINE
+import org.jenkinsci.bytecode.AdaptField;
+import org.jenkinsci.remoting.RoleChecker;
+=======
+import org.kohsuke.accmod.restrictions.NoExternalUse;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03000;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03000;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03000
+<<<<<<< MINE
+    public Item[] getItems() {
+        Snapshot s = this.snapshot;
+        Item[] r = new Item[s.waitingList.size() + s.blockedProjects.size() + s.buildables.size() +
+                s.pendings.size()];
+        s.waitingList.toArray(r);
+        int idx = s.waitingList.size();
+        for (BlockedItem p : s.blockedProjects) {
+            r[idx++] = p;
+        }
+        for (BuildableItem p : reverse(s.buildables)) {
+            r[idx++] = p;
+        }
+        for (BuildableItem p : reverse(s.pendings)) {
+            r[idx++] = p;
+=======
+    public synchronized Item[] getItems() {
+        List<Item> r = new ArrayList<Item>();
+
+        for(WaitingItem p : waitingList) {
+            r = filterItemListBasedOnPermissions(r, p);
+        }
+        for (BlockedItem p : blockedProjects.values()){
+            r = filterItemListBasedOnPermissions(r, p);
+        }
+        for (BuildableItem p : reverse(buildables.values())) {
+            r = filterItemListBasedOnPermissions(r, p);
+        }
+        for (BuildableItem p : reverse(pendings.values())) {
+            r= filterItemListBasedOnPermissions(r, p);
+        }
+        Item[] items = new Item[r.size()];
+        r.toArray(items);
+        return items;
+    }
+
+    private List<Item> filterItemListBasedOnPermissions(List<Item> r, Item t) {
+        if (t.task instanceof hudson.model.Item) {
+            if (((hudson.model.Item)t.task).hasPermission(hudson.model.Item.READ)) {
+                r.add(t);
+            }
+        }
+        return r;
+    }
+
+    /**
+     * Returns an array of Item for which it is only visible the name of the task.
+     *
+     * Generally speaking the array is sorted such that the items that are most likely built sooner are
+     * at the end.
+     */
+    @Restricted(NoExternalUse.class)
+    @Exported(inline=true)
+    public synchronized StubItem[] getDiscoverableItems() {
+        List<StubItem> r = new ArrayList<StubItem>();
+
+        for(WaitingItem p : waitingList) {
+            r = filterDiscoverableItemListBasedOnPermissions(r, p);
+        }
+        for (BlockedItem p : blockedProjects.values()){
+            r = filterDiscoverableItemListBasedOnPermissions(r, p);
+        }
+        for (BuildableItem p : reverse(buildables.values())) {
+            r = filterDiscoverableItemListBasedOnPermissions(r, p);
+        }
+        for (BuildableItem p : reverse(pendings.values())) {
+            r= filterDiscoverableItemListBasedOnPermissions(r, p);
+        }
+        StubItem[] items = new StubItem[r.size()];
+        r.toArray(items);
+        return items;
+    }
+
+    private List<StubItem> filterDiscoverableItemListBasedOnPermissions(List<StubItem> r, Item t) {
+        if (t.task instanceof hudson.model.Item) {
+            if (!((hudson.model.Item)t.task).hasPermission(hudson.model.Item.READ) && ((hudson.model.Item)t.task).hasPermission(hudson.model.Item.DISCOVER)) {
+                r.add(new StubItem(new StubTask(t.task)));
+            }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b04068;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a04068;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c04068
+<<<<<<< MINE
+    private List<Item> checkPermissionsAndAddToList(List<Item> r, Item t) {
+=======
+    private List<Item> filterItemListBasedOnPermissions(List<Item> r, Item t) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07528;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07528;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07528
+<<<<<<< MINE
+    private void _cleanUpReleaseAllLoggers(List<Throwable> errors) {
+        LOGGER.log(Level.FINE, "Releasing all loggers");
+        try {
+            LogFactory.releaseAll();
+        } catch (OutOfMemoryError e) {
+            // we should just propagate this, no point trying to log
+            throw e;
+        } catch (LinkageError e) {
+            LOGGER.log(SEVERE, "Failed to release all loggers", e);
+            // safe to ignore and continue for this one
+        } catch (Throwable e) {
+            LOGGER.log(SEVERE, "Failed to release all loggers", e);
+            // save for later
+            errors.add(e);
+=======
+        LogFactory.releaseAll();
+
+        theInstance = null;
+        if (JenkinsJVM.isJenkinsJVM()) {
+            JenkinsJVMAccess._setJenkinsJVM(oldJenkinsJVM);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02720;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02720;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02720
+<<<<<<< MINE
+    private void _cleanUpPluginServletFilters(List<Throwable> errors) {
+        LOGGER.log(Level.FINE, "Stopping filters");
+        try {
+            PluginServletFilter.cleanUp();
+        } catch (OutOfMemoryError e) {
+            // we should just propagate this, no point trying to log
+            throw e;
+        } catch (LinkageError e) {
+            LOGGER.log(SEVERE, "Failed to stop filters", e);
+            // safe to ignore and continue for this one
+        } catch (Throwable e) {
+            LOGGER.log(SEVERE, "Failed to stop filters", e);
+            // save for later
+            errors.add(e);
+        }
+    }
+=======
+        PluginServletFilter.cleanUp();
+
+        LogFactory.releaseAll();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07780;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07780;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07780
+<<<<<<< MINE
+	
+    private static final String UPDATE_CENTER_URL = SystemProperties.getString(UpdateCenter.class.getName()+".updateCenterUrl","http://updates.jenkins-ci.org/");
+=======
+
+    private static final String UPDATE_CENTER_URL = System.getProperty(UpdateCenter.class.getName()+".updateCenterUrl","http://updates.jenkins-ci.org/");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07780;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07780;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07780
+<<<<<<< MINE
+     * Defines the refresh period for of the internal cache ({@link #itemsView}).
+     * Data should be defined in milliseconds, default value - 1000;
+     * @since 1.577
+     */
+    private static int CACHE_REFRESH_PERIOD = SystemProperties.getInteger(Queue.class.getName() + ".cacheRefreshPeriod", 1000);
+
+    /**
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07780;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07780;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07780
+<<<<<<< MINE
+    public static boolean SYMLINK_ESCAPEHATCH = SystemProperties.getBoolean(Util.class.getName()+".symlinkEscapeHatch");
+=======
+    public static boolean SYMLINK_ESCAPEHATCH = Boolean.getBoolean(Util.class.getName()+".symlinkEscapeHatch");
+
+    /**
+     * The number of times we will attempt to delete files/directory trees
+     * before giving up and throwing an exception.<br/>
+     * Specifying a value less than 1 is invalid and will be treated as if
+     * a value of 1 (i.e. one attempt, no retries) was specified.
+     * <p>
+     * e.g. if some of the child directories are big, it might take long enough
+     * to delete that it allows others to create new files in the directory we
+     * are trying to empty, causing problems like JENKINS-10113.
+     * Or, if we're on Windows, then deletes can fail for transient reasons
+     * regardless of external activity; see JENKINS-15331.
+     * Whatever the reason, this allows us to do multiple attempts before we
+     * give up, thus improving build reliability.
+     */
+    @Restricted(value = NoExternalUse.class)
+    static int DELETION_MAX = Math.max(1, Integer.getInteger(Util.class.getName() + ".maxFileDeletionRetries", 3).intValue());
+
+    /**
+     * The time (in milliseconds) that we will wait between attempts to
+     * delete files when retrying.<br>
+     * This has no effect unless {@link #DELETION_MAX} is non-zero.
+     * <p>
+     * If zero, we will not delay between attempts.<br>
+     * If negative, we will wait an (linearly) increasing multiple of this value
+     * between attempts.
+     */
+    @Restricted(value = NoExternalUse.class)
+    static int WAIT_BETWEEN_DELETION_RETRIES = Integer.getInteger(Util.class.getName() + ".deletionRetryWait", 100).intValue();
+
+    /**
+     * If this flag is set to true then we will request a garbage collection
+     * after a deletion failure before we next retry the delete.<br>
+     * It defaults to <code>false</code> and is ignored unless
+     * {@link #DELETION_MAX} is greater than 1.
+     * <p>
+     * Setting this flag to true <i>may</i> resolve some problems on Windows,
+     * and also for directory trees residing on an NFS share, <b>but</b> it can
+     * have a negative impact on performance and may have no effect at all (GC
+     * behavior is JVM-specific).
+     * <p>
+     * Warning: This should only ever be used if you find that your builds are
+     * failing because Jenkins is unable to delete files, that this failure is
+     * because Jenkins itself has those files locked "open", and even then it
+     * should only be used on slaves with relatively few executors (because the
+     * garbage collection can impact the performance of all job executors on
+     * that slave).<br/>
+     * i.e. Setting this flag is a act of last resort - it is <em>not</em>
+     * recommended, and should not be used on the main Jenkins server
+     * unless you can tolerate the performance impact.
+     */
+    @Restricted(value = NoExternalUse.class)
+    static boolean GC_AFTER_FAILED_DELETE = Boolean.getBoolean(Util.class.getName() + ".performGCOnFailedDelete");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b09660;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a09660;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c09660
+<<<<<<< MINE
+        forceEnabled = SystemProperties.optBoolean(JnlpSlaveAgentProtocol3.class.getName() + ".enabled");
+        if (forceEnabled != null) {
+            ENABLED = forceEnabled;
+=======
+        String propName = JnlpSlaveAgentProtocol3.class.getName() + ".enabled";
+        String propertyString = SystemProperties.getString(propName);
+        if (propertyString != null) {
+            ENABLED = SystemProperties.getBoolean(propName);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b09660;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a09660;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c09660
+<<<<<<< MINE
+=======
+import org.kohsuke.args4j.Option;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07260;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07260;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07260
+<<<<<<< MINE
+        forceEnabled = SystemProperties.optBoolean(JnlpSlaveAgentProtocol3.class.getName() + ".enabled");
+        if (forceEnabled != null) {
+            ENABLED = forceEnabled;
+=======
+        String propName = JnlpSlaveAgentProtocol3.class.getName() + ".enabled";
+        String propertyString = SystemProperties.getString(propName);
+        if (propertyString != null) {
+            ENABLED = SystemProperties.getBoolean(propName);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07260;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07260;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07260
+<<<<<<< MINE
+=======
+import org.kohsuke.args4j.Option;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b13060;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a13060;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c13060
+<<<<<<< MINE
+        return "CLI-connect";
+    }
+
+    /**
+     * {@inheritDoc}
+     */
+    @Override
+    public String getDisplayName() {
+        return "Jenkins CLI Protocol/1";
+=======
+        return jenkins.CLI.DISABLED ? null : "CLI-connect";
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01808
+<<<<<<< MINE
+        forceEnabled = SystemProperties.optBoolean(JnlpSlaveAgentProtocol3.class.getName() + ".enabled");
+        if (forceEnabled != null) {
+            ENABLED = forceEnabled;
+=======
+        String propName = JnlpSlaveAgentProtocol3.class.getName() + ".enabled";
+        String propertyString = SystemProperties.getString(propName);
+        if (propertyString != null) {
+            ENABLED = SystemProperties.getBoolean(propName);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b01808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a01808;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c01808
+<<<<<<< MINE
+=======
+import org.kohsuke.args4j.Option;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07060;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07060;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07060
+<<<<<<< MINE
+        forceEnabled = SystemProperties.optBoolean(JnlpSlaveAgentProtocol3.class.getName() + ".enabled");
+        if (forceEnabled != null) {
+            ENABLED = forceEnabled;
+=======
+        String propName = JnlpSlaveAgentProtocol3.class.getName() + ".enabled";
+        String propertyString = SystemProperties.getString(propName);
+        if (propertyString != null) {
+            ENABLED = SystemProperties.getBoolean(propName);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07060;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07060;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07060
+<<<<<<< MINE
+=======
+import org.kohsuke.args4j.Option;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b09884;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a09884;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c09884
+<<<<<<< MINE
+        forceEnabled = SystemProperties.optBoolean(JnlpSlaveAgentProtocol3.class.getName() + ".enabled");
+        if (forceEnabled != null) {
+            ENABLED = forceEnabled;
+=======
+        String propName = JnlpSlaveAgentProtocol3.class.getName() + ".enabled";
+        String propertyString = SystemProperties.getString(propName);
+        if (propertyString != null) {
+            ENABLED = SystemProperties.getBoolean(propName);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b09884;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a09884;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c09884
+<<<<<<< MINE
+=======
+import org.kohsuke.args4j.Option;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b07080;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a07080;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c07080
+<<<<<<< MINE
+import jenkins.model.Jenkins;
+import org.acegisecurity.Authentication;
+=======
+import org.acegisecurity.context.SecurityContext;
+import org.acegisecurity.context.SecurityContextHolder;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03048;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03048
+<<<<<<< MINE
+import jenkins.util.SystemProperties;
+=======
+import java.util.Arrays;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b04840;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a04840;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c04840
+<<<<<<< MINE
+    @CheckForNull
+    public static Secret decrypt(@CheckForNull String data) {
+        if(data==null)      return null;
+        try {
+            byte[] in = Base64.decode(data.toCharArray());
+            Secret s = tryDecrypt(KEY.decrypt(), in);
+            if (s!=null)    return s;
+=======
+    public static Secret decrypt(String data) {
+        if (data == null) return null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10196;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10196;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10196
+<<<<<<< MINE
+        return super.makeSearchIndex()
+            .add("configure", "config","configure")
+            .add("manage")
+            .add("log")
+            .add(new CollectionSearchIndex<TopLevelItem>() {
+                protected SearchItem get(String key) { return getItemByFullName(key, TopLevelItem.class); }
+                protected Collection<TopLevelItem> all() { return getAllItems(TopLevelItem.class); }
+                @Nonnull
+                @Override
+                protected Iterable<TopLevelItem> allAsIterable() {
+                    return allItems(TopLevelItem.class);
+                }
+            })
+            .add(getPrimaryView().makeSearchIndex())
+            .add(new CollectionSearchIndex() {// for computers
+                protected Computer get(String key) { return getComputer(key); }
+                protected Collection<Computer> all() { return computers.values(); }
+            })
+            .add(new CollectionSearchIndex() {// for users
+                protected User get(String key) { return User.get(key,false); }
+                protected Collection<User> all() { return User.getAll(); }
+            })
+            .add(new CollectionSearchIndex() {// for views
+                protected View get(String key) { return getView(key); }
+                protected Collection<View> all() { return viewGroupMixIn.getViews(); }
+            });
+=======
+        SearchIndexBuilder builder = super.makeSearchIndex();
+        if (hasPermission(ADMINISTER)) {
+                builder.add("configure", "config", "configure")
+                    .add("manage")
+                    .add("log");
+        }
+        builder.add(new CollectionSearchIndex<TopLevelItem>() {
+                    protected SearchItem get(String key) { return getItemByFullName(key, TopLevelItem.class); }
+                    protected Collection<TopLevelItem> all() { return getAllItems(TopLevelItem.class); }
+                    @Nonnull
+                    @Override
+                    protected Iterable<TopLevelItem> allAsIterable() {
+                        return allItems(TopLevelItem.class);
+                    }
+                })
+                .add(getPrimaryView().makeSearchIndex())
+                .add(new CollectionSearchIndex() {// for computers
+                    protected Computer get(String key) { return getComputer(key); }
+                    protected Collection<Computer> all() { return computers.values(); }
+                })
+                .add(new CollectionSearchIndex() {// for users
+                    protected User get(String key) { return User.get(key,false); }
+                    protected Collection<User> all() { return User.getAll(); }
+                })
+                .add(new CollectionSearchIndex() {// for views
+                    protected View get(String key) { return getView(key); }
+                    protected Collection<View> all() { return views; }
+                });
+        return builder;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11604;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11604;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11604
+<<<<<<< MINE
+    public static boolean ALLOW_NON_EXISTENT_USER_TO_LOGIN = SystemProperties.getBoolean(User.class.getName()+".allowNonExistentUserToLogin");
+=======
+    public static boolean ALLOW_NON_EXISTENT_USER_TO_LOGIN = Boolean.getBoolean(User.class.getName()+".allowNonExistentUserToLogin");
+
+
+    /**
+     * Jenkins historically created a (usually) ephemeral user record when an user with Overall/Administer permission
+     * accesses a /user/arbitraryName URL.
+     * <p>
+     * Unfortunately this constitutes a CSRF vulnerability, as malicious users can make admins create arbitrary numbers
+     * of ephemeral user records, so the behavior was changed in Jenkins 2.TODO / 2.32.2.
+     * <p>
+     * As some users may be relying on the previous behavior, setting this to true restores the previous behavior. This
+     * is not recommended.
+     *
+     * SECURITY-406.
+     */
+    // TODO 2.4+ SystemProperties
+    @Restricted(NoExternalUse.class)
+    public static boolean ALLOW_USER_CREATION_VIA_URL = Boolean.getBoolean(User.class.getName() + ".allowUserCreationViaUrl");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b00776;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a00776;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c00776
+<<<<<<< MINE
+=======
+import java.io.StringWriter;
+import java.lang.reflect.Field;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b04520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a04520;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c04520
+<<<<<<< MINE
+        try (MultipartFormDataParser p = new MultipartFormDataParser(req)) {
+            if (isUseCrumbs() && !getCrumbIssuer().validateCrumb(req, p)) {
+                rsp.sendError(HttpServletResponse.SC_FORBIDDEN, "No crumb found");
+            }
+=======
+        MultipartFormDataParser p = new MultipartFormDataParser(req);
+        if(isUseCrumbs() && !getCrumbIssuer().validateCrumb(req, p)) {
+            // TODO investigate whether this check can be removed
+            rsp.sendError(HttpServletResponse.SC_FORBIDDEN,"No crumb found");
+        }
+        try {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06408;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06408;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06408
+<<<<<<< MINE
+     * @since 2.64
+     */
+=======
+     */
+    @Restricted(NoExternalUse.class)
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b13112;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a13112;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c13112
+<<<<<<< MINE
+import hudson.tasks.*;
+import org.acegisecurity.context.SecurityContextHolder;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10692;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10692;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10692
+<<<<<<< MINE
+=======
+        if (u == null && !configFile.isFile() && !configFile.getParentFile().isDirectory()) {
+            // check for legacy users and migrate if safe to do so.
+            File[] legacy = getLegacyConfigFilesFor(id);
+            if (legacy != null && legacy.length > 0) {
+                for (File legacyUserDir : legacy) {
+                    final XmlFile legacyXml = new XmlFile(XSTREAM, new File(legacyUserDir, "config.xml"));
+                    try {
+                        Object o = legacyXml.read();
+                        if (o instanceof User) {
+                            if (idStrategy().equals(id, legacyUserDir.getName()) && !idStrategy().filenameOf(legacyUserDir.getName())
+                                    .equals(legacyUserDir.getName())) {
+                                if (legacyUserDir.renameTo(configFile.getParentFile())) {
+                                    LOGGER.log(Level.INFO, "Migrated user record from {0} to {1}", new Object[] {legacyUserDir, configFile.getParentFile()});
+                                } else {
+                                    LOGGER.log(Level.WARNING, "Failed to migrate user record from {0} to {1}",
+                                            new Object[]{legacyUserDir, configFile.getParentFile()});
+                                }
+                                break;
+                            }
+                        } else {
+                            LOGGER.log(Level.FINE, "Unexpected object loaded from {0}: {1}",
+                                    new Object[]{ legacyUserDir, o });
+                        }
+                    } catch (IOException e) {
+                        LOGGER.log(Level.FINE, String.format("Exception trying to load user from %s: %s",
+                                new Object[]{ legacyUserDir, e.getMessage() }), e);
+                    }
+                }
+            }
+        }
+
+        File unsanitizedLegacyConfigFile = getUnsanitizedLegacyConfigFileFor(id);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b10692;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a10692;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c10692
+<<<<<<< MINE
+                    LOGGER.log(Level.INFO, "Migrated user record from {0} to {1}", new Object[] {unsanitizedLegacyConfigFile, configFile});
+=======
+                    LOGGER.log(Level.INFO, "Migrated unsafe user record from {0} to {1}", new Object[] {unsanitizedLegacyConfigFile, configFile});
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06084;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06084;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06084
+<<<<<<< MINE
+        if (unsanitizedLegacyConfigFile.exists() && !unsanitizedLegacyConfigFile.equals(configFile)) {
+=======
+        if (u == null && !configFile.isFile() && !configFile.getParentFile().isDirectory()) {
+            // check for legacy users and migrate if safe to do so.
+            File[] legacy = getLegacyConfigFilesFor(id);
+            if (legacy != null && legacy.length > 0) {
+                for (File legacyUserDir : legacy) {
+                    final XmlFile legacyXml = new XmlFile(XSTREAM, new File(legacyUserDir, "config.xml"));
+                    try {
+                        Object o = legacyXml.read();
+                        if (o instanceof User) {
+                            if (idStrategy().equals(id, legacyUserDir.getName()) && !idStrategy().filenameOf(legacyUserDir.getName())
+                                    .equals(legacyUserDir.getName())) {
+                                if (!legacyUserDir.renameTo(configFile.getParentFile())) {
+                                    LOGGER.log(Level.WARNING, "Failed to migrate user record from {0} to {1}",
+                                            new Object[]{legacyUserDir, configFile.getParentFile()});
+                                }
+                                break;
+                            }
+                        } else {
+                            LOGGER.log(Level.FINE, "Unexpected object loaded from {0}: {1}",
+                                    new Object[]{ legacyUserDir, o });
+                        }
+                    } catch (IOException e) {
+                        LOGGER.log(Level.FINE, String.format("Exception trying to load user from %s: %s",
+                                new Object[]{ legacyUserDir, e.getMessage() }), e);
+                    }
+                }
+            }
+        }
+
+        File unsanitizedLegacyConfigFile = getUnsanitizedLegacyConfigFileFor(id);
+        boolean mustMigrateLegacyConfig = isMigrationRequiredForLegacyConfigFile(unsanitizedLegacyConfigFile, configFile);
+        if (mustMigrateLegacyConfig) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b09300;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a09300;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c09300
+<<<<<<< MINE
+import org.apache.commons.codec.digest.DigestUtils;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b09008;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a09008;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c09008
+<<<<<<< MINE
+import org.apache.commons.codec.digest.DigestUtils;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b12920;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a12920;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c12920
+<<<<<<< MINE
+import org.apache.commons.codec.digest.DigestUtils;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06984;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06984;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06984
+<<<<<<< MINE
+            WebApp.get(servletContext).setClassLoader(pluginManager.uberClassLoader);
+
+            adjuncts = new AdjunctManager(servletContext, pluginManager.uberClassLoader,"adjuncts/"+SESSION_HASH, TimeUnit.DAYS.toMillis(365));
+=======
+            webApp.setClassLoader(pluginManager.uberClassLoader);
+            webApp.setJsonInErrorMessageSanitizer(RedactSecretJsonInErrorMessageSanitizer.INSTANCE);
+            
+            adjuncts = new AdjunctManager(servletContext, pluginManager.uberClassLoader,"adjuncts/"+SESSION_HASH, TimeUnit2.DAYS.toMillis(365));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b05964;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a05964;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c05964
+<<<<<<< MINE
+        new Thread("exit thread") {
+            @Override
+            public void run() {
+                try {
+                    ACL.impersonate(ACL.SYSTEM);
+                    LOGGER.severe(String.format("Shutting down VM as requested by %s from %s",
+                            getAuthentication().getName(), req!=null?req.getRemoteAddr():"???"));
+                    if (rsp!=null) {
+                        rsp.setStatus(HttpServletResponse.SC_OK);
+                        rsp.setContentType("text/plain");
+                        try (PrintWriter w = rsp.getWriter()) {
+                            w.println("Shutting down");
+                        }
+                    }
+=======
+        LOGGER.info(String.format("Shutting down VM as requested by %s from %s",
+                getAuthentication().getName(), req!=null?req.getRemoteAddr():"???"));
+        if (rsp!=null) {
+            rsp.setStatus(HttpServletResponse.SC_OK);
+            rsp.setContentType("text/plain");
+            try (PrintWriter w = rsp.getWriter()) {
+                w.println("Shutting down");
+            }
+        }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11556;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11556;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11556
+<<<<<<< MINE
+    private static final File getConfigFileFor(String id) {
+        return new File(getUserFolderFor(id), "config.xml");
+    }
+    
+    private static File getUserFolderFor(String id){
+        return new File(getRootDir(), idStrategy().filenameOf(id));
+=======
+    /**
+     * Returns the folder that store all the user information.
+     * Useful for plugins to save a user-specific file aside the config.xml.
+     * Exposes implementation details that may be subject to change.
+     *
+     * @since 2.129
+     */
+    public File getUserFolder() {
+        return getExistingUserFolder();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b02504;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a02504;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c02504
+<<<<<<< MINE
+    }
+    
+    /**
+     * Returns the folder that store all the user information
+     * Useful for plugins to save a user-specific file aside the config.xml
+     * 
+     * @since 2.129
+     */
+    public File getUserFolder(){
+        return getUserFolderFor(this.id);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11716;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11716;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11716
+<<<<<<< MINE
+    
+    /**
+     * Compute the number of calendar days elapsed since the given date.
+     * As it's only the calendar days difference that matter, "11.00pm" to "2.00am the day after" returns 1,
+     * even if there are only 3 hours between. As well as "10am" to "2pm" both on the same day, returns 0.
+     */
+    @Restricted(NoExternalUse.class)
+    public static long daysBetween(@Nonnull Date a, @Nonnull Date b){
+        LocalDate aLocal = a.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate bLocal = b.toInstant().atZone(ZoneId.systemDefault()).toLocalDate();
+        return ChronoUnit.DAYS.between(aLocal, bLocal);
+    }
+    
+    /**
+     * @return positive number of days between the given date and now
+     * @see #daysBetween(Date, Date)
+     */
+    @Restricted(NoExternalUse.class)
+    public static long daysElapsedSince(@Nonnull Date date){
+        return Math.max(0, daysBetween(date, new Date()));
+    }
+    
+=======
+
+    /**
+     * Find the specific ancestor, or throw an exception.
+     * Useful for an ancestor we know is inside the URL to ease readability
+     */
+    @Restricted(NoExternalUse.class)
+    public static @Nonnull <T> T getNearestAncestorOfTypeOrThrow(@Nonnull StaplerRequest request, @Nonnull Class<T> clazz) {
+        T t = request.findAncestorObject(clazz);
+        if (t == null) {
+            throw new IllegalArgumentException("No ancestor of type " + clazz.getName() + " in the request");
+        }
+        return t;
+    }
+
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06464
+<<<<<<< MINE
+=======
+import java.nio.file.NoSuchFileException;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06464
+<<<<<<< MINE
+        deleteContentsRecursive(fileToPath(file), PathRemover.PathChecker.ALLOW_ALL);
+    }
+
+    /**
+     * Deletes the given directory contents (but not the directory itself) recursively using a PathChecker.
+     * @param path a directory to delete
+     * @param pathChecker a security check to validate a path before deleting
+     * @throws IOException if the operation fails
+     */
+    @Restricted(NoExternalUse.class)
+    public static void deleteContentsRecursive(@Nonnull Path path, @Nonnull PathRemover.PathChecker pathChecker) throws IOException {
+        newPathRemover(pathChecker).forceRemoveDirectoryContents(path);
+=======
+        for( int numberOfAttempts=1 ; ; numberOfAttempts++ ) {
+            try {
+                tryOnceDeleteContentsRecursive(file);
+                break; // success
+            } catch (IOException ex) {
+                boolean threadWasInterrupted = pauseBetweenDeletes(numberOfAttempts);
+                if( numberOfAttempts>= DELETION_MAX || threadWasInterrupted)
+                    throw new IOException(deleteFailExceptionMessage(file, numberOfAttempts, threadWasInterrupted), ex);
+            }
+        }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06464
+<<<<<<< MINE
+        newPathRemover(PathRemover.PathChecker.ALLOW_ALL).forceRemoveFile(fileToPath(f));
+=======
+        for( int numberOfAttempts=1 ; ; numberOfAttempts++ ) {
+            try {
+                tryOnceDeleteFile(f);
+                break; // success
+            } catch (IOException ex) {
+                boolean threadWasInterrupted = pauseBetweenDeletes(numberOfAttempts);
+                if( numberOfAttempts>= DELETION_MAX || threadWasInterrupted)
+                    throw new IOException(deleteFailExceptionMessage(f, numberOfAttempts, threadWasInterrupted), ex);
+            }
+        }
+    }
+
+    /**
+     * Deletes this file, working around most problems which might make
+     * this difficult.
+     * 
+     * @param f
+     *            What to delete. If a directory, it'll need to be empty.
+     * @throws IOException if it exists but could not be successfully deleted,
+     * or if it represents an invalid {@link Path}.
+     */
+    private static void tryOnceDeleteFile(File f) throws IOException {
+        Path path = fileToPath(f);
+        try {
+            Files.deleteIfExists(path);
+        } catch (IOException e) {
+            // perhaps this file is read-only?
+            makeWritable(path);
+            /*
+             on Unix both the file and the directory that contains it has to be writable
+             for a file deletion to be successful. (Confirmed on Solaris 9)
+
+             $ ls -la
+             total 6
+             dr-xr-sr-x   2 hudson   hudson       512 Apr 18 14:41 .
+             dr-xr-sr-x   3 hudson   hudson       512 Apr 17 19:36 ..
+             -r--r--r--   1 hudson   hudson       469 Apr 17 19:36 manager.xml
+             -rw-r--r--   1 hudson   hudson         0 Apr 18 14:41 x
+             $ rm x
+             rm: x not removed: Permission denied
+             */
+            Path parent = path.getParent();
+            if (parent != null) {
+                makeWritable(parent);
+            }
+            try {
+                Files.deleteIfExists(path);
+            } catch (IOException e2) {
+                // see https://java.net/projects/hudson/lists/users/archive/2008-05/message/357
+                // I suspect other processes putting files in this directory
+                File[] files = f.listFiles();
+                if(files!=null && files.length>0)
+                    throw new IOException("Unable to delete " + f.getPath()+" - files in dir: "+Arrays.asList(files), e2);
+                throw e2;
+            }
+        }
+    }
+
+    /**
+     * Makes the file at the given path writable by any means possible.
+     */
+    private static void makeWritable(@Nonnull Path path) throws IOException {
+        if (!Functions.isWindows()) {
+            try {
+                PosixFileAttributes attrs = Files.readAttributes(path, PosixFileAttributes.class);
+                Set<PosixFilePermission> newPermissions = attrs.permissions();
+                newPermissions.add(PosixFilePermission.OWNER_WRITE);
+                Files.setPosixFilePermissions(path, newPermissions);
+                return;
+            } catch (NoSuchFileException e) {
+                return;
+            } catch (UnsupportedOperationException e) {
+                // PosixFileAttributes not supported, fall back to old IO.
+            }
+        }
+
+        /**
+         * We intentionally do not check the return code of setWritable, because if it
+         * is false we prefer to rethrow the exception thrown by Files.deleteIfExists,
+         * which will have a more useful message than something we make up here.
+         */
+        path.toFile().setWritable(true);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06464
+<<<<<<< MINE
+        deleteRecursive(fileToPath(dir), PathRemover.PathChecker.ALLOW_ALL);
+    }
+
+    /**
+     * Deletes the given directory and contents recursively using a filter.
+     * @param dir a directory to delete
+     * @param pathChecker a security check to validate a path before deleting
+     * @throws IOException if the operation fails
+     */
+    @Restricted(NoExternalUse.class)
+    public static void deleteRecursive(@Nonnull Path dir, @Nonnull PathRemover.PathChecker pathChecker) throws IOException {
+        newPathRemover(pathChecker).forceRemoveRecursive(dir);
+=======
+        for( int numberOfAttempts=1 ; ; numberOfAttempts++ ) {
+            try {
+                tryOnceDeleteRecursive(dir);
+                break; // success
+            } catch (IOException ex) {
+                boolean threadWasInterrupted = pauseBetweenDeletes(numberOfAttempts);
+                if( numberOfAttempts>= DELETION_MAX || threadWasInterrupted)
+                    throw new IOException(deleteFailExceptionMessage(dir, numberOfAttempts, threadWasInterrupted), ex);
+            }
+        }
+    }
+
+    /**
+     * Deletes a file or folder, throwing the first exception encountered, but
+     * having a go at deleting everything. i.e. it does not <em>stop</em> on the
+     * first exception, but tries (to delete) everything once.
+     *
+     * @param dir
+     * What to delete. If a directory, the contents will be deleted
+     * too.
+     * @throws The first exception encountered.
+     */
+    private static void tryOnceDeleteRecursive(File dir) throws IOException {
+        if(!isSymlink(dir))
+            tryOnceDeleteContentsRecursive(dir);
+        tryOnceDeleteFile(dir);
+    }
+
+    /**
+     * Deletes a folder's contents, throwing the first exception encountered,
+     * but having a go at deleting everything. i.e. it does not <em>stop</em>
+     * on the first exception, but tries (to delete) everything once.
+     *
+     * @param directory
+     * The directory whose contents will be deleted.
+     * @throws The first exception encountered.
+     */
+    private static void tryOnceDeleteContentsRecursive(File directory) throws IOException {
+        File[] directoryContents = directory.listFiles();
+        if(directoryContents==null)
+            return; // the directory didn't exist in the first place
+        IOException firstCaught = null;
+        for (File child : directoryContents) {
+            try {
+                tryOnceDeleteRecursive(child);
+            } catch (IOException justCaught) {
+                if( firstCaught==null) {
+                    firstCaught = justCaught;
+                }
+            }
+        }
+        if( firstCaught!=null )
+            throw firstCaught;
+    }
+
+    /**
+     * Pauses between delete attempts, and says if it's ok to try again.
+     * This does not wait if the wait time is zero or if we have tried
+     * too many times already.
+     * <p>
+     * See {@link #WAIT_BETWEEN_DELETION_RETRIES} for details of
+     * the pause duration.<br/>
+     * See {@link #GC_AFTER_FAILED_DELETE} for when {@link System#gc()} is called.
+     * 
+     * @return false if it is ok to continue trying to delete things, true if
+     *         we were interrupted (and should stop now).
+     */
+    @SuppressFBWarnings(value = "DM_GC", justification = "Garbage collection happens only when "
+            + "GC_AFTER_FAILED_DELETE is true. It's an experimental feature in Jenkins.")
+    private static boolean pauseBetweenDeletes(int numberOfAttemptsSoFar) {
+        long delayInMs;
+        if( numberOfAttemptsSoFar>=DELETION_MAX ) return false;
+        /* If the Jenkins process had the file open earlier, and it has not
+         * closed it then Windows won't let us delete it until the Java object
+         * with the open stream is Garbage Collected, which can result in builds
+         * failing due to "file in use" on Windows despite working perfectly
+         * well on other OSs. */
+        if (GC_AFTER_FAILED_DELETE) {
+            System.gc();
+        }
+        if (WAIT_BETWEEN_DELETION_RETRIES>=0) {
+            delayInMs = WAIT_BETWEEN_DELETION_RETRIES;
+        } else {
+            delayInMs = -numberOfAttemptsSoFar*WAIT_BETWEEN_DELETION_RETRIES;
+        }
+        if (delayInMs<=0)
+            return Thread.interrupted();
+        try {
+            Thread.sleep(delayInMs);
+            return false;
+        } catch (InterruptedException e) {
+            return true;
+        }
+    }
+
+    /**
+     * Creates a "couldn't delete file" message that explains how hard we tried.
+     * See {@link #DELETION_MAX}, {@link #WAIT_BETWEEN_DELETION_RETRIES}
+     * and {@link #GC_AFTER_FAILED_DELETE} for more details.
+     */
+    private static String deleteFailExceptionMessage(File whatWeWereTryingToRemove, int retryCount, boolean wasInterrupted) {
+        StringBuilder sb = new StringBuilder();
+        sb.append("Unable to delete '");
+        sb.append(whatWeWereTryingToRemove);
+        sb.append("'. Tried ");
+        sb.append(retryCount);
+        sb.append(" time");
+        if( retryCount!=1 ) sb.append('s');
+        if( DELETION_MAX>1 ) {
+            sb.append(" (of a maximum of ");
+            sb.append(DELETION_MAX);
+            sb.append(')');
+            if( GC_AFTER_FAILED_DELETE )
+                sb.append(" garbage-collecting");
+            if( WAIT_BETWEEN_DELETION_RETRIES!=0 && GC_AFTER_FAILED_DELETE )
+                sb.append(" and");
+            if( WAIT_BETWEEN_DELETION_RETRIES!=0 ) {
+                sb.append(" waiting ");
+                sb.append(getTimeSpanString(Math.abs(WAIT_BETWEEN_DELETION_RETRIES)));
+                if( WAIT_BETWEEN_DELETION_RETRIES<0 ) {
+                    sb.append("-");
+                    sb.append(getTimeSpanString(Math.abs(WAIT_BETWEEN_DELETION_RETRIES)*DELETION_MAX));
+                }
+            }
+            if( WAIT_BETWEEN_DELETION_RETRIES!=0 || GC_AFTER_FAILED_DELETE)
+                sb.append(" between attempts");
+        }
+        if( wasInterrupted )
+            sb.append(". The delete operation was interrupted before it completed successfully");
+        sb.append('.');
+        return sb.toString();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06464
+<<<<<<< MINE
+        return isSymlink(fileToPath(file));
+    }
+
+    @Restricted(NoExternalUse.class)
+    public static boolean isSymlink(@Nonnull Path path) {
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06464
+<<<<<<< MINE
+            BasicFileAttributes attrs = Files.readAttributes(path, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+            return attrs.isSymbolicLink() || (attrs instanceof DosFileAttributes && attrs.isOther());
+        } catch (IOException ignored) {
+=======
+            Path path = fileToPath(file);
+            BasicFileAttributes attrs = Files.readAttributes(path, BasicFileAttributes.class, LinkOption.NOFOLLOW_LINKS);
+            if (attrs.isSymbolicLink()) {
+                return true;
+            } else if (attrs instanceof DosFileAttributes) {
+                /* Returns true for non-symbolic link reparse points and devices. We could call
+                 * WindowsFileAttributes#isReparsePoint with reflection instead to exclude devices,
+                 * but as mentioned in the above comment this does not appear to be an issue.
+                 */
+                return attrs.isOther();
+            } else {
+                return false;
+            }
+        } catch (NoSuchFileException e) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a06464;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c06464
+<<<<<<< MINE
+
+    private static PathRemover newPathRemover(@Nonnull PathRemover.PathChecker pathChecker) {
+        return PathRemover.newFilteredRobustRemover(pathChecker, DELETION_MAX - 1, GC_AFTER_FAILED_DELETE, WAIT_BETWEEN_DELETION_RETRIES);
+    }
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b03632;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a03632;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c03632
+<<<<<<< MINE
+    }
+
+    /**
+     * A/B test turning off this protocol by default.
+     */
+    private static final boolean OPT_IN;
+
+    static {
+        //TODO: Jenkins#get() is not safe in the current context
+        byte hash = Util.fromHexString(Jenkins.get().getLegacyInstanceId())[0];
+        OPT_IN = (hash % 10) == 0;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b05636;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a05636;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c05636
+<<<<<<< MINE
+import org.jenkinsci.remoting.SerializableOnlyOverRemoting;
+=======
+import jenkins.util.java.JavaUtils;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b00736;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a00736;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c00736
+<<<<<<< MINE
+    private static final ThreadLocal<CLICommand> CURRENT_COMMAND = new ThreadLocal<CLICommand>();
+=======
+    /**
+     * Key for {@link Channel#getProperty(Object)} that links to the {@link Authentication} object
+     * which captures the identity of the client given by the transport layer.
+     */
+    public static final ChannelProperty<Authentication> TRANSPORT_AUTHENTICATION = new ChannelProperty<>(Authentication.class, "transportAuthentication");
+
+    private static final ThreadLocal<CLICommand> CURRENT_COMMAND = new ThreadLocal<>();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_b11320;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_a11320;C:\Users\Alice Borner\Desktop\projects\jenkins\git\.merge_file_c11320
+<<<<<<< MINE
+import jenkins.util.SystemProperties;
+=======
+
+import org.jenkinsci.remoting.SerializableOnlyOverRemoting;
+>>>>>>> YOURS

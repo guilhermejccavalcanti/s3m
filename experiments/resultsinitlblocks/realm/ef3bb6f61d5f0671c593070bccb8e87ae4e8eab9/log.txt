@@ -1,0 +1,18 @@
+########### MERGE COMMIT ###########
+ef3bb6f61d5f0671c593070bccb8e87ae4e8eab9
+########### PROJECT NAME ###########
+realm-java
+########### BASE ###########
+C:\Users\Alice Borner\jFSTMergeResults\ef3bb6f61d5f0671c593070bccb8e87ae4e8eab9\Base.java
+########### LEFT ###########
+C:\Users\Alice Borner\jFSTMergeResults\ef3bb6f61d5f0671c593070bccb8e87ae4e8eab9\Left.java
+########### RIGHT ###########
+C:\Users\Alice Borner\jFSTMergeResults\ef3bb6f61d5f0671c593070bccb8e87ae4e8eab9\Right.java
+########### OLD HANDLER OUTPUT ###########
+C:\Users\Alice Borner\jFSTMergeResults\ef3bb6f61d5f0671c593070bccb8e87ae4e8eab9\OldHandlerOutput.java
+########### OLD HANDLER TIME ###########
+921906045 ns
+########### NEW HANDLER OUTPUT ###########
+C:\Users\Alice Borner\jFSTMergeResults\ef3bb6f61d5f0671c593070bccb8e87ae4e8eab9\NewHandlerOutput.java
+########### NEW HANDLER TIME ###########
+1312992413 ns

@@ -1,0 +1,64 @@
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b10548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a10548;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c10548
+<<<<<<< MINE
+            JetType receiverType = context.services.typeInferrerVisitorWithNamespaces.getType(receiverExpression, context.replaceExpectedTypes(NO_EXPECTED_TYPE, NO_EXPECTED_TYPE));
+            if (selectorExpression == null) return null;
+            if (receiverType == null) receiverType = ErrorUtils.createErrorType("Type for " + expression.getText());
+=======
+
+            JetType receiverType = context.services.typeInferrerVisitorWithNamespaces.getType(receiverExpression, new TypeInferenceContext(context.trace, context.scope, false, context.dataFlowInfo, NO_EXPECTED_TYPE, NO_EXPECTED_TYPE));
+
+            if (selectorExpression instanceof JetSimpleNameExpression) {
+                propagateConstantValues(expression, context, (JetSimpleNameExpression) selectorExpression);
+            }
+
+            if (receiverType == null) return null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_b11836;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_a11836;C:\Users\Alice Borner\Desktop\projects\kotlin\git\.merge_file_c11836
+<<<<<<< MINE
+                Collection<DeclarationDescriptor> declarationsByLabel = context.scope.getDeclarationsByLabel(labelName);
+                int size = declarationsByLabel.size();
+                final JetSimpleNameExpression targetLabel = expression.getTargetLabel();
+                assert targetLabel != null;
+                if (size == 1) {
+                    DeclarationDescriptor declarationDescriptor = declarationsByLabel.iterator().next();
+                    if (declarationDescriptor instanceof ClassDescriptor) {
+                        ClassDescriptor classDescriptor = (ClassDescriptor) declarationDescriptor;
+                        thisReceiver = classDescriptor.getImplicitReceiver();
+                    }
+                    else if (declarationDescriptor instanceof FunctionDescriptor) {
+                        FunctionDescriptor functionDescriptor = (FunctionDescriptor) declarationDescriptor;
+                        thisReceiver = functionDescriptor.getReceiverParameter();
+                    }
+                    else {
+                        throw new UnsupportedOperationException(); // TODO
+                    }
+                    context.trace.record(REFERENCE_TARGET, targetLabel, declarationDescriptor);
+                    context.trace.record(REFERENCE_TARGET, expression.getThisReference(), declarationDescriptor);
+                }
+                else if (size == 0) {
+                    // This uses the info written by the control flow processor
+                    PsiElement psiElement = BindingContextUtils.resolveToDeclarationPsiElement(context.trace.getBindingContext(), targetLabel);
+                    if (psiElement instanceof JetFunctionLiteralExpression) {
+                        DeclarationDescriptor declarationDescriptor = context.trace.getBindingContext().get(BindingContext.DECLARATION_TO_DESCRIPTOR, psiElement);
+                        if (declarationDescriptor instanceof FunctionDescriptor) {
+                            thisReceiver = ((FunctionDescriptor) declarationDescriptor).getReceiverParameter();
+                            if (thisReceiver.exists()) {
+                                context.trace.record(REFERENCE_TARGET, targetLabel, declarationDescriptor);
+                                context.trace.record(REFERENCE_TARGET, expression.getThisReference(), declarationDescriptor);
+                            }
+                        }
+                        else {
+                            context.trace.report(UNRESOLVED_REFERENCE.on(targetLabel));
+                        }
+                    }
+                    else {
+                        context.trace.report(UNRESOLVED_REFERENCE.on(targetLabel));
+                    }
+                }
+                else {
+//                    context.trace.getErrorHandler().genericError(targetLabel.getNode(), "Ambiguous label");
+                    context.trace.report(AMBIGUOUS_LABEL.on(targetLabel));
+                }
+=======
+                thisReceiver = labelsResolver.resolveThisLabel(expression, context, thisReceiver, labelName);
+>>>>>>> YOURS

@@ -1,0 +1,606 @@
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b17816;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a17816;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c17816
+<<<<<<< MINE
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+=======
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.Enumeration;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Locale;
+import java.util.Map;
+import java.util.Map.Entry;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b16956;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a16956;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c16956
+<<<<<<< MINE
+					if (StringUtils.isNotBlank(image)) {
+						trackable.image = image;
+					}
+					if (StringUtils.isNotBlank(details)) {
+						trackable.details = details;
+					}
+=======
+				if (image != null) {
+					trackable.image = image;
+				}
+				if (details != null) {
+					trackable.details = details;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b16956;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a16956;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c16956
+<<<<<<< MINE
+
+		if (wpIcons.isEmpty()) {
+			wpIcons.put("waypoint", R.drawable.marker_waypoint_waypoint);
+			wpIcons.put("flag", R.drawable.marker_waypoint_flag);
+			wpIcons.put("pkg", R.drawable.marker_waypoint_pkg);
+			wpIcons.put("puzzle", R.drawable.marker_waypoint_puzzle);
+			wpIcons.put("stage", R.drawable.marker_waypoint_stage);
+			wpIcons.put("trailhead", R.drawable.marker_waypoint_trailhead);
+		}
+
+		int icon = -1;
+		String iconTxt = null;
+
+		if (cache) {
+			if (StringUtils.isNotBlank(type)) {
+				if (own) {
+					iconTxt = type + "-own";
+				} else if (found) {
+					iconTxt = type + "-found";
+				} else if (disabled) {
+					iconTxt = type + "-disabled";
+				} else {
+					iconTxt = type;
+				}
+			} else {
+				iconTxt = "traditional";
+			}
+
+			if (gcIcons.containsKey(iconTxt)) {
+				icon = gcIcons.get(iconTxt);
+			} else {
+				icon = gcIcons.get("traditional");
+			}
+		} else {
+			if (StringUtils.isNotBlank(type)) {
+				iconTxt = type;
+			} else {
+				iconTxt = "waypoint";
+			}
+
+			if (wpIcons.containsKey(iconTxt)) {
+				icon = wpIcons.get(iconTxt);
+			} else {
+				icon = wpIcons.get("waypoint");
+			}
+		}
+
+		return icon;
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19172;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19172
+<<<<<<< MINE
+				final HashMap<String, String> params = new HashMap<String, String>();
+				params.put("geocode", cache.geocode);
+				final Long searchId = searchByGeocode(params, listId, false);
+				cache = app.getCache(searchId);
+			} else if (StringUtils.isNotBlank(geocode)) {
+=======
+				// only reload the cache, if it was already stored or has not all details (by checking the description)
+				if (cache.reason > 0 || cache.description == null || cache.description.length() == 0) {
+					final HashMap<String, String> params = new HashMap<String, String>();
+					params.put("geocode", cache.geocode);
+					final Long searchId = searchByGeocode(params, listId, false);
+					cache = app.getCache(searchId);
+				}
+			} else if (geocode != null) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a15020;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c15020
+<<<<<<< MINE
+			int logType, int year, int month, int day, String log, List<cgTrackableLog> trackables) {
+		if (ArrayUtils.isEmpty(viewstates)) {
+=======
+			int logType, int year, int month, int day, String log, ArrayList<cgTrackableLog> trackables) {
+		if (isEmpty(viewstates)) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c09076
+<<<<<<< MINE
+            HttpPost request = new HttpPost(uri);
+            if (params != null) {
+                request.setEntity(new UrlEncodedFormEntity(params, HTTP.UTF_8));
+=======
+            if (httpCode == 302 && httpLocation != null) {
+                final URI newLocation = uri.resolve(httpLocation);
+                response = request(newLocation,
+                        "GET", new HashMap<String, String>(), requestId, false, false, false);
+            } else {
+                if (StringUtils.isNotEmpty(buffer)) {
+                    BaseUtils.replaceWhitespace(buffer);
+                    String data = buffer.toString();
+                    buffer = null;
+
+                    if (data != null) {
+                        response.setData(data);
+                    } else {
+                        response.setData("");
+                    }
+                    response.setStatusCode(httpCode);
+                    response.setStatusMessage(httpMessage);
+                    response.setUrl(u.toString());
+                }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c09076
+<<<<<<< MINE
+    /**
+     * Replace the characters \n, \r and \t with a space. The input are complete HTML pages.
+     * This method must be fast, but may not lead to the shortest replacement String.
+     * 
+     * @param buffer
+     *            The data
+     */
+    public static String replaceWhitespace(final String data) {
+        // YOU ARE ONLY ALLOWED TO CHANGE THIS CODE IF YOU CAN PROVE IT BECAME FASTER ON A DEVICE
+        // see WhitespaceTest in the test project
+        final int length = data.length();
+        final char[] chars = new char[length];
+        data.getChars(0, length, chars, 0);
+        int resultSize = 0;
+        boolean lastWasWhitespace = true;
+        for (char c : chars) {
+            if (c == ' ' || c == '\n' || c == '\r' || c == '\t') {
+                if (!lastWasWhitespace) {
+                    chars[resultSize++] = ' ';
+                }
+                lastWasWhitespace = true;
+            } else {
+                chars[resultSize++] = c;
+                lastWasWhitespace = false;
+            }
+        }
+        return String.valueOf(chars, 0, resultSize);
+    }
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a09076;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c09076
+<<<<<<< MINE
+        return null;
+=======
+        String page = null;
+        if (httpCode == 302 && httpLocation != null) {
+            final URI newLocation = uri.resolve(httpLocation);
+            page = requestJSONgc(newLocation, params);
+        } else {
+            BaseUtils.replaceWhitespace(buffer);
+            page = buffer.toString();
+        }
+
+        if (page != null) {
+            return page;
+        } else {
+            return "";
+        }
+    }
+
+    private static InputStream getInputstreamFromConnection(HttpURLConnection connection) throws IOException {
+        final String encoding = connection.getContentEncoding();
+        InputStream ins;
+
+        if (encoding != null && encoding.equalsIgnoreCase("gzip")) {
+            ins = new GZIPInputStream(connection.getInputStream());
+        } else if (encoding != null && encoding.equalsIgnoreCase("deflate")) {
+            ins = new InflaterInputStream(connection.getInputStream(), new Inflater(true));
+        } else {
+            ins = connection.getInputStream();
+        }
+        return ins;
+    }
+
+    public static String requestJSON(String host, String path, String params) {
+        return requestJSON("http://", host, path, "GET", params);
+    }
+
+    public static String requestJSON(String scheme, String host, String path, String method, String params) {
+        int httpCode = -1;
+        //String httpLocation = null;
+
+        if (method == null) {
+            method = "GET";
+        } else {
+            method = method.toUpperCase();
+        }
+
+        boolean methodPost = false;
+        if (method.equalsIgnoreCase("POST")) {
+            methodPost = true;
+        }
+
+        URLConnection uc = null;
+        HttpURLConnection connection = null;
+        Integer timeout = 30000;
+        final StringBuffer buffer = new StringBuffer();
+
+        for (int i = 0; i < 3; i++) {
+            if (i > 0) {
+                Log.w(cgSettings.tag, "Failed to download data, retrying. Attempt #" + (i + 1));
+            }
+
+            buffer.delete(0, buffer.length());
+            timeout = 30000 + (i * 15000);
+
+            try {
+                try {
+                    URL u = null;
+                    if (methodPost) {
+                        u = new URL(scheme + host + path);
+                    } else {
+                        u = new URL(scheme + host + path + "?" + params);
+                    }
+
+                    if (u.getProtocol().toLowerCase().equals("https")) {
+                        trustAllHosts();
+                        HttpsURLConnection https = (HttpsURLConnection) u.openConnection();
+                        https.setHostnameVerifier(doNotVerify);
+                        uc = https;
+                    } else {
+                        uc = (HttpURLConnection) u.openConnection();
+                    }
+
+                    uc.setRequestProperty("Host", host);
+                    uc.setRequestProperty("Accept", "application/json, text/javascript, */*; q=0.01");
+                    if (methodPost) {
+                        uc.setRequestProperty("Content-Type", "application/x-www-form-urlencoded");
+                        uc.setRequestProperty("Content-Length", Integer.toString(params.length()));
+                        uc.setRequestProperty("X-HTTP-Method-Override", "GET");
+                    } else {
+                        uc.setRequestProperty("Content-Type", "application/json; charset=UTF-8");
+                    }
+                    uc.setRequestProperty("X-Requested-With", "XMLHttpRequest");
+
+                    connection = (HttpURLConnection) uc;
+                    connection.setReadTimeout(timeout);
+                    connection.setRequestMethod(method);
+                    HttpURLConnection.setFollowRedirects(false); // TODO: Fix these (FilCab)
+                    connection.setDoInput(true);
+                    if (methodPost) {
+                        connection.setDoOutput(true);
+
+                        final OutputStream out = connection.getOutputStream();
+                        final OutputStreamWriter wr = new OutputStreamWriter(out);
+                        wr.write(params);
+                        wr.flush();
+                        wr.close();
+                    } else {
+                        connection.setDoOutput(false);
+                    }
+
+                    InputStream ins = getInputstreamFromConnection(connection);
+                    final InputStreamReader inr = new InputStreamReader(ins);
+                    final BufferedReader br = new BufferedReader(inr, 1024);
+
+                    readIntoBuffer(br, buffer);
+
+                    httpCode = connection.getResponseCode();
+
+                    final String paramsLog = params.replaceAll(passMatch, "password=***");
+                    Log.i(cgSettings.tag + " | JSON", "[POST " + (int) (params.length() / 1024) + "k | " + httpCode + " | " + (int) (buffer.length() / 1024) + "k] Downloaded " + "http://" + host + path + "?" + paramsLog);
+
+                    connection.disconnect();
+                    br.close();
+                    ins.close();
+                    inr.close();
+                } catch (IOException e) {
+                    httpCode = connection.getResponseCode();
+
+                    Log.e(cgSettings.tag, "cgeoBase.requestJSON.IOException: " + httpCode + ": " + connection.getResponseMessage() + " ~ " + e.toString());
+                }
+            } catch (Exception e) {
+                Log.e(cgSettings.tag, "cgeoBase.requestJSON: " + e.toString());
+            }
+
+            if (StringUtils.isNotBlank(buffer)) {
+                break;
+            }
+
+            if (httpCode == 403) {
+                // we're not allowed to download content, so let's move
+                break;
+            }
+        }
+
+        String page = null;
+        //This is reported as beeing deadCode (httpLocation is always null)
+        //2011-08-09 - 302 is redirect so something should probably be done
+        /*
+         * if (httpCode == 302 && httpLocation != null) {
+         * final Uri newLocation = Uri.parse(httpLocation);
+         * if (newLocation.isRelative()) {
+         * page = requestJSONgc(host, path, params);
+         * } else {
+         * page = requestJSONgc(newLocation.getHost(), newLocation.getPath(), params);
+         * }
+         * } else {
+         */
+        BaseUtils.replaceWhitespace(buffer);
+        page = buffer.toString();
+        //}
+
+        if (page != null) {
+            return page;
+        } else {
+            return "";
+        }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b21236;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a21236;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c21236
+<<<<<<< MINE
+    public static cgCacheWrap parseCache(final String page, final int reason) {
+=======
+    public cgCacheWrap parseCache(final String page, final int reason, final Handler handler) {
+        sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_details);
+
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b06900;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a06900;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c06900
+<<<<<<< MINE
+    private final static Pattern PATTERN_TRACKABLE_GOAL = Pattern.compile("<h3>\\W*Current GOAL[^<]*</h3>[^<]*<div id=\"TrackableGoal\">[^<]*<p>(.*?)</p>[^<]*</div>[^<]*<h3>");
+    private final static Pattern PATTERN_TRACKABLE_DETAILSIMAGE = Pattern.compile("<h3>\\W*About This Item[^<]*</h3>[^<]*<div id=\"TrackableDetails\">([^<]*<p>([^<]*<img id=\"ctl00_ContentBody_BugDetails_BugImage\" class=\"[^\"]+\" src=\"([^\"]+)\"[^>]*>)?[^<]*</p>)?[^<]*<p[^>]*>(.*)</p>[^<]*</div>");
+
+=======
+    private final static Pattern PATTERN_TRACKABLE_Goal = Pattern.compile("<h3>\\W*Current GOAL[^<]*</h3>[^<]*<div id=\"TrackableGoal\">[^<]*<p>(.*?)</p>[^<]*</div>[^<]*<h3>");
+    private final static Pattern PATTERN_TRACKABLE_DetailsImage = Pattern.compile("<h3>\\W*About This Item[^<]*</h3>[^<]*<div id=\"TrackableDetails\">([^<]*<p>([^<]*<img id=\"ctl00_ContentBody_BugDetails_BugImage\" class=\"[^\"]+\" src=\"([^\"]+)\"[^>]*>)?[^<]*</p>)?[^<]*<p[^>]*>(.*)</p>[^<]*</div> <div id=\"ctl00_ContentBody_BugDetails_uxAbuseReport\">");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b06124;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a06124;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c06124
+<<<<<<< MINE
+
+    private final static Pattern patternType = Pattern.compile("<img src=\"[^\"]*/WptTypes/\\d+\\.gif\" alt=\"([^\"]+)\" (title=\"[^\"]*\" )?width=\"32\" height=\"32\"[^>]*>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+    private final static Pattern patternOwner = Pattern.compile("<span class=\"minorCacheDetails\">\\W*An?(\\W*Event)?\\W*cache\\W*by[^<]*<a href=\"[^\"]+\">([^<]+)</a>[^<]*</span>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+    private final static Pattern patternHidden = Pattern.compile("<span[^>]*>\\W*Hidden[\\s:]*([^<]+)</span>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+    private final static Pattern patternHiddenEvent = Pattern.compile("<span[^>]*>\\W*Event\\W*Date[^:]*:([^<]*)</span>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+    private final static Pattern patternFavourite = Pattern.compile("<a id=\"uxFavContainerLink\"[^>]*>[^<]*<div[^<]*<span class=\"favorite-value\">[^\\d]*([0-9]+)[^\\d^<]*</span>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+    private final static Pattern patternCountLogs = Pattern.compile("<span id=\"ctl00_ContentBody_lblFindCounts\"><p(.+?)<\\/p><\\/span>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern patternCountLog = Pattern.compile("src=\"\\/images\\/icons\\/(.+?).gif\"[^>]+> (\\d*[,.]?\\d+)", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+    private final static Pattern patternAttributes = Pattern.compile("<h3 class=\"WidgetHeader\">[^<]*<img[^>]+>\\W*Attributes[^<]*</h3>[^<]*<div class=\"WidgetBody\">(([^<]*<img src=\"[^\"]+\" alt=\"[^\"]+\"[^>]*>)+)[^<]*<p", Pattern.CASE_INSENSITIVE);
+    private final static Pattern patternAttributesInside = Pattern.compile("[^<]*<img src=\"([^\"]+)\" alt=\"([^\"]+)\"[^>]*>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern patternSpoilers = Pattern.compile("<p class=\"NoPrint\">\\s+((?:<a href=\"http://img\\.geocaching\\.com/cache/[^.]+\\.jpg\"[^>]+><img class=\"StatusIcon\"[^>]+><span>[^<]+</span></a><br />(?:[^<]+<br /><br />)?)+)\\s+</p>", Pattern.CASE_INSENSITIVE | Pattern.MULTILINE);
+    private final static Pattern patternSpoilersInside = Pattern.compile("<a href=\"(http://img\\.geocaching\\.com/cache/[^.]+\\.jpg)\"[^>]+><img class=\"StatusIcon\"[^>]+><span>([^<]+)</span></a><br />(?:([^<]+)<br /><br />)?", Pattern.CASE_INSENSITIVE);
+    private final static Pattern patternInventory = Pattern.compile("<span id=\"ctl00_ContentBody_uxTravelBugList_uxInventoryLabel\">\\W*Inventory[^<]*</span>[^<]*</h3>[^<]*<div class=\"WidgetBody\">([^<]*<ul>(([^<]*<li>[^<]*<a href=\"[^\"]+\"[^>]*>[^<]*<img src=\"[^\"]+\"[^>]*>[^<]*<span>[^<]+<\\/span>[^<]*<\\/a>[^<]*<\\/li>)+)[^<]*<\\/ul>)?", Pattern.CASE_INSENSITIVE);
+    private final static Pattern patternInventoryInside = Pattern.compile("[^<]*<li>[^<]*<a href=\"[a-z0-9\\-\\_\\.\\?\\/\\:\\@]*\\/track\\/details\\.aspx\\?guid=([0-9a-z\\-]+)[^\"]*\"[^>]*>[^<]*<img src=\"[^\"]+\"[^>]*>[^<]*<span>([^<]+)<\\/span>[^<]*<\\/a>[^<]*<\\/li>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern patternOnWatchlist = Pattern.compile("<img\\s*src=\"\\/images\\/stockholm\\/16x16\\/icon_stop_watchlist.gif\"", Pattern.CASE_INSENSITIVE);
+
+    private static final Pattern patternAvatarImg = Pattern.compile("<img src=\"(http://img.geocaching.com/user/avatar/[0-9a-f-]+\\.jpg)\"[^>]*\\salt=\"Avatar\"");
+
+    private final static Pattern PATTERN_TRACKABLE_TrackableId = Pattern.compile("<a id=\"ctl00_ContentBody_LogLink\" title=\"[^\"]*\" href=\".*log\\.aspx\\?wid=([a-z0-9\\-]+)\"[^>]*>[^<]*</a>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_Geocode = Pattern.compile("<span id=\"ctl00_ContentBody_BugDetails_BugTBNum\" String=\"[^\"]*\">Use[^<]*<strong>(TB[0-9a-z]+)[^<]*</strong> to reference this item.[^<]*</span>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_Name = Pattern.compile("<h2>([^<]*<img[^>]*>)?[^<]*<span id=\"ctl00_ContentBody_lbHeading\">([^<]+)</span>[^<]*</h2>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_Owner = Pattern.compile("<dt>\\W*Owner:[^<]*</dt>[^<]*<dd>[^<]*<a id=\"ctl00_ContentBody_BugDetails_BugOwner\" title=\"[^\"]*\" href=\"[^\"]*/profile/\\?guid=([a-z0-9\\-]+)\">([^<]+)<\\/a>[^<]*</dd>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_Released = Pattern.compile("<dt>\\W*Released:[^<]*</dt>[^<]*<dd>[^<]*<span id=\"ctl00_ContentBody_BugDetails_BugReleaseDate\">([^<]+)<\\/span>[^<]*</dd>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_Origin = Pattern.compile("<dt>\\W*Origin:[^<]*</dt>[^<]*<dd>[^<]*<span id=\"ctl00_ContentBody_BugDetails_BugOrigin\">([^<]+)<\\/span>[^<]*</dd>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_SpottedCache = Pattern.compile("<dt>\\W*Recently Spotted:[^<]*</dt>[^<]*<dd>[^<]*<a id=\"ctl00_ContentBody_BugDetails_BugLocation\" title=\"[^\"]*\" href=\"[^\"]*/seek/cache_details.aspx\\?guid=([a-z0-9\\-]+)\">In ([^<]+)</a>[^<]*</dd>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_SpottedUser = Pattern.compile("<dt>\\W*Recently Spotted:[^<]*</dt>[^<]*<dd>[^<]*<a id=\"ctl00_ContentBody_BugDetails_BugLocation\" href=\"[^\"]*/profile/\\?guid=([a-z0-9\\-]+)\">In the hands of ([^<]+).</a>[^<]*</dd>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_SpottedUnknown = Pattern.compile("<dt>\\W*Recently Spotted:[^<]*</dt>[^<]*<dd>[^<]*<a id=\"ctl00_ContentBody_BugDetails_BugLocation\">Unknown Location[^<]*</a>[^<]*</dd>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_SpottedOwner = Pattern.compile("<dt>\\W*Recently Spotted:[^<]*</dt>[^<]*<dd>[^<]*<a id=\"ctl00_ContentBody_BugDetails_BugLocation\">In the hands of the owner[^<]*</a>[^<]*</dd>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_GOAL = Pattern.compile("<h3>\\W*Current GOAL[^<]*</h3>[^<]*<div id=\"TrackableGoal\">[^<]*<p>(.*?)</p>[^<]*</div>[^<]*<h3>");
+    private final static Pattern PATTERN_TRACKABLE_DETAILSIMAGE = Pattern.compile("<h3>\\W*About This Item[^<]*</h3>[^<]*<div id=\"TrackableDetails\">([^<]*<p>([^<]*<img id=\"ctl00_ContentBody_BugDetails_BugImage\" class=\"[^\"]+\" src=\"([^\"]+)\"[^>]*>)?[^<]*</p>)?[^<]*<p[^>]*>(.*)</p>[^<]*</div> <div id=\"ctl00_ContentBody_BugDetails_uxAbuseReport\">");
+    private final static Pattern PATTERN_TRACKABLE_Icon = Pattern.compile("<img id=\"ctl00_ContentBody_BugTypeImage\" class=\"TravelBugHeaderIcon\" src=\"([^\"]+)\"[^>]*>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_Type = Pattern.compile("<img id=\"ctl00_ContentBody_BugTypeImage\" class=\"TravelBugHeaderIcon\" src=\"[^\"]+\" alt=\"([^\"]+)\"[^>]*>", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_Distance = Pattern.compile("<h4[^>]*\\W*Tracking History \\(([0-9.,]+(km|mi))[^\\)]*\\)", Pattern.CASE_INSENSITIVE);
+    private final static Pattern PATTERN_TRACKABLE_Log =  Pattern.compile("<tr class=\"Data.+?src=\"/images/icons/([^.]+)\\.gif[^>]+>&nbsp;([^<]+)</td>.+?guid.+?>([^<]+)</a>.+?(?:guid=([^\"]+)\">(<span class=\"Strike\">)?([^<]+)</.+?)?<td colspan=\"4\">(.+?)(?:<ul.+?ul>)?\\s*</td>\\s*</tr>", Pattern.CASE_INSENSITIVE);
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19852;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19852;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19852
+<<<<<<< MINE
+        caches.cacheList.add(cache);
+
+        return caches;
+    }
+
+    private static void getExtraOnlineInfo(final cgCache cache, final String page, final CancellableHandler handler) {
+        if (CancellableHandler.isCancelled(handler)) {
+            return;
+        }
+        sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_logs);
+        loadLogsFromDetails(page, cache);
+
+        if (CancellableHandler.isCancelled(handler)) {
+            return;
+        }
+        sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_elevation);
+        if (cache.coords != null) {
+            cache.elevation = getElevation(cache.coords);
+        }
+=======
+        if (Settings.isAdditionalDetails()) {
+            if (cache.coords != null) {
+                cache.elevation = getElevation(cache.coords);
+            }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b19852;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a19852;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c19852
+<<<<<<< MINE
+        if (CancellableHandler.isCancelled(handler)) {
+            return;
+        }
+        sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_gcvote);
+        final cgRating rating = GCVote.getRating(cache.guid, cache.geocode);
+        if (rating != null) {
+            cache.rating = rating.rating;
+            cache.votes = rating.votes;
+            cache.myVote = rating.myVote;
+=======
+            sendLoadProgressDetail(handler, R.string.cache_dialog_loading_details_status_gcvote);
+
+            final cgRating rating = GCVote.getRating(cache.guid, cache.geocode);
+            if (rating != null) {
+                cache.rating = rating.rating;
+                cache.votes = rating.votes;
+                cache.myVote = rating.myVote;
+            }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b10056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a10056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c10056
+<<<<<<< MINE
+        res = context.getResources();
+
+        // setup cache type mappings
+
+
+        cacheIDsChoices.put(res.getString(R.string.all), CacheType.ALL_GUID);
+
+        for (CacheType ct : CacheType.values()) {
+            String l10n = res.getString(ct.stringId);
+            cacheTypesInv.put(ct, l10n);
+            cacheIDsChoices.put(l10n, ct.guid);
+        }
+
+        for (CacheSize cs : CacheSize.values()) {
+            cacheSizesInv.put(cs, res.getString(cs.stringId));
+        }
+=======
+        res = app.getBaseContext().getResources();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04520;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04520;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04520
+<<<<<<< MINE
+    UNKNOWN("unknown", "unknown", "", R.string.unknown, R.drawable.type_unknown), // icon missing
+=======
+    UNKNOWN("unknown", "unknown", "", R.string.unknown, R.drawable.type_unknown),
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a04056;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c04056
+<<<<<<< MINE
+    FOUND_IT(2, "2", "found it", R.string.log_found, R.drawable.mark_green),
+    DIDNT_FIND_IT(3, "3", "didn't find it", R.string.log_dnf, R.drawable.mark_red),
+    NOTE(4, "4", "write note", R.string.log_note),
+    PUBLISH_LISTING(1003, "24", "publish listing", R.string.log_published, R.drawable.mark_green_more),
+    ENABLE_LISTING(23, "23", "enable listing", R.string.log_enabled, R.drawable.mark_green_more),
+    ARCHIVE(5, "5", "archive", R.string.log_archived, R.drawable.mark_red_more),
+    TEMP_DISABLE_LISTING(22, "22", "temporarily disable listing", R.string.log_disabled, R.drawable.mark_red_more),
+    NEEDS_ARCHIVE(7, "7", "needs archived", R.string.log_needs_archived, R.drawable.mark_red),
+    WILL_ATTEND(9, "9", "will attend", R.string.log_attend),
+    ATTENDED(10, "10", "attended", R.string.log_attended, R.drawable.mark_green),
+    RETRIEVED_IT(13, "13", "retrieved it", R.string.log_retrieved, R.drawable.mark_green),
+    PLACED_IT(14, "14", "placed it", R.string.log_placed),
+    GRABBED_IT(19, "19", "grabbed it", R.string.log_grabbed, R.drawable.mark_green),
+    NEEDS_MAINTENANCE(45, "45", "needs maintenance", R.string.log_maintenance_needed, R.drawable.mark_red),
+    OWNER_MAINTENANCE(46, "46", "owner maintenance", R.string.log_maintained, R.drawable.mark_green_more),
+    UPDATE_COORDINATES(47, "47", "update coordinates", R.string.log_update),
+    DISCOVERED_IT(48, "48", "discovered it", R.string.log_discovered, R.drawable.mark_green),
+    POST_REVIEWER_NOTE(18, "18", "post reviewer note", R.string.log_reviewer),
+    VISIT(1001, "1001", "visit", R.string.log_tb_visit, R.drawable.mark_green),
+    WEBCAM_PHOTO_TAKEN(11, "11", "webcam photo taken", R.string.log_webcam, R.drawable.mark_green),
+    ANNOUNCEMENT(74, "74", "announcement", R.string.log_announcement),
+    MOVE_COLLECTION(69, "69", "unused_collection", R.string.log_movecollection),
+    MOVE_INVENTORY(70, "70", "unused_inventory", R.string.log_moveinventory),
+    UNKNOWN(0, "unknown", "", R.string.err_unknown, R.drawable.mark_red); // LogType not init. yet
+=======
+    FOUND_IT(2, "2", "found it", R.string.log_found),
+    DIDNT_FIND_IT(3, "3", "didn't find it", R.string.log_dnf),
+    NOTE(4, "4", "write note", R.string.log_note),
+    PUBLISH_LISTING(1003, "24", "publish listing", R.string.log_published),
+    ENABLE_LISTING(23, "23", "enable listing", R.string.log_enabled),
+    ARCHIVE(5, "5", "archive", R.string.log_archived),
+    TEMP_DISABLE_LISTING(22, "22", "temporarily disable listing", R.string.log_disabled),
+    NEEDS_ARCHIVE(7, "7", "needs archived", R.string.log_needs_archived),
+    WILL_ATTEND(9, "9", "will attend", R.string.log_attend),
+    ATTENDED(10, "10", "attended", R.string.log_attended),
+    RETRIEVED_IT(13, "13", "retrieved it", R.string.log_retrieved),
+    PLACED_IT(14, "14", "placed it", R.string.log_placed),
+    GRABBED_IT(19, "19", "grabbed it", R.string.log_grabbed),
+    NEEDS_MAINTENANCE(45, "45", "needs maintenance", R.string.log_maintenance_needed),
+    OWNER_MAINTENANCE(46, "46", "owner maintenance", R.string.log_maintained),
+    UPDATE_COORDINATES(47, "47", "update coordinates", R.string.log_update),
+    DISCOVERED_IT(48, "48", "discovered it", R.string.log_discovered),
+    POST_REVIEWER_NOTE(18, "68", "post reviewer note", R.string.log_reviewer),
+    VISIT(1001, "1001", "visit", R.string.log_tb_visit),
+    WEBCAM_PHOTO_TAKEN(11, "11", "webcam photo taken", R.string.log_webcam),
+    ANNOUNCEMENT(74, "74", "announcement", R.string.log_announcement),
+    MOVE_COLLECTION(69, "69", "unused_collection", R.string.log_movecollection),
+    MOVE_INVENTORY(70, "70", "unused_inventory", R.string.log_moveinventory),
+    UNKNOWN(0, "unknown", "", R.string.err_unknown); // LogType not init. yet
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b03576;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a03576;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c03576
+<<<<<<< MINE
+    VISIT(1001, "1001", "visit", R.string.log_tb_visit, R.drawable.mark_green),
+    WEBCAM_PHOTO_TAKEN(11, "11", "webcam photo taken", R.string.log_webcam, R.drawable.mark_green),
+=======
+    VISIT(1001, "75", "visit", R.string.log_tb_visit),
+    WEBCAM_PHOTO_TAKEN(11, "11", "webcam photo taken", R.string.log_webcam),
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b11000;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a11000;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c11000
+<<<<<<< MINE
+    PUBLISH_LISTING(1003, "24", "publish listing", R.string.log_published, R.drawable.mark_green_more),
+    ENABLE_LISTING(23, "23", "enable listing", R.string.log_enabled, R.drawable.mark_green_more),
+    ARCHIVE(5, "5", "archive", R.string.log_archived, R.drawable.mark_red_more),
+    TEMP_DISABLE_LISTING(22, "22", "temporarily disable listing", R.string.log_disabled, R.drawable.mark_red_more),
+    NEEDS_ARCHIVE(7, "7", "needs archived", R.string.log_needs_archived, R.drawable.mark_red),
+=======
+    PUBLISH_LISTING(1003, "24", "publish listing", R.string.log_published),
+    ENABLE_LISTING(23, "23", "enable listing", R.string.log_enabled),
+    ARCHIVE(5, "5", "archive", R.string.log_archived),
+    UNARCHIVE(12, "12", "unarchive", R.string.log_unarchived),
+    TEMP_DISABLE_LISTING(22, "22", "temporarily disable listing", R.string.log_disabled),
+    NEEDS_ARCHIVE(7, "7", "needs archived", R.string.log_needs_archived),
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b21328;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a21328;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c21328
+<<<<<<< MINE
+    RETRACT(25, "25", "rectract listing", R.string.log_retractlisting),
+    UNKNOWN(0, "unknown", "", R.string.err_unknown, R.drawable.mark_red); // LogType not init. yet
+=======
+    RETRACT(25, "25", "retract listing", R.string.log_retractlisting),
+    UNKNOWN(0, "unknown", "", R.string.err_unknown); // LogType not init. yet
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b20648;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a20648;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c20648
+<<<<<<< MINE
+
+    public static boolean isUseNavigationApp(NavigationAppsEnum navApp) {
+        return getBoolean(navApp.preferenceKey, true);
+    }
+
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b20560;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a20560;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c20560
+<<<<<<< MINE
+import android.os.Environment;
+=======
+import android.view.ViewConfiguration;
+
+import java.lang.reflect.Field;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_b00800;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_a00800;C:\Users\Alice Borner\Desktop\projects\cgeo\git\.merge_file_c00800
+<<<<<<< MINE
+    /**
+     * get the overlay image ID for showing the offline log type
+     */
+    public int getOfflineLogOverlay() {
+        if (overlayId != 0) {
+            return overlayId;
+        }
+        return R.drawable.marker_unknown_offline;
+=======
+	/**
+	 * get the overlay image ID for showing the offline log type
+	 */
+	public int getOfflineLogOverlay() {
+		if (overlayId != 0) {
+			return overlayId;
+		}
+		return R.drawable.marker_unknown_offline;
+	}
+
+    /**
+     * return the collection of found log type ids, to be used in the parser
+     */
+    public static Collection<String> foundLogTypes() {
+        final ArrayList<String> foundLogTypes = new ArrayList<>();
+        for (final LogType logType : LogType.values()) {
+            if (logType.isFoundLog()) {
+                foundLogTypes.add(String.valueOf(logType.id));
+            }
+        }
+        return foundLogTypes;
+>>>>>>> YOURS

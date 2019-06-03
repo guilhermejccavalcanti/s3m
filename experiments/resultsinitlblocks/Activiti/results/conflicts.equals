@@ -1,0 +1,45 @@
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b19028;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a19028;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c19028
+<<<<<<< MINE
+					LOGGER.log(Level.SEVERE, "Error reading XML document", e);
+					throw new XMLException("Error reading XML", e);
+=======
+					LOGGER.error("Error reading XML document", e);
+					return model;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13752;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13752;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13752
+<<<<<<< MINE
+      JsonNode processDocumentationNode = modelNode.get(EDITOR_SHAPE_PROPERTIES).get(PROPERTY_DOCUMENTATION);
+      if (processDocumentationNode != null && StringUtils.isNotEmpty(processDocumentationNode.asText())) {
+        process.setDocumentation(processDocumentationNode.asText());
+      }
+=======
+      JsonNode processExecutableNode = JsonConverterUtil.getProperty(PROPERTY_PROCESS_EXECUTABLE, modelNode);
+      if (processExecutableNode != null && StringUtils.isNotEmpty(processExecutableNode.asText())) {
+        process.setExecutable(JsonConverterUtil.getPropertyValueAsBoolean(PROPERTY_PROCESS_EXECUTABLE, modelNode));
+      }
+      
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b21480;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a21480;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c21480
+<<<<<<< MINE
+=======
+      JsonNode processExecutionListenerNode = modelNode.get(EDITOR_SHAPE_PROPERTIES).get(PROPERTY_EXECUTION_LISTENERS);
+      if (processExecutionListenerNode != null && StringUtils.isNotEmpty(processExecutionListenerNode.asText())){
+         process.setExecutionListeners(convertJsonToListeners(processExecutionListenerNode));
+      }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+    return selectList(statement, parameter, page, true);
+=======
+    if (page != null) {
+      parameter.setFirstResult(page.getFirstResult());
+      parameter.setMaxResults(page.getMaxResults());
+    }
+    return selectList(statement, parameter);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_b13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_a13444;C:\Users\Alice Borner\Desktop\projects\Activiti\git\.merge_file_c13444
+<<<<<<< MINE
+      } else if (flowElement instanceof AdhocSubProcess) {
+        xtw.writeStartElement(ELEMENT_ADHOC_SUBPROCESS);
+=======
+>>>>>>> YOURS

@@ -1,0 +1,18 @@
+########### MERGE COMMIT ###########
+d86925ca0efc051259a35f917753080868614f0f
+########### PROJECT NAME ###########
+cgeo
+########### BASE ###########
+C:\Users\Alice Borner\jFSTMergeResults\d86925ca0efc051259a35f917753080868614f0f\Base.java
+########### LEFT ###########
+C:\Users\Alice Borner\jFSTMergeResults\d86925ca0efc051259a35f917753080868614f0f\Left.java
+########### RIGHT ###########
+C:\Users\Alice Borner\jFSTMergeResults\d86925ca0efc051259a35f917753080868614f0f\Right.java
+########### OLD HANDLER OUTPUT ###########
+C:\Users\Alice Borner\jFSTMergeResults\d86925ca0efc051259a35f917753080868614f0f\OldHandlerOutput.java
+########### OLD HANDLER TIME ###########
+7460420066 ns
+########### NEW HANDLER OUTPUT ###########
+C:\Users\Alice Borner\jFSTMergeResults\d86925ca0efc051259a35f917753080868614f0f\NewHandlerOutput.java
+########### NEW HANDLER TIME ###########
+12758806889 ns

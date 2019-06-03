@@ -1,0 +1,20 @@
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c04924
+<<<<<<< MINE
+      GET_METADATA, UPDATE_METADATA, UPDATE_PARTITION_ENTRIES, FETCH_PARTITION_ENTRIES, DELETE_PARTITION_ENTRIES, INITIATE_FETCH_AND_UPDATE, ASYNC_OPERATION_STATUS, INITIATE_REBALANCE_NODE, ASYNC_OPERATION_STOP, ASYNC_OPERATION_LIST, 
+=======
+      GET_METADATA, UPDATE_METADATA, UPDATE_PARTITION_ENTRIES, FETCH_PARTITION_ENTRIES, DELETE_PARTITION_ENTRIES, INITIATE_FETCH_AND_UPDATE, ASYNC_OPERATION_STATUS, TRUNCATE_ENTRIES, 
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b01420;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a01420;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c01420
+<<<<<<< MINE
+        case 25: return INITIATE_REBALANCE_NODE_ON_DONOR;
+        case 26: return DELETE_STORE_REBALANCE_STATE;
+=======
+        case 25: return REPAIR_JOB;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_b10728;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_a10728;C:\Users\Alice Borner\Desktop\projects\voldemort\git\.merge_file_c10728
+<<<<<<< MINE
+        case 26: return INITIATE_REBALANCE_NODE_ON_DONOR;
+        case 27: return DELETE_STORE_REBALANCE_STATE;
+=======
+        case 26: return NATIVE_BACKUP;
+>>>>>>> YOURS

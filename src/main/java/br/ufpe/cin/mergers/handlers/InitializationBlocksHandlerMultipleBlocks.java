@@ -75,6 +75,9 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     		// there are common global variables being used by left and right added blocks
     		mergeDependentAddedNodesAndUpdateAST(context, commonVarsNodesMap);
     	}
+    	
+    	if(!addedNodes.getLeft().isEmpty() && !addedNodes.getRight().isEmpty())
+    		mergeAddedNodesAndUpdateAST(context, addedNodes);
     }
 	
     private Map<FSTNode, FSTNode> defineEditedNodes(List<FSTNode> addedCandidates,
@@ -118,7 +121,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
             
         } else if(leftNode == null && rightNode == null) {
         	// any branch edited the node, delete one of the nodes content to don't have duplicates
-            FilesManager.findAndDeleteASTNode(context.superImposedTree, baseContent);
+            FilesManager.findAndDeleteASTNode(context.superImposedTree, baseContent.trim());
 		} else {
 			// one of the branches edited or deleted the node
 			if (leftNode == null) {
@@ -133,6 +136,19 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 				mergeDeletedEditedContentAndUpdateAST(context, baseNode, rightDeletedNodes, leftNode, false);
 			}
         }
+	}
+
+	private void mergeAddedNodesAndUpdateAST(MergeContext context, Pair<List<FSTNode>,List<FSTNode>> addedNodes) {
+		for(FSTNode leftAddedNode : addedNodes.getLeft()) {
+			for(FSTNode rightAddedNode : addedNodes.getRight()) {
+				String leftContent = ((FSTTerminal) leftAddedNode).getBody();
+				String rightContent = ((FSTTerminal) rightAddedNode).getBody(); 
+				
+				// added nodes are similar, then one must be deleted so it's not duplicated
+				if(leftContent.equals(rightContent))
+		            FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
+			}
+		}
 	}
 
 	private Map<FSTNode, FSTNode> selectEditedNodes(List<FSTNode> branchNodes, List<FSTNode> baseNodes) {
@@ -357,9 +373,9 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	
     	for(FSTNode listNode : nodes) {
     		
-    		String listNodeContent = (listNode != null) ? ((FSTTerminal) listNode).getBody() : "";
-            String nodeContent = (node != null) ? ((FSTTerminal) node).getBody() : "";
-            
+    		String listNodeContent = (listNode != null) ? ((FSTTerminal) listNode).getBody().trim() : "";
+            String nodeContent = (node != null) ? ((FSTTerminal) node).getBody().trim() : "";
+
             if(listNodeContent.equals(nodeContent))
             	return true;
     	}

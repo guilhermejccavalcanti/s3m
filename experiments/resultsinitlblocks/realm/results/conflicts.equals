@@ -1,0 +1,478 @@
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b00232;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a00232;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c00232
+<<<<<<< MINE
+        context = new Context();
+=======
+        if (mode.equals(OpenMode.READ_ONLY))
+            this.immutable = true; // Group immutable
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b21392;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a21392;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c21392
+<<<<<<< MINE
+            return new Table(context, this, nativeTablePointer);
+=======
+            return new Table(context, this.parent, nativeTablePointer, immutable);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b09908;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a09908;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c09908
+<<<<<<< MINE
+        String fieldId = "index_" + fieldName;
+
+        String shortType = objectTypes.get(fieldElement.asType().toString());
+=======
+        String shortType = convertSimpleTypesToObject(fieldElement.asType().toString());
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b04388;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a04388;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c04388
+<<<<<<< MINE
+            if (shortType.equals("Integer")) {
+                shortType = "Long";
+                returnCast = "(int)";
+            }
+=======
+            String getterStmt = "return " + returnCast + "row.get" + shortType + "( " + columnIndex + " )";
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b04924;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a04924;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c04924
+<<<<<<< MINE
+        for (VariableElement field : fields) {
+            String fieldName = field.getSimpleName().toString();
+            String fieldTypeCanonicalName = field.asType().toString();
+            String fieldTypeName;
+            if (fieldTypeCanonicalName.contains(".")) {
+                fieldTypeName = fieldTypeCanonicalName.substring(fieldTypeCanonicalName.lastIndexOf('.') + 1);
+            } else {
+                fieldTypeName = fieldTypeCanonicalName;
+            }
+
+            if (JAVA_TO_REALM_TYPES.containsKey(fieldTypeCanonicalName)) {
+                writer.emitStatement("table.addColumn(%s, \"%s\")",
+                        JAVA_TO_COLUMN_TYPES.get(fieldTypeCanonicalName),
+                        fieldName.toLowerCase(Locale.getDefault()));
+            } else if (typeUtils.isAssignable(field.asType(), realmObject)) {
+                writer.emitStatement("table.addColumnLink(ColumnType.LINK, \"%s\", transaction.getTable(\"%s\"))",
+                        fieldName.toLowerCase(Locale.getDefault()), fieldTypeName.toLowerCase(Locale.getDefault()));
+            } else if (typeUtils.isAssignable(field.asType(), realmList)) {
+                String genericCanonicalType = ((DeclaredType) field.asType()).getTypeArguments().get(0).toString();
+                String genericType;
+                if (genericCanonicalType.contains(".")) {
+                    genericType = genericCanonicalType.substring(genericCanonicalType.lastIndexOf('.') + 1);
+                } else {
+                    genericType = genericCanonicalType;
+                }
+
+                writer.emitStatement("table.addColumnLink(ColumnType.LINK_LIST, \"%s\", transaction.getTable(\"%s\"))",
+                        fieldName.toLowerCase(Locale.getDefault()), genericType);
+=======
+        for (FieldInfo field : fields) {
+
+            if (field.columnType.equals("ColumnType.LINK")) {
+                writer.emitStatement("table.addColumnLink( %s, \"%s\", %s)", field.columnType,
+                    field.fieldName.toLowerCase(Locale.getDefault()), "table");
+            }
+            else {
+                writer.emitStatement("table.addColumn( %s, \"%s\" )", field.columnType, field.fieldName.toLowerCase(Locale.getDefault()));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b02276;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a02276;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c02276
+<<<<<<< MINE
+=======
+                "java.util.Arrays",
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b11916;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a11916;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c11916
+<<<<<<< MINE
+=======
+                "java.util.Arrays",
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b08828;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a08828;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c08828
+<<<<<<< MINE
+=======
+                "java.util.Arrays",
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b00448;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a00448;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c00448
+<<<<<<< MINE
+                writer.beginControlFlow("if (!transaction.hasTable(\"%s%s\"))", table_prefix, fieldTypeName);
+                writer.emitStatement("%sRealmProxy.initTable(transaction)", fieldTypeCanonicalName);
+=======
+                writer.beginControlFlow("if (!transaction.hasTable(\"%s\"))", fieldTypeName);
+                writer.emitStatement("%sRealmProxy.initTable(transaction)", fieldTypeName);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b03980;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a03980;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c03980
+<<<<<<< MINE
+        elementUtils = processingEnvironment.getElementUtils();
+=======
+        Elements elementUtils = processingEnvironment.getElementUtils();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b18720;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a18720;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c18720
+<<<<<<< MINE
+            removeHandler(handler);
+=======
+            handlers.remove(handler);
+            handler = null;
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b10436;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a10436;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c10436
+<<<<<<< MINE
+// Class metadata for generating proxy classes
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b13964;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a13964;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c13964
+<<<<<<< MINE
+        if (name == null || name.equals("")) throw new IllegalArgumentException("Invalid name. Name must be a non-empty String.");
+=======
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Invalid name. Name must be a non-empty String.");
+        }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b19496;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a19496;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c19496
+<<<<<<< MINE
+            writer.emitStatement("return copy(realm, object, false, cache)");
+=======
+            writer.emitStatement("return copy(realm, object, update)");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b14052;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a14052;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c14052
+<<<<<<< MINE
+        long columnIndex = columnIndices.getColumnIndex(clazz, fieldName);
+        if (columnIndex < 0) {
+=======
+        Long columnIndex = columnIndices.get(getClassSimpleName(clazz)).get(fieldName);
+        if (columnIndex == null || columnIndex < 0) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b12564;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a12564;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c12564
+<<<<<<< MINE
+        Table table = getTable(clazz);
+=======
+        E result;
+
+        Table table = tables.get(clazz);
+        if (table == null) {
+            String simpleClassName = getClassSimpleName(clazz);
+            table = transaction.getTable(TABLE_PREFIX + simpleClassName);
+            tables.put(clazz, table);
+        }
+
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b12564;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a12564;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c12564
+<<<<<<< MINE
+        writer.emitStatement("cache.put(newObject, (RealmObjectProxy) realmObject)");
+        for (VariableElement field : fields) {
+=======
+        writer.emitStatement("cache.put(newObject, realmObject)");
+        for (VariableElement field : metadata.getFields()) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c04012
+<<<<<<< MINE
+private final Map<String, Map<String, Long>> columnIndices = new HashMap<String, Map<String, Long>>();
+=======
+static final ColumnIndices columnIndices = new ColumnIndices();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c04012
+<<<<<<< MINE
+        return (java.lang.String) row.getString(realm.getColumnIndices().get("Simple").get("name"));
+=======
+        return (java.lang.String) row.getString(INDEX_NAME);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c04012
+<<<<<<< MINE
+        return (boolean) row.getBoolean(realm.getColumnIndices().get("Booleans").get("done"));
+=======
+        return (boolean) row.getBoolean(INDEX_DONE);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c04012
+<<<<<<< MINE
+        return (java.lang.String) row.getString(realm.getColumnIndices().get("AllTypes").get("columnString"));
+=======
+        return (java.lang.String) row.getString(INDEX_COLUMNSTRING);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a04012;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c04012
+<<<<<<< MINE
+                        "return (%s) row.get%s(realm.getColumnIndices().get(\"%s\").get(\"%s\"))",
+                        fieldTypeCanonicalName, realmType, className, fieldName);
+=======
+                        "return (%s) row.get%s(%s)",
+                        fieldTypeCanonicalName, realmType, staticFieldIndexVarName(field));
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b12412;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a12412;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c12412
+<<<<<<< MINE
+                // Create columnIndices
+                List<String> fieldNames = proxyMediator.getFieldNames(modelClass);
+                Table table = realm.transaction.getTable(proxyMediator.getTableName(modelClass));
+                for (String fieldName : fieldNames) {
+                    long columnIndex = table.getColumnIndex(fieldName);
+                    if (columnIndex == -1) {
+                        throw new RealmMigrationNeededException("Field '" + fieldName + "' not found for type '" + modelClassName + "'");
+                    }
+                    Map<String, Long> innerMap = columnIndices.get(modelClassName);
+                    if (innerMap == null) {
+                        innerMap = new HashMap<String, Long>();
+                    }
+                    innerMap.put(fieldName, columnIndex);
+                    columnIndices.put(modelClassName, innerMap);
+                }
+=======
+                // validate created table
+                Method validateMethod;
+                try {
+                    validateMethod = generatedClass.getMethod("validateTable", new Class[]{ImplicitTransaction.class});
+                } catch (NoSuchMethodException e) {
+                    throw new RealmException("Could not find the validateTable method in the generated " + generatedClassName + " class: " + APT_NOT_EXECUTED_MESSAGE);
+                }
+                try {
+                    validateMethod.invoke(null, realm.transaction);
+                } catch (IllegalAccessException e) {
+                    throw new RealmException("Could not execute the validateTable method in the " + generatedClassName + " class: " + APT_NOT_EXECUTED_MESSAGE);
+                } catch (InvocationTargetException e) {
+                    throw new RealmMigrationNeededException(e.getMessage(), e);
+                }
+
+                // Populate the columnIndices table
+                Method columnIndiciesMethod;
+                try {
+                    columnIndiciesMethod = generatedClass.getMethod("getColumnIndices");
+                } catch (NoSuchMethodException e) {
+                    throw new RealmException("Could not find the getColumnIndices method in the generated " + generatedClassName + " class: " + APT_NOT_EXECUTED_MESSAGE);
+                }
+                Map<String,Long> indices;
+                try {
+                    //noinspection unchecked
+                    indices = (Map<String,Long>) columnIndiciesMethod.invoke(null);
+                } catch (IllegalAccessException e) {
+                    throw new RealmException("Could not execute the getColumnIndices method in the generated " + generatedClassName + " class: " + APT_NOT_EXECUTED_MESSAGE);
+                } catch (InvocationTargetException e) {
+                    throw new RealmException("An exception was thrown in the getColumnIndices method in the generated " + generatedClassName + " class: " + APT_NOT_EXECUTED_MESSAGE);
+                }
+                columnIndices.addClass((Class<? extends RealmObject>) generatedClass.getSuperclass(), indices);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b14180;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a14180;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c14180
+<<<<<<< MINE
+        checkHasPrimaryKey(object.getClass());
+        if (isObjectInRealm(object)) {
+            return object;
+        }
+
+=======
+        checkHasPrimaryKey(object);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b12760;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a12760;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c12760
+<<<<<<< MINE
+                proxyMediator.populateUsingJsonObject(obj, json.getJSONObject(i));
+=======
+                realmJson.createOrUpdateUsingJsonObject(clazz, this, json.getJSONObject(i), false);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b09176;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a09176;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c09176
+<<<<<<< MINE
+        return proxyMediator.copyOrUpdate(this, object, update, new HashMap<RealmObject, RealmObjectProxy>());
+=======
+        Class<? extends RealmObject> realmClass = getRealmClassFromObject(object);
+        Class<?> proxyClass = getProxyClass(realmClass);
+        Method method = insertOrUpdateMethods.get(realmClass);
+        if (method == null) {
+            try {
+                method = proxyClass.getMethod("copyOrUpdate", new Class[]{Realm.class, realmClass, boolean.class, Map.class});
+            } catch (NoSuchMethodException e) {
+                throw new RealmException("Could not find the copyOrUpdate() method in generated proxy class for " + proxyClass.getName() + ": " + APT_NOT_EXECUTED_MESSAGE, e);
+            }
+            insertOrUpdateMethods.put(proxyClass, method);
+        }
+        try {
+            Object result = method.invoke(null, this, object, update, new HashMap<RealmObject,RealmObject>());
+            return (E) result;
+        } catch (IllegalAccessException e) {
+            throw new RealmException("Could not execute the copyToRealm method : " + APT_NOT_EXECUTED_MESSAGE, e);
+        } catch (InvocationTargetException e) {
+            throw new RealmException("An exception was thrown in the copyToRealm method in the proxy class " + proxyClass.getName(), e);
+        }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b05404;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a05404;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c05404
+<<<<<<< MINE
+            if (!table.hasIndex(table.getColumnIndex("columnString"))) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Index not defined for field 'columnString'");
+=======
+            if (!table.hasSearchIndex(table.getColumnIndex("columnString"))) {
+                throw new IllegalStateException("Index not defined for field 'columnString'");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b05404;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a05404;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c05404
+<<<<<<< MINE
+                    writer.beginControlFlow("if (!table.hasIndex(table.getColumnIndex(\"%s\")))", fieldName);
+                    writer.emitStatement("throw new RealmMigrationNeededException(transaction.getPath(), \"Index not defined for field '%s'\")", fieldName);
+=======
+                    writer.beginControlFlow("if (!table.hasSearchIndex(table.getColumnIndex(\"%s\")))", fieldName);
+                    writer.emitStatement("throw new IllegalStateException(\"Index not defined for field '%s'\")", fieldName);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b09652;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a09652;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c09652
+<<<<<<< MINE
+=======
+            }
+            if (!columnTypes.containsKey("name")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field 'name'");
+            }
+            if (columnTypes.get("name") != ColumnType.STRING) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'String' for field 'name'");
+            }
+            if (!columnTypes.containsKey("age")) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Missing field 'age'");
+            }
+            if (columnTypes.get("age") != ColumnType.INTEGER) {
+                throw new RealmMigrationNeededException(transaction.getPath(), "Invalid type 'int' for field 'age'");
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b09652;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a09652;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c09652
+<<<<<<< MINE
+                writer.emitStatement("Table table_%d = transaction.getTable(\"%s%s\")", fieldIndex, Constants.TABLE_PREFIX, fieldTypeSimpleName);
+                writer.beginControlFlow("if (!table.getLinkTarget(%s).equals(table_%d))", staticFieldIndexVarName(field), fieldIndex);
+                writer.emitStatement("throw new IllegalStateException(\"Mismatching link tables for column '%s'\")",
+                        fieldName);
+                writer.endControlFlow();
+=======
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b08028;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a08028;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c08028
+<<<<<<< MINE
+        //This cast is correct because obj is either
+        //generated by RealmProxy or the original type extending directly from RealmObject
+        @SuppressWarnings("unchecked")
+        Class<? extends RealmObject> superclass = (Class<? extends RealmObject>) clazz.getSuperclass();
+
+        if (!superclass.equals(RealmObject.class)) {
+            clazz = superclass;
+        }
+
+=======
+        clazz = Util.getOriginalModelClass(clazz);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b04760;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a04760;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c04760
+<<<<<<< MINE
+public SharedGroup(String databaseFile, boolean enableImplicitTransactions,
+                       Durability durability, byte[] key) {
+=======
+public SharedGroup(String canonicalPath, boolean enableImplicitTransactions, Durability durability, byte[] key) {
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b17964;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a17964;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c17964
+<<<<<<< MINE
+        this.handlerController = new HandlerController(this);
+        this.sharedGroupManager = new SharedGroupManager(configuration);
+        this.schema = new RealmSchema(this, sharedGroupManager.getTransaction());
+=======
+
+        this.sharedRealm = SharedRealm.getInstance(configuration);
+        this.schema = new RealmSchema(this);
+        this.handlerController = new HandlerController(this);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b12488;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a12488;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c12488
+<<<<<<< MINE
+        this.proxyState = new ProxyState(this);
+=======
+        this.proxyState = new ProxyState<some.test.Simple>(some.test.Simple.class, this);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b12488;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a12488;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c12488
+<<<<<<< MINE
+        this.proxyState = new ProxyState(this);
+=======
+        this.proxyState = new ProxyState<some.test.NullTypes>(some.test.NullTypes.class, this);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b12488;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a12488;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c12488
+<<<<<<< MINE
+        this.proxyState = new ProxyState(this);
+=======
+        this.proxyState = new ProxyState<some.test.Booleans>(some.test.Booleans.class, this);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b12488;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a12488;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c12488
+<<<<<<< MINE
+        this.proxyState = new ProxyState(this);
+=======
+        this.proxyState = new ProxyState<some.test.AllTypes>(some.test.AllTypes.class, this);
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b09508;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a09508;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c09508
+<<<<<<< MINE
+                if (changeListenerCalled.decrementAndGet() == 0) {
+                    looperThread.testComplete();
+=======
+                Looper.prepare();
+                backgroundLooper[0] = Looper.myLooper();
+
+                Realm asyncRealm = null;
+                try {
+                    Realm.asyncTaskExecutor.pause();
+                    asyncRealm = openRealmInstance("testDistinctAsyncQueryWithNull");
+                    final long numberOfBlocks = 25;
+                    final long numberOfObjects = 10; // Must be greater than 1
+                    populateForDistinct(asyncRealm, numberOfBlocks, numberOfObjects, true);
+
+                    final RealmResults<AnnotationIndexTypes> distinctDate = asyncRealm.where(AnnotationIndexTypes.class).distinctAsync(AnnotationIndexTypes.FIELD_INDEX_DATE);
+                    final RealmResults<AnnotationIndexTypes> distinctString = asyncRealm.where(AnnotationIndexTypes.class).distinctAsync(AnnotationIndexTypes.FIELD_INDEX_STRING);
+
+                    assertFalse(distinctDate.isLoaded());
+                    assertTrue(distinctDate.isValid());
+                    assertTrue(distinctDate.isEmpty());
+
+                    assertFalse(distinctString.isLoaded());
+                    assertTrue(distinctString.isValid());
+                    assertTrue(distinctString.isEmpty());
+
+                    Realm.asyncTaskExecutor.resume();
+
+                    distinctDate.addChangeListener(new RealmChangeListener<RealmResults<AnnotationIndexTypes>>() {
+                        @Override
+                        public void onChange(RealmResults<AnnotationIndexTypes> object) {
+                            assertEquals(1, distinctDate.size());
+                            signalCallbackFinished.countDown();
+                        }
+                    });
+
+                    distinctString.addChangeListener(new RealmChangeListener<RealmResults<AnnotationIndexTypes>>() {
+                        @Override
+                        public void onChange(RealmResults<AnnotationIndexTypes> object) {
+                            assertEquals(1, distinctString.size());
+                            signalCallbackFinished.countDown();
+                        }
+                    });
+
+                    Looper.loop();
+                } catch (Throwable e) {
+                    e.printStackTrace();
+                    threadAssertionError[0] = e;
+
+                } finally {
+                    if (signalCallbackFinished.getCount() > 0) {
+                        signalCallbackFinished.countDown();
+                    }
+                    if (asyncRealm != null) {
+                        asyncRealm.close();
+                    }
+                    signalClosedRealm.countDown();
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b09024;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a09024;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c09024
+<<<<<<< MINE
+public abstract RealmObjectSchema addField(String fieldName, Class<?> fieldType, FieldAttribute... attributes);
+=======
+public RealmObjectSchema addField(String fieldName, Class<?> fieldType, FieldAttribute... attributes) {
+        FieldMetaData metadata = SUPPORTED_SIMPLE_FIELDS.get(fieldType);
+        if (metadata == null) {
+            if (SUPPORTED_LINKED_FIELDS.containsKey(fieldType)) {
+                throw new IllegalArgumentException("Use addRealmObjectField() instead to add fields that link to other RealmObjects: " + fieldName);
+            } else {
+                throw new IllegalArgumentException(String.format(Locale.US,
+                        "Realm doesn't support this field type: %s(%s)",
+                        fieldName, fieldType));
+            }
+        }
+
+        if (containsAttribute(attributes, FieldAttribute.PRIMARY_KEY)) {
+            checkAddPrimaryKeyForSync();
+        }
+
+        checkNewFieldName(fieldName);
+        boolean nullable = metadata.defaultNullable;
+        if (containsAttribute(attributes, FieldAttribute.REQUIRED)) {
+            nullable = false;
+        }
+
+        long columnIndex = table.addColumn(metadata.realmType, fieldName, nullable);
+        try {
+            addModifiers(fieldName, attributes);
+        } catch (Exception e) {
+            // Modifiers have been removed by the addModifiers method()
+            table.removeColumn(columnIndex);
+            throw e;
+        }
+        return this;
+    }
+>>>>>>> YOURS
+C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_b19760;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_a19760;C:\Users\Alice Borner\Desktop\projects\realm-java\git\.merge_file_c19760
+<<<<<<< MINE
+void checkLegalName(String fieldName) {
+        //noinspection ConstantConditions
+=======
+static void checkLegalName(String fieldName) {
+>>>>>>> YOURS

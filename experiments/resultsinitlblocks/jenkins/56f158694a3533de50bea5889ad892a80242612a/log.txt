@@ -1,0 +1,18 @@
+########### MERGE COMMIT ###########
+56f158694a3533de50bea5889ad892a80242612a
+########### PROJECT NAME ###########
+jenkins
+########### BASE ###########
+C:\Users\Alice Borner\jFSTMergeResults\56f158694a3533de50bea5889ad892a80242612a\Base.java
+########### LEFT ###########
+C:\Users\Alice Borner\jFSTMergeResults\56f158694a3533de50bea5889ad892a80242612a\Left.java
+########### RIGHT ###########
+C:\Users\Alice Borner\jFSTMergeResults\56f158694a3533de50bea5889ad892a80242612a\Right.java
+########### OLD HANDLER OUTPUT ###########
+C:\Users\Alice Borner\jFSTMergeResults\56f158694a3533de50bea5889ad892a80242612a\OldHandlerOutput.java
+########### OLD HANDLER TIME ###########
+804181404 ns
+########### NEW HANDLER OUTPUT ###########
+C:\Users\Alice Borner\jFSTMergeResults\56f158694a3533de50bea5889ad892a80242612a\NewHandlerOutput.java
+########### NEW HANDLER TIME ###########
+1217284434 ns
