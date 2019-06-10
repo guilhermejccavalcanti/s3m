@@ -28,9 +28,9 @@ public class MergeConflict {
 		this.right = rightConflictingContent;
 		this.body  ="<<<<<<< MINE\n"+
 				    leftConflictingContent+
-				    "=======\n"+
+				    "\n=======\n"+
 				    rightConflictingContent+
-				    ">>>>>>> YOURS";
+				    "\n>>>>>>> YOURS";
 	}
 	
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent, int startLOC, int endLOC) {
@@ -40,7 +40,7 @@ public class MergeConflict {
 				    leftConflictingContent+
 				    "=======\n"+
 				    rightConflictingContent+
-				    ">>>>>>> YOURS";
+				    "\n>>>>>>> YOURS";
 		this.startLOC = startLOC;
 		this.endLOC = endLOC;
 	}
