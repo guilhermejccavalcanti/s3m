@@ -4,7 +4,6 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
-import java.util.Map;
 
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.mergers.handlers.*;
@@ -16,6 +15,9 @@ import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.RenamingUtils;
+import br.ufpe.cin.mergers.util.Side;
+import br.ufpe.cin.mergers.util.Traverser;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
 import cide.gparser.ParseException;
@@ -129,8 +131,8 @@ public final class SemistructuredMerge {
 		FSTNode mergeLeftBaseRight = superimpose(mergeLeftBase, right, null, context, false);
 		
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
-		mergeMatchedContent(mergeLeftBaseRight, context);
-		
+		mergeMatchedContent(mergeLeftBaseRight, context);		
+
 		context.superImposedTree = mergeLeftBaseRight;
 		
 		return context;
@@ -334,33 +336,9 @@ public final class SemistructuredMerge {
 
 		if(identifyNodes) {
 			identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
-			identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
 		}
 
 		return TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
-	}
-
-	/**
-	 * Verifies if a node was deleted/renamed in one of the revisions
-	 * @param node
-	 * @param context
-	 * @param leftContent
-	 * @param baseContent
-	 * @param rightContent
-	 */
-	private static void identifyPossibleNodesDeletionOrRenamings(FSTNode node, MergeContext context, String leftContent,String baseContent, String rightContent) {
-		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
-		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
-		String rightContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);
-		if (!baseContenttrim.isEmpty()) {
-			if (!baseContenttrim.equals(leftContenttrim) && rightContenttrim.isEmpty()) {
-				Pair<String, FSTNode> tuple = Pair.of(baseContent, node);
-				context.possibleRenamedRightNodes.add(tuple);
-			} else if (!baseContenttrim.equals(rightContenttrim) && leftContenttrim.isEmpty()) {
-				Pair<String, FSTNode> tuple = Pair.of(baseContent, node);
-				context.possibleRenamedLeftNodes.add(tuple);
-			}
-		}
 	}
 
 	/**
