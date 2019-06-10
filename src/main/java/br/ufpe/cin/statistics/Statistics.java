@@ -49,26 +49,25 @@ public final class Statistics {
 		context.acidentalConflicts = context.unstructuredNumberOfConflicts - context.equalConflicts - context.orderingConflicts;
 		context.acidentalConflicts = (context.acidentalConflicts>0) ? context.acidentalConflicts : 0;
 
-		String filesMerged = ((context.getLeft() != null)?context.getLeft().getAbsolutePath() :"<empty left>") + "#" +
-				((context.getBase() != null)?context.getBase().getAbsolutePath() :"<empty base>") + "#" +
-				((context.getRight()!= null)?context.getRight().getAbsolutePath():"<empty right>");
+		String filesMerged = context.fullyQualifiedMergedClass;
+		
 		String loggermsg = filesMerged 
-				+ "," + context.semistructuredNumberOfConflicts 
-				+ "," + context.semistructuredMergeConflictsLOC
-				+ "," + context.renamingConflicts
-				+ "," + context.deletionConflicts
-				+ "," + context.innerDeletionConflicts
-				+ "," + context.typeAmbiguityErrorsConflicts
-				+ "," + context.newElementReferencingEditedOneConflicts
-				+ "," + context.initializationBlocksConflicts
-				+ "," + context.acidentalConflicts
-				+ "," + context.unstructuredNumberOfConflicts 
-				+ "," + context.unstructuredMergeConflictsLOC
-				+ "," + context.unstructuredMergeTime
-				+ "," + context.semistructuredMergeTime	
-				+ "," + context.duplicatedDeclarationErrors
-				+ "," + context.orderingConflicts
-				+ "," + context.equalConflicts;
+				+ ";" + context.semistructuredNumberOfConflicts 
+				+ ";" + context.semistructuredMergeConflictsLOC
+				+ ";" + context.renamingConflicts
+				+ ";" + context.deletionConflicts
+				+ ";" + context.innerDeletionConflicts
+				+ ";" + context.typeAmbiguityErrorsConflicts
+				+ ";" + context.newElementReferencingEditedOneConflicts
+				+ ";" + context.initializationBlocksConflicts
+				+ ";" + context.acidentalConflicts
+				+ ";" + context.unstructuredNumberOfConflicts 
+				+ ";" + context.unstructuredMergeConflictsLOC
+				+ ";" + context.unstructuredMergeTime
+				+ ";" + context.semistructuredMergeTime	
+				+ ";" + context.duplicatedDeclarationErrors
+				+ ";" + context.orderingConflicts
+				+ ";" + context.equalConflicts;
 
 		computeDifferentConflicts(context);		
 		LoggerStatistics.logContext(loggermsg,context);
@@ -119,22 +118,22 @@ public final class Statistics {
 		}
 
 		String loggermsg = scenario.getRevisionsFilePath() 
-				+ "," + semistructuredNumberOfConflicts 
-				+ "," + semistructuredMergeConflictsLOC
-				+ "," + renamingConflicts
-				+ "," + deletionConflicts
-				+ "," + innerDeletionConflicts
-				+ "," + typeAmbiguityErrorsConflicts
-				+ "," + newElementReferencingEditedOneConflicts
-				+ "," + initializationBlocksConflicts
-				+ "," + acidentalConflicts
-				+ "," + unstructuredNumberOfConflicts 
-				+ "," + unstructuredMergeConflictsLOC
-				+ "," + unstructuredMergeTime
-				+ "," + semistructuredMergeTime
-				+ "," + duplicatedDeclarationErrors
-				+ "," + orderingConflicts
-				+ "," + equalConflicts+	'\n';
+				+ ";" + semistructuredNumberOfConflicts 
+				+ ";" + semistructuredMergeConflictsLOC
+				+ ";" + renamingConflicts
+				+ ";" + deletionConflicts
+				+ ";" + innerDeletionConflicts
+				+ ";" + typeAmbiguityErrorsConflicts
+				+ ";" + newElementReferencingEditedOneConflicts
+				+ ";" + initializationBlocksConflicts
+				+ ";" + acidentalConflicts
+				+ ";" + unstructuredNumberOfConflicts 
+				+ ";" + unstructuredMergeConflictsLOC
+				+ ";" + unstructuredMergeTime
+				+ ";" + semistructuredMergeTime
+				+ ";" + duplicatedDeclarationErrors
+				+ ";" + orderingConflicts
+				+ ";" + equalConflicts+	'\n';
 
 		LoggerStatistics.logScenario(loggermsg);
 	}
@@ -192,6 +191,7 @@ public final class Statistics {
 
 		for(MergeConflict confa : unstructuredMergeConflits){
 			confa.setOriginFiles(context.getLeft(), context.getBase(), context.getRight());
+			confa.setFullyQualifiedMergedClass(context.fullyQualifiedMergedClass);
 			boolean found = false;
 			for(MergeConflict confb : semistructuredMergeConflicts){
 				if(areEquivalentConflicts(confa,confb)){
@@ -206,6 +206,7 @@ public final class Statistics {
 		}
 		for(MergeConflict confa : semistructuredMergeConflicts){
 			confa.setOriginFiles(context.getLeft(), context.getBase(), context.getRight());
+			confa.setFullyQualifiedMergedClass(context.fullyQualifiedMergedClass);
 			boolean found = false;
 			for(MergeConflict confb : unstructuredMergeConflits){
 				if(areEquivalentConflicts(confa,confb)){
@@ -218,9 +219,9 @@ public final class Statistics {
 			}
 		}
 
-		LoggerStatistics.logConflicts(equalMergeConflicts,null);
-		LoggerStatistics.logConflicts(differentUnstructuredMergeConflicts,Source.UNSTRUCTURED);
-		LoggerStatistics.logConflicts(differentSemistructuredMergeConflicts,Source.SEMISTRUCTURED);
+		LoggerStatistics.logConflicts(context,equalMergeConflicts,null);
+		LoggerStatistics.logConflicts(context,differentUnstructuredMergeConflicts,Source.UNSTRUCTURED);
+		LoggerStatistics.logConflicts(context,differentSemistructuredMergeConflicts,Source.SEMISTRUCTURED);
 	}
 
 	private static boolean areEquivalentConflicts(MergeConflict confa, MergeConflict confb) {

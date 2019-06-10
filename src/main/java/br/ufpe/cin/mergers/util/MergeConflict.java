@@ -21,6 +21,7 @@ public class MergeConflict {
 	public File baseOriginFile;
 	public File rightOriginFile;
 	
+	public String fullyQualifiedMergedClass;
 
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent) {
 		this.left  = leftConflictingContent;
@@ -71,6 +72,15 @@ public class MergeConflict {
 		this.rightOriginFile = right;
 		this.baseOriginFile = base;
 	}
+	
+	public String getFullyQualifiedMergedClass() {
+		return fullyQualifiedMergedClass;
+	}
+
+	public void setFullyQualifiedMergedClass(String fullyQualifiedMergedClass) {
+		this.fullyQualifiedMergedClass = fullyQualifiedMergedClass;
+	}
+	
 	
 	@Override
 	public String toString() {

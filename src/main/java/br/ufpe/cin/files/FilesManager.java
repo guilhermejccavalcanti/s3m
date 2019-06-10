@@ -1,12 +1,14 @@
 package br.ufpe.cin.files;
 
 import java.io.BufferedReader;
-import java.io.BufferedWriter;
 import java.io.ByteArrayInputStream;
 import java.io.File;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.io.UncheckedIOException;
 import java.nio.charset.Charset;
-import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
@@ -25,8 +27,11 @@ import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 
 import com.github.javaparser.JavaParser;
+import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
-import com.github.javaparser.ParseException; 
+import com.github.javaparser.ast.PackageDeclaration;
+import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
+import com.github.javaparser.ast.body.TypeDeclaration;
 
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
@@ -666,5 +671,45 @@ public final class FilesManager {
 		SimplePrintVisitor visitor = new SimplePrintVisitor();
 		visitor.visit(node);
 		return visitor.getResult().replaceAll(("  "), " ");
+	}
+	
+	/**
+	 * Returns the fully qualified name of a given class file.
+	 */
+	public static String getFullyQualifiedName(File fileClass) {
+		try {
+			String fullqualifiedname = "";
+			CompilationUnit indenter = JavaParser.parse(fileClass);
+			PackageDeclaration pckg = indenter.getPackage();
+			if(pckg!=null){
+				fullqualifiedname += pckg.getPackageName();
+			}
+			List<TypeDeclaration> types = indenter.getTypes();
+			if(!types.isEmpty()){
+				TypeDeclaration type = types.get(0);
+				if(type instanceof ClassOrInterfaceDeclaration ){
+					fullqualifiedname += ((!fullqualifiedname.isEmpty())?".":"") + type.getName();
+				}
+			}
+			return fullqualifiedname;
+		} catch (Exception e) {
+			return "";
+		}
+	}
+	
+	/**
+	 * Returns the last line of text file.
+	 */
+	public static String lastLine(String filePath){
+		String lastLine = null;
+		try(BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+			String currentLine = null;
+			while ((currentLine = reader.readLine()) != null){
+				lastLine = currentLine;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+		}
+		return lastLine;
 	}
 }
