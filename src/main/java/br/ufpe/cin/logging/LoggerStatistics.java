@@ -15,6 +15,7 @@ import br.ufpe.cin.crypto.CryptoUtils;
 import br.ufpe.cin.exceptions.CryptoException;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.PrintException;
+import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.Source;
@@ -51,7 +52,7 @@ public class LoggerStatistics {
 			//logging
 			String timeStamp = new SimpleDateFormat("yyyyMMdd_HHmmss").format(Calendar.getInstance().getTime());
 			String logpath   = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-			String logentry	 = timeStamp+","+msg+"\n";
+			String logentry	 = timeStamp+";"+msg+"\n";
 			logpath = logpath + "jfstmerge.statistics";
 			File statisticsLog = new File(logpath);
 
@@ -65,7 +66,7 @@ public class LoggerStatistics {
 				//logging merged files for further analysis
 				logFiles(timeStamp,context);
 			}
-			
+
 			logSummary();
 		}
 		catch (CryptoException c)
@@ -96,9 +97,9 @@ public class LoggerStatistics {
 		logpath = logpath + "jfstmerge.statistics.scenarios";
 
 		//reading the log file to see if it is not empty neither contains the header
-		String header = "revision,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergeinnerdeletionconfs,ssmergetaeconfs,ssmergenereoconfs,"
-				+ "ssmergeinitlblocksconfs,ssmergeacidentalconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,unmergeduplicateddeclarationerrors,"
-				+ "unmergeorderingconfs,equalconfs\n";
+		String header = "revision;ssmergeconfs;ssmergeloc;ssmergerenamingconfs;ssmergedeletionconfs;ssmergeinnerdeletionconfs;ssmergetaeconfs;ssmergenereoconfs;"
+				+ "ssmergeinitlblocksconfs;ssmergeacidentalconfs;unmergeconfs;unmergeloc;unmergetime;ssmergetime;unmergeduplicateddeclarationerrors;"
+				+ "unmergeorderingconfs;equalconfs\n";
 		File statisticsLog = new File(logpath);
 		if(!statisticsLog.exists()){
 			FileUtils.write(statisticsLog, header, true);
@@ -107,29 +108,55 @@ public class LoggerStatistics {
 		FileUtils.write(statisticsLog, loggermsg, true);
 	}
 
-	public static void logConflicts(List<MergeConflict> conflicts, Source source) throws IOException {
+	public static void logConflicts(MergeContext context, List<MergeConflict> conflicts, Source source) throws IOException {
 		String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
 		new File(logpath).mkdirs(); //ensuring that the directories exists	
-		for(MergeConflict mc : conflicts){
-			String origin =  ((mc.leftOriginFile != null) ? mc.leftOriginFile.getAbsolutePath() : "<empty left>") 
-					+ ";" + ((mc.baseOriginFile  != null) ? mc.baseOriginFile.getAbsolutePath() : "<empty base>") 
-					+ ";" + ((mc.rightOriginFile != null) ? mc.rightOriginFile.getAbsolutePath(): "<empty right>");
-			if(source == null){
-				File f = new File(logpath + "conflicts.equals");
-				FileUtils.write(f,(origin+'\n'+mc.body+'\n'),true);
+
+		File logFile;
+		if(source == null){
+			logFile = new File(logpath + "conflicts.equals");
+			printConflicts(context, conflicts, logFile);
+		} else {
+			switch (source) {
+			case UNSTRUCTURED:
+				logFile = new File(logpath + "conflicts.unstructured");
+				printConflicts(context, conflicts, logFile);
 				break;
-			}else {
-				switch (source) {
-				case UNSTRUCTURED:
-					File f = new File(logpath + "conflicts.unstructured");
-					FileUtils.write(f,(origin+'\n'+mc.body+'\n'),true);
-					break;
-				case SEMISTRUCTURED:
-					f = new File(logpath + "conflicts.semistructured");
-					FileUtils.write(f,(origin+'\n'+mc.body+'\n'),true);
-					break;
-				}
+			case SEMISTRUCTURED:
+				logFile = new File(logpath + "conflicts.semistructured");
+				printConflicts(context, conflicts, logFile);
+				break;
 			}
+		}
+	}
+	private static void printConflicts(MergeContext context, List<MergeConflict> confs, File logFile) throws IOException {
+		if(!confs.isEmpty()){
+			StringBuilder builder = new StringBuilder();
+			builder.append("----------------------------\n");
+			for(MergeConflict mc : confs){
+				builder.append(mc.body);
+				builder.append("\n----------------------------\n");
+			}
+			String conflicts = builder.toString();
+
+			String files = context.fullyQualifiedMergedClass;
+			String leftContent = FilesManager.readFileContent(context.getLeft());
+			String baseContent = FilesManager.readFileContent(context.getBase());
+			String rightContent= FilesManager.readFileContent(context.getRight());
+			String ssmeContent = context.semistructuredOutput;
+			String txmeContent = context.unstructuredOutput;
+
+			builder = new StringBuilder();
+			builder.append("########################################################\n");
+			builder.append("Files: " + files + "\n");
+			builder.append("Conflicts:\n" + conflicts + "\n");
+			builder.append("Semistructured Merge Output:\n" + ssmeContent + "\n");
+			builder.append("Unstructured Merge Output:\n" + txmeContent   + "\n");
+			builder.append("Left Content:\n" + ((leftContent.isEmpty()) ?"<empty>":leftContent) + "\n");
+			builder.append("Base Content:\n" + ((baseContent.isEmpty()) ?"<empty>":baseContent) + "\n");
+			builder.append("Right Content:\n"+ ((rightContent.isEmpty())?"<empty>":rightContent)+ "\n");
+
+			FileUtils.write(logFile,(builder.toString()+"\n"),true);
 		}
 	}
 
@@ -159,7 +186,7 @@ public class LoggerStatistics {
 
 				List<String> lines = Files.readAllLines(statistics.toPath());
 				for(int i = 1; i <lines.size(); i++){
-					String[] columns = lines.get(i).split(",");
+					String[] columns = lines.get(i).split(";");
 
 					ssmergeconfs += Integer.parseInt(columns[2]);
 					ssmergeloc 	 += Integer.parseInt(columns[3]);
@@ -249,7 +276,7 @@ public class LoggerStatistics {
 			String leftcontent = context.getLeftContent();
 			if(!leftcontent.isEmpty()){
 
-				FileUtils.write(logfiles, timeStamp+","+context.getLeft().getAbsolutePath()+"\n", true);
+				FileUtils.write(logfiles, timeStamp+";"+context.getLeft().getAbsolutePath()+"\n", true);
 				FileUtils.write(logfiles, leftcontent + "\n", true);
 				FileUtils.write(logfiles, "!@#$%\n", true); //separator
 			}
@@ -258,7 +285,7 @@ public class LoggerStatistics {
 			String basecontent = context.getBaseContent();
 			if(!basecontent.isEmpty()){
 
-				FileUtils.write(logfiles, timeStamp+","+context.getBase().getAbsolutePath()+"\n", true);
+				FileUtils.write(logfiles, timeStamp+";"+context.getBase().getAbsolutePath()+"\n", true);
 				FileUtils.write(logfiles, basecontent + "\n", true);
 				FileUtils.write(logfiles, "!@#$%\n", true); 
 			}
@@ -267,7 +294,7 @@ public class LoggerStatistics {
 			String rightcontent = context.getRightContent();
 			if(!rightcontent.isEmpty()){
 
-				FileUtils.write(logfiles, timeStamp+","+context.getRight().getAbsolutePath()+"\n", true);
+				FileUtils.write(logfiles, timeStamp+";"+context.getRight().getAbsolutePath()+"\n", true);
 				FileUtils.write(logfiles, rightcontent + "\n", true);
 				FileUtils.write(logfiles, "!@#$%\n", true); 
 			}
@@ -301,9 +328,9 @@ public class LoggerStatistics {
 
 		//manageLogBuffer(logpath);
 
-		String header = "date,files,ssmergeconfs,ssmergeloc,ssmergerenamingconfs,ssmergedeletionconfs,ssmergeinnerdeletionconfs,ssmergetaeconfs,ssmergenereoconfs,"
-				+ "ssmergeinitlblocksconfs,ssmergeacidentalconfs,unmergeconfs,unmergeloc,unmergetime,ssmergetime,unmergeduplicateddeclarationerrors,"
-				+ "unmergeorderingconfs,equalconfs\n";
+		String header = "date;files;ssmergeconfs;ssmergeloc;ssmergerenamingconfs;ssmergedeletionconfs;ssmergeinnerdeletionconfs;ssmergetaeconfs;ssmergenereoconfs;"
+				+ "ssmergeinitlblocksconfs;ssmergeacidentalconfs;unmergeconfs;unmergeloc;unmergetime;ssmergetime;unmergeduplicateddeclarationerrors;"
+				+ "unmergeorderingconfs;equalconfs\n";
 
 		//reading the log file to see if it is not empty neither contains the header
 		if(!new File(logpath).exists()){

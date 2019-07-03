@@ -21,15 +21,16 @@ public class MergeConflict {
 	public File baseOriginFile;
 	public File rightOriginFile;
 	
+	public String fullyQualifiedMergedClass;
 
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent) {
 		this.left  = leftConflictingContent;
 		this.right = rightConflictingContent;
 		this.body  ="<<<<<<< MINE\n"+
 				    leftConflictingContent+
-				    "=======\n"+
+				    "\n=======\n"+
 				    rightConflictingContent+
-				    ">>>>>>> YOURS";
+				    "\n>>>>>>> YOURS";
 	}
 	
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent, int startLOC, int endLOC) {
@@ -39,7 +40,7 @@ public class MergeConflict {
 				    leftConflictingContent+
 				    "=======\n"+
 				    rightConflictingContent+
-				    ">>>>>>> YOURS";
+				    "\n>>>>>>> YOURS";
 		this.startLOC = startLOC;
 		this.endLOC = endLOC;
 	}
@@ -71,6 +72,15 @@ public class MergeConflict {
 		this.rightOriginFile = right;
 		this.baseOriginFile = base;
 	}
+	
+	public String getFullyQualifiedMergedClass() {
+		return fullyQualifiedMergedClass;
+	}
+
+	public void setFullyQualifiedMergedClass(String fullyQualifiedMergedClass) {
+		this.fullyQualifiedMergedClass = fullyQualifiedMergedClass;
+	}
+	
 	
 	@Override
 	public String toString() {
