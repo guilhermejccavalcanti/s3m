@@ -11,6 +11,7 @@ import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Optional;
@@ -177,26 +178,18 @@ public class RenamingUtils {
     }
 
     public static boolean haveEqualSignatureButName(FSTNode left, FSTNode right) {
-        Triple<String, String, String> leftSignature = getSplitSignature(left);
-        Triple<String, String, String> rightSignature = getSplitSignature(right);
+        String[] leftArgumentTypes = getMethodArgumentTypes(left);
+        String[] rightArgumentTypes = getMethodArgumentTypes(right);
 
-        return leftSignature.getLeft().equals(rightSignature.getLeft()) && leftSignature.getRight().equals(rightSignature.getRight());
+        return Arrays.equals(leftArgumentTypes, rightArgumentTypes);
     }
 
-    private static Triple<String, String, String> getSplitSignature(FSTNode node) {
+    private static String[] getMethodArgumentTypes(FSTNode node) {
+        // The signature is stored in a FSTNode has the format 'name(arg1-arg2-arg3-...)'.
         String[] nodeNameAndArguments = node.getName().split("[()]");
-        String nodeName = nodeNameAndArguments[0];
-        String nodeBody = ((FSTTerminal) node).getBody();
-        String nodeSignature = getSignature(nodeBody);
-        return Triple.of(getPrefix(nodeSignature, nodeName), nodeName, getSuffix(nodeSignature));
-    }
-
-    private static String getSuffix(String signature) {
-        return FilesManager.getStringContentIntoSingleLineNoSpacing(signature.substring(signature.indexOf("(")));
-    }
-
-    private static String getPrefix(String signature, String name) {
-        return FilesManager.getStringContentIntoSingleLineNoSpacing(signature.substring(0, signature.indexOf(name)));
+        
+        String[] arguments = nodeNameAndArguments[1].split("-");
+        return arguments;
     }
 
     public static boolean oneContainsTheBodyFromTheOther(FSTNode left, FSTNode right) {
