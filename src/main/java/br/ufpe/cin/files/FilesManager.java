@@ -679,7 +679,7 @@ public final class FilesManager {
 	public static String getFullyQualifiedName(File fileClass) {
 		try {
 			String fullqualifiedname = "";
-			CompilationUnit indenter = JavaParser.parse(fileClass);
+			CompilationUnit indenter = JavaParser.parse(fileClass, "");
 			PackageDeclaration pckg = indenter.getPackage();
 			if(pckg!=null){
 				fullqualifiedname += pckg.getPackageName();
@@ -702,7 +702,7 @@ public final class FilesManager {
 	 */
 	public static String lastLine(String filePath){
 		String lastLine = null;
-		try(BufferedReader reader = new BufferedReader(new FileReader(filePath))) {
+		try(BufferedReader reader = Files.newBufferedReader(Paths.get(filePath), Charset.forName("UTF-8"))) {
 			String currentLine = null;
 			while ((currentLine = reader.readLine()) != null){
 				lastLine = currentLine;
