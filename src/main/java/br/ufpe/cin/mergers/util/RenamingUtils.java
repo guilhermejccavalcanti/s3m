@@ -78,10 +78,13 @@ public class RenamingUtils {
 
         if(node.getType().equals("MethodDecl")) {
             return ((FSTTerminal) node).getComponent("MethodDeclarationBody1");
-        } else if(node.getType().equals("ConstructorDecl")) {
-            String hey = ((FSTTerminal) node).getComponent("ConstructorDeclarationBody");
-            return hey;
-        } else 
+        } 
+        
+        else if(node.getType().equals("ConstructorDecl")) {
+            return ((FSTTerminal) node).getComponent("ConstructorDeclarationBody");
+        } 
+        
+        else 
             return StringUtils.EMPTY;
     }
 
