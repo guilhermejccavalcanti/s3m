@@ -165,14 +165,6 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 		if (nonTerminal.getType().equals("EnumConstants")) {
 			printFeatures(nonTerminal,true);
 			Iterator<FSTNode> listElements = getChildren(nonTerminal, "EnumConstant").iterator();
-
-			//fix commas
-			List<FSTNode> copy = new ArrayList<FSTNode>();
-			List<FSTNode> nonempty = new ArrayList<FSTNode>();
-			while (listElements.hasNext())copy.add(listElements.next());
-			for(FSTNode n:copy)if(!((FSTTerminal)n).getBody().isEmpty())nonempty.add(n);
-			listElements = nonempty.iterator();
-
 			if (listElements.hasNext()) {
 				listElements.next().accept(this);
 			}

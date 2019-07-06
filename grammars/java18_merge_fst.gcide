@@ -625,10 +625,7 @@ ConstructorDeclaration:
 		[ LOOK_AHEAD("Annotation()") Annotation ]
 		[ TypeParameters]
 		<IDENTIFIER> FormalParameters [ "throws" NameList ]
-		"{"
-		[ LOOK_AHEAD("ExplicitConstructorInvocation()") ExplicitConstructorInvocation ]
-		( BlockStatement )*
-"}"
+		ConstructorDeclarationBody
 ;
 
 ExplicitConstructorInvocation:
@@ -637,6 +634,13 @@ ExplicitConstructorInvocation:
 		LOOK_AHEAD("TypeArguments() \"this\" Arguments() \";\"") TypeArguments "this" Arguments ";" @!
 		|
 		[LOOK_AHEAD("PrimaryExpression() \".\"") PrimaryExpression "." ] [ TypeArguments ] "super" Arguments ";"	
+;
+
+ConstructorDeclarationBody:
+		"{"
+		[ LOOK_AHEAD("ExplicitConstructorInvocation()") ExplicitConstructorInvocation ]
+		( BlockStatement )*
+		"}"
 ;
 
 Initializer:  
