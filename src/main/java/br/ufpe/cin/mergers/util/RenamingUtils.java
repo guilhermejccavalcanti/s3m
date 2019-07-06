@@ -73,12 +73,16 @@ public class RenamingUtils {
     }
 
     public static String getNodeBodyWithoutSignature(FSTNode node) {
-        return Optional.of(node)
-                .map(FSTTerminal.class::cast)
-                .map(FSTTerminal::getBody)
-                .map(FilesManager::getStringContentIntoSingleLineNoSpacing)
-                .map(RenamingUtils::removeSignature)
-                .orElse(StringUtils.EMPTY);
+        if(node == null) 
+            return StringUtils.EMPTY;
+
+        if(node.getType().equals("MethodDecl")) {
+            return ((FSTTerminal) node).getComponent("MethodDeclarationBody1");
+        } else if(node.getType().equals("ConstructorDecl")) {
+            String hey = ((FSTTerminal) node).getComponent("ConstructorDeclarationBody");
+            return hey;
+        } else 
+            return StringUtils.EMPTY;
     }
 
     public static String removeSignature(String string) {
