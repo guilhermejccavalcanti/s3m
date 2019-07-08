@@ -76,16 +76,16 @@ public class RenamingUtils {
         if(node == null) 
             return StringUtils.EMPTY;
 
-        if(node.getType().equals("MethodDecl")) {
-            return ((FSTTerminal) node).getComponent("MethodDeclarationBody1");
+        String nodeBody = null;
+        if(isMethod(node)) {
+            nodeBody = ((FSTTerminal) node).getComponent("MethodDeclarationBody1");
         } 
         
-        else if(node.getType().equals("ConstructorDecl")) {
-            return ((FSTTerminal) node).getComponent("ConstructorDeclarationBody");
+        else if(isConstructor(node)) {
+            nodeBody = ((FSTTerminal) node).getComponent("ConstructorDeclarationBody");
         } 
         
-        else 
-            return StringUtils.EMPTY;
+        return (nodeBody == null) ? StringUtils.EMPTY : nodeBody;
     }
 
     public static String removeSignature(String string) {
@@ -104,12 +104,15 @@ public class RenamingUtils {
     }
 
     public static boolean isMethodOrConstructorNode(FSTNode node) {
-        if (node instanceof FSTTerminal) {
-            String nodeType = node.getType();
-            return nodeType.equals("MethodDecl") || nodeType.equals("ConstructorDecl");
-        }
+        return isMethod(node) || isConstructor(node);
+    }
 
-        return false;
+    private static boolean isMethod(FSTNode node) {
+        return node instanceof FSTTerminal && node.getType().equals("MethodDecl");
+    }
+
+    private static boolean isConstructor(FSTNode node) {
+        return node instanceof FSTTerminal && node.getType().equals("ConstructorDecl");
     }
 
     public static boolean haveSameParent(FSTNode left, FSTNode right) {
