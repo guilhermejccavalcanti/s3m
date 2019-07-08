@@ -192,7 +192,7 @@ public class RenamingUtils {
     }
 
     private static String[] getMethodArgumentTypes(FSTNode node) {
-        // The signature is stored in a FSTNode has the format 'name(arg1-arg2-arg3-...)'.
+        // The signature is stored in a FSTNode has the format 'name(arg1-arg1-arg2-arg2-arg3-arg3...)'.
         String[] nodeNameAndArguments = node.getName().split("[()]");
         
         String[] arguments = nodeNameAndArguments[1].split("-");
