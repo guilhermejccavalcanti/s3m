@@ -73,19 +73,10 @@ public class RenamingUtils {
     }
 
     public static String getNodeBodyWithoutSignature(FSTNode node) {
-        if(node == null) 
-            return StringUtils.EMPTY;
-
-        String nodeBody = null;
-        if(isMethod(node)) {
-            nodeBody = ((FSTTerminal) node).getComponent("MethodDeclarationBody1");
-        } 
+        if(isMethodOrConstructorNode(node))
+            return ((FSTTerminal) node).getDeclarationBody();
         
-        else if(isConstructor(node)) {
-            nodeBody = ((FSTTerminal) node).getComponent("ConstructorDeclarationBody");
-        } 
-        
-        return (nodeBody == null) ? StringUtils.EMPTY : nodeBody;
+        return StringUtils.EMPTY;
     }
 
     public static String removeSignature(String string) {
