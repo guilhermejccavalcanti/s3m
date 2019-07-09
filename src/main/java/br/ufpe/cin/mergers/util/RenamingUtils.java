@@ -197,7 +197,7 @@ public class RenamingUtils {
         String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
         String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
 
-        return leftBody.contains(rightBody) || rightBody.contains(leftBody);
+        return leftBody != StringUtils.EMPTY && rightBody != StringUtils.EMPTY && (leftBody.contains(rightBody) || rightBody.contains(leftBody));
     }
 
     public static boolean haveDifferentBody(FSTNode left, FSTNode right) {
