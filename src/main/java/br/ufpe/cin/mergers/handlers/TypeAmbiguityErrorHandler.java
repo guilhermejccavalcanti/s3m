@@ -182,7 +182,7 @@ public final class TypeAmbiguityErrorHandler implements ConflictHandler {
 	 */
 	private static void generateConflictWithImportStatements(MergeContext context, String leftImportStatement,String rightImportStatement) {
 		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(leftImportStatement+'\n', rightImportStatement+'\n');
+		MergeConflict newConflict = new MergeConflict(leftImportStatement, "", rightImportStatement);
 		//second put the conflict in one of the nodes containing the import statements, and deletes the other node containing the orther import statement
 		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftImportStatement, newConflict.body);
 		FilesManager.findAndDeleteASTNode(context.superImposedTree, rightImportStatement);
