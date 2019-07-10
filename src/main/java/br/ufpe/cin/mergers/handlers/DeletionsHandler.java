@@ -133,7 +133,7 @@ public class DeletionsHandler implements ConflictHandler {
 					FSTNonTerminal declarationInSource = correspondingInSource.getParent();
 					//conflict only if there are editions to the original element
 					if(hasChanges(deletedNode, declarationInSource)){ 
-						generateNonTerminalConflict(source, identifier, isLeftDeletion,	parent, index, context);
+						generateNonTerminalConflict(source, deletedNode, identifier, isLeftDeletion,	parent, index, context);
 					}
 				}
 			}
@@ -184,19 +184,20 @@ public class DeletionsHandler implements ConflictHandler {
 	}
 
 	private static void generateNonTerminalConflict(FSTNode source,
-			String identifier, boolean isLeftDeletion, FSTNonTerminal parent,
-			int index, MergeContext context) {
+			FSTNode baseNode, String identifier, boolean isLeftDeletion,
+			FSTNonTerminal parent, int index, MergeContext context) {
 		/*This is a workaround as there is no comprehensive way to create a conflict for a non-terminal node.
 			We pretty print the non-terminal node and create a terminal node representation instead.*/
 		FSTNode correspondingInSource = FilesManager.findNodeByID(source, identifier);
 		if(correspondingInSource!=null){
 			FSTNonTerminal declarationInSource = correspondingInSource.getParent();
-			String body = FilesManager.prettyPrint((FSTNonTerminal) declarationInSource);
+			String contributionBody = FilesManager.prettyPrint((FSTNonTerminal) declarationInSource);
+			String baseBody = FilesManager.prettyPrint((FSTNonTerminal) baseNode);
 			MergeConflict newConflict;
 			if(isLeftDeletion){
-				newConflict = new MergeConflict("", body+'\n');
+				newConflict = new MergeConflict("", baseBody, contributionBody);
 			} else {
-				newConflict = new MergeConflict(body+'\n',"");
+				newConflict = new MergeConflict(contributionBody, baseBody, "");
 			}
 			FSTTerminal terminal = new FSTTerminal(declarationInSource.getType(), identifier, newConflict.body, "");
 			parent.addChild(terminal, index);
