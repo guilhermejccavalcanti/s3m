@@ -5,6 +5,7 @@ import java.util.List;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.Traverser;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
@@ -33,7 +34,8 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 						String editedElementIdentfier = getElementIdentifier(editedRightNode);
 						if(thereIsUnstructuredConflictWithAddedAndEditedElements(unstructuredMergeConflicts, newElementContent, editedElementContent)){
 							if(addedElementRefersToEditedOne(newElementContent,editedElementIdentfier)){
-								generateConflictWithAddedAndEditedElements(context, ((FSTTerminal)editedRightNode).getBody(),newElementContent);
+								String baseContent = getBaseContent(context, editedRightNode);
+								generateConflictWithAddedAndEditedElements(context, ((FSTTerminal)editedRightNode).getBody(), baseContent, newElementContent);
 							}
 						}
 					}
@@ -49,7 +51,8 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 						String editedElementIdentfier = getElementIdentifier(editedLeftNode);
 						if(thereIsUnstructuredConflictWithAddedAndEditedElements(unstructuredMergeConflicts, newElementContent, editedElementContent)){
 							if(addedElementRefersToEditedOne(newElementContent,editedElementIdentfier)){
-								generateConflictWithAddedAndEditedElements(context, ((FSTTerminal)editedLeftNode).getBody(),newElementContent);
+								String baseContent = getBaseContent(context, editedLeftNode);
+								generateConflictWithAddedAndEditedElements(context, ((FSTTerminal)editedLeftNode).getBody(), baseContent, newElementContent);
 							}
 						}
 					}
@@ -108,14 +111,20 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 	 * @param editedElementContent
 	 * @param addedElementContent
 	 */
-	private static void generateConflictWithAddedAndEditedElements(MergeContext context, String editedElementContent,String addedElementContent) {
+	private static void generateConflictWithAddedAndEditedElements(MergeContext context, String editedElementContent, String baseContent, String addedElementContent) {
 		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(editedElementContent+'\n', addedElementContent+'\n');
+		MergeConflict newConflict = new MergeConflict(editedElementContent, baseContent, addedElementContent);
 		//second put the conflict in one of the nodes containing the import statements, and deletes the other node containing the orther import statement
 		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, editedElementContent, newConflict.body);
 		FilesManager.findAndDeleteASTNode(context.superImposedTree, addedElementContent);
 		
 		//statistics
 		context.newElementReferencingEditedOneConflicts++;
+	}
+
+	private static String getBaseContent(MergeContext context, FSTNode editedNode) {
+		// The edited node has the same identifier as the base node.
+		FSTNode baseNode = Traverser.retrieveNodeFromTree(editedNode, context.baseTree);
+		return ((FSTTerminal) baseNode).getBody();
 	}
 }
