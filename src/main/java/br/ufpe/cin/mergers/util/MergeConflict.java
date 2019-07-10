@@ -23,6 +23,19 @@ public class MergeConflict {
 	
 	public String fullyQualifiedMergedClass;
 
+	public MergeConflict(String leftConflictingContent, String baseConflictingContent, String rightConflictingContent) {
+		this.left = leftConflictingContent;
+		this.base = baseConflictingContent;
+		this.right = rightConflictingContent;
+		this.body = "<<<<<<< MINE\n" + 
+					leftConflictingContent + 
+					"\n|||||||\n" +
+					baseConflictingContent +
+					"\n=======\n" +
+					rightConflictingContent +
+					"\n>>>>>>> YOURS";
+	}
+
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent) {
 		this.left  = leftConflictingContent;
 		this.right = rightConflictingContent;
@@ -45,15 +58,15 @@ public class MergeConflict {
 		this.endLOC = endLOC;
 	}
 	
-	public MergeConflict(String leftConflictingContent,	String rightConflictingContent, String message) {
-		this.left  = leftConflictingContent;
-		this.right = rightConflictingContent;
-		this.body  ="<<<<<<< MINE\n"+
-				    leftConflictingContent+
-				    "======= "+ message + " \n" +
-				    rightConflictingContent+
-				    ">>>>>>> YOURS";
-	}
+	// public MergeConflict(String leftConflictingContent,	String rightConflictingContent, String message) {
+	// 	this.left  = leftConflictingContent;
+	// 	this.right = rightConflictingContent;
+	// 	this.body  ="<<<<<<< MINE\n"+
+	// 			    leftConflictingContent+
+	// 			    "======= "+ message + " \n" +
+	// 			    rightConflictingContent+
+	// 			    ">>>>>>> YOURS";
+	// }
 	
 	public boolean contains(String leftPattern, String rightPattern){
 		if(leftPattern.isEmpty() || rightPattern.isEmpty()){
