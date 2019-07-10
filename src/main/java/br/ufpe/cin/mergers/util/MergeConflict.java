@@ -29,7 +29,7 @@ public class MergeConflict {
 		this.right = rightConflictingContent;
 		this.body = "<<<<<<< MINE\n" + 
 					leftConflictingContent + 
-					"\n|||||||\n" +
+					"\n||||||| BASE\n" +
 					baseConflictingContent +
 					"\n=======\n" +
 					rightConflictingContent +
