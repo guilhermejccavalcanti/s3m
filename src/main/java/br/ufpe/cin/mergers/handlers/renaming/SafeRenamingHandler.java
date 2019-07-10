@@ -64,7 +64,7 @@ public class SafeRenamingHandler implements RenamingHandler {
         FSTNode mergeNode = scenarioNodes.getValue3();
 
         if (isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isRenamingWithoutBodyChanges(Side.RIGHT, baseNode, context)) {
-            decideWhenBothRenamedWithoutBodyChanges(context, leftNode, rightNode, mergeNode);
+            decideWhenBothRenamedWithoutBodyChanges(context, leftNode, baseNode, rightNode, mergeNode);
         }
 
         else if (isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) {
@@ -80,12 +80,12 @@ public class SafeRenamingHandler implements RenamingHandler {
         }
     }
 
-    private void decideWhenBothRenamedWithoutBodyChanges(MergeContext context, FSTNode leftNode, FSTNode rightNode,
+    private void decideWhenBothRenamedWithoutBodyChanges(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode,
             FSTNode mergeNode) {
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
             return;
         else
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode);
     }
 
     private void decideWhenTheyRenamedDifferently(MergeContext context, FSTNode leftNode, FSTNode baseNode,
@@ -94,12 +94,12 @@ public class SafeRenamingHandler implements RenamingHandler {
                 
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode)) {
             if (thereIsNewReference(toCheckReferencesFile, signature, context.getBase())) {
-                RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
+                RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode);
             } else {
                 RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
             }
         } else {
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode);
         }
     }
 
@@ -108,7 +108,7 @@ public class SafeRenamingHandler implements RenamingHandler {
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
             RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
         else
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode, mergeNode);
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode);
     }
 
     private boolean isRenamingWithoutBodyChanges(Side renamingSide, FSTNode baseNode, MergeContext context) {

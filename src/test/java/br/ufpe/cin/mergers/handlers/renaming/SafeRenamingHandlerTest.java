@@ -111,8 +111,7 @@ public class SafeRenamingHandlerTest {
 	@Test
 	public void testHandle_whenBothRenameMethodWithoutBodyChanges_andBothRenameToDifferentNames_shouldReportConflict() {
 		merge(renamedMethodWithoutBodyChangesFile1, renamedMethodWithoutBodyChangesFile2);
-		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "<<<<<<<MINEpublicvoidmethod1(intx,inty){inta;intb;intc;}" 
-				+ "=======publicvoidmethod2(intx,inty){inta;intb;intc;}>>>>>>>YOURS");
+		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "<<<<<<<MINEpublicvoidmethod1(intx,inty){inta;intb;intc;}|||||||publicvoidmethod(intx,inty){inta;intb;intc;}=======publicvoidmethod2(intx,inty){inta;intb;intc;}>>>>>>>YOURS");
 	}
 
 	@Test
@@ -133,14 +132,14 @@ public class SafeRenamingHandlerTest {
 	public void testHandle_whenLeftRenamesMethodWithoutBodyChanges_andRightRenamesMethodWithBodyChanges_andBothRenameToDifferentNames_shouldReportConflict() {
 		merge(renamedMethodWithoutBodyChangesFile1, renamedMethodWithBodyChangesFile2);
 		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
-				"<<<<<<<MINEpublicvoidmethod1(intx,inty){inta;intb;intc;}=======publicvoidmethod2(intx,inty){inta;intb;intd;}>>>>>>>YOURS");
+				"<<<<<<<MINEpublicvoidmethod1(intx,inty){inta;intb;intc;}|||||||publicvoidmethod(intx,inty){inta;intb;intc;}=======publicvoidmethod2(intx,inty){inta;intb;intd;}>>>>>>>YOURS");
 	}
 
 	@Test
 	public void testHandle_whenRightRenamesMethodWithoutBodyChanges_andLeftRenamesMethodWithBodyChanges_andBothRenameToDifferentNames_shouldReportConflict() {
 		merge(renamedMethodWithBodyChangesFile1, renamedMethodWithoutBodyChangesFile2);
 		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
-				"<<<<<<<MINEpublicvoidmethod1(intx,inty){intd;intb;intc;}=======publicvoidmethod2(intx,inty){inta;intb;intc;}>>>>>>>YOURS");
+				"<<<<<<<MINEpublicvoidmethod1(intx,inty){intd;intb;intc;}|||||||publicvoidmethod(intx,inty){inta;intb;intc;}=======publicvoidmethod2(intx,inty){inta;intb;intc;}>>>>>>>YOURS");
 	}
 
 	@Test
@@ -153,21 +152,21 @@ public class SafeRenamingHandlerTest {
 	public void testHandle_whenBothRenameMethodWithBodyChanges_andBothRenameToDifferentNames_shouldReportConflict() {
 		merge(renamedMethodWithBodyChangesFile1, renamedMethodWithBodyChangesFile2);
 		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
-				"<<<<<<<MINEpublicvoidmethod1(intx,inty){intd;intb;intc;}=======publicvoidmethod2(intx,inty){inta;intb;intd;}>>>>>>>YOURS");
+				"<<<<<<<MINEpublicvoidmethod1(intx,inty){intd;intb;intc;}|||||||publicvoidmethod(intx,inty){inta;intb;intc;}=======publicvoidmethod2(intx,inty){inta;intb;intd;}>>>>>>>YOURS");
 	}
 
 	@Test
 	public void testHandle_whenLeftDeletesMethod_andRightRenamesMethod_shouldReportConflict() {
 		merge(removedMethodFile, renamedMethodWithBodyChangesFile1);
 		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
-				"<<<<<<<MINE=======publicvoidmethod1(intx,inty){intd;intb;intc;}>>>>>>>YOURS");
+				"<<<<<<<MINE|||||||publicvoidmethod(intx,inty){inta;intb;intc;}=======publicvoidmethod1(intx,inty){intd;intb;intc;}>>>>>>>YOURS");
 	}
 
 	@Test
 	public void testHandle_whenRightDeletesMethod_andLeftRenamesMethod_shouldReportConflict() {
 		merge(renamedMethodWithoutBodyChangesFile2, removedMethodFile);
 		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
-				"<<<<<<<MINEpublicvoidmethod2(intx,inty){inta;intb;intc;}=======>>>>>>>YOURS");
+				"<<<<<<<MINEpublicvoidmethod2(intx,inty){inta;intb;intc;}|||||||publicvoidmethod(intx,inty){inta;intb;intc;}=======>>>>>>>YOURS");
 	}
 
 	@Test

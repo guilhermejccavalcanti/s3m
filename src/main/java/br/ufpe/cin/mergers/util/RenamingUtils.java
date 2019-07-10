@@ -134,13 +134,14 @@ public class RenamingUtils {
         }
     }
 
-    public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
+    public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode) {
         String leftContent = getNodeContent(leftNode);
+        String baseContent = getNodeContent(baseNode);
         String rightContent = getNodeContent(rightNode);
 
         context.renamingConflicts++;
 
-        MergeConflict conflict = new MergeConflict(leftContent, rightContent);
+        MergeConflict conflict = new MergeConflict(leftContent, baseContent, rightContent);
         ((FSTTerminal) mergeNode).setBody(conflict.body);
 
         removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
