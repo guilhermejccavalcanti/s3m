@@ -617,7 +617,7 @@ FSTInfo FinalOrAnnotation(boolean inTerminal) : { Token first=null,t;FSTInfo n;
 
 FSTInfo ConstructorDeclaration(boolean inTerminal) : { Token first=null,t;FSTInfo n; 
 } { {first=getToken(1); productionStart(inTerminal); } (
-	[LOOKAHEAD(Annotation()) n=Annotation(true){ replaceName(n);}] [n=TypeParameters(true){ replaceName(n);}] t=<IDENTIFIER>{ replaceName(new FSTInfo("<IDENTIFIER>",t.image));} n=FormalParameters(true){ replaceName("FormalParameters", n);}{ replaceName(n);} ["throws" n=NameList(true){ replaceName(n);}] "{" [LOOKAHEAD(ExplicitConstructorInvocation()) n=ExplicitConstructorInvocation(true){ replaceName(n);}] (n=BlockStatement(true){ replaceName(n);})* "}" {return productionEndTerminal("ConstructorDeclaration","-","{<IDENTIFIER>}({FormalParameters})","Replacement","Default",first,token);}
+	[LOOKAHEAD(Annotation()) n=Annotation(true){ replaceName(n);}] [n=TypeParameters(true){ replaceName(n);}] t=<IDENTIFIER>{ replaceName(new FSTInfo("<IDENTIFIER>",t.image));} n=FormalParameters(true){ replaceName("FormalParameters", n);}{ replaceName(n);} ["throws" n=NameList(true){ replaceName(n);}] n=ConstructorDeclarationBody(true){ replaceName(n);} {return productionEndTerminal("ConstructorDeclaration","-","{<IDENTIFIER>}({FormalParameters})","Replacement","Default",first,token);}
 
  )  }
 
@@ -628,6 +628,12 @@ FSTInfo ExplicitConstructorInvocation(boolean inTerminal) : { Token first=null,t
 	LOOKAHEAD(TypeArguments() "this" Arguments() ";") n=TypeArguments(true){ replaceName(n);} "this" n=Arguments(true){ replaceName(n);} ";" {return productionEndTerminal("ExplicitConstructorInvocation2","-","-","Replacement","Default",first,token);}
  |
 	[LOOKAHEAD(PrimaryExpression() ".") n=PrimaryExpression(true){ replaceName(n);} "."] [n=TypeArguments(true){ replaceName(n);}] "super" n=Arguments(true){ replaceName(n);} ";" {return productionEndTerminal("ExplicitConstructorInvocation3","-","-","Replacement","Default",first,token);}
+
+ )  }
+
+FSTInfo ConstructorDeclarationBody(boolean inTerminal) : { Token first=null,t;FSTInfo n; 
+} { {first=getToken(1); productionStart(inTerminal); } (
+	"{" [LOOKAHEAD(ExplicitConstructorInvocation()) n=ExplicitConstructorInvocation(true){ replaceName(n);}] (n=BlockStatement(true){ replaceName(n);})* "}" {return productionEndTerminal("ConstructorDeclarationBody","-","-","Replacement","Default",first,token);}
 
  )  }
 

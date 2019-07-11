@@ -23,6 +23,9 @@ public class MergeMethodsRenamingHandlerTest {
             "testfiles/renaming/method/renamed_method_with_body_changes_2/Test.java");
     private File renamedMethodWithBodyChangesFile3 = new File(
             "testfiles/renaming/method/renamed_method_with_body_changes_3/Test.java");
+    private File abstractMethod1 = new File("testfiles/renaming/abstract_method/left/Test.java");
+    private File abstractMethod2 = new File("testfiles/renaming/abstract_method/base/Test.java");
+    private File abstractMethod3 = new File("testfiles/renaming/abstract_method/right/Test.java");
 
     private JFSTMerge jfstMerge = new JFSTMerge();
     private MergeContext mergeContext;
@@ -88,10 +91,21 @@ public class MergeMethodsRenamingHandlerTest {
         merge(renamedMethodWithBodyChangesFile2, renamedMethodWithoutBodyChangesFile1);
         TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
                 "<<<<<<<MINEpublicvoidmethod2(intx,inty){=======publicvoidmethod1(intx,inty){>>>>>>>YOURSinta;intb;intd;}");
-    }    
+    }
+    
+    @Test
+    public void testHandle_abstractMethods_whenBothRenameToDifferentName_shouldReportConflict() {
+        merge(abstractMethod1, abstractMethod2, abstractMethod3);
+        TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
+                "<<<<<<<MINEpublicabstractvoidn1();=======publicabstractvoidn2();>>>>>>>YOURS");
+    }
 
     private void merge(File left, File right) {
         mergeContext = jfstMerge.mergeFiles(left, baseFile, right, null);
+    }
+
+    private void merge(File left, File base, File right) {
+        mergeContext = jfstMerge.mergeFiles(left, base, right, null);
     }
 
 }
