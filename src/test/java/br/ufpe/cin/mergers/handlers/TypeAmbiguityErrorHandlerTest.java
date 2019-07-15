@@ -37,7 +37,7 @@ public class TypeAmbiguityErrorHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("<<<<<<<MINEimportjava.awt.List;|||||||=======importjava.util.List;>>>>>>>YOURS");
+		assertThat(mergeResult).contains("<<<<<<<MINEimportjava.awt.List;|||||||BASE=======importjava.util.List;>>>>>>>YOURS");
 		assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
 	}
 
@@ -50,7 +50,7 @@ public class TypeAmbiguityErrorHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.*;|||||||=======importpcktright.*;>>>>>>>YOURS");
+		assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.*;|||||||BASE=======importpcktright.*;>>>>>>>YOURS");
 		assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
 	}
 
@@ -63,7 +63,7 @@ public class TypeAmbiguityErrorHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.A;|||||||=======importpcktright.*;>>>>>>>YOURS");
+		assertThat(mergeResult).contains("<<<<<<<MINEimportpckt.A;|||||||BASE=======importpcktright.*;>>>>>>>YOURS");
 		assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
 	}
 

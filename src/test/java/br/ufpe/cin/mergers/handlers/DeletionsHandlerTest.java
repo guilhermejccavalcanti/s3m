@@ -106,7 +106,7 @@ public class DeletionsHandlerTest {
 				new File("testfiles/deletioninnernewinstanceofrenamed/base.java"), 
 				new File("testfiles/deletioninnernewinstanceofrenamed/right.java"),
 				null);
-		assertEquals("packagecom.example;publicclassTest{<<<<<<<MINE|||||||classA{doublea;}=======classA{doublea;doubleb;}>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}", FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput));
+		assertEquals("packagecom.example;publicclassTest{<<<<<<<MINE|||||||BASEclassA{doublea;}=======classA{doublea;doubleb;}>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}", FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput));
 		assertEquals(1, ctx.innerDeletionConflicts);
 
 	}
@@ -175,7 +175,7 @@ public class DeletionsHandlerTest {
 				new File("testfiles/deletioninnernewinstanceofrenamed/base.java"), 
 				new File("testfiles/deletioninnernewinstanceofrenamed/left.java"), 
 				null);
-		assertEquals("packagecom.example;publicclassTest{<<<<<<<MINEclassA{doublea;doubleb;}|||||||classA{doublea;}=======>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}", FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput));
+		assertEquals("packagecom.example;publicclassTest{<<<<<<<MINEclassA{doublea;doubleb;}|||||||BASEclassA{doublea;}=======>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}", FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput));
 		assertEquals(1, ctx.innerDeletionConflicts);
 	}
 	
