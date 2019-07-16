@@ -21,6 +21,7 @@ import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.TextualMerge;
+import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
@@ -41,11 +42,9 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     private final static String VAR_DECLARATION_ASSIGNMENT_REGEX = "^([a-zA-Z_$][a-zA-Z_$0-9]*)? "
     		+ "*([a-zA-Z_$][a-zA-Z_$0-9]*) *(=|\\.set) *(.*)?;$";
     
-    // conflict markers
-    private final static String CONFLICT_MARKER = "<<<<<<<";
-    private final static String CONLFICT_MINE = "<<<<<<< MINE";
-    private final static String CONFLICT_YOURS = ">>>>>>> YOURS";
-    private final static String CONFLICTS_SEPARATOR = "=======";
+    private final static String CONFLICT_MARKER = "<<<<<<<";   
+    private final static double INSERTION_THRESHOLD = 0.7;
+    private final static double SIMILARITY_THRESHOLD = 0.5;
     
 	public void handle(MergeContext context) throws TextualMergeException {
 		
@@ -56,9 +55,11 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
         Map<FSTNode, FSTNode> baseLeftEditedNodesMap = selectEditedNodes(leftNodes, baseNodes);
         Map<FSTNode, FSTNode> baseRightEditedNodesMap = selectEditedNodes(rightNodes, baseNodes);
 
+        // pair of nodes lists added by left and right respectively
         Pair<List<FSTNode>, List<FSTNode>> addedNodes = selectAddedNodes(leftNodes, baseNodes, rightNodes,
         		baseLeftEditedNodesMap.values(), baseRightEditedNodesMap.values());
        
+        // pair of nodes lists deleted by left and right respectively
         Pair<List<FSTNode>, List<FSTNode>> deletedNodes = selectDeletedNodes(leftNodes, baseNodes, rightNodes,
         		baseLeftEditedNodesMap.keySet(), baseRightEditedNodesMap.keySet());
         
@@ -91,7 +92,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     		Pair<FSTNode, Double> maxSimilarityPair = maxSimilarity(node, deletedCandidates);
     		FSTNode baseNode = getBaseNode(maxInsertionPair, maxSimilarityPair);
     		
-    		if(baseNode != null && (maxInsertionPair.getValue() > 0.7 || maxSimilarityPair.getValue() > 0.5)) {
+    		if(baseNode != null && (maxInsertionPair.getValue() > INSERTION_THRESHOLD ||
+    				maxSimilarityPair.getValue() > SIMILARITY_THRESHOLD)) {
     			baseEditedNodesMap.put(baseNode, node);
     		}
     	}
@@ -103,8 +105,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 			Pair<List<FSTNode>,List<FSTNode>> deletedNodes) throws TextualMergeException {
 		
 		String baseContent = ((FSTTerminal) baseNode).getBody();
-		String leftContent = (leftNode != null) ? ((FSTTerminal) leftNode).getBody() : "";
-		String rightContent = (rightNode != null) ? ((FSTTerminal) rightNode).getBody() : "";
+		String leftContent = getNodeBody(leftNode);
+		String rightContent = getNodeBody(rightNode);
 
 		if(leftNode != null && rightNode != null) {
 			// both branches edited the node
@@ -338,29 +340,14 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 			}
 			
 	    	String leftConflictContent = StringUtils.substringBetween(leftNodeContent, "{", "}").trim();
-			String mergedContent = getConflictNode(leftConflictContent, rightConflictContent.toString());
+	    	
+	    	StringBuffer staticBlock = new StringBuffer("static {");
+	    	MergeConflict mergeConflict = new MergeConflict(leftConflictContent, rightConflictContent.toString());
+			staticBlock.append(mergeConflict.body + "\n}");
 			
-			FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftNodeContent, mergedContent);
-			
-			if (mergedContent.contains(CONFLICT_MARKER)) {
-				context.initializationBlocksConflicts++;
-			}
+			FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftNodeContent, staticBlock.toString());
+			context.initializationBlocksConflicts++;
 		}
-	}
-	
-	private String getConflictNode(String leftConflictContent, String rightConflictContent) {
-		
-		StringBuffer conflict = new StringBuffer();
-		
-		conflict.append("static {" + "\n");
-		conflict.append(CONLFICT_MINE + "\n");
-		conflict.append(leftConflictContent + "\n");
-		conflict.append(CONFLICTS_SEPARATOR + "\n");
-		conflict.append(rightConflictContent + "\n");
-		conflict.append(CONFLICT_YOURS + "\n");
-		conflict.append("}");
-		
-		return conflict.toString();
 	}
 
 	private List<FSTNode> removeContainedNodesFromList(Collection<FSTNode> nodesList, 
@@ -373,8 +360,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	
     	for(FSTNode listNode : nodes) {
     		
-    		String listNodeContent = (listNode != null) ? ((FSTTerminal) listNode).getBody().trim() : "";
-            String nodeContent = (node != null) ? ((FSTTerminal) node).getBody().trim() : "";
+    		String listNodeContent = getNodeBody(listNode);
+            String nodeContent = getNodeBody(node);
 
             if(listNodeContent.equals(nodeContent))
             	return true;
@@ -382,6 +369,10 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	
     	return false;
     }
+
+	private String getNodeBody(FSTNode node) {
+		return (node != null) ? ((FSTTerminal) node).getBody().trim() : "";
+	}
   
     private List<FSTNode> findInitializationBlocks(List<FSTNode> nodes) {
        
