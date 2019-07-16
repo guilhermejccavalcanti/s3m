@@ -54,10 +54,11 @@ public final class SemistructuredMerge {
 		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
 			builder.add(new MethodAndConstructorRenamingAndDeletionHandler());
 
-		if(JFSTMerge.isInitializationBlocksHandlerEnabled)
+		if(JFSTMerge.isInitializationBlocksHandlerEnabled && 
+				!JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled)
 			builder.add(new InitializationBlocksHandler());
 		
-		if(JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled)
+		if(JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled) 
 			builder.add(new InitializationBlocksHandlerMultipleBlocks());
 
 		if(JFSTMerge.isDuplicatedDeclarationHandlerEnabled)
