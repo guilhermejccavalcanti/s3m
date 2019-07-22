@@ -183,7 +183,7 @@ public class SafeRenamingHandlerTest {
 	public void testHandle_abstractMethods_whenBothRenameToDifferentName_shouldReportConflict() {
 		merge(abstractMethod1, abstractMethod2, abstractMethod3);
 		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
-			"<<<<<<<MINEpublicabstractvoidn1();=======publicabstractvoidn2();>>>>>>>YOURS");
+			"<<<<<<<MINEpublicabstractvoidn1();|||||||BASEpublicabstractvoidm();=======publicabstractvoidn2();>>>>>>>YOURS");
 	}
 
     private void merge(File left, File right) {
