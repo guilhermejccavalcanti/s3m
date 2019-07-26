@@ -102,7 +102,7 @@ public class JFSTMerge {
 			arity = 1)
 	public static boolean isTypeAmbiguityErrorHandlerEnabled = true;
 
-	@Parameter(names = {"--show-base"}, description = "Outputs base's contribution in merge conflicts.")
+	@Parameter(names = {"--show-base", "--diff3-style"}, description = "Outputs base's contribution in merge conflicts.")
 	public static boolean showBase = false;
 
 	/**

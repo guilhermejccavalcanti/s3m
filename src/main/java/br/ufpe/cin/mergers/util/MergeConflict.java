@@ -2,6 +2,8 @@ package br.ufpe.cin.mergers.util;
 
 import java.io.File;
 
+import br.ufpe.cin.app.JFSTMerge;
+
 /**
  * Class representing a textual merge conflict.
  * @author Guilherme
@@ -27,13 +29,15 @@ public class MergeConflict {
 		this.left = leftConflictingContent;
 		this.base = baseConflictingContent;
 		this.right = rightConflictingContent;
-		this.body = "<<<<<<< MINE\n" + 
-					leftConflictingContent + 
-					"\n||||||| BASE\n" +
-					baseConflictingContent +
-					"\n=======\n" +
-					rightConflictingContent +
-					"\n>>>>>>> YOURS";
+
+		StringBuilder body = new StringBuilder();
+		body.append("<<<<<<< MINE\n").append(leftConflictingContent);
+		if(JFSTMerge.showBase) {
+			body.append("\n||||||| BASE\n").append(baseConflictingContent);
+		}
+		body.append("\n=======\n").append(leftConflictingContent).append("\n>>>>>>> YOURS");
+		
+		this.body = body.toString();
 	}
 
 	public MergeConflict(String leftConflictingContent,	String rightConflictingContent) {
