@@ -275,8 +275,6 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 	private Set<String> getGlobalVariables(String nodeContent) {
 		
 		List<String> nodeContentLines = Arrays.asList(nodeContent.split(LINE_BREAK_REGEX));
-		Set<String> nodeGlobalVars = new HashSet<String>();
-		Set<String> localVars = new HashSet<String>();
 		
 		/* 
 		 * Compiles the regex for var assignment or declaration. 
@@ -288,17 +286,18 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		 */
 		Pattern varPattern = Pattern.compile(VAR_DECLARATION_ASSIGNMENT_REGEX);
 
-		for(String line : nodeContentLines) {
-			
-			Matcher localVarMatcher = varPattern.matcher(line.trim());
-			String varType = localVarMatcher.matches() ? localVarMatcher.group(1) : "";
-			
-			if(varType != null && !varType.isEmpty()) {
-				String varName = localVarMatcher.group(2);
-				localVars.add(varName);
-			}
-		}
+		Set<String> localVars = findLocalVars(nodeContentLines, varPattern);
 		
+		Set<String> nodeGlobalVars = findGlobalVars(nodeContentLines, varPattern, localVars);
+		
+		return nodeGlobalVars;
+	}
+
+	private Set<String> findGlobalVars(List<String> nodeContentLines, Pattern varPattern,
+			Set<String> localVars) {
+		
+		Set<String> nodeGlobalVars = new HashSet<String>();
+
 		for(String line : nodeContentLines) {
 			
 			Matcher varAssignmentMatcher = varPattern.matcher(line.trim());
@@ -315,6 +314,23 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		}
 		
 		return nodeGlobalVars;
+	}
+
+	private Set<String> findLocalVars(List<String> nodeContentLines, Pattern varPattern) {
+		Set<String> localVars = new HashSet<String>();
+		
+		for(String line : nodeContentLines) {
+			
+			Matcher localVarMatcher = varPattern.matcher(line.trim());
+			String varType = localVarMatcher.matches() ? localVarMatcher.group(1) : "";
+			
+			if(varType != null && !varType.isEmpty()) {
+				String varName = localVarMatcher.group(2);
+				localVars.add(varName);
+			}
+		}
+		
+		return localVars;
 	}
 	
 	private boolean isVariable(String value) {
