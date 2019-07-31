@@ -88,8 +88,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 
     	for(FSTNode node : addedCandidates) {
     		
-    		Pair<FSTNode, Double> maxInsertionPair = maxInsertionLevel(node, deletedCandidates);
-    		Pair<FSTNode, Double> maxSimilarityPair = maxSimilarity(node, deletedCandidates);
+    		Pair<FSTNode, Double> maxInsertionPair = getMaxInsertionLevelNode(node, deletedCandidates);
+    		Pair<FSTNode, Double> maxSimilarityPair = getMaxSimilarityNode(node, deletedCandidates);
     		FSTNode baseNode = getBaseNode(maxInsertionPair, maxSimilarityPair);
     		
     		if(baseNode != null && (maxInsertionPair.getValue() > INSERTION_THRESHOLD ||
@@ -412,14 +412,24 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
     	return listWithoutDuplicates;
     }
     
-    private static Pair<FSTNode, Double> maxInsertionLevel(FSTNode node, List<FSTNode> nodes) {
+    private static Pair<FSTNode, Double> getMaxInsertionLevelNode(FSTNode node, List<FSTNode> nodes) {
     	
     	Map<FSTNode, Double> nodesInsertionLevelMap = new HashMap<>();
     	String nodeBody = ((FSTTerminal) node).getBody();
     	String nodeLines = StringUtils.substringBetween(nodeBody, "{", "}").trim();
     	List<String> splitNodeContent = Arrays.asList(nodeLines.split(LINE_BREAK_REGEX));
 
-    	for(FSTNode pairNode : nodes) {
+    	calculateInsertionLevels(nodes, nodesInsertionLevelMap, splitNodeContent);
+    	
+    	FSTNode nodeMaxValue = getNodeWithHighestValue(nodesInsertionLevelMap);
+    	
+    	return Pair.of(nodeMaxValue, nodesInsertionLevelMap.get(nodeMaxValue));
+    }
+
+	private static void calculateInsertionLevels(List<FSTNode> nodes, Map<FSTNode, Double> nodesInsertionLevelMap,
+			List<String> splitNodeContent) {
+		
+		for(FSTNode pairNode : nodes) {
         	
     		String pairNodeBody = ((FSTTerminal) pairNode).getBody();
         	String pairNodeLines = StringUtils.substringBetween(pairNodeBody, "{", "}").trim();
@@ -438,13 +448,9 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
         	
         	nodesInsertionLevelMap.put(pairNode, insertionLevel);
     	}
-    	
-    	FSTNode nodeMaxValue = getNodeWithHighestValue(nodesInsertionLevelMap);
-    	
-    	return Pair.of(nodeMaxValue, nodesInsertionLevelMap.get(nodeMaxValue));
-    }
+	}
     
-    private static Pair<FSTNode, Double> maxSimilarity(FSTNode node, List<FSTNode> nodes) {
+    private static Pair<FSTNode, Double> getMaxSimilarityNode(FSTNode node, List<FSTNode> nodes) {
     	
     	String nodeContent = ((FSTTerminal) node).getBody();
     	Map<FSTNode, Double> nodesSimilarityLevelMap = new HashMap<>();
