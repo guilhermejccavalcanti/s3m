@@ -19,6 +19,16 @@ import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.mergers.util.Side;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 
+/**
+ * Default implementation of the renaming handler. It divides renaming or
+ * deletion cases in two types: Single Renaming and Mutual Renaming.
+ * 
+ * @see #handleSingleRenaming(MergeContext, Quartet)
+ * @see #handleMutualRenaming(MergeContext, Quartet)
+ * 
+ * @author João Victor (jvsfc@cin.ufpe.br)
+ * @author Giovanni Barros (gaabs@cin.ufpe.br)
+ */
 public class SafeRenamingHandler implements RenamingHandler {
 
     @Override
@@ -44,6 +54,16 @@ public class SafeRenamingHandler implements RenamingHandler {
                 || RenamingUtils.haveEqualSignature(rightNode, baseNode);
     }
 
+    /**
+     * When only one developer renamed or deleted the method (while the other edited its body),
+     * we classify the renaming as single.
+     * 
+     * To solve this scenario, we run textual merge in the nodes' contents.
+     * 
+     * @param context
+     * @param scenarioNodes
+     * @throws TextualMergeException
+     */
     private void handleSingleRenaming(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) throws TextualMergeException {
         FSTNode leftNode = scenarioNodes.getValue0();
         FSTNode baseNode = scenarioNodes.getValue1();
@@ -53,6 +73,17 @@ public class SafeRenamingHandler implements RenamingHandler {
         RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
     }
 
+    /**
+     * When both developers renamed or deleted a method, we classify the renaming as mutual.
+     * Then, we run a decision tree based on which renaming type each developer did.
+     * 
+     * For example, if both developers renamed without body changes, we check if they renamed
+     * to the same signature. If true, we do nothing. Otherwise, we report a conflict.
+     * 
+     * @param context
+     * @param scenarioNodes
+     * @throws TextualMergeException
+     */
     private void handleMutualRenaming(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) throws TextualMergeException {
         FSTNode leftNode = scenarioNodes.getValue0();
         FSTNode baseNode = scenarioNodes.getValue1();

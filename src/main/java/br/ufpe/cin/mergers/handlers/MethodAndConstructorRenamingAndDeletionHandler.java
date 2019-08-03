@@ -20,11 +20,19 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
- * Renaming or deletions conflicts happen when one developer edits a element renamed or deleted by other.
- * Semistructured merge is unable to detect such cases because it matches elements via its identifier, so
- * if a element is renamed or deleted it cannot match the elements anymore. This class overcomes this issue.
+ * Renaming or deletions conflicts happen when one developer edits a element
+ * renamed or deleted by other. Semistructured merge is unable to detect such
+ * cases because it matches elements via its identifier, so if a element is
+ * renamed or deleted it cannot match the elements anymore. This class overcomes
+ * this issue.
+ * 
+ * We classify renaming or deletion in three main cases: (1) Renaming without body
+ * changes: one altered a method' signature only; (2) Renaming with body changes:
+ * one altered the method' signature and body; (3) Deletion: one deleted a method.
  *
- * @author Guilherme
+ * @author Guilherme Cavalcanti (gjcc@cin.ufpe.br)
+ * @author João Victor (jvsfc@cin.ufpe.br)
+ * @author Giovanni Barros (gaabs@cin.ufpe.br)
  */
 public final class MethodAndConstructorRenamingAndDeletionHandler implements ConflictHandler {
     private RenamingHandler renamingHandler;
