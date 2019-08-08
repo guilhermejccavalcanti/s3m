@@ -26,6 +26,7 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
  * @see #handleSingleRenaming(MergeContext, Quartet)
  * @see #handleMutualRenaming(MergeContext, Quartet)
  * 
+ * @author Guilherme Cavalcanti (gjcc@cin.ufpe.br)
  * @author João Victor (jvsfc@cin.ufpe.br)
  * @author Giovanni Barros (gaabs@cin.ufpe.br)
  */
@@ -79,6 +80,8 @@ public class SafeRenamingHandler implements RenamingHandler {
      * 
      * For example, if both developers renamed without body changes, we check if they renamed
      * to the same signature. If true, we do nothing. Otherwise, we report a conflict.
+     * 
+     * To see the complete decision tree, please check documentation/Renaming-Handler-Table.png file.
      * 
      * @param context
      * @param scenarioNodes
