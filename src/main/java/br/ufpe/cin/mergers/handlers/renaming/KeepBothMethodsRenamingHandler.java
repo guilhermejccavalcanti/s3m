@@ -11,6 +11,15 @@ import br.ufpe.cin.mergers.util.Traverser;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
+/**
+ * Alternative implementation of the renaming handler.
+ * 
+ * This handler always resolves a renaming or deletion conflict by keeping the
+ * involved declarations even if they would lead to a conflict if merged.
+ * 
+ * @author Giovanni Barros (gaabs@cin.ufpe.br)
+ * @author João Victor (jvsfc@cin.ufpe.br)
+ */
 public class KeepBothMethodsRenamingHandler implements RenamingHandler {
 
     @Override
