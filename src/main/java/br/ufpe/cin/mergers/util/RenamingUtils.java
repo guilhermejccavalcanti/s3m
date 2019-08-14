@@ -211,7 +211,7 @@ public class RenamingUtils {
         return leftBody.equals(rightBody);
     }
 
-    public static boolean haveSimilarBody(FSTNode left, FSTNode right) {
+    public static boolean haveSimilarBodyModuloWhitespace(FSTNode left, FSTNode right) {
         String leftBody = RenamingUtils.getMethodBodyWithoutWhitespaces(left);
         String rightBody = RenamingUtils.getMethodBodyWithoutWhitespaces(right);
 

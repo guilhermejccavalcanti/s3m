@@ -143,7 +143,7 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     private boolean areVerySimilarNodes(FSTNode node1, FSTNode node2) {
         return  RenamingUtils.haveEqualSignature(node1, node2)
                 || RenamingUtils.haveEqualBodyModuloWhitespace(node1, node2)
-                || (RenamingUtils.haveSimilarBody(node1, node2) && RenamingUtils.haveEqualSignatureButName(node1, node2))
+                || (RenamingUtils.haveSimilarBodyModuloWhitespace(node1, node2) && RenamingUtils.haveEqualSignatureButName(node1, node2))
                 || RenamingUtils.oneContainsTheBodyFromTheOther(node1, node2);
     }
 
