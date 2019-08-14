@@ -8,14 +8,14 @@ import java.io.PrintStream;
 import cide.languages.*;
 
 import de.ovgu.cide.fstgen.ast.*;
+import br.ufpe.cin.printers.S3MPrettyPrinter;
+public class SimplePrintVisitor extends S3MPrettyPrinter {
 
-public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
-	public SimplePrintVisitor(PrintStream out) {
-		super(out); generateSpaces=true;
-	}
-	public SimplePrintVisitor() {
-		super(); generateSpaces=true;
-	}
+
+
+
+
+
 	public boolean visit(FSTNonTerminal nonTerminal) {
 		if (nonTerminal.getType().equals("CompilationUnit")) {
 			printFeatures(nonTerminal,true);

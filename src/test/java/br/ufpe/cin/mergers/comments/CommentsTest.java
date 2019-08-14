@@ -42,7 +42,7 @@ public class CommentsTest {
         File rightFile = new File("testfiles/comments/additionalcommentsatend/right/Test.java");
 
         String mergeOutput = merge(leftFile, baseFile, rightFile);
-        assertThat(mergeOutput).isEqualTo("publicclassTest{publicvoidm(inta){intb;}inta;intc;//Additionalcomment.//Additionalcomment.}");
+        assertThat(mergeOutput).isEqualTo("publicclassTest{publicvoidm(inta){intb;}inta;intc;//Additionalcomment.}");
     }
 
     @Test

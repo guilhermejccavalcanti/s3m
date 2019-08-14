@@ -1,5 +1,12 @@
 package br.ufpe.cin.generator;
 
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.List;
+
 /**
  * Class reponsible for dealing with the automatic generation 
  * of parsers trough <i>featureBNF</i> grammars. See the 
@@ -32,9 +39,28 @@ public class Generator {
 					"grammars/java18_merge_fst_test.java"
 					);
 		
+					alterInherits();
 		}catch(Exception e){
 			System.err.println("Refresh the root project folder (F5). Try again.");
 			e.printStackTrace();
 		}
+	}
+
+	private static void alterInherits() throws IOException {
+		Path path = Paths.get("src/main/java/br/ufpe/cin/generated/SimplePrintVisitor.java");
+		List<String> lines = Files.readAllLines(path, StandardCharsets.UTF_8);
+
+		for (int i = 0; i < lines.size(); i++) {
+			if (lines.get(i).contains("extends AbstractFSTPrintVisitor")) {
+				lines.set(i, "public class SimplePrintVisitor extends S3MPrettyPrinter {");
+				lines.set(i - 1, "import br.ufpe.cin.printers.S3MPrettyPrinter;");
+				for (int j = 1; j <= 6; j++) {
+					lines.set(i + j, "");
+				}
+				break;
+			}
+		}
+
+		Files.write(path, lines, StandardCharsets.UTF_8);
 	}
 }

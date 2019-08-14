@@ -107,7 +107,7 @@ public final class SemistructuredMerge {
         }
 
         // during the parsing process, code indentation is typically lost, so we reindent the code
-        return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
+        return Prettyprinter.print(context.superImposedTree);
     }
 
 	/**
