@@ -254,15 +254,15 @@ public final class SemistructuredMerge {
 	 */
 	private static String markContributions(String bodyA, String bodyB, boolean firstPass, int indexA, int indexB) { 
 		if (bodyA.contains(SEMANTIC_MERGE_MARKER)) {
-			return bodyA + " " + bodyB;
+			return bodyA + bodyB;
 		} else {
 			if (firstPass) {
-				return SEMANTIC_MERGE_MARKER + " " + bodyA + " " + MERGE_SEPARATOR + " " + bodyB + " "	+ MERGE_SEPARATOR;
+				return SEMANTIC_MERGE_MARKER + bodyA + MERGE_SEPARATOR + bodyB + MERGE_SEPARATOR;
 			} else {
 				if (indexA == 0) {
-					return SEMANTIC_MERGE_MARKER + " " + bodyA + " " + MERGE_SEPARATOR + " " + MERGE_SEPARATOR + " "+ bodyB;
+					return SEMANTIC_MERGE_MARKER + bodyA + MERGE_SEPARATOR + MERGE_SEPARATOR + bodyB;
 				} else {
-					return SEMANTIC_MERGE_MARKER + " " + MERGE_SEPARATOR + " " + bodyA + " " + MERGE_SEPARATOR + " "+ bodyB;
+					return SEMANTIC_MERGE_MARKER + MERGE_SEPARATOR + bodyA + MERGE_SEPARATOR + bodyB;
 				}
 			}
 		}
@@ -313,13 +313,13 @@ public final class SemistructuredMerge {
 
 			/* Merging body. */
 			if (((FSTTerminal) node).getBody().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
-				String mergedBodyContent = mergeContent(node, context,((FSTTerminal) node).getBody() + " ", true);
+				String mergedBodyContent = mergeContent(node, context, ((FSTTerminal) node).getBody(), true);
 				((FSTTerminal) node).setBody(mergedBodyContent);
 			}
 
 			/* Merging prefix: possible comments. */
 			if(((FSTTerminal) node).getSpecialTokenPrefix().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
-				String mergedPrefixContent = mergeContent(node, context,((FSTTerminal) node).getSpecialTokenPrefix() + " ", false);
+				String mergedPrefixContent = mergeContent(node, context, ((FSTTerminal) node).getSpecialTokenPrefix(), false);
 				((FSTTerminal) node).setSpecialTokenPrefix(mergedPrefixContent);
 			}
 
@@ -331,8 +331,8 @@ public final class SemistructuredMerge {
 	private static String mergeContent(FSTNode node, MergeContext context, String nodeField, boolean identifyNodes) throws TextualMergeException {
 		String[] splitContent = nodeField.split(SemistructuredMerge.MERGE_SEPARATOR);
 		String leftContent = splitContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "").trim();
-		String baseContent = splitContent[1].trim();
-		String rightContent = splitContent[2].trim();
+		String baseContent = (splitContent.length > 1) ? splitContent[1].trim() : "";
+		String rightContent = (splitContent.length > 2) ? splitContent[2].trim() : "";
 
 		if(identifyNodes) {
 			identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
