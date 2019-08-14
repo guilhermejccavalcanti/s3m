@@ -22,7 +22,7 @@ public class RenamingUtils {
         String signature = getTrimmedSignature(baseContent);
 
         return FilesManager.extractMergeConflicts(context.unstructuredOutput).stream()
-                .map(conflict -> FilesManager.getStringContentIntoSingleLineNoSpacing(conflict.body))
+                .map(conflict -> FilesManager.getStringContentIntoSingleLineNoSpacing(conflict.toString()))
                 .anyMatch(conflict -> conflict.contains(signature));
     }
 
@@ -110,41 +110,11 @@ public class RenamingUtils {
         return left.getParent().equals(right.getParent());
     }
 
-    public static void generateRenamingConflict(MergeContext context, String currentNodeContent, String firstContent,
-                                                String secondContent, Side renamingSide) {
-        if (renamingSide == Side.LEFT) {//managing the origin of the changes in the conflict
-            String aux = secondContent;
-            secondContent = firstContent;
-            firstContent = aux;
-        }
-
-        //statistics
-        if (firstContent.isEmpty() || secondContent.isEmpty()) {
-            context.deletionConflicts++;
-        } else {
-            context.renamingConflicts++;
-        }
-
-        //first creates a conflict
-        MergeConflict newConflict = new MergeConflict(firstContent + '\n', secondContent + '\n');
-        //second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
-        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.body);
-        if (renamingSide == Side.RIGHT) {
-            FilesManager.findAndDeleteASTNode(context.superImposedTree, firstContent);
-        } else {
-            FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
-        }
-    }
-
     public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
-        String leftContent = getNodeContent(leftNode);
-        String rightContent = getNodeContent(rightNode);
+        MergeConflict conflict = new MergeConflict(leftNode, rightNode);
+        ((FSTTerminal) mergeNode).setBody(conflict.toString());
 
         context.renamingConflicts++;
-
-        MergeConflict conflict = new MergeConflict(leftContent, rightContent);
-        ((FSTTerminal) mergeNode).setBody(conflict.body);
-
         removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
     }
 
@@ -158,8 +128,8 @@ public class RenamingUtils {
     }
 
     public static String getMergeConflictContentOfOppositeSide(MergeConflict mergeConflict, Side side) {
-        if (side == Side.LEFT) return mergeConflict.right;
-        if (side == Side.RIGHT) return mergeConflict.left;
+        if (side == Side.LEFT) return mergeConflict.getRight();
+        if (side == Side.RIGHT) return mergeConflict.getLeft();
 
         return null;
     }

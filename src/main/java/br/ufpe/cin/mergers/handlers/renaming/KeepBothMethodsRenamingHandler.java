@@ -39,7 +39,7 @@ public class KeepBothMethodsRenamingHandler implements RenamingHandler {
         String conflictNodeContent = ((FSTTerminal) mergeNode).getBody();
         if(!conflictNodeContent.equals("")) {
             MergeConflict mergeConflict = FilesManager.extractMergeConflicts(conflictNodeContent).get(0);
-            String nodeContent = (mergeConflict.left.isEmpty()) ? mergeConflict.right : mergeConflict.left;
+            String nodeContent = (mergeConflict.getLeft().isEmpty()) ? mergeConflict.getRight() : mergeConflict.getLeft();
 
             ((FSTTerminal) mergeNode).setBody(nodeContent);
         }
