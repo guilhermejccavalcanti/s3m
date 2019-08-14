@@ -9,6 +9,7 @@ import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.mergers.handlers.*;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
@@ -313,13 +314,13 @@ public final class SemistructuredMerge {
 
 			/* Merging body. */
 			if (((FSTTerminal) node).getBody().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
-				String mergedBodyContent = mergeContent(node, context, ((FSTTerminal) node).getBody(), true);
+				String mergedBodyContent = mergeBodyContent(node, context, ((FSTTerminal) node).getBody());
 				((FSTTerminal) node).setBody(mergedBodyContent);
 			}
 
 			/* Merging prefix: possible comments. */
 			if(((FSTTerminal) node).getSpecialTokenPrefix().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
-				String mergedPrefixContent = mergeContent(node, context, ((FSTTerminal) node).getSpecialTokenPrefix(), false);
+				String mergedPrefixContent = mergePrefixContent(node, context, ((FSTTerminal) node).getSpecialTokenPrefix());
 				((FSTTerminal) node).setSpecialTokenPrefix(mergedPrefixContent);
 			}
 
@@ -328,17 +329,31 @@ public final class SemistructuredMerge {
 		}
 	}
 
-	private static String mergeContent(FSTNode node, MergeContext context, String nodeField, boolean identifyNodes) throws TextualMergeException {
-		String[] splitContent = nodeField.split(SemistructuredMerge.MERGE_SEPARATOR);
-		String leftContent = splitContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "").trim();
-		String baseContent = (splitContent.length > 1) ? splitContent[1].trim() : "";
-		String rightContent = (splitContent.length > 2) ? splitContent[2].trim() : "";
+	private static String mergeBodyContent(FSTNode node, MergeContext context, String nodeField)
+			throws TextualMergeException {
+		Triple<String, String, String> contributionsContents = splitContributionsContents(nodeField);
+		String leftContent = contributionsContents.getLeft().trim();
+		String baseContent = contributionsContents.getMiddle().trim();
+		String rightContent = contributionsContents.getRight().trim();
 
-		if(identifyNodes) {
-			identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
-		}
+		identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
+		return TextualMerge.merge(leftContent, baseContent, rightContent,
+				JFSTMerge.isWhitespaceIgnored);
+	}
 
-		return TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
+	private static String mergePrefixContent(FSTNode node, MergeContext context, String nodeField)
+			throws TextualMergeException {
+		Triple<String, String, String> contributionsContents = splitContributionsContents(nodeField);
+		return RenamingUtils.compareAndMerge(contributionsContents.getLeft(), contributionsContents.getMiddle(),
+				contributionsContents.getRight());
+	}
+
+	private static Triple<String, String, String> splitContributionsContents(String nodeContent) {
+		String[] splitContent = nodeContent.split(SemistructuredMerge.MERGE_SEPARATOR);
+		String leftContent = splitContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "");
+		String baseContent = (splitContent.length > 1) ? splitContent[1] : "";
+		String rightContent = (splitContent.length > 2) ? splitContent[2] : "";
+		return Triple.of(leftContent, baseContent, rightContent);
 	}
 
 	/**
