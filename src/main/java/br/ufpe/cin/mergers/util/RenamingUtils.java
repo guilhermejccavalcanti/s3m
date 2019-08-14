@@ -253,6 +253,8 @@ public class RenamingUtils {
             return right;
         } else if(baseTrimmed.equals(rightTrimmed) && !baseTrimmed.equals(leftTrimmed)) {
             return left;
+        } else if(leftTrimmed.equals(rightTrimmed)) {
+            return (left.length() > right.length()) ? left : right;
         } else {
             return TextualMerge.merge(left, base, right, JFSTMerge.isWhitespaceIgnored);
         }
