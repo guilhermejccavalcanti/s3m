@@ -201,10 +201,10 @@ public class RenamingUtils {
     }
 
     public static boolean haveDifferentBody(FSTNode left, FSTNode right) {
-        return !haveEqualBody(left, right);
+        return !haveEqualBodyModuloWhitespace(left, right);
     }
 
-    public static boolean haveEqualBody(FSTNode left, FSTNode right) {
+    public static boolean haveEqualBodyModuloWhitespace(FSTNode left, FSTNode right) {
         String leftBody = RenamingUtils.getMethodBodyWithoutWhitespaces(left);
         String rightBody = RenamingUtils.getMethodBodyWithoutWhitespaces(right);
 
