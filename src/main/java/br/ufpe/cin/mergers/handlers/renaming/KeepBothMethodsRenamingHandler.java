@@ -37,10 +37,12 @@ public class KeepBothMethodsRenamingHandler implements RenamingHandler {
     private void removeConflictFromBaseNode(FSTNode baseNode, MergeContext context) {
         FSTNode mergeNode = Traverser.retrieveNodeFromTree(baseNode, context.superImposedTree);
         String conflictNodeContent = ((FSTTerminal) mergeNode).getBody();
-        MergeConflict mergeConflict = FilesManager.extractMergeConflicts(conflictNodeContent).get(0);
-        String nodeContent = (mergeConflict.left.isEmpty()) ? mergeConflict.right : mergeConflict.left;
+        if(!conflictNodeContent.equals("")) {
+            MergeConflict mergeConflict = FilesManager.extractMergeConflicts(conflictNodeContent).get(0);
+            String nodeContent = (mergeConflict.left.isEmpty()) ? mergeConflict.right : mergeConflict.left;
 
-        ((FSTTerminal) mergeNode).setBody(nodeContent);
+            ((FSTTerminal) mergeNode).setBody(nodeContent);
+        }
     }
 
     private boolean isSingleRenaming(Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) {
