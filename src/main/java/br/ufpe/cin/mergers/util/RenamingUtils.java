@@ -74,7 +74,7 @@ public class RenamingUtils {
 
     public static String getNodeBodyWithoutSignature(FSTNode node) {
         if(isMethodOrConstructorNode(node))
-            return ((FSTTerminal) node).getDeclarationBody();
+            return StringUtils.deleteWhitespace(((FSTTerminal) node).getDeclarationBody());
         
         return StringUtils.EMPTY;
     }
