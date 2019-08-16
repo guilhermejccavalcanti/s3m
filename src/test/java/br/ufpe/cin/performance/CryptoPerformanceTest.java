@@ -18,7 +18,7 @@ import br.ufpe.cin.app.JFSTMerge;
 public class CryptoPerformanceTest {
 
 	private static final int NUM_ITERATIONS = 6;
-	private static final double ACCEPTED_MARGIN = 0.4;
+	private static final double ACCEPTED_MARGIN = 0.6;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws UnsupportedEncodingException {
