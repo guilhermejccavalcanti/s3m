@@ -219,15 +219,17 @@ public class RenamingUtils {
         String baseTrimmed = base.trim();
         String rightTrimmed = right.trim();
 
-        if(baseTrimmed.equals(leftTrimmed) && !baseTrimmed.equals(rightTrimmed)) {
-            return right;
-        } else if(baseTrimmed.equals(rightTrimmed) && !baseTrimmed.equals(leftTrimmed)) {
-            return left;
-        } else if(leftTrimmed.equals(rightTrimmed)) {
-            return (left.length() > right.length()) ? left : right;
-        } else {
-            return TextualMerge.merge(left, base, right, JFSTMerge.isWhitespaceIgnored);
-        }
+        if(JFSTMerge.isWhitespaceIgnored) {
+            if(baseTrimmed.equals(leftTrimmed) && !baseTrimmed.equals(rightTrimmed)) {
+                return right;
+            } else if(baseTrimmed.equals(rightTrimmed) && !baseTrimmed.equals(leftTrimmed)) {
+                return left;
+            } else if(leftTrimmed.equals(rightTrimmed)) {
+                return (left.length() > right.length()) ? left : right;
+            } 
+        } 
+        
+        return TextualMerge.merge(left, base, right, JFSTMerge.isWhitespaceIgnored);
     }
 
     private static String getNodeContent(FSTNode node) {
