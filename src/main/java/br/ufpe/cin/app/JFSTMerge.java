@@ -98,6 +98,10 @@ public class JFSTMerge {
 			"semistructured merge alone is unable to solve.", arity = 1)
 	public static boolean isMethodAndConstructorRenamingAndDeletionHandlerEnabled = true;
 
+	@Parameter(names = {"--handle-method-constructor-renaming-deletion-old-version", "-hmcrdov"}, description = "Detects and solves conflicts caused by renaming or deletion, where" +
+	"semistructured merge alone is unable to solve. Uses the previous version of the renaming handler.")
+	public static boolean isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled = false;
+
 	@Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
 			arity = 1)
 	public static boolean isTypeAmbiguityErrorHandlerEnabled = true;
