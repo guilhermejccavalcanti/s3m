@@ -35,7 +35,7 @@ public class MergeConflict {
 		if(JFSTMerge.showBase) {
 			body.append("\n||||||| BASE\n").append(baseConflictingContent);
 		}
-		body.append("\n=======\n").append(leftConflictingContent).append("\n>>>>>>> YOURS");
+		body.append("\n=======\n").append(rightConflictingContent).append("\n>>>>>>> YOURS");
 		
 		this.body = body.toString();
 	}
