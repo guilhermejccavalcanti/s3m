@@ -51,6 +51,7 @@ public class IndentationTest {
     }
 
     @Test
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
     public void testIndentationPreservation_givenMergeDoesNotIgnoreWhitespaces_whenLeftAddsAnAttributeIndented4Spaces_andRightAddsTheSameAttributeIndented8Spaces_shouldReportConflict() {
         JFSTMerge.isWhitespaceIgnored = false;
         String mergeResult = merge("addsattributeaddssameattribute");
@@ -74,6 +75,7 @@ public class IndentationTest {
     }
 
     @Test
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
     public void testIndentationPreservation_givenMergeDoesNotIgnoreWhitespaces_whenLeftPushesAnAttributeIndented4Spaces8Spaces_andRightPushesTheSameAttribute4Spaces_shouldReportConflict() {
         JFSTMerge.isWhitespaceIgnored = false;
         String mergeResult = merge("pushesattributepushesattribute");
@@ -91,6 +93,7 @@ public class IndentationTest {
     }
 
     @Test
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
     public void testIndentationPreservation_givenMergeDoesNotIgnoreWhitespaces_whenLeftPushesAMethodIndented4Spaces4Spaces_andRightPushesTheSameMethod8Spaces_shouldReportConflict() {
         JFSTMerge.isWhitespaceIgnored = false;
         String mergeResult = merge("pushesmethodpushesmethod");
@@ -108,6 +111,7 @@ public class IndentationTest {
     }
 
     @Test
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
     public void testIndentationPreservation_givenMergeDoesNotIgnoreWhitespaces_whenLeftChangesFrom4SpacesTo1Tab_shouldReportConflict() {
         JFSTMerge.isWhitespaceIgnored = false;
         String mergeResult = merge("spacetotab");

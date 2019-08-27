@@ -58,6 +58,7 @@ public class LineSpacingTest {
     }
 
     @Test
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
     public void testSpacingPreservation_givenMergeDoesNotIgnoreWhitespaces_whenLeftPushesAnAttribute2Lines_andRightPullsTheSameAttribute1Line_shouldReportConflict() {
         JFSTMerge.isWhitespaceIgnored = false;
         String mergeResult = merge("pushattributepullattribute");
@@ -74,6 +75,7 @@ public class LineSpacingTest {
     }
 
     @Test
+    @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
     public void testSpacingPreservation_givenMergeDoesNotIgnoreWhitespaces_whenLeftAddsAnAttributePost2Lines_andRightAddsTheSameAttributePost3Lines_shouldReportConflict() {
         JFSTMerge.isWhitespaceIgnored = false;
         String mergeResult = merge("addsattributeaddssameattribute");
