@@ -72,9 +72,9 @@ public class RenamingUtils {
         return methodSource.contains("{");
     }
 
-    public static String getNodeBodyWithoutSignature(FSTNode node) {
+    public static String getMethodBodyWithoutWhitespaces(FSTNode node) {
         if(isMethodOrConstructorNode(node))
-            return ((FSTTerminal) node).getDeclarationBody();
+            return StringUtils.deleteWhitespace(((FSTTerminal) node).getDeclarationBody());
         
         return StringUtils.EMPTY;
     }
@@ -194,26 +194,26 @@ public class RenamingUtils {
     }
 
     public static boolean oneContainsTheBodyFromTheOther(FSTNode left, FSTNode right) {
-        String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
-        String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
+        String leftBody = RenamingUtils.getMethodBodyWithoutWhitespaces(left);
+        String rightBody = RenamingUtils.getMethodBodyWithoutWhitespaces(right);
 
         return leftBody != StringUtils.EMPTY && rightBody != StringUtils.EMPTY && (leftBody.contains(rightBody) || rightBody.contains(leftBody));
     }
 
     public static boolean haveDifferentBody(FSTNode left, FSTNode right) {
-        return !haveEqualBody(left, right);
+        return !haveEqualBodyModuloWhitespace(left, right);
     }
 
-    public static boolean haveEqualBody(FSTNode left, FSTNode right) {
-        String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
-        String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
+    public static boolean haveEqualBodyModuloWhitespace(FSTNode left, FSTNode right) {
+        String leftBody = RenamingUtils.getMethodBodyWithoutWhitespaces(left);
+        String rightBody = RenamingUtils.getMethodBodyWithoutWhitespaces(right);
 
         return leftBody.equals(rightBody);
     }
 
-    public static boolean haveSimilarBody(FSTNode left, FSTNode right) {
-        String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
-        String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
+    public static boolean haveSimilarBodyModuloWhitespace(FSTNode left, FSTNode right) {
+        String leftBody = RenamingUtils.getMethodBodyWithoutWhitespaces(left);
+        String rightBody = RenamingUtils.getMethodBodyWithoutWhitespaces(right);
 
         double bodySimilarity = FilesManager.computeStringSimilarity(leftBody, rightBody);
 
