@@ -37,7 +37,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("<<<<<<<MINEinta=15;|||||||BASEinta=10;=======intm(){returna+15;}>>>>>>>YOURS");
+		assertThat(mergeResult).contains("<<<<<<<MINEinta=15;=======intm(){returna+15;}>>>>>>>YOURS");
 		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
 	
@@ -51,7 +51,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("<<<<<<<MINEstaticintm(){return15;}|||||||BASEintm(){return10;}=======inta=m();>>>>>>>YOURS");
+		assertThat(mergeResult).contains("<<<<<<<MINEstaticintm(){return15;}=======inta=m();>>>>>>>YOURS");
 		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
 	
@@ -64,7 +64,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("<<<<<<<MINEinta=15;|||||||BASEinta=10;=======intb=a+20;>>>>>>>YOURS");
+		assertThat(mergeResult).contains("<<<<<<<MINEinta=15;=======intb=a+20;>>>>>>>YOURS");
 		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
 	
@@ -78,7 +78,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 				null);
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
-		assertThat(mergeResult).contains("<<<<<<<MINEstaticStringm(){return\"insidemethodmedited\";}|||||||BASEStringm(){return\"something...\";}=======voidn(){if(m().equals(\"something...\")){System.out.println(\"insidemethodn\");}}>>>>>>>YOURS");
+		assertThat(mergeResult).contains("<<<<<<<MINEstaticStringm(){return\"insidemethodmedited\";}=======voidn(){if(m().equals(\"something...\")){System.out.println(\"insidemethodn\");}}>>>>>>>YOURS");
 		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
 
