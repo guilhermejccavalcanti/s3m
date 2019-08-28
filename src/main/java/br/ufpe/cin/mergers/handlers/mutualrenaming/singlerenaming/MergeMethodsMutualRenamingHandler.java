@@ -51,7 +51,7 @@ public class MergeMethodsMutualRenamingHandler implements MutualRenamingHandler 
     private void reportConflictAndUpdateNodesLists(MergeContext context, FSTNode leftNode, FSTNode rightNode,
                                                    List<FSTNode> leftNewMethodsOrConstructors,
                                                    List<FSTNode> rightNewMethodsOrConstructors) {
-        RenamingUtils.generateMutualRenamingConflict(context, leftNode, rightNode);
+        RenamingUtils.generateMutualRenamingConflictLegacy(context, leftNode, rightNode);
         leftNewMethodsOrConstructors.remove(leftNode);
         rightNewMethodsOrConstructors.remove(rightNode);
     }

@@ -21,7 +21,7 @@ public class SafeMutualRenamingHandler implements MutualRenamingHandler {
                 .filter(pair -> pair.getLeft() != null && pair.getRight() != null)
                 .filter(pair -> RenamingUtils.haveDifferentSignature(pair.getLeft(), pair.getRight()))
                 .forEach(pair -> {
-                    RenamingUtils.generateMutualRenamingConflict(context, pair.getLeft(), pair.getRight());
+                    RenamingUtils.generateMutualRenamingConflictLegacy(context, pair.getLeft(), pair.getRight());
                     leftNewMethodsOrConstructors.remove(pair.getLeft());
                     rightNewMethodsOrConstructors.remove(pair.getRight());
                 });
