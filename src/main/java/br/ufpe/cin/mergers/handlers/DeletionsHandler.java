@@ -194,11 +194,11 @@ public class DeletionsHandler implements ConflictHandler {
 			String body = FilesManager.prettyPrint((FSTNonTerminal) declarationInSource);
 			MergeConflict newConflict;
 			if(isLeftDeletion){
-				newConflict = new MergeConflict("", body+'\n');
+				newConflict = new MergeConflict(null, declarationInSource);
 			} else {
-				newConflict = new MergeConflict(body+'\n',"");
+				newConflict = new MergeConflict(declarationInSource, null);
 			}
-			FSTTerminal terminal = new FSTTerminal(declarationInSource.getType(), identifier, newConflict.body, "");
+			FSTTerminal terminal = new FSTTerminal(declarationInSource.getType(), identifier, newConflict.toString(), "");
 			parent.addChild(terminal, index);
 			context.innerDeletionConflicts++;
 		}
