@@ -19,6 +19,8 @@ import br.ufpe.cin.files.FilesManager;
 
 /**
  * Represents unstructured, linebased, textual merge.
+ * We use a temporary, still in evaluation process JGit's artifact. This build allows
+ * unstructured merge to output base's contribution in conflicts, conformant with diff3 style.
  * @author Guilherme
  */
 public final class TextualMerge {
@@ -27,6 +29,7 @@ public final class TextualMerge {
 
 	/**
 	 * Three-way unstructured merge of three given files.
+	 * 
 	 * @param left
 	 * @param base
 	 * @param right
