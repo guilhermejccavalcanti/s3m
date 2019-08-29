@@ -8,14 +8,14 @@ import java.io.PrintStream;
 import cide.languages.*;
 
 import de.ovgu.cide.fstgen.ast.*;
+import br.ufpe.cin.printers.S3MPrettyPrinter;
+public class SimplePrintVisitor extends S3MPrettyPrinter {
 
-public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
-	public SimplePrintVisitor(PrintStream out) {
-		super(out); generateSpaces=true;
-	}
-	public SimplePrintVisitor() {
-		super(); generateSpaces=true;
-	}
+
+
+
+
+
 	public boolean visit(FSTNonTerminal nonTerminal) {
 		if (nonTerminal.getType().equals("CompilationUnit")) {
 			printFeatures(nonTerminal,true);
@@ -140,7 +140,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("{");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyStart");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			hintIncIndent();
 			hintNewLine();
 			for (FSTNode v : getChildren(nonTerminal,"ClassOrInterfaceBodyDeclaration")) {
@@ -149,7 +154,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 			}
 			hintDecIndent();
 			hintNewLine();
-			printToken("}");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyEnd");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			printFeatures(nonTerminal,false);
 			return false;
 		}
@@ -175,6 +185,7 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 				if (!((FSTTerminal) n).getBody().isEmpty())
 					nonempty.add(n);
 			listElements = nonempty.iterator();
+
 			
 			if (listElements.hasNext()) {
 				listElements.next().accept(this);
@@ -230,7 +241,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("{");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyStart");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			hintIncIndent();
 			hintNewLine();
 			for (FSTNode v : getChildren(nonTerminal,"ClassOrInterfaceBodyDeclaration")) {
@@ -239,7 +255,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 			}
 			hintDecIndent();
 			hintNewLine();
-			printToken("}");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyEnd");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			printFeatures(nonTerminal,false);
 			return false;
 		}
@@ -325,7 +346,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("{");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyStart");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			hintIncIndent();
 			hintNewLine();
 			for (FSTNode v : getChildren(nonTerminal,"ClassOrInterfaceBodyDeclaration")) {
@@ -334,7 +360,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 			}
 			hintDecIndent();
 			hintNewLine();
-			printToken("}");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyEnd");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			printFeatures(nonTerminal,false);
 			return false;
 		}
