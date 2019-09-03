@@ -58,7 +58,7 @@ public final class TypeAmbiguityErrorHandler implements ConflictHandler {
                 if( (rightImportedMember.equals("*;") && leftImportedMember.equals("*;")) ||
                         (rightImportedMember.equals(leftImportedMember))){
                     if(thereIsCompiltationProblemWithImportedStatements(compiler,context,leftImportStatement,rightImportStatement)){
-                        generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
+                        generateConflictWithImportStatements(context,leftImportStatementNode,rightImportStatementNode); break;
                     }
                     /*					else if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
                     generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
@@ -69,7 +69,7 @@ public final class TypeAmbiguityErrorHandler implements ConflictHandler {
                 else if(rightImportedMember.equals("*;") || leftImportedMember.equals("*;")) {
                     if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
                         if(thereIsContributionUsingImportedMember(context,rightImportedMember, leftImportedMember)){
-                            generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
+                            generateConflictWithImportStatements(context,leftImportStatementNode,rightImportStatementNode); break;
                         }
                     }
                 }
@@ -180,11 +180,15 @@ public final class TypeAmbiguityErrorHandler implements ConflictHandler {
 	 * @param leftImportStatement
 	 * @param rightImportStatement
 	 */
-	private static void generateConflictWithImportStatements(MergeContext context, String leftImportStatement,String rightImportStatement) {
+	private static void generateConflictWithImportStatements(MergeContext context, FSTNode leftImportNode, FSTNode rightImportNode) {
 		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(leftImportStatement+'\n', rightImportStatement+'\n');
+		MergeConflict newConflict = new MergeConflict(leftImportNode, rightImportNode);
+
+		String leftImportStatement = ((FSTTerminal) leftImportNode).getBody();
+		String rightImportStatement = ((FSTTerminal) rightImportNode).getBody();
+		
 		//second put the conflict in one of the nodes containing the import statements, and deletes the other node containing the orther import statement
-		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftImportStatement, newConflict.body);
+		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftImportStatement, newConflict.toString());
 		FilesManager.findAndDeleteASTNode(context.superImposedTree, rightImportStatement);
 
 		//statistics

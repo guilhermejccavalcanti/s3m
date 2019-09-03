@@ -417,7 +417,7 @@ FSTInfo TypeDeclaration(boolean inTerminal) : { Token first=null,t;FSTInfo n;
  |
 	LOOKAHEAD(Modifiers() "enum") n=Modifiers(inTerminal){ replaceName(n);} "enum" n=Id(inTerminal){ replaceName("Id", n);}{ replaceName(n);} [n=ImplementsList(inTerminal){ replaceName(n);}] "{" [n=EnumConstants(inTerminal){ replaceName(n);}] ["," ] [n=EnumBodyInternal(inTerminal){ replaceName(n);}] "}" {return productionEndNonTerminal("EnumDecl","{Id}","{Id}");}
  |
-	n=Modifiers(inTerminal){ replaceName(n);} [n=FinalOrAbstract(inTerminal){ replaceName(n);}] n=ClassOrInterface(inTerminal){ replaceName(n);} n=Id(inTerminal){ replaceName("Id", n);}{ replaceName(n);} [n=TypeParameters(inTerminal){ replaceName(n);}] [n=ExtendsList(inTerminal){ replaceName(n);}] [n=ImplementsList(inTerminal){ replaceName(n);}] "{" (n=ClassOrInterfaceBodyDeclaration(inTerminal){ replaceName(n);})* "}" [LOOKAHEAD(2) <SEMICOLON>] {return productionEndNonTerminal("ClassOrInterfaceDecl","{Id}","{Id}");}
+	n=Modifiers(inTerminal){ replaceName(n);} [n=FinalOrAbstract(inTerminal){ replaceName(n);}] n=ClassOrInterface(inTerminal){ replaceName(n);} n=Id(inTerminal){ replaceName("Id", n);}{ replaceName(n);} [n=TypeParameters(inTerminal){ replaceName(n);}] [n=ExtendsList(inTerminal){ replaceName(n);}] [n=ImplementsList(inTerminal){ replaceName(n);}] n=ClassOrInterfaceBodyStart(inTerminal){ replaceName(n);} (n=ClassOrInterfaceBodyDeclaration(inTerminal){ replaceName(n);})* n=ClassOrInterfaceBodyEnd(inTerminal){ replaceName(n);} [LOOKAHEAD(2) <SEMICOLON>] {return productionEndNonTerminal("ClassOrInterfaceDecl","{Id}","{Id}");}
 
  )  }
 
@@ -503,7 +503,19 @@ FSTInfo TypeBound(boolean inTerminal) : { Token first=null,t;FSTInfo n;
 
 FSTInfo ClassOrInterfaceBody(boolean inTerminal) : { Token first=null,t;FSTInfo n; 
 } { {first=getToken(1); productionStart(inTerminal); } (
-	"{" (n=ClassOrInterfaceBodyDeclaration(true){ replaceName(n);})* "}" {return productionEndTerminal("ClassOrInterfaceBody","-","-","Replacement","Default",first,token);}
+	n=ClassOrInterfaceBodyStart(true){ replaceName(n);} (n=ClassOrInterfaceBodyDeclaration(true){ replaceName(n);})* n=ClassOrInterfaceBodyEnd(true){ replaceName(n);} {return productionEndTerminal("ClassOrInterfaceBody","-","-","Replacement","Default",first,token);}
+
+ )  }
+
+FSTInfo ClassOrInterfaceBodyStart(boolean inTerminal) : { Token first=null,t;FSTInfo n; 
+} { {first=getToken(1); productionStart(inTerminal); } (
+	"{"  {return productionEndTerminal("ClassOrInterfaceBodyStart","-","-","concat","LineBased",first,token);}
+
+ )  }
+
+FSTInfo ClassOrInterfaceBodyEnd(boolean inTerminal) : { Token first=null,t;FSTInfo n; 
+} { {first=getToken(1); productionStart(inTerminal); } (
+	"}"  {return productionEndTerminal("ClassOrInterfaceBodyEnd","-","-","concat","LineBased",first,token);}
 
  )  }
 
@@ -511,7 +523,7 @@ FSTInfo ClassOrInterfaceBodyDeclaration(boolean inTerminal) : { Token first=null
 } { {first=getToken(1); productionStart(inTerminal); } (
 	LOOKAHEAD(2) n=Initializer(true){ replaceName(n);} {return productionEndTerminal("InitializerDecl","{AUTO}","{AUTO}","Replacement","Default",first,token);}
  |
-	LOOKAHEAD(Modifiers() ClassOrInterface()) n=Modifiers(inTerminal){ replaceName(n);} [n=FinalOrAbstract(inTerminal){ replaceName(n);}] n=ClassOrInterface(inTerminal){ replaceName(n);} n=Id(inTerminal){ replaceName("Id", n);}{ replaceName(n);} [n=TypeParameters(inTerminal){ replaceName(n);}] [n=ExtendsList(inTerminal){ replaceName(n);}] [n=ImplementsList(inTerminal){ replaceName(n);}] "{" (n=ClassOrInterfaceBodyDeclaration(inTerminal){ replaceName(n);})* "}" [LOOKAHEAD(2) <SEMICOLON>] {return productionEndNonTerminal("InnerClassDecl","{Id}","{Id}");}
+	LOOKAHEAD(Modifiers() ClassOrInterface()) n=Modifiers(inTerminal){ replaceName(n);} [n=FinalOrAbstract(inTerminal){ replaceName(n);}] n=ClassOrInterface(inTerminal){ replaceName(n);} n=Id(inTerminal){ replaceName("Id", n);}{ replaceName(n);} [n=TypeParameters(inTerminal){ replaceName(n);}] [n=ExtendsList(inTerminal){ replaceName(n);}] [n=ImplementsList(inTerminal){ replaceName(n);}] n=ClassOrInterfaceBodyStart(inTerminal){ replaceName(n);} (n=ClassOrInterfaceBodyDeclaration(inTerminal){ replaceName(n);})* n=ClassOrInterfaceBodyEnd(inTerminal){ replaceName(n);} [LOOKAHEAD(2) <SEMICOLON>] {return productionEndNonTerminal("InnerClassDecl","{Id}","{Id}");}
  |
 	LOOKAHEAD(Modifiers() "enum") n=Modifiers(inTerminal){ replaceName(n);} "enum" n=Id(inTerminal){ replaceName("Id", n);}{ replaceName(n);} [n=ImplementsList(inTerminal){ replaceName(n);}] "{" [n=EnumConstants(inTerminal){ replaceName(n);}] ["," ] [n=EnumBodyInternal(inTerminal){ replaceName(n);}] "}" {return productionEndNonTerminal("InnerEnumDecl","{Id}","{Id}");}
  |
@@ -1561,7 +1573,7 @@ FSTInfo AnnotationTypeMemberDeclaration(boolean inTerminal) : { Token first=null
 } { {first=getToken(1); productionStart(inTerminal); } (
 	LOOKAHEAD(Modifiers() Type() <IDENTIFIER> "(") n=Modifiers(true){ replaceName(n);} n=Type(true){ replaceName(n);} t=<IDENTIFIER>{ replaceName(new FSTInfo("<IDENTIFIER>",t.image));} "(" ")" [n=DefaultValue(true){ replaceName(n);}] ";" {return productionEndTerminal("AnnotationTypeMemberDeclaration1","{<IDENTIFIER>}","{<IDENTIFIER>}","Replacement","LineBased",first,token);}
  |
-	LOOKAHEAD(Modifiers() ClassOrInterface()) n=Modifiers(inTerminal){ replaceName(n);} [n=FinalOrAbstract(inTerminal){ replaceName(n);}] n=ClassOrInterface(inTerminal){ replaceName(n);} n=Id(inTerminal){ replaceName("Id", n);}{ replaceName(n);} [n=TypeParameters(inTerminal){ replaceName(n);}] [n=ExtendsList(inTerminal){ replaceName(n);}] [n=ImplementsList(inTerminal){ replaceName(n);}] "{" (n=ClassOrInterfaceBodyDeclaration(inTerminal){ replaceName(n);})* "}" [LOOKAHEAD(2) <SEMICOLON>] {return productionEndNonTerminal("AnnotationInnerClassDecl","{Id}","{Id}");}
+	LOOKAHEAD(Modifiers() ClassOrInterface()) n=Modifiers(inTerminal){ replaceName(n);} [n=FinalOrAbstract(inTerminal){ replaceName(n);}] n=ClassOrInterface(inTerminal){ replaceName(n);} n=Id(inTerminal){ replaceName("Id", n);}{ replaceName(n);} [n=TypeParameters(inTerminal){ replaceName(n);}] [n=ExtendsList(inTerminal){ replaceName(n);}] [n=ImplementsList(inTerminal){ replaceName(n);}] n=ClassOrInterfaceBodyStart(inTerminal){ replaceName(n);} (n=ClassOrInterfaceBodyDeclaration(inTerminal){ replaceName(n);})* n=ClassOrInterfaceBodyEnd(inTerminal){ replaceName(n);} [LOOKAHEAD(2) <SEMICOLON>] {return productionEndNonTerminal("AnnotationInnerClassDecl","{Id}","{Id}");}
  |
 	LOOKAHEAD(Modifiers() "enum") n=Modifiers(inTerminal){ replaceName(n);} "enum" n=Id(inTerminal){ replaceName("Id", n);}{ replaceName(n);} [n=ImplementsList(inTerminal){ replaceName(n);}] "{" [n=EnumConstants(inTerminal){ replaceName(n);}] ["," ] [n=EnumBodyInternal(inTerminal){ replaceName(n);}] "}" {return productionEndNonTerminal("AnnotationInnerEnumDecl","{Id}","{Id}");}
  |

@@ -30,7 +30,7 @@ public class WhitespaceIgnorationParameterTest {
     @Test
     public void testNoSpacingIgnoration() {
         String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(getMergeContext(false).semistructuredOutput);
-        assertThat(mergeResult).isEqualTo("publicclassTest{voidhelloWorld(){<<<<<<<MINESystem.out.println(\"HelloWorld!\");=======System.out.println(\"HelloWorld!\");>>>>>>>YOURS}<<<<<<<MINEStringhello=\"hello\";=======>>>>>>>YOURS}");
+        assertThat(mergeResult).isEqualTo("publicclassTest{voidhelloWorld(){<<<<<<<MINESystem.out.println(\"HelloWorld!\");=======System.out.println(\"HelloWorld!\");>>>>>>>YOURS}<<<<<<<MINE=======>>>>>>>YOURS<<<<<<<MINEStringhello=\"hello\";=======>>>>>>>YOURS<<<<<<<MINE=======>>>>>>>YOURS}");
     }
 
     @Test
