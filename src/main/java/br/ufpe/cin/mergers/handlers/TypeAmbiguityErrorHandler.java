@@ -182,7 +182,7 @@ public final class TypeAmbiguityErrorHandler implements ConflictHandler {
 	 */
 	private static void generateConflictWithImportStatements(MergeContext context, FSTNode leftImportNode, FSTNode rightImportNode) {
 		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(leftImportNode, rightImportNode);
+		MergeConflict newConflict = new MergeConflict(leftImportNode, null, rightImportNode);
 
 		String leftImportStatement = ((FSTTerminal) leftImportNode).getBody();
 		String rightImportStatement = ((FSTTerminal) rightImportNode).getBody();

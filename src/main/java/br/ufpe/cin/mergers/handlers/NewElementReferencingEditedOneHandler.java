@@ -5,6 +5,7 @@ import java.util.List;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.Traverser;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
@@ -33,7 +34,7 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 						String editedElementIdentfier = getElementIdentifier(editedRightNode);
 						if(thereIsUnstructuredConflictWithAddedAndEditedElements(unstructuredMergeConflicts, newElementContent, editedElementContent)){
 							if(addedElementRefersToEditedOne(newElementContent,editedElementIdentfier)){
-								generateConflictWithAddedAndEditedElements(context, editedRightNode, addedLeftNode);
+								generateConflictWithAddedAndEditedElements(context, editedRightNode, findBaseNode(context, editedRightNode), addedLeftNode);
 							}
 						}
 					}
@@ -49,7 +50,7 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 						String editedElementIdentfier = getElementIdentifier(editedLeftNode);
 						if(thereIsUnstructuredConflictWithAddedAndEditedElements(unstructuredMergeConflicts, newElementContent, editedElementContent)){
 							if(addedElementRefersToEditedOne(newElementContent,editedElementIdentfier)){
-								generateConflictWithAddedAndEditedElements(context, editedLeftNode, addedRightNode);
+								generateConflictWithAddedAndEditedElements(context, editedLeftNode, findBaseNode(context, editedLeftNode), addedRightNode);
 							}
 						}
 					}
@@ -108,9 +109,9 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 	 * @param editedElementContent
 	 * @param addedElementContent
 	 */
-	private static void generateConflictWithAddedAndEditedElements(MergeContext context, FSTNode editedElement, FSTNode addedElement) {
+	private static void generateConflictWithAddedAndEditedElements(MergeContext context, FSTNode editedElement, FSTNode baseElement, FSTNode addedElement) {
 		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(editedElement, addedElement);
+		MergeConflict newConflict = new MergeConflict(editedElement, baseElement, addedElement);
 
 		String editedElementContent = ((FSTTerminal) editedElement).getBody();
 		String addedElementContent = ((FSTTerminal) addedElement).getBody();
@@ -121,5 +122,10 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 		
 		//statistics
 		context.newElementReferencingEditedOneConflicts++;
+	}
+
+	private static FSTNode findBaseNode(MergeContext context, FSTNode editedNode) {
+		// The edited node has the same identifier as the base node.
+		return Traverser.retrieveNodeFromTree(editedNode, context.baseTree);
 	}
 }

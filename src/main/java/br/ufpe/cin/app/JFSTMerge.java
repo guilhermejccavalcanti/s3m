@@ -107,6 +107,9 @@ public class JFSTMerge {
 			arity = 1)
 	public static boolean isTypeAmbiguityErrorHandlerEnabled = true;
 
+	@Parameter(names = {"--show-base", "--diff3-style"}, description = "Outputs base's contribution in merge conflicts.")
+	public static boolean showBase = false;
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files.
 	 * This is mainly used for evaluation purposes.
