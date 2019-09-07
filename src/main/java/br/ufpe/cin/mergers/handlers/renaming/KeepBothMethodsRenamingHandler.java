@@ -11,6 +11,15 @@ import br.ufpe.cin.mergers.util.Traverser;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
+/**
+ * Alternative implementation of the renaming handler.
+ * 
+ * This handler always resolves a renaming or deletion conflict by keeping the
+ * involved declarations even if they would lead to a conflict if merged.
+ * 
+ * @author Giovanni Barros (gaabs@cin.ufpe.br)
+ * @author João Victor (jvsfc@cin.ufpe.br)
+ */
 public class KeepBothMethodsRenamingHandler implements RenamingHandler {
 
     @Override
@@ -28,10 +37,12 @@ public class KeepBothMethodsRenamingHandler implements RenamingHandler {
     private void removeConflictFromBaseNode(FSTNode baseNode, MergeContext context) {
         FSTNode mergeNode = Traverser.retrieveNodeFromTree(baseNode, context.superImposedTree);
         String conflictNodeContent = ((FSTTerminal) mergeNode).getBody();
-        MergeConflict mergeConflict = FilesManager.extractMergeConflicts(conflictNodeContent).get(0);
-        String nodeContent = (mergeConflict.left.isEmpty()) ? mergeConflict.right : mergeConflict.left;
+        if(!conflictNodeContent.equals("")) {
+            MergeConflict mergeConflict = FilesManager.extractMergeConflicts(conflictNodeContent).get(0);
+            String nodeContent = (mergeConflict.getLeft().isEmpty()) ? mergeConflict.getRight() : mergeConflict.getLeft();
 
-        ((FSTTerminal) mergeNode).setBody(nodeContent);
+            ((FSTTerminal) mergeNode).setBody(nodeContent);
+        }
     }
 
     private boolean isSingleRenaming(Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) {

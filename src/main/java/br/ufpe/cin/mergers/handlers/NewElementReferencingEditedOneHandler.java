@@ -34,8 +34,7 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 						String editedElementIdentfier = getElementIdentifier(editedRightNode);
 						if(thereIsUnstructuredConflictWithAddedAndEditedElements(unstructuredMergeConflicts, newElementContent, editedElementContent)){
 							if(addedElementRefersToEditedOne(newElementContent,editedElementIdentfier)){
-								String baseContent = getBaseContent(context, editedRightNode);
-								generateConflictWithAddedAndEditedElements(context, ((FSTTerminal)editedRightNode).getBody(), baseContent, newElementContent);
+								generateConflictWithAddedAndEditedElements(context, editedRightNode, findBaseNode(context, editedRightNode), addedLeftNode);
 							}
 						}
 					}
@@ -51,8 +50,7 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 						String editedElementIdentfier = getElementIdentifier(editedLeftNode);
 						if(thereIsUnstructuredConflictWithAddedAndEditedElements(unstructuredMergeConflicts, newElementContent, editedElementContent)){
 							if(addedElementRefersToEditedOne(newElementContent,editedElementIdentfier)){
-								String baseContent = getBaseContent(context, editedLeftNode);
-								generateConflictWithAddedAndEditedElements(context, ((FSTTerminal)editedLeftNode).getBody(), baseContent, newElementContent);
+								generateConflictWithAddedAndEditedElements(context, editedLeftNode, findBaseNode(context, editedLeftNode), addedRightNode);
 							}
 						}
 					}
@@ -111,20 +109,23 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 	 * @param editedElementContent
 	 * @param addedElementContent
 	 */
-	private static void generateConflictWithAddedAndEditedElements(MergeContext context, String editedElementContent, String baseContent, String addedElementContent) {
+	private static void generateConflictWithAddedAndEditedElements(MergeContext context, FSTNode editedElement, FSTNode baseElement, FSTNode addedElement) {
 		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(editedElementContent, baseContent, addedElementContent);
+		MergeConflict newConflict = new MergeConflict(editedElement, baseElement, addedElement);
+
+		String editedElementContent = ((FSTTerminal) editedElement).getBody();
+		String addedElementContent = ((FSTTerminal) addedElement).getBody();
+
 		//second put the conflict in one of the nodes containing the import statements, and deletes the other node containing the orther import statement
-		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, editedElementContent, newConflict.body);
+		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, editedElementContent, newConflict.toString());
 		FilesManager.findAndDeleteASTNode(context.superImposedTree, addedElementContent);
 		
 		//statistics
 		context.newElementReferencingEditedOneConflicts++;
 	}
 
-	private static String getBaseContent(MergeContext context, FSTNode editedNode) {
+	private static FSTNode findBaseNode(MergeContext context, FSTNode editedNode) {
 		// The edited node has the same identifier as the base node.
-		FSTNode baseNode = Traverser.retrieveNodeFromTree(editedNode, context.baseTree);
-		return ((FSTTerminal) baseNode).getBody();
+		return Traverser.retrieveNodeFromTree(editedNode, context.baseTree);
 	}
 }

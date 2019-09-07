@@ -191,15 +191,13 @@ public class DeletionsHandler implements ConflictHandler {
 		FSTNode correspondingInSource = FilesManager.findNodeByID(source, identifier);
 		if(correspondingInSource!=null){
 			FSTNonTerminal declarationInSource = correspondingInSource.getParent();
-			String contributionBody = FilesManager.prettyPrint((FSTNonTerminal) declarationInSource);
-			String baseBody = FilesManager.prettyPrint((FSTNonTerminal) baseNode);
 			MergeConflict newConflict;
 			if(isLeftDeletion){
-				newConflict = new MergeConflict("", baseBody, contributionBody);
+				newConflict = new MergeConflict(null, baseNode, declarationInSource);
 			} else {
-				newConflict = new MergeConflict(contributionBody, baseBody, "");
+				newConflict = new MergeConflict(declarationInSource, baseNode, null);
 			}
-			FSTTerminal terminal = new FSTTerminal(declarationInSource.getType(), identifier, newConflict.body, "");
+			FSTTerminal terminal = new FSTTerminal(declarationInSource.getType(), identifier, newConflict.toString(), "");
 			parent.addChild(terminal, index);
 			context.innerDeletionConflicts++;
 		}

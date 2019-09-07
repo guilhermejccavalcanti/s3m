@@ -151,7 +151,7 @@ public final class Statistics {
 	private static int computeConflictsLOC(List<MergeConflict> listofconflicts) {
 		int conflictsloc = 0;
 		for(MergeConflict mc : listofconflicts){
-			conflictsloc += ((new BufferedReader(new StringReader(mc.left)).lines().collect(Collectors.toList()).size()) + (new BufferedReader(new StringReader(mc.right)).lines().collect(Collectors.toList()).size())) ;
+			conflictsloc += ((new BufferedReader(new StringReader(mc.getLeft())).lines().collect(Collectors.toList()).size()) + (new BufferedReader(new StringReader(mc.getRight())).lines().collect(Collectors.toList()).size())) ;
 		}
 		return conflictsloc;
 	}
@@ -225,8 +225,8 @@ public final class Statistics {
 	}
 
 	private static boolean areEquivalentConflicts(MergeConflict confa, MergeConflict confb) {
-		String bodya = FilesManager.getStringContentIntoSingleLineNoSpacing(confa.left + confa.right);
-		String bodyb = FilesManager.getStringContentIntoSingleLineNoSpacing(confb.left + confb.right);
+		String bodya = FilesManager.getStringContentIntoSingleLineNoSpacing(confa.getLeft() + confa.getRight());
+		String bodyb = FilesManager.getStringContentIntoSingleLineNoSpacing(confb.getLeft() + confb.getRight());
 		if(bodya.equals(bodyb)){
 			return true;
 		}

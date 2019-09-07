@@ -1,19 +1,42 @@
 language: java
 jdk:
- - oraclejdk8
+ - openjdk8
 notifications:
  email:
   recipients:
    - joao.coutinho9@gmail.com
   on_success: always
-before_install:
-- ./gradlew clean build -x test
-- cp build/libs/jFSTMerge-all.jar testfiles/shelltests/config/jFSTMerge.jar
-- bash testfiles/shelltests/config/gitconfiguration.sh
-- git config --global user.email "gjcc@cin.ufpe.br"
-- git config --global user.name "Guilherme Cavalcanti" 
-- sudo apt-get install shunit2
-script:
-- ./gradlew test
-- cd testfiles/shelltests/
-- shunit2 s3mTests.sh
+
+jobs:
+ include:
+  - if: type != cron # Regular build: triggered by push and pull-request requests.
+    before_install:
+    - ./gradlew clean build -x test
+    - cp build/libs/jFSTMerge-all.jar testfiles/shelltests/config/jFSTMerge.jar
+    - bash testfiles/shelltests/config/gitconfiguration.sh
+    - git config --global user.email "gjcc@cin.ufpe.br"
+    - git config --global user.name "Guilherme Cavalcanti"
+    - sudo apt-get install shunit2
+    script:
+    - ./gradlew test
+    - cd testfiles/shelltests/
+    - shunit2 s3mTests.sh
+
+  - if: type = cron # Cron job: periodic test.
+    before_install:
+    - ./gradlew clean build -x test
+    - cp build/libs/jFSTMerge-all.jar testfiles/shelltests/config/jFSTMerge.jar
+    - bash testfiles/shelltests/config/gitconfiguration.sh
+    - git config --global user.email "gjcc@cin.ufpe.br"
+    - git config --global user.name "Guilherme Cavalcanti"
+    - sudo apt-get install shunit2
+    before_script:
+    - cd testfiles/shelltests
+    - git clone https://github.com/jvcoutinho/s3m-test-samples
+    - cd s3m-test-samples
+    - git checkout left
+    - git checkout right
+    - git checkout master
+    - cd ..
+    script:
+    - shunit2 s3mTravisCronJobsTests.sh

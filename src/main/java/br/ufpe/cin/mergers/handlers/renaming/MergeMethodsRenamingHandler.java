@@ -7,6 +7,15 @@ import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 
+/**
+ * Alternative implementation of the renaming handler.
+ * 
+ * This handler always resolves a renaming or deletion conflict by merging
+ * the involved declarations.
+ * 
+ * @author Giovanni Barros (gaabs@cin.ufpe.br)
+ * @author João Victor (jvsfc@cin.ufpe.br)
+ */
 public class MergeMethodsRenamingHandler implements RenamingHandler {
 
     @Override
