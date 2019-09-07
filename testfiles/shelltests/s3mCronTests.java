@@ -1,6 +1,26 @@
-import org.junit.*;
+import static org.junit.Assert.assertEquals;
+
+import java.io.IOException;
+import java.io.InputStream;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.IOUtils;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 public class s3mCronTests {
+
+    private final Path samplesRepositoryPath = Paths.get("./samples");
+    private final Path s3mFilesPath = Paths.get(System.getProperty("user.home") + "/.jfstmerge");
+
+    @BeforeClass
+    public static void cloneSamplesRepository() throws IOException, InterruptedException {
+        runProgram(Paths.get("."), "git", "clone", "https://github.com/jvcoutinho/s3m-test-samples.git", "samples");
+    }
 
     @Test
     public void testLogCorrectness() throws IOException, InterruptedException {
@@ -38,14 +58,14 @@ public class s3mCronTests {
 
     private String initBranchesAndMerge() throws IOException, InterruptedException {
         StringBuilder output = new StringBuilder();
-        output.append(runProgram("git", "merge", "origin/left", "--no-edit", "--quiet"));
-        output.append(runProgram("git", "merge", "origin/right", "--no-edit", "--quiet"));
+        output.append(runProgram(samplesRepositoryPath, "git", "merge", "origin/left", "--no-edit", "--quiet"));
+        output.append(runProgram(samplesRepositoryPath, "git", "merge", "origin/right", "--no-edit", "--quiet"));
         return output.toString();
     }
 
-    private String runProgram(String... commands) throws IOException, InterruptedException {
+    private static String runProgram(Path directory, String... commands) throws IOException, InterruptedException {
         Process program = new ProcessBuilder()
-                .directory(s3mTempRepositoryPath.toFile())
+                .directory(directory.toFile())
                 .command(commands)
                 .start();
 
