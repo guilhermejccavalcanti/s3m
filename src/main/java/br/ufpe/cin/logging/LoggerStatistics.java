@@ -134,7 +134,7 @@ public class LoggerStatistics {
 			StringBuilder builder = new StringBuilder();
 			builder.append("----------------------------\n");
 			for(MergeConflict mc : confs){
-				builder.append(mc.body);
+				builder.append(mc.toString());
 				builder.append("\n----------------------------\n");
 			}
 			String conflicts = builder.toString();

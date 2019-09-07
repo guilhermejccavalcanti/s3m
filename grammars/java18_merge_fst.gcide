@@ -512,7 +512,17 @@ TypeBound:
 
 @FSTInline
 ClassOrInterfaceBody:
-		"{" @+ @! ( ClassOrInterfaceBodyDeclaration @!)* @- @! "}"
+		ClassOrInterfaceBodyStart @+ @! ( ClassOrInterfaceBodyDeclaration @!)* @- @! ClassOrInterfaceBodyEnd
+;
+
+@FSTTerminal(merge="LineBased", compose="concat")
+ClassOrInterfaceBodyStart:
+	"{"
+;
+
+@FSTTerminal(merge="LineBased", compose="concat")
+ClassOrInterfaceBodyEnd:
+	"}"
 ;
 
 ClassOrInterfaceBodyDeclaration:

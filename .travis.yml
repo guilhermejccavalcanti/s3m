@@ -20,6 +20,43 @@ notifications:
       - joao.coutinho9@gmail.com
     on_success: always
 
+jobs:
+ include:
+  - before_install:
+    - curl "${GRAVIS}.install-jdk-travis.sh" --output ~/.install-jdk-travis.sh
+    - source ~/.install-jdk-travis.sh
+
+    - ./gradlew clean build -x test --console=plain # build
+
+    - cp build/libs/jFSTMerge-all.jar ${HOME}/s3m.jar
+    - bash testfiles/shelltests/config/gitconfiguration.sh # configure git integration with S3M
+
+    - git config --global user.email "gjcc@cin.ufpe.br"
+    - git config --global user.name "Guilherme Cavalcanti"
+  - if: type = cron # Regular build: triggered by push and pull-request requests.
+    script:
+      - ./gradlew test --console=plain
+      - cd testfiles/shelltests
+      - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
+          javac -cp .\;dependencies/* s3mGitIntegrationTests.java;
+          java -cp .\;dependencies/* org.junit.runner.JUnitCore s3mGitIntegrationTests;
+        else
+          javac -cp .:dependencies/* s3mGitIntegrationTests.java;
+          java -cp .:dependencies/* org.junit.runner.JUnitCore s3mGitIntegrationTests;
+        fi
+  - if: type != cron # Cron job: periodic test.
+    before_script:
+    - cd testfiles/shelltests
+    - git clone https://github.com/jvcoutinho/s3m-test-samples
+    script:
+      - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
+          javac -cp .\;dependencies/* s3mCronTests.java;
+          java -cp .\;dependencies/* org.junit.runner.JUnitCore s3mCronTests;
+        else
+          javac -cp .:dependencies/* s3mCronTests.java;
+          java -cp .:dependencies/* org.junit.runner.JUnitCore s3mCronTests;
+        fi
+
 before_install:
   - curl "${GRAVIS}.install-jdk-travis.sh" --output ~/.install-jdk-travis.sh
   - source ~/.install-jdk-travis.sh
