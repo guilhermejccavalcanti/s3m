@@ -31,10 +31,10 @@ public class MergeConflict {
 
 	private String fullyQualifiedMergedClass;
 
-	private static final String MINE_CONFLICT_MARKER = "<<<<<<< MINE";
-	private static final String BASE_CONFLICT_MARKER = "||||||| BASE";
-	private static final String CHANGE_CONFLICT_MARKER = "======= ";
-	private static final String YOURS_CONFLICT_MARKER = ">>>>>>> YOURS";
+	public static final String MINE_CONFLICT_MARKER = "<<<<<<< MINE";
+	public static final String BASE_CONFLICT_MARKER = "||||||| BASE";
+	public static final String CHANGE_CONFLICT_MARKER = "=======";
+	public static final String YOURS_CONFLICT_MARKER = ">>>>>>> YOURS";
 
 	public MergeConflict(FSTNode left, FSTNode base, FSTNode right) {
 		this.left = getNodeContent(left);
@@ -65,7 +65,7 @@ public class MergeConflict {
 					.append('\n');
 		}
 		conflict.append(CHANGE_CONFLICT_MARKER)
-				.append(message)
+				.append(" " + message)
 				.append('\n')
 				.append(right)
 				.append('\n')
