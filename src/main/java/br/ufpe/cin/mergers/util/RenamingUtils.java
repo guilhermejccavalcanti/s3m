@@ -117,21 +117,6 @@ public class RenamingUtils {
         removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
     }
 
-    public static void generateMutualRenamingConflictLegacy(MergeContext context, FSTNode left, FSTNode right) {
-        String leftContent = ((FSTTerminal) left).getBody();
-        String rightContent = ((FSTTerminal) right).getBody();
-
-        //statistics
-        context.renamingConflicts++;
-
-        //first creates a conflict
-        MergeConflict newConflict = new MergeConflict(leftContent + '\n', rightContent + '\n');
-
-        //second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
-        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, newConflict.body);
-        FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
-    }
-
     public static void removeUnmmatchedNode(FSTNode mergeTree, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
         if(equalIfExists(leftNode, mergeNode) && !equalIfExists(rightNode, leftNode))
             Traverser.removeNode(rightNode, mergeTree);

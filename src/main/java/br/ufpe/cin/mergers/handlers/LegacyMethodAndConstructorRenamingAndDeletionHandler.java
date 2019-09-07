@@ -46,7 +46,7 @@ public final class LegacyMethodAndConstructorRenamingAndDeletionHandler implemen
 						rightBody = removeSignature(rightBody);
 
 						if(leftBody.equals(rightBody)){//the methods have the same body, ignoring their signature
-							generateMutualRenamingConflict(context, ((FSTTerminal)left).getBody(), ((FSTTerminal)left).getBody(), ((FSTTerminal)right).getBody());
+							generateMutualRenamingConflict(context, ((FSTTerminal)left).getBody(), left, right);
 							break;
 						}
 					}
@@ -68,7 +68,7 @@ public final class LegacyMethodAndConstructorRenamingAndDeletionHandler implemen
 				if(nodeHasConflict(tuple.getRight()) && isValidNode(tuple.getRight())){
 					String baseContent = tuple.getLeft();
 					String currentNodeContent= ((FSTTerminal) tuple.getRight()).getBody(); //node content with conflict
-					String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).right;
+					String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).getRight();
 
 					//1. getting similar nodes to fulfill renaming conflicts
 					for(FSTNode newNode : context.addedLeftNodes){ // a possible renamed node is seem as "new" node due to superimposition
@@ -85,7 +85,7 @@ public final class LegacyMethodAndConstructorRenamingAndDeletionHandler implemen
 					//2. checking if unstructured merge also reported the renaming conflict
 					String signature = getSignature(baseContent);
 					List<MergeConflict> unstructuredMergeConflictsHavingRenamedSignature = FilesManager.extractMergeConflicts(context.unstructuredOutput).stream()
-							.filter(mc -> FilesManager.getStringContentIntoSingleLineNoSpacing(mc.body).contains(signature))
+							.filter(mc -> FilesManager.getStringContentIntoSingleLineNoSpacing(mc.toString()).contains(signature))
 							.collect(Collectors.toList());
 					if(unstructuredMergeConflictsHavingRenamedSignature.size() > 0){
 						String possibleRenamingContent = getMostSimilarContent(similarNodes);
@@ -102,7 +102,7 @@ public final class LegacyMethodAndConstructorRenamingAndDeletionHandler implemen
 				if(nodeHasConflict(tuple.getRight()) && isValidNode(tuple.getRight())){
 					String baseContent = tuple.getLeft();
 					String currentNodeContent= ((FSTTerminal) tuple.getRight()).getBody(); //node content with conflict
-					String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).left;
+					String editedNodeContent = FilesManager.extractMergeConflicts(currentNodeContent).get(0).getLeft();
 
 					for(FSTNode newNode : context.addedRightNodes){ // a possible renamed node is seem as "new" node due to superimposition
 						if(isValidNode(newNode)){
@@ -117,7 +117,7 @@ public final class LegacyMethodAndConstructorRenamingAndDeletionHandler implemen
 
 					String signature = getSignature(baseContent);
 					List<MergeConflict> unstructuredMergeConflictsHavingRenamedSignature = FilesManager.extractMergeConflicts(context.unstructuredOutput).stream()
-							.filter(mc -> FilesManager.getStringContentIntoSingleLineNoSpacing(mc.body).contains(signature))
+							.filter(mc -> FilesManager.getStringContentIntoSingleLineNoSpacing(mc.toString()).contains(signature))
 							.collect(Collectors.toList());
 					if(unstructuredMergeConflictsHavingRenamedSignature.size() > 0){
 						String possibleRenamingContent = getMostSimilarContent(similarNodes);
@@ -178,9 +178,9 @@ public final class LegacyMethodAndConstructorRenamingAndDeletionHandler implemen
 		}
 
 		//first creates a conflict 
-		MergeConflict newConflict = new MergeConflict(firstContent+'\n', secondContent+'\n');
+		MergeConflict newConflict = new MergeConflict(firstContent, "", secondContent);
 		//second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
-		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.body);
+		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.toString());
 		if(isLeftToRight){
 			FilesManager.findAndDeleteASTNode(context.superImposedTree, firstContent);
 		} else {
@@ -189,16 +189,18 @@ public final class LegacyMethodAndConstructorRenamingAndDeletionHandler implemen
 		}
 	}
 
-	private static void generateMutualRenamingConflict(MergeContext context,String currentNodeContent, String firstContent,String secondContent) {
-		//statistics
+	private static void generateMutualRenamingConflict(MergeContext context,String currentNodeContent, FSTNode left,
+			FSTNode right) {
+		// statistics
 		context.renamingConflicts++;
 
-		//first creates a conflict 
-		MergeConflict newConflict = new MergeConflict(firstContent+'\n', secondContent+'\n');
+		// first creates a conflict
+		MergeConflict newConflict = new MergeConflict(left, null, right);
 
-		//second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
-		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.body);
-		FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
+		// second put the conflict in one of the nodes containing the previous conflict,
+		// and deletes the other node containing the possible renamed version
+		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.toString());
+		FilesManager.findAndDeleteASTNode(context.superImposedTree, ((FSTTerminal)right).getBody());
 	}
 
 	/*	pure similarity-based handler (it works)

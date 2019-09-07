@@ -5,20 +5,26 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import br.ufpe.cin.app.JFSTMerge;
-import br.ufpe.cin.mergers.handlers.*;
 import com.google.common.collect.ImmutableList;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.handlers.ConflictHandler;
+import br.ufpe.cin.mergers.handlers.DeletionsHandler;
+import br.ufpe.cin.mergers.handlers.DuplicatedDeclarationHandler;
+import br.ufpe.cin.mergers.handlers.InitializationBlocksHandler;
+import br.ufpe.cin.mergers.handlers.LegacyMethodAndConstructorRenamingAndDeletionHandler;
+import br.ufpe.cin.mergers.handlers.MethodAndConstructorRenamingAndDeletionHandler;
+import br.ufpe.cin.mergers.handlers.NewElementReferencingEditedOneHandler;
+import br.ufpe.cin.mergers.handlers.TypeAmbiguityErrorHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
-import br.ufpe.cin.mergers.util.Side;
-import br.ufpe.cin.mergers.util.Traverser;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
 import cide.gparser.ParseException;
@@ -340,8 +346,9 @@ public final class SemistructuredMerge {
 		String baseContent = contributionsContents.getMiddle().trim();
 		String rightContent = contributionsContents.getRight().trim();
 
-    identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
-    identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
+		identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
+		if(JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+    		identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
 
 		return TextualMerge.merge(leftContent, baseContent, rightContent,
 				JFSTMerge.isWhitespaceIgnored);
