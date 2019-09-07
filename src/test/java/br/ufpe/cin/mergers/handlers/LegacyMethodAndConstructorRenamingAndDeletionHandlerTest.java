@@ -1,10 +1,11 @@
 package br.ufpe.cin.mergers.handlers;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertTrue;
 
 import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
+import java.nio.charset.Charset;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -23,7 +24,7 @@ public class LegacyMethodAndConstructorRenamingAndDeletionHandlerTest {
 		PrintStream originalStream = System.out;
 		PrintStream hideStream    = new PrintStream(new OutputStream(){
 		    public void write(int b) {}
-		});
+		}, true, Charset.defaultCharset().displayName());
 		System.setOut(hideStream);
 	}
 
