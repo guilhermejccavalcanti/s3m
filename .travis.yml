@@ -33,6 +33,10 @@ jobs:
 
     - git config --global user.email "gjcc@cin.ufpe.br"
     - git config --global user.name "Guilherme Cavalcanti"
+  - before_cache:
+    - curl "${GRAVIS}.clean_gradle_cache.sh" --output ~/.clean_gradle_cache.sh
+    - bash ~/.clean_gradle_cache.sh
+    
   - if: type = cron # Regular build: triggered by push and pull-request requests.
     script:
       - ./gradlew test --console=plain
@@ -57,29 +61,3 @@ jobs:
           java -cp .:dependencies/* org.junit.runner.JUnitCore s3mCronTests;
         fi
 
-before_install:
-  - curl "${GRAVIS}.install-jdk-travis.sh" --output ~/.install-jdk-travis.sh
-  - source ~/.install-jdk-travis.sh
-
-  - ./gradlew clean build -x test --console=plain
-
-  - cp build/libs/jFSTMerge-all.jar ${HOME}/s3m.jar
-  - bash testfiles/shelltests/config/gitconfiguration.sh
-
-  - git config --global user.email "gjcc@cin.ufpe.br"
-  - git config --global user.name "Guilherme Cavalcanti" 
-
-script:
-  - ./gradlew test --console=plain
-  - cd testfiles/shelltests
-  - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
-      javac -cp .\;dependencies/* s3mGitIntegrationTests.java;
-      java -cp .\;dependencies/* org.junit.runner.JUnitCore s3mGitIntegrationTests;
-    else
-      javac -cp .:dependencies/* s3mGitIntegrationTests.java;
-      java -cp .:dependencies/* org.junit.runner.JUnitCore s3mGitIntegrationTests;
-    fi
-
-before_cache:
-  - curl "${GRAVIS}.clean_gradle_cache.sh" --output ~/.clean_gradle_cache.sh
-  - bash ~/.clean_gradle_cache.sh
