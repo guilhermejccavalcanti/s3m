@@ -22,7 +22,7 @@ public abstract class S3MPrettyPrinter extends AbstractFSTPrintVisitor {
     private final Queue<String> tokensCurrentLine;
 
     private final Pattern conflictPattern = Pattern
-            .compile("<<<<<<< MINE(.*)(||||||| BASE)?(.*)=======(.*)>>>>>>> YOURS", Pattern.DOTALL);
+            .compile("<<<<<<< MINE(.*)(||||||| BASE)?(.*)=======(.*)>>>>>>> YOURS(.*)", Pattern.DOTALL);
 
     public S3MPrettyPrinter() {
         this.result = new StringBuilder();
