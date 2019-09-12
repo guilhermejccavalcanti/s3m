@@ -187,7 +187,7 @@ For research purposes, S3M's stores a error and some statistical logs in `${HOME
 Check the [Releases](https://github.com/guilhermejccavalcanti/jFSTMerge/releases) page. Download and execute the most recent installer and follow its instructions.
 
 ### Usage
-If integrated with Git, S3M will run automatically on every `git merge` command. No further configuration required.  
+If integrated with Git, S3M will run automatically every time you invoke the `git merge` command. No further configuration required.  
 You can still run it as a standalone tool, if desired. Its `.jar` is present in the installation directory.
 
 #### Parameters
@@ -198,7 +198,7 @@ You can still run it as a standalone tool, if desired. Its `.jar` is present in 
 | `-f` | 3 | String | Specify the files to be merged (mine, base, yours).
 | `-d` | 3 | String | Specify the directories to be merged (mine, base, yours).
 | `-o` | 1 | String | Destination of the merged content. *(default: yours)*
-| `-c` | 1 | Boolean | Enables or disables cryptography during logs generation. *(default: true)*
+| `-c` | 1 | Boolean | Enables or disables cryptography during log generation. *(default: true)*
 | `-l` | 1 | Boolean | Enables or disables logging. *(default: true)*
 | `--encoding-inference` | 1 | Boolean | Tries to infer file encodings to properly merge them. If not enabled, the tool assumes files are encoded in UTF-8. *(default: true)*
 | `--ignore-space-change` | 1 | Boolean | Lines with whitespace changes only are considered as unchanged for the sake of a three-way merge. *(default: true)*
