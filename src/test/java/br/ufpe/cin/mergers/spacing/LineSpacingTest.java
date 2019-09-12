@@ -36,6 +36,14 @@ public class LineSpacingTest {
     }
 
     @Test
+    public void testSpacingPreservation_whenLeftAddsAnImportStatementPost2Lines_andRightAddsADifferentImportStatementPost5Lines_shouldPreserveBothSpacing() {
+        String mergeResult = merge("imports");
+
+        assertEquals(2, numLineBreaksBetweenDeclarations(mergeResult, "package mypackage;", "import importstatement.A;"));
+        assertEquals(5, numLineBreaksBetweenDeclarations(mergeResult, "import importstatement.A;", "import importstatement2.*;"));
+    }
+
+    @Test
     public void testSpacingPreservation_whenLeftAddsAnAttributePost2Lines_andRightAddsADifferentAttributePost4Lines_shouldPreserveBothSpacing() {
         String mergeResult = merge("addsattributeaddsdiffattribute");
         
