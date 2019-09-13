@@ -17,6 +17,8 @@ import java.util.ArrayList;
 import java.util.Arrays;
 
 public class EncodingInferenceParameterTest {
+    
+    private JFSTMerge merger = new JFSTMerge();
 
     @BeforeClass
     public static void setUpBeforeClass() throws UnsupportedEncodingException {
@@ -31,7 +33,7 @@ public class EncodingInferenceParameterTest {
 
     @Test
     public void testEncodingInferenceDisabled() {
-        JFSTMerge.filesEncoding = Arrays.asList(new String[] {"UTF-8", "UTF-8", "UTF-8"});
+        merger.setFilesEncoding(Arrays.asList(new String[] {"UTF-8", "UTF-8", "UTF-8"}));
         String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(getMergeResult());
         // The first two characters are weird ones.
         assertThat(mergeResult.substring(2)).isEqualTo("publicclassTest{voidhelloWorld(){System.out.println(\"HelloWorld!\");}}");
@@ -39,14 +41,14 @@ public class EncodingInferenceParameterTest {
 
     @Test
     public void testEncodingInferenceEnabled() {
-        JFSTMerge.filesEncoding = new ArrayList<>();
+        merger.setFilesEncoding(new ArrayList<>());
         String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(getMergeResult());
         // The first character is a special one from UTF-16.
         assertThat(mergeResult.substring(1)).isEqualTo("publicclassTest{voidhelloWorld(){System.out.println(\"HelloWorld!\");}}");
     }
 
     private String getMergeResult() {
-        MergeContext context = new JFSTMerge().mergeFiles(
+        MergeContext context = merger.mergeFiles(
                 new File("testfiles/differentencodings/left.java"),
                 new File("testfiles/differentencodings/base.java"),
                 new File("testfiles/differentencodings/right.java"),

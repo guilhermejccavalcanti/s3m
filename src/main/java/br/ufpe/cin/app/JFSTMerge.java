@@ -66,7 +66,7 @@ public class JFSTMerge {
 
 	@Parameter(names = "--files-encoding", description = "Determines the encoding of the input files. If not specified," +
 			"the tool tries to infer the encoding of the files. If this fails, it assumes the files are encoded in UTF-8.", arity = 3)
-	public static List<String> filesEncoding = new ArrayList<>();
+	private List<String> filesEncoding = new ArrayList<>();
 
 	@Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
 			+ "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
@@ -310,6 +310,10 @@ public class JFSTMerge {
 		} else {
 			return 0;
 		}
+	}
+
+	public void setFilesEncoding(List<String> filesEncoding) {
+		this.filesEncoding = filesEncoding;
 	}
 
 }
