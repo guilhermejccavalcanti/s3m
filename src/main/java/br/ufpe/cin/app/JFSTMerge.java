@@ -19,6 +19,7 @@ import br.ufpe.cin.statistics.Statistics;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.converters.FileConverter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -47,11 +48,8 @@ public class JFSTMerge {
 	private static int conflictState = 0;
 
 	//command line options
-	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
-	List<String> filespath = new ArrayList<String>();
-
-	@Parameter(names = "-d", arity = 3, description = "Directories to be merged (mine, base, yours)")
-	List<String> directoriespath = new ArrayList<String>();
+	@Parameter(arity = 3, description = "MinePath BasePath YoursPath", required = true, listConverter = FileConverter.class)
+	List<File> files = new ArrayList<>();
 
 	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
             + "then it will use \"yours\" as the destination for the merge. ")
@@ -286,16 +284,21 @@ public class JFSTMerge {
 		try {
 			commandLineOptions.parse(args);
 			CommandLineValidator.validateCommandLineOptions(this);
-			if (!filespath.isEmpty()) {
-				mergeFiles(new File(filespath.get(0)), new File(filespath.get(1)), new File(filespath.get(2)), outputpath);
-			} else if (!directoriespath.isEmpty()) {
-				mergeDirectories(directoriespath.get(0), directoriespath.get(1), directoriespath.get(2), outputpath);
+
+			if(areDirectories(files)) {
+				mergeDirectories(files.get(0).getAbsolutePath(), files.get(1).getAbsolutePath(), files.get(2).getAbsolutePath(), outputpath);
+			} else {
+				mergeFiles(files.get(0), files.get(1), files.get(2), outputpath);
 			}
 		} catch (ParameterException pe) {
 			System.err.println(pe.getMessage());
 			commandLineOptions.setProgramName("JFSTMerge");
 			commandLineOptions.usage();
 		}
+	}
+
+	private boolean areDirectories(List<File> files) {
+		return files.stream().allMatch(File::isDirectory);
 	}
 
 	private int checkConflictState(MergeContext context) {
