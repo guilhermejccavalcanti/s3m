@@ -76,7 +76,7 @@ public class JFSTMerge {
 	public static boolean keepBothVersionsOfRenamedMethod = false;
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-	@Parameter(names = {"-r", "--renaming"}, description = "Parameter to choose strategy on renaming conflicts.",
+	@Parameter(names = {"-r", "--renaming-strategy"}, description = "Parameter to choose strategy on renaming conflicts.",
             converter = RenamingStrategyConverter.class)
 	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
 
