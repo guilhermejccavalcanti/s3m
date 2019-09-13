@@ -64,9 +64,9 @@ public class JFSTMerge {
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
-	@Parameter(names = "--encoding-inference", description = "Tries to infer file encodings to properly merge them. If" +
-			"not enabled, the tool assumes files are encoded in UTF-8.", arity = 1)
-	public static boolean isEncodingInferenceEnabled = true;
+	@Parameter(names = "--files-encoding", description = "Determines the encoding of the input files. If not specified," +
+			"the tool tries to infer the encoding of the files. If this fails, it assumes the files are encoded in UTF-8.", arity = 3)
+	public static List<String> filesEncoding = new ArrayList<>();
 
 	@Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
 			+ "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
@@ -192,10 +192,12 @@ public class JFSTMerge {
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath) {
 		FilesManager.validateFiles(left, base, right);
 
-		if(isEncodingInferenceEnabled) {
+		if(filesEncoding.isEmpty()) {
 			FilesEncoding.analyseFiles(left, base, right);
 			assert(FilesEncoding.retrieveEncoding(left).equals(FilesEncoding.retrieveEncoding(base)));
 			assert(FilesEncoding.retrieveEncoding(base).equals(FilesEncoding.retrieveEncoding(right)));
+		} else {
+			FilesEncoding.setFilesEncoding(left, base, right, filesEncoding);
 		}
 
 		if (!isGit) {
