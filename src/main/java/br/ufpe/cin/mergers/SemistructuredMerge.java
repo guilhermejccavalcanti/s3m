@@ -5,20 +5,26 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import br.ufpe.cin.app.JFSTMerge;
-import br.ufpe.cin.mergers.handlers.*;
 import com.google.common.collect.ImmutableList;
+
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.handlers.ConflictHandler;
+import br.ufpe.cin.mergers.handlers.DeletionsHandler;
+import br.ufpe.cin.mergers.handlers.DuplicatedDeclarationHandler;
+import br.ufpe.cin.mergers.handlers.InitializationBlocksHandler;
+import br.ufpe.cin.mergers.handlers.LegacyMethodAndConstructorRenamingAndDeletionHandler;
+import br.ufpe.cin.mergers.handlers.MethodAndConstructorRenamingAndDeletionHandler;
+import br.ufpe.cin.mergers.handlers.NewElementReferencingEditedOneHandler;
+import br.ufpe.cin.mergers.handlers.TypeAmbiguityErrorHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
-import br.ufpe.cin.mergers.util.Side;
-import br.ufpe.cin.mergers.util.Traverser;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
 import cide.gparser.ParseException;
@@ -47,8 +53,12 @@ public final class SemistructuredMerge {
 		if(JFSTMerge.isNewElementReferencingEditedOneHandlerEnabled)
 			builder.add(new NewElementReferencingEditedOneHandler());
 
-		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled &&
+			!JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
 			builder.add(new MethodAndConstructorRenamingAndDeletionHandler());
+
+		if(JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+			builder.add(new LegacyMethodAndConstructorRenamingAndDeletionHandler());
 
 		if(JFSTMerge.isInitializationBlocksHandlerEnabled)
 			builder.add(new InitializationBlocksHandler());
@@ -337,6 +347,9 @@ public final class SemistructuredMerge {
 		String rightContent = contributionsContents.getRight().trim();
 
 		identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
+		if(JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+    		identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
+
 		return TextualMerge.merge(leftContent, baseContent, rightContent,
 				JFSTMerge.isWhitespaceIgnored);
 	}
@@ -347,6 +360,7 @@ public final class SemistructuredMerge {
 		return RenamingUtils.compareAndMerge(contributionsContents.getLeft(), contributionsContents.getMiddle(),
 				contributionsContents.getRight());
 	}
+
 
 	private static Triple<String, String, String> splitContributionsContents(String nodeContent) {
 		String[] splitContent = nodeContent.split(SemistructuredMerge.MERGE_SEPARATOR);
@@ -374,6 +388,29 @@ public final class SemistructuredMerge {
 				context.editedRightNodes.add(node);
 			} else if (baseContenttrim.equals(rightContenttrim) && !leftContenttrim.equals(rightContenttrim)) {
 				context.editedLeftNodes.add(node);
+			}
+		}
+	}
+
+	/**
+	 * Verifies if a node was deleted/renamed in one of the revisions
+	 * @param node
+	 * @param context
+	 * @param leftContent
+	 * @param baseContent
+	 * @param rightContent
+	 */
+	private static void identifyPossibleNodesDeletionOrRenamings(FSTNode node, MergeContext context, String leftContent,String baseContent, String rightContent) {
+		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
+		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
+		String rightContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);
+		if (!baseContenttrim.isEmpty()) {
+			if (!baseContenttrim.equals(leftContenttrim) && rightContenttrim.isEmpty()) {
+				Pair<String, FSTNode> tuple = Pair.of(baseContent, node);
+				context.possibleRenamedRightNodes.add(tuple);
+			} else if (!baseContenttrim.equals(rightContenttrim) && leftContenttrim.isEmpty()) {
+				Pair<String, FSTNode> tuple = Pair.of(baseContent, node);
+				context.possibleRenamedLeftNodes.add(tuple);
 			}
 		}
 	}

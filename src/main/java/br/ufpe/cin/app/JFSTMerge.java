@@ -98,6 +98,11 @@ public class JFSTMerge {
 			"semistructured merge alone is unable to solve.", arity = 1)
 	public static boolean isMethodAndConstructorRenamingAndDeletionHandlerEnabled = true;
 
+	@Parameter(names = {"--handle-method-constructor-renaming-deletion-old-version", "-hmcrdov"}, description = "Detects and solves conflicts caused by renaming or deletion, where" +
+	"semistructured merge alone is unable to solve. It gathers all methods and constructors from both contributions that are not present in base. If both aren't in the base and they have different signatures but equal bodies," +
+	"the handler reports a conflict. If only one of them is present in the base, the handler finds the first method similar (0.7 threshold) in the other contribution and reports a conflict if unstructured merge also reported.")
+	public static boolean isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled = false;
+
 	@Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
 			arity = 1)
 	public static boolean isTypeAmbiguityErrorHandlerEnabled = true;
