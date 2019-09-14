@@ -1,5 +1,6 @@
 package br.ufpe.cin.mergers.handlers;
 
+import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
 import java.io.File;
@@ -105,11 +106,8 @@ public class DeletionsHandlerTest {
 				new File("testfiles/deletioninnernewinstanceofrenamed/base.java"), 
 				new File("testfiles/deletioninnernewinstanceofrenamed/right.java"),
 				null);
-		assertTrue(
-				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
-				.equals("packagecom.example;publicclassTest{<<<<<<<MINE=======classA{doublea;doubleb;}>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}")
-				);
-		assertTrue(ctx.innerDeletionConflicts==1);
+		assertEquals("packagecom.example;publicclassTest{<<<<<<<MINE=======classA{doublea;doubleb;}>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}", FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput));
+		assertEquals(1, ctx.innerDeletionConflicts);
 
 	}
 	
@@ -177,11 +175,8 @@ public class DeletionsHandlerTest {
 				new File("testfiles/deletioninnernewinstanceofrenamed/base.java"), 
 				new File("testfiles/deletioninnernewinstanceofrenamed/left.java"), 
 				null);
-		assertTrue(
-				FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
-				.equals("packagecom.example;publicclassTest{<<<<<<<MINEclassA{doublea;doubleb;}=======>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}")
-				);
-		assertTrue(ctx.innerDeletionConflicts==1);
+		assertEquals("packagecom.example;publicclassTest{<<<<<<<MINEclassA{doublea;doubleb;}=======>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}", FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput));
+		assertEquals(1, ctx.innerDeletionConflicts);
 	}
 	
 	@Test

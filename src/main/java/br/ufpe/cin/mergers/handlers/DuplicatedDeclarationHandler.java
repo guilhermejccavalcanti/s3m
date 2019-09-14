@@ -83,7 +83,7 @@ public final class DuplicatedDeclarationHandler implements ConflictHandler {
 		List<MergeConflict> conflicts = FilesManager.extractMergeConflicts(context.unstructuredOutput);
 		for(int sourceLOC : sourceLOCs){
 			for(MergeConflict mc : conflicts){
-				if((mc.startLOC <= sourceLOC) && (mc.endLOC >= sourceLOC)){
+				if((mc.getStartLOC() <= sourceLOC) && (mc.getEndLOC() >= sourceLOC)) {
 					return true;
 				}
 			}
