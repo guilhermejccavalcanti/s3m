@@ -1,6 +1,6 @@
 package br.ufpe.cin.performance;
 
-import static org.assertj.core.api.Assertions.*;
+import static org.assertj.core.api.Assertions.assertThat;
 
 import java.io.File;
 import java.io.OutputStream;
@@ -8,11 +8,13 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
-import br.ufpe.cin.crypto.CryptoUtils;
-import br.ufpe.cin.exceptions.CryptoException;
-import org.junit.*;
+import org.junit.Before;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import br.ufpe.cin.app.JFSTMerge;
+import br.ufpe.cin.crypto.CryptoUtils;
+import br.ufpe.cin.exceptions.CryptoException;
 
 @edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 public class CryptoPerformanceTest {
