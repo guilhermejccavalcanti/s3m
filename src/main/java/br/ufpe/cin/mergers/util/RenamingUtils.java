@@ -110,7 +110,8 @@ public class RenamingUtils {
     }
 
     public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode) {
-        MergeConflict conflict = new MergeConflict(leftNode, baseNode, rightNode);
+        String conflictMessage = new StringBuilder("mutual renaming of ").append(baseNode.getName()).append(" to different signatures").toString();
+        MergeConflict conflict = new MergeConflict(leftNode, baseNode, rightNode, conflictMessage);
         ((FSTTerminal) mergeNode).setBody(conflict.toString());
 
         context.renamingConflicts++;
