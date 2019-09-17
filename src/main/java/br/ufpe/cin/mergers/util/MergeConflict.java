@@ -2,6 +2,7 @@ package br.ufpe.cin.mergers.util;
 
 import java.io.File;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
@@ -21,24 +22,24 @@ public class MergeConflict {
 	private final String body;
 	private final String message;
 
-	public int startLOC;
-	public int endLOC;
+	private int startLOC;
+	private int endLOC;
 
-	public File leftOriginFile;
-	public File baseOriginFile;
-	public File rightOriginFile;
+	private File leftOriginFile;
+	private File baseOriginFile;
+	private File rightOriginFile;
 
-	public String fullyQualifiedMergedClass;
+	private String fullyQualifiedMergedClass;
 
-	private static final String MINE_CONFLICT_MARKER = "<<<<<<< MINE";
-	private static final String BASE_CONFLICT_MARKER = "||||||| BASE";
-	private static final String CHANGE_CONFLICT_MARKER = "======= ";
-	private static final String YOURS_CONFLICT_MARKER = ">>>>>>> YOURS";
+	public static final String MINE_CONFLICT_MARKER = "<<<<<<< MINE";
+	public static final String BASE_CONFLICT_MARKER = "||||||| BASE";
+	public static final String CHANGE_CONFLICT_MARKER = "=======";
+	public static final String YOURS_CONFLICT_MARKER = ">>>>>>> YOURS";
 
-	public MergeConflict(FSTNode left, FSTNode right) {
+	public MergeConflict(FSTNode left, FSTNode base, FSTNode right) {
 		this.left = getNodeContent(left);
+		this.base = getNodeContent(base);
 		this.right = getNodeContent(right);
-		this.base = "";
 		this.message = "";
 		this.body = assembleBody();
 	}
@@ -55,33 +56,41 @@ public class MergeConflict {
 
 	private String assembleBody() {
 		StringBuilder conflict = new StringBuilder();
-		conflict.append(MINE_CONFLICT_MARKER).append('\n').append(left).append('\n').append(CHANGE_CONFLICT_MARKER)
-				.append(message).append('\n').append(right).append('\n').append(YOURS_CONFLICT_MARKER);
+		conflict.append(MINE_CONFLICT_MARKER)
+				.append('\n')
+				.append(left)
+				.append('\n');
+		if(JFSTMerge.showBase) {
+			conflict.append(BASE_CONFLICT_MARKER)
+					.append('\n');
+		}
+		conflict.append(CHANGE_CONFLICT_MARKER)
+				.append(" " + message)
+				.append('\n')
+				.append(right)
+				.append('\n')
+				.append(YOURS_CONFLICT_MARKER);
 		return conflict.toString();
 	}
 
-	public MergeConflict(FSTTerminal left, FSTTerminal right, int startLOC, int endLOC) {
-		this(left, right);
+	public MergeConflict(FSTTerminal left, FSTTerminal base, FSTTerminal right, int startLOC, int endLOC) {
+		this(left, base, right);
 		this.startLOC = startLOC;
 		this.endLOC = endLOC;
 	}
 
-	public MergeConflict(String left, String right, int startLOC, int endLOC) {
+	public MergeConflict(String left, String base, String right) {
 		this.left = left;
-		this.base = "";
+		this.base = base;
 		this.right = right;
 		this.message = "";
 		this.body = assembleBody();
-		this.startLOC = startLOC;
-		this.endLOC = endLOC;
 	}
 
-	public MergeConflict(FSTTerminal left, FSTTerminal right, String message) {
-		this.left = IndentationUtils.indentFirstLine(left);
-		this.right = IndentationUtils.indentFirstLine(right);
-		this.base = "";
-		this.message = message;
-		this.body = assembleBody();
+	public MergeConflict(String left, String base, String right, int startLOC, int endLOC) {
+		this(left, base, right);
+		this.startLOC = startLOC;
+		this.endLOC = endLOC;
 	}
 
 	public boolean contains(String leftPattern, String rightPattern) {
@@ -115,12 +124,39 @@ public class MergeConflict {
 		return this.body;
 	}
 
+	/**
+	 * @return the LEFT conflicting content
+	 */
 	public String getLeft() {
 		return left;
 	}
 
+	/**
+	 * @return the BASE conflicting content
+	 */
+	public String getBase() {
+		return base;
+	}
+
+	/**
+	 * @return the YOURS conflicting content
+	 */
 	public String getRight() {
 		return right;
+	}
+
+	/**
+	 * @return the startLOC of the conflict
+	 */
+	public int getStartLOC() {
+		return startLOC;
+	}
+	
+	/**
+	 * @return the endLOC
+	 */
+	public int getEndLOC() {
+		return endLOC;
 	}
 
 	/*

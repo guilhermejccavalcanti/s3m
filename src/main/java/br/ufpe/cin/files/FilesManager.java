@@ -3,7 +3,6 @@ package br.ufpe.cin.files;
 import java.io.BufferedReader;
 import java.io.ByteArrayInputStream;
 import java.io.File;
-import java.io.FileReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
@@ -18,14 +17,6 @@ import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import org.apache.commons.io.FileUtils;
-import org.apache.commons.io.FilenameUtils;
-import org.apache.commons.lang3.StringUtils;
-
-import br.ufpe.cin.generated.SimplePrintVisitor;
-import br.ufpe.cin.mergers.util.MergeConflict;
-import br.ufpe.cin.mergers.util.MergeContext;
-
 import com.github.javaparser.JavaParser;
 import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
@@ -33,6 +24,13 @@ import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
 
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
+import org.apache.commons.lang3.StringUtils;
+
+import br.ufpe.cin.generated.SimplePrintVisitor;
+import br.ufpe.cin.mergers.util.MergeConflict;
+import br.ufpe.cin.mergers.util.MergeContext;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTNonTerminal;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
@@ -381,62 +379,81 @@ public final class FilesManager {
 		return (content.replaceAll("\\r\\n|\\r|\\n|\\u0000","")).replaceAll("\\s+","");
 	}
 
+	private static enum ConflictArea {
+		None, Left, Base, Right
+	}
+
 	/**
 	 * Extracts the merge conflicts of a string representation of merged code.
 	 * @param mergedCode
 	 * @return list o merge conflicts
 	 */
-	public static List<MergeConflict> extractMergeConflicts(String mergedCode){
-		String CONFLICT_HEADER_BEGIN= "<<<<<<< MINE";
-		String CONFLICT_MID			= "=======";
-		String CONFLICT_HEADER_END 	= ">>>>>>> YOURS";
-		String leftConflictingContent = "";
-		String rightConflictingContent= "";
-		boolean isConflictOpen		  = false;
-		boolean isLeftContent		  = false;
-		int lineCounter				  = 0;
-		int startLOC				  = 0;
-		int endLOC				  	  = 0;
-
+	public static List<MergeConflict> extractMergeConflicts(String mergedCode) {
 		List<MergeConflict> mergeConflicts = new ArrayList<MergeConflict>();
-		List<String> lines = new ArrayList<>();
-		BufferedReader reader = new BufferedReader(new StringReader(mergedCode));
-		lines = reader.lines().collect(Collectors.toList());
-		Iterator<String> itlines = lines.iterator();
-		while(itlines.hasNext()){
-			String line = itlines.next();
-			lineCounter++;
-			if(line.contains(CONFLICT_HEADER_BEGIN)){
-				isConflictOpen = true;
-				isLeftContent  = true;
-				startLOC = lineCounter;
-			}
-			else if(line.contains(CONFLICT_MID)){
-				isLeftContent = false;
-			}
-			else if(line.contains(CONFLICT_HEADER_END)) {
-				endLOC = lineCounter;
-				MergeConflict mergeConflict = new MergeConflict(leftConflictingContent,rightConflictingContent,startLOC,endLOC);
-				mergeConflicts.add(mergeConflict);
 
-				//reseting the flags
-				isConflictOpen	= false;
-				isLeftContent   = false;
-				leftConflictingContent = "";
-				rightConflictingContent= "";
-			} else {
-				if(isConflictOpen){
-					if(isLeftContent){leftConflictingContent+=line + "\n";
-					}else{rightConflictingContent+=line + "\n";}
+		StringBuilder leftConflictingContent = new StringBuilder();
+		StringBuilder baseConflictingContent = new StringBuilder();
+		StringBuilder rightConflictingContent = new StringBuilder();
+
+		ConflictArea conflictArea = ConflictArea.None;
+
+		int lineCounter = 0;
+		int startLOC = 0;
+		int endLOC = 0;
+
+		Iterator<String> mergeCodeLines = splitLines(mergedCode);
+		while(mergeCodeLines.hasNext()) {
+			String line = mergeCodeLines.next();
+			lineCounter++;
+
+			/* See the following conditionals as a state machine. */
+			if(line.contains(MergeConflict.MINE_CONFLICT_MARKER) && conflictArea == ConflictArea.None) {
+				startLOC = lineCounter;
+				conflictArea = ConflictArea.Left;
+			} 
+			
+			else if(line.contains(MergeConflict.BASE_CONFLICT_MARKER) && conflictArea == ConflictArea.Left) {
+				conflictArea = ConflictArea.Base;
+			} 
+			
+			else if(line.contains(MergeConflict.CHANGE_CONFLICT_MARKER) && (conflictArea == ConflictArea.Base || conflictArea == ConflictArea.Left)) {
+				conflictArea = ConflictArea.Right;
+			} 
+			
+			else if(line.contains(MergeConflict.YOURS_CONFLICT_MARKER) && conflictArea == ConflictArea.Right) {
+				endLOC = lineCounter;
+				mergeConflicts.add(new MergeConflict(leftConflictingContent.toString(), baseConflictingContent.toString(), rightConflictingContent.toString(), startLOC, endLOC));
+				conflictArea = ConflictArea.None;
+			} 
+			
+			else {
+				switch (conflictArea) {
+					case Left:
+						leftConflictingContent.append(line).append('\n');
+						break;
+					case Base:
+						baseConflictingContent.append(line).append('\n');
+						break;
+					case Right:
+						rightConflictingContent.append(line).append('\n');
+						break;
+					default: // not in conflict area
+						break;
 				}
 			}
 		}
 		return mergeConflicts;
 	}
 
+	private static Iterator<String> splitLines(String mergedCode) {
+		BufferedReader reader = new BufferedReader(new StringReader(mergedCode));
+		return reader.lines().collect(Collectors.toList()).iterator();
+	}
+
 	/**
-	 * Finds a node with the content in the first parameter,
-	 * and replace the content with the content in the second parameter.
+	 * Finds a node with the content in the first parameter, and replace the content
+	 * with the content in the second parameter.
+	 * 
 	 * @param tree
 	 * @param newContent
 	 */

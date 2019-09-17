@@ -114,8 +114,7 @@ public class SafeRenamingHandlerTest {
 	@Test
 	public void testHandle_whenBothRenameMethodWithoutBodyChanges_andBothRenameToDifferentNames_shouldReportConflict() {
 		merge(renamedMethodWithoutBodyChangesFile1, renamedMethodWithoutBodyChangesFile2);
-		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "<<<<<<<MINEpublicvoidmethod1(intx,inty){inta;intb;intc;}" 
-				+ "=======publicvoidmethod2(intx,inty){inta;intb;intc;}>>>>>>>YOURS");
+		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext, "<<<<<<<MINEpublicvoidmethod1(intx,inty){inta;intb;intc;}=======publicvoidmethod2(intx,inty){inta;intb;intc;}>>>>>>>YOURS");
 	}
 
 	@Test
