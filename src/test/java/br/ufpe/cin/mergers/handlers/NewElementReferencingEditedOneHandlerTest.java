@@ -67,6 +67,21 @@ public class NewElementReferencingEditedOneHandlerTest {
 		assertThat(mergeResult).contains("<<<<<<<MINEinta=15;=======intb=a+20;>>>>>>>YOURS");
 		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
+
+	@Test
+	public void testNereoFieldField_givenShowMessageOptionIsEnabled_whenRightAddsAnAttributeThatRefersToAnotherEditedByLeft_shouldReportConflict() {
+		JFSTMerge.showConflictMessages = true;
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/nereofieldfield/left/Test.java"), 
+				new File("testfiles/nereofieldfield/base/Test.java"), 
+				new File("testfiles/nereofieldfield/right/Test.java"),
+				null);
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+		JFSTMerge.showConflictMessages = false;
+
+		assertThat(mergeResult).contains("<<<<<<<MINEinta=15;=======addedbthatreferstoeditedaintb=a+20;>>>>>>>YOURS");
+		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
+	}
 	
 	
 	@Test
@@ -79,6 +94,21 @@ public class NewElementReferencingEditedOneHandlerTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
 		assertThat(mergeResult).contains("<<<<<<<MINEstaticStringm(){return\"insidemethodmedited\";}=======voidn(){if(m().equals(\"something...\")){System.out.println(\"insidemethodn\");}}>>>>>>>YOURS");
+		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
+	}
+
+	@Test
+	public void testNereoMethodMethod_givenShowMessageOptionIsEnabled_whenRightAddsAnMethodThatRefersToAnotherEditedByLeft_shouldReportConflict() {
+		JFSTMerge.showConflictMessages = true;
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/nereomethodmethod/left/Test.java"), 
+				new File("testfiles/nereomethodmethod/base/Test.java"), 
+				new File("testfiles/nereomethodmethod/right/Test.java"),
+				null);
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+		JFSTMerge.showConflictMessages = false;
+
+		assertThat(mergeResult).contains("<<<<<<<MINEstaticStringm(){return\"insidemethodmedited\";}=======addedn({FormalParametersInternal})thatreferstoeditedm({FormalParametersInternal})voidn(){if(m().equals(\"something...\")){System.out.println(\"insidemethodn\");}}>>>>>>>YOURS");
 		assertThat(ctx.newElementReferencingEditedOneConflicts).isOne();
 	}
 

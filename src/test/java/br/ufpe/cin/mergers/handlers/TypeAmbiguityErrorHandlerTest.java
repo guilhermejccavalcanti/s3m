@@ -42,6 +42,21 @@ public class TypeAmbiguityErrorHandlerTest {
 	}
 
 	@Test
+	public void testImportStatements_givenShowMessageOptionIsEnabled_whenBothAddAnImportStatementThatRefersToASameClassName_shouldReportConflict_andDisplayTheConflictMessage() {
+		JFSTMerge.showConflictMessages = true;
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/importmembermember/left/Test/src/Test.java"),
+				new File("testfiles/importmembermember/base/Test/src/Test.java"),
+				new File("testfiles/importmembermember/right/Test/src/Test.java"),
+				null);
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+		JFSTMerge.showConflictMessages = false;
+
+		assertThat(mergeResult).contains("<<<<<<<MINEimportjava.awt.List;=======typeambiguityerrorimportjava.util.List;>>>>>>>YOURS");
+		assertThat(ctx.typeAmbiguityErrorsConflicts).isOne();
+	}
+
+	@Test
 	public void testImportPackagePackage() {
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
 				new File("testfiles/importpackagepackage/left/Test/src/Test.java"),
