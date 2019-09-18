@@ -44,10 +44,10 @@ public class IndentationTest {
     }
 
     @Test
-    public void testIndentationPreservation_givenMergeIgnoresWhitespaces_whenLeftAddsAnAttributeIndented4Spaces_andRightAddsTheSameAttributeIndented8Spaces_shouldPreserveRightIndentation() {
+    public void testIndentationPreservation_givenMergeIgnoresWhitespaces_whenLeftAddsAnAttributeIndented4Spaces_andRightAddsTheSameAttributeIndented8Spaces_shouldPreserveLeftIndentation() {
         String mergeResult = merge("addsattributeaddssameattribute");
 
-        assertEquals(8, numIndentationWhitespaces(mergeResult, "int a;"));
+        assertEquals(4, numIndentationWhitespaces(mergeResult, "int a;"));
     }
 
     @Test
@@ -68,10 +68,10 @@ public class IndentationTest {
     }
 
     @Test
-    public void testIndentationPreservation_givenMergeIgnoresWhitespaces_whenLeftPushesAnAttributeIndented4Spaces8Spaces_andRightPushesTheSameAttribute4Spaces_shouldPreserveLeftIndentation() {
+    public void testIndentationPreservation_givenMergeIgnoresWhitespaces_whenLeftPushesAnAttributeIndented4Spaces8Spaces_andRightPushesTheSameAttribute4Spaces_shouldPreserveRightIndentation() {
         String mergeResult = merge("pushesattributepushesattribute");
 
-        assertEquals(12, numIndentationWhitespaces(mergeResult, "int a;"));
+        assertEquals(8, numIndentationWhitespaces(mergeResult, "int a;"));
     }
 
     @Test
@@ -85,10 +85,10 @@ public class IndentationTest {
     }
 
     @Test
-    public void testIndentationPreservation_givenMergeIgnoresWhitespaces_whenLeftPushesAMethodIndented4Spaces4Spaces_andRightPushesTheSameMethod8Spaces_shouldPreserveRightIndentation() {
+    public void testIndentationPreservation_givenMergeIgnoresWhitespaces_whenLeftPushesAMethodIndented4Spaces4Spaces_andRightPushesTheSameMethod8Spaces_shouldPreserveLeftIndentation() {
         String mergeResult = merge("pushesmethodpushesmethod");
 
-        assertEquals(12, numIndentationWhitespaces(mergeResult, "void m() {")); 
+        assertEquals(8, numIndentationWhitespaces(mergeResult, "void m() {")); 
         assertEquals(4, numIndentationWhitespaces(mergeResult, "}")); // the end is messed up by textual merge.
     }
 
@@ -104,10 +104,10 @@ public class IndentationTest {
     }
 
     @Test
-    public void testIndentationPreservation_givenMergeIgnoresWhitespaces_whenLeftChangesFrom4SpacesTo1Tab_shouldPreserveRightIndentation() {
+    public void testIndentationPreservation_givenMergeIgnoresWhitespaces_whenLeftChangesFrom4SpacesTo1Tab_shouldPreserveLeftIndentation() {
         String mergeResult = merge("spacetotab");
 
-        assertEquals(4, numIndentationWhitespaces(mergeResult, "void m() {")); 
+        assertEquals(1, numIndentationWhitespaces(mergeResult, "void m() {")); 
     }
 
     @Test

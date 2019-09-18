@@ -224,7 +224,7 @@ public class RenamingUtils {
             } else if(baseTrimmed.equals(rightTrimmed) && !baseTrimmed.equals(leftTrimmed)) {
                 return left;
             } else if(leftTrimmed.equals(rightTrimmed)) {
-                return (left.length() > right.length()) ? left : right;
+                return (left.length() < right.length()) ? left : right;
             } 
         } 
         
