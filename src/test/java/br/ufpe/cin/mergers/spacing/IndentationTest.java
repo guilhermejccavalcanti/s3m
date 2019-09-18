@@ -120,6 +120,14 @@ public class IndentationTest {
         assertThat(StringUtils.deleteWhitespace(mergeResult), containsString("<<<<<<<MINE}=======}>>>>>>>YOURS"));
     }
 
+    @Test
+    public void testIndentationPreservation_givenMergeIgnoresWhitespaces_whenLeftChangesAnEnum_andRightChangesTheSameEnum_shouldPreserveBothIndentations() {
+        String mergeResult = merge("enum");
+
+        assertEquals(1, numIndentationWhitespaces(mergeResult, "enum")); 
+        assertEquals(8, numIndentationWhitespaces(mergeResult, "{")); 
+    }
+
     private int numIndentationWhitespaces(String mergeResult, String declaration) {
         String declarationLine = findDeclarationLine(mergeResult, declaration);
         String indentation = StringUtils.substringBefore(declarationLine, declaration);
