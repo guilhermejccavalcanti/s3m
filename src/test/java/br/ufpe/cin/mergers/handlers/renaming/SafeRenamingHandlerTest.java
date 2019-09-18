@@ -159,6 +159,7 @@ public class SafeRenamingHandlerTest {
 	}
 
 	@Test
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public void testHandle_givenShowMessageOptionIsEnabled_whenBothRenameMethodWithBodyChanges_andBothRenameToDifferentNames_shouldReportConflict_andDisplayTheConflictMessage() {
 		JFSTMerge.showConflictMessages = true;
 		merge(renamedMethodWithBodyChangesFile1, renamedMethodWithBodyChangesFile2);

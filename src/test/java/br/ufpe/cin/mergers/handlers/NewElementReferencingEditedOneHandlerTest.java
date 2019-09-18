@@ -69,6 +69,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 	}
 
 	@Test
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public void testNereoFieldField_givenShowMessageOptionIsEnabled_whenRightAddsAnAttributeThatRefersToAnotherEditedByLeft_shouldReportConflict() {
 		JFSTMerge.showConflictMessages = true;
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
@@ -98,6 +99,7 @@ public class NewElementReferencingEditedOneHandlerTest {
 	}
 
 	@Test
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
 	public void testNereoMethodMethod_givenShowMessageOptionIsEnabled_whenRightAddsAnMethodThatRefersToAnotherEditedByLeft_shouldReportConflict() {
 		JFSTMerge.showConflictMessages = true;
 		MergeContext ctx = 	new JFSTMerge().mergeFiles(
