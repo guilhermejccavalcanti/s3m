@@ -20,7 +20,7 @@ import br.ufpe.cin.exceptions.CryptoException;
 public class CryptoPerformanceTest {
 
 	private static final int NUM_ITERATIONS = 6;
-	private static final double ACCEPTED_MARGIN = 0.5;
+	private static final double ACCEPTED_MARGIN = 0.6;
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws UnsupportedEncodingException {
