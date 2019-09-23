@@ -3,4 +3,3 @@
 [merge "s3m"]
     name = assert_conflict_states
     driver = java -jar /home/travis/jFSTMerge.jar %A %O %B -o %A -g
-
