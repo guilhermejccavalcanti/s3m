@@ -1,5 +1,7 @@
 package br.ufpe.cin.app;
 
+import br.ufpe.cin.crypto.FileEncrypterDecrypter;
+import br.ufpe.cin.exceptions.CryptoException;
 import br.ufpe.cin.exceptions.PrintException;
 import br.ufpe.cin.exceptions.SemistructuredMergeException;
 import br.ufpe.cin.exceptions.TextualMergeException;
@@ -23,6 +25,7 @@ import com.beust.jcommander.ParameterException;
 import java.io.BufferedReader;
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
@@ -46,6 +49,9 @@ public class JFSTMerge {
 	//indicator of conflicting merge
 	private static int conflictState = 0;
 
+	// EncrypterDecrypter
+	private FileEncrypterDecrypter fileEncrypterDecrypter = new FileEncrypterDecrypter();
+
 	//command line options
 	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
 	List<String> filespath = new ArrayList<String>();
@@ -61,7 +67,7 @@ public class JFSTMerge {
 	public static boolean isGit = false;
 
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).", arity = 1)
-	public static boolean isCryptographed = true;
+	private boolean isCryptographed = true;
   
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
@@ -204,8 +210,6 @@ public class JFSTMerge {
 
 		if(isEncodingInferenceEnabled) {
 			FilesEncoding.analyseFiles(left, base, right);
-			assert(FilesEncoding.retrieveEncoding(left).equals(FilesEncoding.retrieveEncoding(base)));
-			assert(FilesEncoding.retrieveEncoding(base).equals(FilesEncoding.retrieveEncoding(right)));
 		}
 
 		if (!isGit) {
@@ -253,12 +257,17 @@ public class JFSTMerge {
 
 		//computing statistics
 		try {
+			decryptLogFiles();
 			Statistics.compute(context);
+			if(isCryptographed) {
+				encryptLogFiles();
+			}
 		} catch (Exception e) {
 			System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 			LOGGER.log(Level.SEVERE, "", e);
 			System.exit(-1);
 		}
+
 		System.out.println("Merge files finished.");
 		return context;
 	}
@@ -306,6 +315,29 @@ public class JFSTMerge {
 		}
 	}
 
+	private void encryptLogFiles() throws CryptoException {
+		String userHome = System.getProperty("user.home");
+		Path statisticsFile = Paths.get(userHome, ".jfstmerge", "jfstmerge.statistics");
+		Path filesFile = Paths.get(userHome, ".jfstmerge", "jfstmerge.files");
+
+		fileEncrypterDecrypter.cipher(statisticsFile, statisticsFile);
+		fileEncrypterDecrypter.cipher(filesFile, filesFile);
+	}
+
+	private void decryptLogFiles() {
+		String userHome = System.getProperty("user.home");
+		Path statisticsFile = Paths.get(userHome, ".jfstmerge", "jfstmerge.statistics");
+		Path filesFile = Paths.get(userHome, ".jfstmerge", "jfstmerge.files");
+		try {
+			if(Files.exists(statisticsFile))
+				fileEncrypterDecrypter.decipher(statisticsFile, statisticsFile);
+			if(Files.exists(filesFile))
+				fileEncrypterDecrypter.decipher(filesFile, filesFile);
+		} catch(CryptoException e) {
+			System.out.println("Log files are already decrypted.");
+		}
+	}
+
 	private int checkConflictState(MergeContext context) {
 		List<MergeConflict> conflictList = FilesManager.extractMergeConflicts(context.semistructuredOutput);
 		if (conflictList.size() > 0) {
@@ -313,6 +345,10 @@ public class JFSTMerge {
 		} else {
 			return 0;
 		}
+	}
+
+	public void isCryptographyEnabled(boolean isCryptographed) {
+		this.isCryptographed = isCryptographed;
 	}
 
 }
