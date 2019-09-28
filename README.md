@@ -188,11 +188,13 @@ Check the [Releases](https://github.com/guilhermejccavalcanti/jFSTMerge/releases
 
 ### Usage
 If integrated with Git, S3M will run automatically every time you invoke the `git merge` command. No further configuration required.  
-You can still run it as a standalone tool, if desired. Its `.jar` is present in the installation directory.
+You can still run it as a standalone tool, if desired. Its `.jar` is present in the installation directory. You can use the command below:
+
+`java -jar jFSTMerge.jar leftPath basePath rightPath`
+
+where `leftPath`, `basePath` and `rightPath` can be either a file or a directory.
 
 #### Parameters
-* `-f` and `-d` parameters are the only mandatory ones, but they are exclusive (only one of them can be used).
-
 | Parameter | Arity | Type | Description |
 | :---: | :---: | :---: | --- |
 | `-f` | 3 | String | Specify the files to be merged (mine, base, yours).
