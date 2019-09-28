@@ -204,8 +204,6 @@ public class JFSTMerge {
 
 		if(isEncodingInferenceEnabled) {
 			FilesEncoding.analyseFiles(left, base, right);
-			assert(FilesEncoding.retrieveEncoding(left).equals(FilesEncoding.retrieveEncoding(base)));
-			assert(FilesEncoding.retrieveEncoding(base).equals(FilesEncoding.retrieveEncoding(right)));
 		}
 
 		if (!isGit) {
