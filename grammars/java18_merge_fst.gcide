@@ -468,18 +468,33 @@ ClassOrInterfaceTypeAnnotation:
 
 @FSTInline 
 EnumDeclaration:  
-        "enum" Id
+        Enum Id
         [ ImplementsList ]
         EnumBody
 ;
 
+@FSTTerminal(merge="LineBased")
+Enum:
+	"enum"
+;
+
 @FSTInline 
 EnumBody:  
-		"{"
-		[EnumConstants]
-		["," <NONE>]
-		[ EnumBodyInternal ]
-		"}"
+	EnumBodyStart
+	[EnumConstants]
+	["," <NONE>]
+	[ EnumBodyInternal ]
+	EnumBodyEnd
+;
+
+@FSTTerminal(merge="LineBased", compose="concat")
+EnumBodyStart:
+	"{"
+;
+
+@FSTTerminal(merge="LineBased", compose="concat")
+EnumBodyEnd:
+	"}"
 ;
 
 @FSTNonTerminal()
@@ -512,7 +527,17 @@ TypeBound:
 
 @FSTInline
 ClassOrInterfaceBody:
-		"{" @+ @! ( ClassOrInterfaceBodyDeclaration @!)* @- @! "}"
+		ClassOrInterfaceBodyStart @+ @! ( ClassOrInterfaceBodyDeclaration @!)* @- @! ClassOrInterfaceBodyEnd
+;
+
+@FSTTerminal(merge="LineBased", compose="concat")
+ClassOrInterfaceBodyStart:
+	"{"
+;
+
+@FSTTerminal(merge="LineBased", compose="concat")
+ClassOrInterfaceBodyEnd:
+	"}"
 ;
 
 ClassOrInterfaceBodyDeclaration:
@@ -625,10 +650,7 @@ ConstructorDeclaration:
 		[ LOOK_AHEAD("Annotation()") Annotation ]
 		[ TypeParameters]
 		<IDENTIFIER> FormalParameters [ "throws" NameList ]
-		"{"
-		[ LOOK_AHEAD("ExplicitConstructorInvocation()") ExplicitConstructorInvocation ]
-		( BlockStatement )*
-"}"
+		ConstructorDeclarationBody
 ;
 
 ExplicitConstructorInvocation:
@@ -637,6 +659,13 @@ ExplicitConstructorInvocation:
 		LOOK_AHEAD("TypeArguments() \"this\" Arguments() \";\"") TypeArguments "this" Arguments ";" @!
 		|
 		[LOOK_AHEAD("PrimaryExpression() \".\"") PrimaryExpression "." ] [ TypeArguments ] "super" Arguments ";"	
+;
+
+ConstructorDeclarationBody:
+		"{"
+		[ LOOK_AHEAD("ExplicitConstructorInvocation()") ExplicitConstructorInvocation ]
+		( BlockStatement )*
+		"}"
 ;
 
 Initializer:  

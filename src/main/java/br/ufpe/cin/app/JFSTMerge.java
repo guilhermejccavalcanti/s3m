@@ -19,6 +19,7 @@ import br.ufpe.cin.statistics.Statistics;
 import com.beust.jcommander.JCommander;
 import com.beust.jcommander.Parameter;
 import com.beust.jcommander.ParameterException;
+import com.beust.jcommander.converters.FileConverter;
 
 import java.io.BufferedReader;
 import java.io.File;
@@ -47,11 +48,8 @@ public class JFSTMerge {
 	private static int conflictState = 0;
 
 	//command line options
-	@Parameter(names = "-f", arity = 3, description = "Files to be merged (mine, base, yours)")
-	List<String> filespath = new ArrayList<String>();
-
-	@Parameter(names = "-d", arity = 3, description = "Directories to be merged (mine, base, yours)")
-	List<String> directoriespath = new ArrayList<String>();
+	@Parameter(arity = 3, description = "MinePath BasePath YoursPath", required = true, listConverter = FileConverter.class)
+	List<File> files = new ArrayList<>();
 
 	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
             + "then it will use \"yours\" as the destination for the merge. ")
@@ -66,9 +64,9 @@ public class JFSTMerge {
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
-	@Parameter(names = "--encoding-inference", description = "Tries to infer file encodings to properly merge them. If" +
-			"not enabled, the tool assumes files are encoded in UTF-8.", arity = 1)
-	public static boolean isEncodingInferenceEnabled = true;
+	@Parameter(names = "--files-encoding", description = "Determines the encoding of the input files. If not specified," +
+			"the tool tries to infer the encoding of the files. If this fails, it assumes the files are encoded in UTF-8.", arity = 3)
+	private List<String> filesEncoding = new ArrayList<>();
 
 	@Parameter(names = "--ignore-space-change", description = "Treats lines with the indicated type of whitespace change as unchanged for "
 			+ "the sake of a three-way merge. Whitespace changes mixed with other changes to a line are not ignored.", arity = 1)
@@ -78,7 +76,7 @@ public class JFSTMerge {
 	public static boolean keepBothVersionsOfRenamedMethod = false;
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-	@Parameter(names = {"-r", "--renaming"}, description = "Parameter to choose strategy on renaming conflicts.",
+	@Parameter(names = {"-r", "--renaming-strategy"}, description = "Parameter to choose strategy on renaming conflicts.",
             converter = RenamingStrategyConverter.class)
 	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
 
@@ -103,10 +101,18 @@ public class JFSTMerge {
 			"semistructured merge alone is unable to solve.", arity = 1)
 	public static boolean isMethodAndConstructorRenamingAndDeletionHandlerEnabled = true;
 
+	@Parameter(names = {"--handle-method-constructor-renaming-deletion-old-version", "-hmcrdov"}, description = "Detects and solves conflicts caused by renaming or deletion, where" +
+	"semistructured merge alone is unable to solve. It gathers all methods and constructors from both contributions that are not present in base. If both aren't in the base and they have different signatures but equal bodies," +
+	"the handler reports a conflict. If only one of them is present in the base, the handler finds the first method similar (0.7 threshold) in the other contribution and reports a conflict if unstructured merge also reported.")
+	public static boolean isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled = false;
+
 	@Parameter(names = {"--handle-type-ambiguity-error", "-htae"}, description = "Detects cases where import statements share elements with the same name.",
 			arity = 1)
 	public static boolean isTypeAmbiguityErrorHandlerEnabled = true;
-	
+
+	@Parameter(names = {"--show-base", "--diff3-style"}, description = "Outputs base's contribution in merge conflicts.")
+	public static boolean showBase = false;
+
 	/**
 	 * Merges merge scenarios, indicated by .revisions files.
 	 * This is mainly used for evaluation purposes.
@@ -199,10 +205,12 @@ public class JFSTMerge {
 	public MergeContext mergeFiles(File left, File base, File right, String outputFilePath) {
 		FilesManager.validateFiles(left, base, right);
 
-		if(isEncodingInferenceEnabled) {
+		if(filesEncoding.isEmpty()) {
 			FilesEncoding.analyseFiles(left, base, right);
 			assert(FilesEncoding.retrieveEncoding(left).equals(FilesEncoding.retrieveEncoding(base)));
 			assert(FilesEncoding.retrieveEncoding(base).equals(FilesEncoding.retrieveEncoding(right)));
+		} else {
+			FilesEncoding.setFilesEncoding(left, base, right, filesEncoding);
 		}
 
 		if (!isGit) {
@@ -291,16 +299,21 @@ public class JFSTMerge {
 		try {
 			commandLineOptions.parse(args);
 			CommandLineValidator.validateCommandLineOptions(this);
-			if (!filespath.isEmpty()) {
-				mergeFiles(new File(filespath.get(0)), new File(filespath.get(1)), new File(filespath.get(2)), outputpath);
-			} else if (!directoriespath.isEmpty()) {
-				mergeDirectories(directoriespath.get(0), directoriespath.get(1), directoriespath.get(2), outputpath);
+
+			if(areDirectories(files)) {
+				mergeDirectories(files.get(0).getAbsolutePath(), files.get(1).getAbsolutePath(), files.get(2).getAbsolutePath(), outputpath);
+			} else {
+				mergeFiles(files.get(0), files.get(1), files.get(2), outputpath);
 			}
 		} catch (ParameterException pe) {
 			System.err.println(pe.getMessage());
 			commandLineOptions.setProgramName("JFSTMerge");
 			commandLineOptions.usage();
 		}
+	}
+
+	private boolean areDirectories(List<File> files) {
+		return files.stream().allMatch(File::isDirectory);
 	}
 
 	private int checkConflictState(MergeContext context) {
@@ -310,6 +323,10 @@ public class JFSTMerge {
 		} else {
 			return 0;
 		}
+	}
+
+	public void setFilesEncoding(List<String> filesEncoding) {
+		this.filesEncoding = filesEncoding;
 	}
 
 }

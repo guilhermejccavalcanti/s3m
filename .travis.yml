@@ -1,19 +1,70 @@
-language: java
-jdk:
- - oraclejdk8
+# Java is currently unsupported on Windows, so we use a bash build and
+# install it using Gravis' (https://github.com/DanySK/Gravis-CI) script.
+
+language: bash
+
+env:
+  - GRAVIS="https://raw.githubusercontent.com/DanySK/Gravis-CI/master/" JDK="1.8"
+
+os:
+  - linux
+  - osx
+  - windows
+
 notifications:
- email:
-  recipients:
-   - joao.coutinho9@gmail.com
-  on_success: always
+  email:
+    recipients:
+      - joao.coutinho9@gmail.com
+    on_success: always
+
 before_install:
-- ./gradlew clean build -x test
-- cp build/libs/jFSTMerge-all.jar testfiles/shelltests/config/jFSTMerge.jar
-- bash testfiles/shelltests/config/gitconfiguration.sh
-- git config --global user.email "gjcc@cin.ufpe.br"
-- git config --global user.name "Guilherme Cavalcanti" 
-- sudo apt-get install shunit2
+  - curl "${GRAVIS}.install-jdk-travis.sh" --output ~/.install-jdk-travis.sh
+  - source ~/.install-jdk-travis.sh
+
+  - ./gradlew clean build -x test --console=plain # build
+
+  - cp build/libs/jFSTMerge-all.jar ${HOME}/s3m.jar
+  - bash testfiles/shelltests/config/gitconfiguration.sh # configure git integration with S3M
+
+  - git config --global user.email "gjcc@cin.ufpe.br"
+  - git config --global user.name "Guilherme Cavalcanti"
+
 script:
-- ./gradlew test
-- cd testfiles/shelltests/
-- shunit2 s3mTests.sh
+  - ./gradlew test --console=plain
+  - cd testfiles/shelltests
+  - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
+      javac -cp .\;dependencies/* s3mGitIntegrationTests.java;
+      java -cp .\;dependencies/* org.junit.runner.JUnitCore s3mGitIntegrationTests;
+    else
+      javac -cp .:dependencies/* s3mGitIntegrationTests.java;
+      java -cp .:dependencies/* org.junit.runner.JUnitCore s3mGitIntegrationTests;
+    fi
+
+before_cache:
+  - curl "${GRAVIS}.clean_gradle_cache.sh" --output ~/.clean_gradle_cache.sh
+  - bash ~/.clean_gradle_cache.sh
+
+
+jobs:
+ include:
+  - if: type == cron # Cron build: triggered periodically.
+    before_install:
+    - ./gradlew clean build -x test --console=plain # build
+
+    - cp build/libs/jFSTMerge-all.jar ${HOME}/s3m.jar
+    - bash testfiles/shelltests/config/gitconfiguration.sh # configure git integration with S3M
+
+    - git config --global user.email "gjcc@cin.ufpe.br"
+    - git config --global user.name "Guilherme Cavalcanti"
+    before_script:
+      - cd testfiles/shelltests
+    script:
+      - if [ "${TRAVIS_OS_NAME}" == "windows" ]; then
+          javac -cp .\;dependencies/* s3mCronTests.java;
+          java -cp .\;dependencies/* org.junit.runner.JUnitCore s3mCronTests;
+        else
+          javac -cp .:dependencies/* s3mCronTests.java;
+          java -cp .:dependencies/* org.junit.runner.JUnitCore s3mCronTests;
+        fi
+
+

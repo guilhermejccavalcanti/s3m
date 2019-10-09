@@ -1,7 +1,9 @@
 public class Test {
-	
-	public void m()	{
-		int a;
-	}
+
+    public void method(int x, int y) {
+        int a;
+        int b;
+        int c;
+    }
 
 }

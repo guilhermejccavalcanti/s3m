@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import br.ufpe.cin.files.FilesManager;
 import de.ovgu.cide.fstgen.ast.FSTNode;
@@ -16,28 +17,33 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
  * @author Guilherme
  */
 public class MergeContext {
-    File base;
+	File base;
 	File right;
 	File left;
 	String outputFilePath;
-	
+	public String fullyQualifiedMergedClass  = "";
+
+
 	String baseContent = "";
 	String leftContent = "";
 	String rightContent= "";
-	
+
 	public List<FSTNode> addedLeftNodes = new ArrayList<FSTNode>();
 	public List<FSTNode> addedRightNodes= new ArrayList<FSTNode>();
-	
+
 	public List<FSTNode> deletedBaseNodes = new ArrayList<FSTNode>();
 	public List<FSTNode> nodesDeletedByLeft = new ArrayList<FSTNode>(); 
 	public List<FSTNode> nodesDeletedByRight= new ArrayList<FSTNode>();
 
+	public List<Pair<Side, FSTNode>> renamedWithoutBodyChanges = new ArrayList<>();
+	public List<Pair<Side, FSTNode>> deletedOrRenamedWithBodyChanges = new ArrayList<>();
+	
 	public List<Pair<String,FSTNode>> possibleRenamedLeftNodes = new ArrayList<Pair<String,FSTNode>>();
 	public List<Pair<String,FSTNode>> possibleRenamedRightNodes= new ArrayList<Pair<String,FSTNode>>();
 
 	public List<FSTNode> editedLeftNodes = new ArrayList<FSTNode>(); 
 	public List<FSTNode> editedRightNodes= new ArrayList<FSTNode>();
-	
+
 
 	public FSTNode leftTree;
 	public FSTNode baseTree;
@@ -45,7 +51,7 @@ public class MergeContext {
 	public FSTNode superImposedTree;
 	public String semistructuredOutput;
 	public String unstructuredOutput;
-	
+
 	//statistics
 	public int newElementReferencingEditedOneConflicts = 0;
 	public int renamingConflicts = 0;
@@ -72,10 +78,12 @@ public class MergeContext {
 		this.base = base;
 		this.right= right;
 		this.outputFilePath = outputFilePath;
-		
+
 		this.leftContent = FilesManager.readFileContent(this.left);
 		this.baseContent = FilesManager.readFileContent(this.base);
 		this.rightContent= FilesManager.readFileContent(this.right);
+
+		this.setFullQualifiedMergedClassName();
 	}
 
 	/**
@@ -85,15 +93,17 @@ public class MergeContext {
 	public MergeContext join(MergeContext otherContext){
 		this.addedLeftNodes. addAll(otherContext.addedLeftNodes);
 		this.addedRightNodes.addAll(otherContext.addedRightNodes);
-		
+
 		this.editedLeftNodes. addAll(otherContext.editedLeftNodes);
 		this.editedRightNodes.addAll(otherContext.editedRightNodes);
-		
+
 		this.deletedBaseNodes. addAll(otherContext.deletedBaseNodes);
 		this.nodesDeletedByLeft. addAll(otherContext.nodesDeletedByLeft);
 		this.nodesDeletedByRight. addAll(otherContext.nodesDeletedByRight);
 
-		
+		this.renamedWithoutBodyChanges.addAll(otherContext.renamedWithoutBodyChanges);
+		this.deletedOrRenamedWithBodyChanges.addAll(otherContext.deletedOrRenamedWithBodyChanges);
+
 		this.possibleRenamedLeftNodes. addAll(otherContext.possibleRenamedLeftNodes);
 		this.possibleRenamedRightNodes.addAll(otherContext.possibleRenamedRightNodes);
 
@@ -101,16 +111,16 @@ public class MergeContext {
 		this.baseTree = otherContext.baseTree;
 		this.rightTree = otherContext.rightTree;
 		this.superImposedTree = otherContext.superImposedTree;
-		
-/*		this.renamingConflicts	+=	otherContext.renamingConflicts;
+
+		/*		this.renamingConflicts	+=	otherContext.renamingConflicts;
 		this.newElementReferencingEditedOneConflicts	+=	otherContext.newElementReferencingEditedOneConflicts;
 		this.typeAmbiguityErrorsConflicts	+=	otherContext.typeAmbiguityErrorsConflicts;
 		this.deletionConflicts	+=	otherContext.deletionConflicts;
 		this.initializationBlocksConflicts	+= otherContext.initializationBlocksConflicts;*/
-		
+
 		return this;
 	}
-	
+
 	public File getBase() {
 		return base;
 	}
@@ -157,5 +167,30 @@ public class MergeContext {
 
 	public void setRightContent(String rightContent) {
 		this.rightContent = rightContent;
+	}
+
+	private void setFullQualifiedMergedClassName(){
+		String name = "";
+		if(this.left != null && this.left.length()!=0 ){
+			name = FilesManager.getFullyQualifiedName(this.left);
+		} else if(this.right != null && this.right.length()!=0){
+			name = FilesManager.getFullyQualifiedName(this.right);
+		} else if(this.base != null && this.base.length()!=0){
+			name = FilesManager.getFullyQualifiedName(this.base);
+		} 
+		if(name.isEmpty()){
+			name = (this.left 	!= null ? this.left.getAbsolutePath() : "<empty left>") + "#" + (
+					this.base 	!= null ? this.base.getAbsolutePath() : "<empty base>") + "#" + (
+					this.right 	!= null ? this.right.getAbsolutePath(): "<empty right>");
+		}
+		
+		//more detailed info when executed mining repositories
+		String projectAndCommit = "";
+		File executionLog = new File(System.getProperty("user.home") + File.separator + ".jfstmerge" + File.separator + "execution.log");
+		if(executionLog.exists()){
+			projectAndCommit = FilesManager.lastLine(executionLog.getAbsolutePath())+",";
+		}
+		
+		this.fullyQualifiedMergedClass = projectAndCommit+name;
 	}
 }

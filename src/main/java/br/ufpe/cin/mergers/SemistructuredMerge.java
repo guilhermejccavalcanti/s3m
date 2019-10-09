@@ -5,9 +5,9 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
-import org.apache.commons.lang3.tuple.Pair;
-
 import com.google.common.collect.ImmutableList;
+import org.apache.commons.lang3.tuple.Pair;
+import org.apache.commons.lang3.tuple.Triple;
 
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.ExceptionUtils;
@@ -19,10 +19,12 @@ import br.ufpe.cin.mergers.handlers.DeletionsHandler;
 import br.ufpe.cin.mergers.handlers.DuplicatedDeclarationHandler;
 import br.ufpe.cin.mergers.handlers.InitializationBlocksHandler;
 import br.ufpe.cin.mergers.handlers.InitializationBlocksHandlerMultipleBlocks;
+import br.ufpe.cin.mergers.handlers.LegacyMethodAndConstructorRenamingAndDeletionHandler;
 import br.ufpe.cin.mergers.handlers.MethodAndConstructorRenamingAndDeletionHandler;
 import br.ufpe.cin.mergers.handlers.NewElementReferencingEditedOneHandler;
 import br.ufpe.cin.mergers.handlers.TypeAmbiguityErrorHandler;
 import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.RenamingUtils;
 import br.ufpe.cin.parser.JParser;
 import br.ufpe.cin.printers.Prettyprinter;
 import cide.gparser.ParseException;
@@ -51,15 +53,19 @@ public final class SemistructuredMerge {
 		if(JFSTMerge.isNewElementReferencingEditedOneHandlerEnabled)
 			builder.add(new NewElementReferencingEditedOneHandler());
 
-		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled &&
+			!JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
 			builder.add(new MethodAndConstructorRenamingAndDeletionHandler());
 
-		if(JFSTMerge.isInitializationBlocksHandlerEnabled && 
-				!JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled)
+		if(JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+			builder.add(new LegacyMethodAndConstructorRenamingAndDeletionHandler());
+    
+    if(!JFSTMerge.isInitializationBlocksHandlerEnabled && 
+				JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled)
+      builder.add(new InitializationBlocksHandlerMultipleBlocks());
+
+		if(JFSTMerge.isInitializationBlocksHandlerEnabled)
 			builder.add(new InitializationBlocksHandler());
-		
-		if(JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled) 
-			builder.add(new InitializationBlocksHandlerMultipleBlocks());
 
 		if(JFSTMerge.isDuplicatedDeclarationHandlerEnabled)
 			builder.add(new DuplicatedDeclarationHandler());
@@ -115,7 +121,7 @@ public final class SemistructuredMerge {
         }
 
         // during the parsing process, code indentation is typically lost, so we reindent the code
-        return FilesManager.indentCode(Prettyprinter.print(context.superImposedTree));
+        return Prettyprinter.print(context.superImposedTree);
     }
 
 	/**
@@ -140,8 +146,8 @@ public final class SemistructuredMerge {
 		FSTNode mergeLeftBaseRight = superimpose(mergeLeftBase, right, null, context, false);
 		
 		removeRemainingBaseNodes(mergeLeftBaseRight, context);
-		mergeMatchedContent(mergeLeftBaseRight, context);
-		
+		mergeMatchedContent(mergeLeftBaseRight, context);		
+
 		context.superImposedTree = mergeLeftBaseRight;
 		
 		return context;
@@ -263,15 +269,15 @@ public final class SemistructuredMerge {
 	 */
 	private static String markContributions(String bodyA, String bodyB, boolean firstPass, int indexA, int indexB) { 
 		if (bodyA.contains(SEMANTIC_MERGE_MARKER)) {
-			return bodyA + " " + bodyB;
+			return bodyA + bodyB;
 		} else {
 			if (firstPass) {
-				return SEMANTIC_MERGE_MARKER + " " + bodyA + " " + MERGE_SEPARATOR + " " + bodyB + " "	+ MERGE_SEPARATOR;
+				return SEMANTIC_MERGE_MARKER + bodyA + MERGE_SEPARATOR + bodyB + MERGE_SEPARATOR;
 			} else {
 				if (indexA == 0) {
-					return SEMANTIC_MERGE_MARKER + " " + bodyA + " " + MERGE_SEPARATOR + " " + MERGE_SEPARATOR + " "+ bodyB;
+					return SEMANTIC_MERGE_MARKER + bodyA + MERGE_SEPARATOR + MERGE_SEPARATOR + bodyB;
 				} else {
-					return SEMANTIC_MERGE_MARKER + " " + MERGE_SEPARATOR + " " + bodyA + " " + MERGE_SEPARATOR + " "+ bodyB;
+					return SEMANTIC_MERGE_MARKER + MERGE_SEPARATOR + bodyA + MERGE_SEPARATOR + bodyB;
 				}
 			}
 		}
@@ -322,13 +328,13 @@ public final class SemistructuredMerge {
 
 			/* Merging body. */
 			if (((FSTTerminal) node).getBody().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
-				String mergedBodyContent = mergeContent(node, context,((FSTTerminal) node).getBody() + " ", true);
+				String mergedBodyContent = mergeBodyContent(node, context, ((FSTTerminal) node).getBody());
 				((FSTTerminal) node).setBody(mergedBodyContent);
 			}
 
 			/* Merging prefix: possible comments. */
 			if(((FSTTerminal) node).getSpecialTokenPrefix().contains(SemistructuredMerge.MERGE_SEPARATOR)) {
-				String mergedPrefixContent = mergeContent(node, context,((FSTTerminal) node).getSpecialTokenPrefix() + " ", false);
+				String mergedPrefixContent = mergePrefixContent(node, context, ((FSTTerminal) node).getSpecialTokenPrefix());
 				((FSTTerminal) node).setSpecialTokenPrefix(mergedPrefixContent);
 			}
 
@@ -337,18 +343,57 @@ public final class SemistructuredMerge {
 		}
 	}
 
-	private static String mergeContent(FSTNode node, MergeContext context, String nodeField, boolean identifyNodes) throws TextualMergeException {
-		String[] splitContent = nodeField.split(SemistructuredMerge.MERGE_SEPARATOR);
-		String leftContent = splitContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "").trim();
-		String baseContent = splitContent[1].trim();
-		String rightContent = splitContent[2].trim();
+	private static String mergeBodyContent(FSTNode node, MergeContext context, String nodeField)
+			throws TextualMergeException {
+		Triple<String, String, String> contributionsContents = splitContributionsContents(nodeField);
+		String leftContent = contributionsContents.getLeft().trim();
+		String baseContent = contributionsContents.getMiddle().trim();
+		String rightContent = contributionsContents.getRight().trim();
 
-		if(identifyNodes) {
-			identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
-			identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
+		identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
+		if(JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+    		identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
+
+		return TextualMerge.merge(leftContent, baseContent, rightContent,
+				JFSTMerge.isWhitespaceIgnored);
+	}
+
+	private static String mergePrefixContent(FSTNode node, MergeContext context, String nodeField)
+			throws TextualMergeException {
+		Triple<String, String, String> contributionsContents = splitContributionsContents(nodeField);
+		return RenamingUtils.compareAndMerge(contributionsContents.getLeft(), contributionsContents.getMiddle(),
+				contributionsContents.getRight());
+	}
+
+
+	private static Triple<String, String, String> splitContributionsContents(String nodeContent) {
+		String[] splitContent = nodeContent.split(SemistructuredMerge.MERGE_SEPARATOR);
+		String leftContent = splitContent[0].replace(SemistructuredMerge.SEMANTIC_MERGE_MARKER, "");
+		String baseContent = (splitContent.length > 1) ? splitContent[1] : "";
+		String rightContent = (splitContent.length > 2) ? splitContent[2] : "";
+		return Triple.of(leftContent, baseContent, rightContent);
+	}
+
+	/**
+	 * Verifies if a node was edited in only one of the revisions (left, or
+	 * right), and fills the given merge context with this information.
+	 * @param node
+	 * @param context
+	 * @param leftContent
+	 * @param baseContent
+	 * @param rightContent
+	 */
+	private static void identifyNodesEditedInOnlyOneVersion(FSTNode node, MergeContext context, String leftContent,	String baseContent, String rightContent) {
+		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
+		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
+		String rightContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);
+		if (!baseContenttrim.isEmpty()) {
+			if (baseContenttrim.equals(leftContenttrim) && !rightContenttrim.equals(leftContenttrim)) {
+				context.editedRightNodes.add(node);
+			} else if (baseContenttrim.equals(rightContenttrim) && !leftContenttrim.equals(rightContenttrim)) {
+				context.editedLeftNodes.add(node);
+			}
 		}
-
-		return TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
 	}
 
 	/**
@@ -370,28 +415,6 @@ public final class SemistructuredMerge {
 			} else if (!baseContenttrim.equals(rightContenttrim) && leftContenttrim.isEmpty()) {
 				Pair<String, FSTNode> tuple = Pair.of(baseContent, node);
 				context.possibleRenamedLeftNodes.add(tuple);
-			}
-		}
-	}
-
-	/**
-	 * Verifies if a node was edited in only one of the revisions (left, or
-	 * right), and fills the given merge context with this information.
-	 * @param node
-	 * @param context
-	 * @param leftContent
-	 * @param baseContent
-	 * @param rightContent
-	 */
-	private static void identifyNodesEditedInOnlyOneVersion(FSTNode node, MergeContext context, String leftContent,	String baseContent, String rightContent) {
-		String leftContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(leftContent);
-		String baseContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(baseContent);
-		String rightContenttrim = FilesManager.getStringContentIntoSingleLineNoSpacing(rightContent);
-		if (!baseContenttrim.isEmpty()) {
-			if (baseContenttrim.equals(leftContenttrim) && !rightContenttrim.equals(leftContenttrim)) {
-				context.editedRightNodes.add(node);
-			} else if (baseContenttrim.equals(rightContenttrim) && !leftContenttrim.equals(rightContenttrim)) {
-				context.editedLeftNodes.add(node);
 			}
 		}
 	}

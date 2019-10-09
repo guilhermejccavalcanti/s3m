@@ -8,14 +8,14 @@ import java.io.PrintStream;
 import cide.languages.*;
 
 import de.ovgu.cide.fstgen.ast.*;
+import br.ufpe.cin.printers.S3MPrettyPrinter;
+public class SimplePrintVisitor extends S3MPrettyPrinter {
 
-public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
-	public SimplePrintVisitor(PrintStream out) {
-		super(out); generateSpaces=true;
-	}
-	public SimplePrintVisitor() {
-		super(); generateSpaces=true;
-	}
+
+
+
+
+
 	public boolean visit(FSTNonTerminal nonTerminal) {
 		if (nonTerminal.getType().equals("CompilationUnit")) {
 			printFeatures(nonTerminal,true);
@@ -66,7 +66,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("enum");
+			{
+				FSTNode v=getChild(nonTerminal, "Enum");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			{
 				FSTNode v=getChild(nonTerminal, "Id");
 				if (v!=null) {
@@ -79,7 +84,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("{");
+			{
+				FSTNode v=getChild(nonTerminal, "EnumBodyStart");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			{
 				FSTNode v=getChild(nonTerminal, "EnumConstants");
 				if (v!=null) {
@@ -92,7 +102,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("}");
+			{
+				FSTNode v=getChild(nonTerminal, "EnumBodyEnd");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			printFeatures(nonTerminal,false);
 			return false;
 		}
@@ -140,7 +155,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("{");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyStart");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			hintIncIndent();
 			hintNewLine();
 			for (FSTNode v : getChildren(nonTerminal,"ClassOrInterfaceBodyDeclaration")) {
@@ -149,7 +169,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 			}
 			hintDecIndent();
 			hintNewLine();
-			printToken("}");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyEnd");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			printFeatures(nonTerminal,false);
 			return false;
 		}
@@ -165,14 +190,6 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 		if (nonTerminal.getType().equals("EnumConstants")) {
 			printFeatures(nonTerminal,true);
 			Iterator<FSTNode> listElements = getChildren(nonTerminal, "EnumConstant").iterator();
-
-			//fix commas
-			List<FSTNode> copy = new ArrayList<FSTNode>();
-			List<FSTNode> nonempty = new ArrayList<FSTNode>();
-			while (listElements.hasNext())copy.add(listElements.next());
-			for(FSTNode n:copy)if(!((FSTTerminal)n).getBody().isEmpty())nonempty.add(n);
-			listElements = nonempty.iterator();
-
 			if (listElements.hasNext()) {
 				listElements.next().accept(this);
 			}
@@ -227,7 +244,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("{");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyStart");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			hintIncIndent();
 			hintNewLine();
 			for (FSTNode v : getChildren(nonTerminal,"ClassOrInterfaceBodyDeclaration")) {
@@ -236,7 +258,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 			}
 			hintDecIndent();
 			hintNewLine();
-			printToken("}");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyEnd");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			printFeatures(nonTerminal,false);
 			return false;
 		}
@@ -248,7 +275,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("enum");
+			{
+				FSTNode v=getChild(nonTerminal, "Enum");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			{
 				FSTNode v=getChild(nonTerminal, "Id");
 				if (v!=null) {
@@ -261,7 +293,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("{");
+			{
+				FSTNode v=getChild(nonTerminal, "EnumBodyStart");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			{
 				FSTNode v=getChild(nonTerminal, "EnumConstants");
 				if (v!=null) {
@@ -274,7 +311,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("}");
+			{
+				FSTNode v=getChild(nonTerminal, "EnumBodyEnd");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			printFeatures(nonTerminal,false);
 			return false;
 		}
@@ -322,7 +364,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("{");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyStart");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			hintIncIndent();
 			hintNewLine();
 			for (FSTNode v : getChildren(nonTerminal,"ClassOrInterfaceBodyDeclaration")) {
@@ -331,7 +378,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 			}
 			hintDecIndent();
 			hintNewLine();
-			printToken("}");
+			{
+				FSTNode v=getChild(nonTerminal, "ClassOrInterfaceBodyEnd");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			printFeatures(nonTerminal,false);
 			return false;
 		}
@@ -343,7 +395,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("enum");
+			{
+				FSTNode v=getChild(nonTerminal, "Enum");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			{
 				FSTNode v=getChild(nonTerminal, "Id");
 				if (v!=null) {
@@ -356,7 +413,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("{");
+			{
+				FSTNode v=getChild(nonTerminal, "EnumBodyStart");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			{
 				FSTNode v=getChild(nonTerminal, "EnumConstants");
 				if (v!=null) {
@@ -369,7 +431,12 @@ public class SimplePrintVisitor extends AbstractFSTPrintVisitor  {
 					v.accept(this);
 				}
 			}
-			printToken("}");
+			{
+				FSTNode v=getChild(nonTerminal, "EnumBodyEnd");
+				if (v!=null) {
+					v.accept(this);
+				}
+			}
 			printFeatures(nonTerminal,false);
 			return false;
 		}

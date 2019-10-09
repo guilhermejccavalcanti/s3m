@@ -1,24 +1,27 @@
 package br.ufpe.cin.mergers.util;
 
-import br.ufpe.cin.app.JFSTMerge;
-import br.ufpe.cin.files.FilesManager;
-import de.ovgu.cide.fstgen.ast.FSTNode;
-import de.ovgu.cide.fstgen.ast.FSTTerminal;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
 import org.apache.commons.lang.StringUtils;
 import org.apache.commons.lang3.tuple.Pair;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
+import br.ufpe.cin.app.JFSTMerge;
+import br.ufpe.cin.exceptions.TextualMergeException;
+import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.TextualMerge;
+import de.ovgu.cide.fstgen.ast.FSTNode;
+import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
 public class RenamingUtils {
     public static boolean hasUnstructuredMergeConflict(MergeContext context, String baseContent) {
         String signature = getTrimmedSignature(baseContent);
 
         return FilesManager.extractMergeConflicts(context.unstructuredOutput).stream()
-                .map(conflict -> FilesManager.getStringContentIntoSingleLineNoSpacing(conflict.body))
+                .map(conflict -> FilesManager.getStringContentIntoSingleLineNoSpacing(conflict.toString()))
                 .anyMatch(conflict -> conflict.contains(signature));
     }
 
@@ -68,13 +71,11 @@ public class RenamingUtils {
         return methodSource.contains("{");
     }
 
-    public static String getNodeBodyWithoutSignature(FSTNode node) {
-        return Optional.of(node)
-                .map(FSTTerminal.class::cast)
-                .map(FSTTerminal::getBody)
-                .map(FilesManager::getStringContentIntoSingleLineNoSpacing)
-                .map(RenamingUtils::removeSignature)
-                .orElse(StringUtils.EMPTY);
+    public static String getMethodBodyWithoutWhitespaces(FSTNode node) {
+        if(isMethodOrConstructorNode(node))
+            return StringUtils.deleteWhitespace(((FSTTerminal) node).getDeclarationBody());
+        
+        return StringUtils.EMPTY;
     }
 
     public static String removeSignature(String string) {
@@ -93,62 +94,41 @@ public class RenamingUtils {
     }
 
     public static boolean isMethodOrConstructorNode(FSTNode node) {
-        if (node instanceof FSTTerminal) {
-            String nodeType = node.getType();
-            return nodeType.equals("MethodDecl") || nodeType.equals("ConstructorDecl");
-        }
+        return isMethod(node) || isConstructor(node);
+    }
 
-        return false;
+    private static boolean isMethod(FSTNode node) {
+        return node instanceof FSTTerminal && node.getType().equals("MethodDecl");
+    }
+
+    private static boolean isConstructor(FSTNode node) {
+        return node instanceof FSTTerminal && node.getType().equals("ConstructorDecl");
     }
 
     public static boolean haveSameParent(FSTNode left, FSTNode right) {
         return left.getParent().equals(right.getParent());
     }
 
-    public static void generateRenamingConflict(MergeContext context, String currentNodeContent, String firstContent,
-                                                String secondContent, Side renamingSide) {
-        if (renamingSide == Side.LEFT) {//managing the origin of the changes in the conflict
-            String aux = secondContent;
-            secondContent = firstContent;
-            firstContent = aux;
-        }
+    public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode) {
+        MergeConflict conflict = new MergeConflict(leftNode, baseNode, rightNode);
+        ((FSTTerminal) mergeNode).setBody(conflict.toString());
 
-        //statistics
-        if (firstContent.isEmpty() || secondContent.isEmpty()) {
-            context.deletionConflicts++;
-        } else {
-            context.renamingConflicts++;
-        }
-
-        //first creates a conflict
-        MergeConflict newConflict = new MergeConflict(firstContent + '\n', secondContent + '\n');
-        //second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
-        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.body);
-        if (renamingSide == Side.RIGHT) {
-            FilesManager.findAndDeleteASTNode(context.superImposedTree, firstContent);
-        } else {
-            FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
-        }
+        context.renamingConflicts++;
+        removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
     }
 
-    public static void generateMutualRenamingConflict(MergeContext context, FSTNode left, FSTNode right) {
-        String leftContent = ((FSTTerminal) left).getBody();
-        String rightContent = ((FSTTerminal) right).getBody();
+    public static void removeUnmmatchedNode(FSTNode mergeTree, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
+        if(equalIfExists(leftNode, mergeNode) && !equalIfExists(rightNode, leftNode))
+            Traverser.removeNode(rightNode, mergeTree);
+    }
 
-        //statistics
-        context.renamingConflicts++;
-
-        //first creates a conflict
-        MergeConflict newConflict = new MergeConflict(leftContent + '\n', rightContent + '\n');
-
-        //second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
-        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, newConflict.body);
-        FilesManager.findAndDeleteASTNode(context.superImposedTree, rightContent);
+    private static boolean equalIfExists(FSTNode node1, FSTNode node2) {
+        return node1 != null && node1.equals(node2);
     }
 
     public static String getMergeConflictContentOfOppositeSide(MergeConflict mergeConflict, Side side) {
-        if (side == Side.LEFT) return mergeConflict.right;
-        if (side == Side.RIGHT) return mergeConflict.left;
+        if (side == Side.LEFT) return mergeConflict.getRight();
+        if (side == Side.RIGHT) return mergeConflict.getLeft();
 
         return null;
     }
@@ -164,26 +144,106 @@ public class RenamingUtils {
     }
 
     public static boolean haveEqualSignature(FSTNode left, FSTNode right) {
-        return left.getName().equals(right.getName());
+        return left != null && right != null && left.getName().equals(right.getName());
+    }
+
+    public static boolean haveEqualSignatureButName(FSTNode left, FSTNode right) {
+        String[] leftArgumentTypes = getMethodArgumentTypes(left);
+        String[] rightArgumentTypes = getMethodArgumentTypes(right);
+
+        return Arrays.equals(leftArgumentTypes, rightArgumentTypes);
+    }
+
+    private static String[] getMethodArgumentTypes(FSTNode node) {
+        // The signature is stored in a FSTNode has the format 'name(arg1-arg1-arg2-arg2-arg3-arg3...)'.
+        String[] nodeNameAndArguments = node.getName().split("[()]");
+        
+        String[] arguments = nodeNameAndArguments[1].split("-");
+        return arguments;
+    }
+
+    public static boolean oneContainsTheBodyFromTheOther(FSTNode left, FSTNode right) {
+        String leftBody = RenamingUtils.getMethodBodyWithoutWhitespaces(left);
+        String rightBody = RenamingUtils.getMethodBodyWithoutWhitespaces(right);
+
+        return leftBody != StringUtils.EMPTY && rightBody != StringUtils.EMPTY && (leftBody.contains(rightBody) || rightBody.contains(leftBody));
     }
 
     public static boolean haveDifferentBody(FSTNode left, FSTNode right) {
-        return !haveEqualBody(left, right);
+        return !haveEqualBodyModuloWhitespace(left, right);
     }
 
-    public static boolean haveEqualBody(FSTNode left, FSTNode right) {
-        String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
-        String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
+    public static boolean haveEqualBodyModuloWhitespace(FSTNode left, FSTNode right) {
+        String leftBody = RenamingUtils.getMethodBodyWithoutWhitespaces(left);
+        String rightBody = RenamingUtils.getMethodBodyWithoutWhitespaces(right);
 
         return leftBody.equals(rightBody);
     }
 
-    public static boolean haveSimilarBody(FSTNode left, FSTNode right) {
-        String leftBody = RenamingUtils.getNodeBodyWithoutSignature(left);
-        String rightBody = RenamingUtils.getNodeBodyWithoutSignature(right);
+    public static boolean haveSimilarBodyModuloWhitespace(FSTNode left, FSTNode right) {
+        String leftBody = RenamingUtils.getMethodBodyWithoutWhitespaces(left);
+        String rightBody = RenamingUtils.getMethodBodyWithoutWhitespaces(right);
 
         double bodySimilarity = FilesManager.computeStringSimilarity(leftBody, rightBody);
 
         return bodySimilarity >= JFSTMerge.RENAMING_SIMILARITY_THRESHOLD;
+    }
+
+    public static void runTextualMerge(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode) throws TextualMergeException {
+        ((FSTTerminal) mergeNode).setBody(mergeContent(leftNode, baseNode, rightNode));
+        ((FSTTerminal) mergeNode).setSpecialTokenPrefix(mergePrefix(leftNode, baseNode, rightNode));
+
+        if(nodeHasConflict(mergeNode))
+            context.renamingConflicts++;
+
+        removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
+    }
+
+    private static String mergeContent(FSTNode leftNode, FSTNode baseNode, FSTNode rightNode)
+            throws TextualMergeException {
+        return TextualMerge.merge(getNodeContent(leftNode), getNodeContent(baseNode), getNodeContent(rightNode),
+                JFSTMerge.isWhitespaceIgnored);
+    }
+
+    private static String mergePrefix(FSTNode leftNode, FSTNode baseNode, FSTNode rightNode)
+            throws TextualMergeException {
+        String leftPrefix = getNodePrefix(leftNode);
+        String basePrefix = getNodePrefix(baseNode);
+        String rightPrefix = getNodePrefix(rightNode);
+        return compareAndMerge(leftPrefix, basePrefix, rightPrefix);
+    }
+
+    public static String compareAndMerge(String left, String base, String right) throws TextualMergeException {
+        String leftTrimmed = left.trim();
+        String baseTrimmed = base.trim();
+        String rightTrimmed = right.trim();
+
+        if(JFSTMerge.isWhitespaceIgnored) {
+            if(base.equals(left) && !base.equals(right)) {
+                return right;
+            } else if(base.equals(right) && !base.equals(left)) {
+                return left;
+            } else if(baseTrimmed.equals(leftTrimmed) && !baseTrimmed.equals(rightTrimmed)) {
+                return right;
+            } else if(baseTrimmed.equals(rightTrimmed) && !baseTrimmed.equals(leftTrimmed)) {
+                return left;
+            } else if(leftTrimmed.equals(rightTrimmed)) {
+                return (left.length() < right.length()) ? left : right;
+            } 
+        } 
+        
+        return TextualMerge.merge(left, base, right, JFSTMerge.isWhitespaceIgnored);
+    }
+
+    private static String getNodeContent(FSTNode node) {
+        if (node == null)
+            return "";
+        return ((FSTTerminal) node).getBody();
+    }
+
+    private static String getNodePrefix(FSTNode node) {
+        if (node == null)
+            return "";
+        return ((FSTTerminal) node).getSpecialTokenPrefix();
     }
 }
