@@ -121,7 +121,7 @@ public class DeletionsHandlerTest {
 				new File("testfiles/deletioninnernewinstanceofrenamed/right.java"),
 				null);
 		JFSTMerge.showConflictMessages = false;
-		assertEquals("packagecom.example;publicclassTest{<<<<<<<MINE=======possibledeletionofclassAclassA{doublea;doubleb;}>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}", FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput));
+		assertEquals("packagecom.example;publicclassTest{<<<<<<<MINE=======possibledeletionorrenamingofclassAwithadditionofnewreferenceclassA{doublea;doubleb;}>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}", FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput));
 		assertEquals(1, ctx.innerDeletionConflicts);
 
 	}
