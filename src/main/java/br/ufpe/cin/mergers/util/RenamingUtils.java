@@ -219,12 +219,16 @@ public class RenamingUtils {
         String rightTrimmed = right.trim();
 
         if(JFSTMerge.isWhitespaceIgnored) {
-            if(baseTrimmed.equals(leftTrimmed) && !baseTrimmed.equals(rightTrimmed)) {
+            if(base.equals(left) && !base.equals(right)) {
+                return right;
+            } else if(base.equals(right) && !base.equals(left)) {
+                return left;
+            } else if(baseTrimmed.equals(leftTrimmed) && !baseTrimmed.equals(rightTrimmed)) {
                 return right;
             } else if(baseTrimmed.equals(rightTrimmed) && !baseTrimmed.equals(leftTrimmed)) {
                 return left;
             } else if(leftTrimmed.equals(rightTrimmed)) {
-                return (left.length() > right.length()) ? left : right;
+                return (left.length() < right.length()) ? left : right;
             } 
         } 
         
