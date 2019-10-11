@@ -115,7 +115,8 @@ public class SafeRenamingHandler implements RenamingHandler {
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
             return;
         else
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode);
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode,
+                    "mutual renaming");
     }
 
     private void decideWhenTheyRenamedDifferently(MergeContext context, FSTNode leftNode, FSTNode baseNode,
@@ -124,13 +125,27 @@ public class SafeRenamingHandler implements RenamingHandler {
                 
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode)) {
             if (thereIsNewReference(toCheckReferencesFile, signature, context.getBase())) {
-                RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode);
+                RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode,
+                        "mutual renaming and a new reference to method " + signature);
             } else {
                 RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
             }
         } else {
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode);
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode,
+                    mutualRenamingConflictMessage(leftNode, rightNode));
         }
+    }
+
+    private String mutualRenamingConflictMessage(FSTNode leftNode, FSTNode rightNode) {
+        if(leftNode == null) {
+            return "deletion and renaming of method";
+        } 
+        
+        if(rightNode == null) {
+            return "renaming and deletion of method";
+        }
+
+        return "mutual renaming";
     }
 
     private void decideWhenBothDeletedOrRenamedWithBodyChanges(MergeContext context, FSTNode leftNode, FSTNode baseNode,
@@ -138,7 +153,8 @@ public class SafeRenamingHandler implements RenamingHandler {
         if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
             RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
         else
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode);
+            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode,
+                    mutualRenamingConflictMessage(leftNode, rightNode));
     }
 
     private boolean isRenamingWithoutBodyChanges(Side renamingSide, FSTNode baseNode, MergeContext context) {

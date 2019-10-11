@@ -86,6 +86,9 @@ public class JFSTMerge {
             converter = RenamingStrategyConverter.class)
 	public static RenamingStrategy renamingStrategy = RenamingStrategy.SAFE;
 
+	@Parameter(names = "-m", description = "Shows extra messages detailing conflict causes.")
+	public static boolean showConflictMessages = false;
+
 	@Parameter(names = {"--handle-duplicate-declarations", "-hdd"}, description = "Detects situations where merging developers' contributions adds " +
 			"declarations with the same signature to different areas of the same class.", arity = 1)
 	public static boolean isDuplicatedDeclarationHandlerEnabled = true;

@@ -422,7 +422,7 @@ public final class FilesManager {
 			
 			else if(line.contains(MergeConflict.YOURS_CONFLICT_MARKER) && conflictArea == ConflictArea.Right) {
 				endLOC = lineCounter;
-				mergeConflicts.add(new MergeConflict(leftConflictingContent.toString(), baseConflictingContent.toString(), rightConflictingContent.toString(), startLOC, endLOC));
+				mergeConflicts.add(new MergeConflict(leftConflictingContent.toString(), baseConflictingContent.toString(), rightConflictingContent.toString(), "", startLOC, endLOC));
 				conflictArea = ConflictArea.None;
 			} 
 			

@@ -192,10 +192,10 @@ public class DeletionsHandler implements ConflictHandler {
 		if(correspondingInSource!=null){
 			FSTNonTerminal declarationInSource = correspondingInSource.getParent();
 			MergeConflict newConflict;
-			if(isLeftDeletion){
-				newConflict = new MergeConflict(null, baseNode, declarationInSource);
+			if(isLeftDeletion) {
+				newConflict = new MergeConflict(null, baseNode, declarationInSource, "possible deletion or renaming of class " + baseNode.getName() + " with addition of new reference");
 			} else {
-				newConflict = new MergeConflict(declarationInSource, baseNode, null);
+				newConflict = new MergeConflict(declarationInSource, baseNode, null, "possible deletion of class " + baseNode.getName() + " with addition of new reference");
 			}
 			FSTTerminal terminal = new FSTTerminal(declarationInSource.getType(), identifier, newConflict.toString(), "");
 			parent.addChild(terminal, index);

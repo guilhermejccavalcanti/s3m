@@ -110,8 +110,8 @@ public final class NewElementReferencingEditedOneHandler implements ConflictHand
 	 * @param addedElementContent
 	 */
 	private static void generateConflictWithAddedAndEditedElements(MergeContext context, FSTNode editedElement, FSTNode baseElement, FSTNode addedElement) {
-		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(editedElement, baseElement, addedElement);
+		String conflictMessage = new StringBuilder().append("added ").append(addedElement.getName()).append(" that refers to edited ").append(editedElement.getName()).toString();
+		MergeConflict newConflict = new MergeConflict(editedElement, baseElement, addedElement, conflictMessage);
 
 		String editedElementContent = ((FSTTerminal) editedElement).getBody();
 		String addedElementContent = ((FSTTerminal) addedElement).getBody();

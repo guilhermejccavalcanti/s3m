@@ -159,6 +159,16 @@ public class SafeRenamingHandlerTest {
 	}
 
 	@Test
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
+	public void testHandle_givenShowMessageOptionIsEnabled_whenBothRenameMethodWithBodyChanges_andBothRenameToDifferentNames_shouldReportConflict_andDisplayTheConflictMessage() {
+		JFSTMerge.showConflictMessages = true;
+		merge(renamedMethodWithBodyChangesFile1, renamedMethodWithBodyChangesFile2);
+		JFSTMerge.showConflictMessages = false;
+		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
+				"<<<<<<<MINEpublicvoidmethod1(intx,inty){intd;intb;intc;}=======mutualrenamingpublicvoidmethod2(intx,inty){inta;intb;intd;}>>>>>>>YOURS");
+	}
+
+	@Test
 	public void testHandle_whenLeftDeletesMethod_andRightRenamesMethod_shouldReportConflict() {
 		merge(removedMethodFile, renamedMethodWithBodyChangesFile1);
 		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
