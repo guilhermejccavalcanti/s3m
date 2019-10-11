@@ -2,6 +2,7 @@ package br.ufpe.cin.mergers;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
+import java.nio.charset.Charset;
 
 import org.eclipse.jgit.diff.RawText;
 import org.eclipse.jgit.diff.RawTextComparator;
@@ -10,18 +11,25 @@ import org.eclipse.jgit.merge.MergeAlgorithm;
 import org.eclipse.jgit.merge.MergeFormatter;
 import org.eclipse.jgit.merge.MergeResult;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.TextualMergeException;
+import br.ufpe.cin.files.FilesEncoding;
 import br.ufpe.cin.files.FilesManager;
 
 /**
  * Represents unstructured, linebased, textual merge.
+ * We use a temporary JGit's artifact. This build allows
+ * unstructured merge to output base's contribution in conflicts, conformant with diff3 style.
  * @author Guilherme
  */
 public final class TextualMerge {
 
+	private static String encoding;
+
 	/**
 	 * Three-way unstructured merge of three given files.
+	 * 
 	 * @param left
 	 * @param base
 	 * @param right
@@ -30,6 +38,7 @@ public final class TextualMerge {
 	 * @throws TextualMergeException 
 	 */
 	public static String merge(File left, File base, File right, boolean ignoreWhiteSpaces) throws TextualMergeException{
+		encoding = FilesEncoding.retrieveEncoding(base);
 		/* this commented code is an alternative to call unstructured merge by command line 		
 		 * String mergeCommand = ""; 
 			if(System.getProperty("os.name").contains("Windows")){
@@ -76,8 +85,14 @@ public final class TextualMerge {
 					new RawText(Constants.encode(rightContent))
 					);		
 			ByteArrayOutputStream output = new ByteArrayOutputStream();
-			(new MergeFormatter()).formatMerge(output, mergeCommand, "BASE", "MINE", "YOURS", Constants.CHARACTER_ENCODING);
-			textualMergeResult = new String(output.toByteArray(), Constants.CHARACTER_ENCODING);
+			if(JFSTMerge.showBase) {
+				new MergeFormatter().formatMergeWriteBaseInConflicts(output, mergeCommand, "BASE", "MINE", "YOURS", Charset.forName(encoding));
+			} else {
+				new MergeFormatter().formatMerge(output, mergeCommand, "BASE", "MINE", "YOURS", 
+						Charset.forName(encoding));
+			}
+			
+			textualMergeResult = new String(output.toByteArray(), Charset.forName(encoding));
 		}catch(Exception e){
 			throw new TextualMergeException(ExceptionUtils.getCauseMessage(e), leftContent,baseContent,rightContent);
 		}

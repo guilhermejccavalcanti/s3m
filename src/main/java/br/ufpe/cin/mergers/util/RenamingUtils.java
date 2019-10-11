@@ -1,21 +1,20 @@
 package br.ufpe.cin.mergers.util;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Comparator;
+import java.util.List;
+import java.util.stream.Collectors;
+
+import org.apache.commons.lang.StringUtils;
+import org.apache.commons.lang3.tuple.Pair;
+
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.TextualMerge;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang3.tuple.Pair;
-import org.apache.commons.lang3.tuple.Triple;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Comparator;
-import java.util.List;
-import java.util.Optional;
-import java.util.stream.Collectors;
 
 public class RenamingUtils {
     public static boolean hasUnstructuredMergeConflict(MergeContext context, String baseContent) {
@@ -110,8 +109,8 @@ public class RenamingUtils {
         return left.getParent().equals(right.getParent());
     }
 
-    public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
-        MergeConflict conflict = new MergeConflict(leftNode, rightNode);
+    public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode) {
+        MergeConflict conflict = new MergeConflict(leftNode, baseNode, rightNode);
         ((FSTTerminal) mergeNode).setBody(conflict.toString());
 
         context.renamingConflicts++;
@@ -220,12 +219,16 @@ public class RenamingUtils {
         String rightTrimmed = right.trim();
 
         if(JFSTMerge.isWhitespaceIgnored) {
-            if(baseTrimmed.equals(leftTrimmed) && !baseTrimmed.equals(rightTrimmed)) {
+            if(base.equals(left) && !base.equals(right)) {
+                return right;
+            } else if(base.equals(right) && !base.equals(left)) {
+                return left;
+            } else if(baseTrimmed.equals(leftTrimmed) && !baseTrimmed.equals(rightTrimmed)) {
                 return right;
             } else if(baseTrimmed.equals(rightTrimmed) && !baseTrimmed.equals(leftTrimmed)) {
                 return left;
             } else if(leftTrimmed.equals(rightTrimmed)) {
-                return (left.length() > right.length()) ? left : right;
+                return (left.length() < right.length()) ? left : right;
             } 
         } 
         

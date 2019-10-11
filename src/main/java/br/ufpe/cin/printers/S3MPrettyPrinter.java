@@ -22,12 +22,14 @@ public abstract class S3MPrettyPrinter extends AbstractFSTPrintVisitor {
     private final Queue<String> tokensCurrentLine;
 
     private final Pattern conflictPattern = Pattern
-            .compile("<<<<<<< MINE(.*)(||||||| BASE)?(.*)=======(.*)>>>>>>> YOURS", Pattern.DOTALL);
+            .compile("<<<<<<< MINE(.*)(||||||| BASE)?(.*)=======(.*)>>>>>>> YOURS(.*)", Pattern.DOTALL);
 
     public S3MPrettyPrinter() {
         this.result = new StringBuilder();
         this.tokensCurrentLine = new LinkedList<String>();
     }
+
+    private boolean printedStatementOnFirstLine = false;
 
     @Override
     public boolean visit(FSTTerminal terminal) {
@@ -40,11 +42,27 @@ public abstract class S3MPrettyPrinter extends AbstractFSTPrintVisitor {
             printToken(IndentationUtils.removePostIndentationAndLineBreaks(prefix));
         } else if (hasConflict(body)) {
             printToken(IndentationUtils.removePostIndentation(prefix) + body);
+        } else if(isFirstLineOfCode(prefix) && isImportOrPackageStatement(terminal)) { 
+            // if there are statements on the first line, there is no line break for them.
+            if(printedStatementOnFirstLine) {
+                printToken('\n' + prefix + body);
+            } else {
+                printToken(prefix + body);
+                printedStatementOnFirstLine = true;
+            }
         } else {
             printToken(prefix + body);
         }
 
         return false;
+    }
+
+    private boolean isImportOrPackageStatement(FSTTerminal terminal) {
+        return terminal.getType().equals("ImportDeclaration") || terminal.getType().equals("PackageDeclaration");
+    }
+
+    private boolean isFirstLineOfCode(String prefix) {
+        return !prefix.contains("\n");
     }
 
     private boolean hasConflict(String content) {
