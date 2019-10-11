@@ -338,6 +338,7 @@ public class JFSTMerge {
 		} catch(CryptoException e) {
 			System.out.println("Log files are already decrypted.");
 		}
+	}
 
 	private boolean areDirectories(List<File> files) {
 		return files.stream().allMatch(File::isDirectory);
