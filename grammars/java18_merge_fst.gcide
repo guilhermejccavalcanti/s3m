@@ -468,18 +468,33 @@ ClassOrInterfaceTypeAnnotation:
 
 @FSTInline 
 EnumDeclaration:  
-        "enum" Id
+        Enum Id
         [ ImplementsList ]
         EnumBody
 ;
 
+@FSTTerminal(merge="LineBased")
+Enum:
+	"enum"
+;
+
 @FSTInline 
 EnumBody:  
-		"{"
-		[EnumConstants]
-		["," <NONE>]
-		[ EnumBodyInternal ]
-		"}"
+	EnumBodyStart
+	[EnumConstants]
+	["," <NONE>]
+	[ EnumBodyInternal ]
+	EnumBodyEnd
+;
+
+@FSTTerminal(merge="LineBased", compose="concat")
+EnumBodyStart:
+	"{"
+;
+
+@FSTTerminal(merge="LineBased", compose="concat")
+EnumBodyEnd:
+	"}"
 ;
 
 @FSTNonTerminal()

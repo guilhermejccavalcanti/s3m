@@ -6,6 +6,7 @@ import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 import org.mozilla.universalchardet.UniversalDetector;
@@ -68,5 +69,12 @@ public class FilesEncoding {
         else
             return encoding;
     }
+
+	public static void setFilesEncoding(File left, File base, File right, List<String> filesEncoding) {
+        encodings.put(left, filesEncoding.get(0));
+        baseEncoding = filesEncoding.get(1);
+        encodings.put(base, baseEncoding);
+        encodings.put(right, filesEncoding.get(2));
+	}
 
 }
