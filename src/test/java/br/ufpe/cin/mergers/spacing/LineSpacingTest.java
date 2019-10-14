@@ -36,6 +36,14 @@ public class LineSpacingTest {
     }
 
     @Test
+    public void testSpacingPreservation_whenLeftAddsAnImportStatementPost2Lines_andRightAddsADifferentImportStatementPost5Lines_shouldPreserveBothSpacing() {
+        String mergeResult = merge("imports");
+
+        assertEquals(2, numLineBreaksBetweenDeclarations(mergeResult, "package mypackage;", "import importstatement.A;"));
+        assertEquals(5, numLineBreaksBetweenDeclarations(mergeResult, "import importstatement.A;", "import importstatement2.*;"));
+    }
+
+    @Test
     public void testSpacingPreservation_whenLeftAddsAnAttributePost2Lines_andRightAddsADifferentAttributePost4Lines_shouldPreserveBothSpacing() {
         String mergeResult = merge("addsattributeaddsdiffattribute");
         
@@ -51,10 +59,10 @@ public class LineSpacingTest {
     }
 
     @Test
-    public void testSpacingPreservation_givenMergeIgnoresWhitespaces_whenLeftPushesAnAttribute2Lines_andRightPullsTheSameAttribute1Line_shouldPreserveLeftSpacing() {
+    public void testSpacingPreservation_givenMergeIgnoresWhitespaces_whenLeftPushesAnAttribute2Lines_andRightPullsTheSameAttribute1Line_shouldPreserveRightSpacing() {
         String mergeResult = merge("pushattributepullattribute");
         
-        assertEquals(4, numLineBreaksBetweenDeclarations(mergeResult, "{", "int a;"));
+        assertEquals(1, numLineBreaksBetweenDeclarations(mergeResult, "{", "int a;"));
     }
 
     @Test
@@ -68,10 +76,10 @@ public class LineSpacingTest {
     }
 
     @Test
-    public void testSpacingPreservation_givenMergeIgnoresWhitespaces_whenLeftAddsAnAttributePost2Lines_andRightAddsTheSameAttributePost3Lines_shouldPreserveRightSpacing() {
+    public void testSpacingPreservation_givenMergeIgnoresWhitespaces_whenLeftAddsAnAttributePost2Lines_andRightAddsTheSameAttributePost3Lines_shouldPreserveLeftSpacing() {
         String mergeResult = merge("addsattributeaddssameattribute");
         
-        assertEquals(3, numLineBreaksBetweenDeclarations(mergeResult, "{", "int a;"));
+        assertEquals(2, numLineBreaksBetweenDeclarations(mergeResult, "{", "int a;"));
     }
 
     @Test

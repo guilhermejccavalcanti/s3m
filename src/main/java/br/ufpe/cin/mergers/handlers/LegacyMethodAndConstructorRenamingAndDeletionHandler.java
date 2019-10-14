@@ -178,7 +178,7 @@ public final class LegacyMethodAndConstructorRenamingAndDeletionHandler implemen
 		}
 
 		//first creates a conflict 
-		MergeConflict newConflict = new MergeConflict(firstContent, "", secondContent);
+		MergeConflict newConflict = new MergeConflict(firstContent, "", secondContent, "");
 		//second put the conflict in one of the nodes containing the previous conflict, and deletes the other node containing the possible renamed version
 		FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.toString());
 		if(isLeftToRight){
@@ -195,7 +195,7 @@ public final class LegacyMethodAndConstructorRenamingAndDeletionHandler implemen
 		context.renamingConflicts++;
 
 		// first creates a conflict
-		MergeConflict newConflict = new MergeConflict(left, null, right);
+		MergeConflict newConflict = new MergeConflict(left, null, right, "");
 
 		// second put the conflict in one of the nodes containing the previous conflict,
 		// and deletes the other node containing the possible renamed version

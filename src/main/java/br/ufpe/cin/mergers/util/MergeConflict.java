@@ -36,11 +36,11 @@ public class MergeConflict {
 	public static final String CHANGE_CONFLICT_MARKER = "=======";
 	public static final String YOURS_CONFLICT_MARKER = ">>>>>>> YOURS";
 
-	public MergeConflict(FSTNode left, FSTNode base, FSTNode right) {
+	public MergeConflict(FSTNode left, FSTNode base, FSTNode right, String message) {
 		this.left = getNodeContent(left);
 		this.base = getNodeContent(base);
 		this.right = getNodeContent(right);
-		this.message = "";
+		this.message = message;
 		this.body = assembleBody();
 	}
 
@@ -62,33 +62,37 @@ public class MergeConflict {
 				.append('\n');
 		if(JFSTMerge.showBase) {
 			conflict.append(BASE_CONFLICT_MARKER)
+					.append('\n')
+					.append(base)
 					.append('\n');
 		}
-		conflict.append(CHANGE_CONFLICT_MARKER)
-				.append(" " + message)
-				.append('\n')
+		conflict.append(CHANGE_CONFLICT_MARKER);
+		if(JFSTMerge.showConflictMessages) {
+			conflict.append(" " + message);
+		}
+		conflict.append('\n')
 				.append(right)
 				.append('\n')
 				.append(YOURS_CONFLICT_MARKER);
 		return conflict.toString();
 	}
 
-	public MergeConflict(FSTTerminal left, FSTTerminal base, FSTTerminal right, int startLOC, int endLOC) {
-		this(left, base, right);
+	public MergeConflict(FSTTerminal left, FSTTerminal base, FSTTerminal right, String message, int startLOC, int endLOC) {
+		this(left, base, right, message);
 		this.startLOC = startLOC;
 		this.endLOC = endLOC;
 	}
 
-	public MergeConflict(String left, String base, String right) {
+	public MergeConflict(String left, String base, String right, String message) {
 		this.left = left;
 		this.base = base;
 		this.right = right;
-		this.message = "";
+		this.message = message;
 		this.body = assembleBody();
 	}
 
-	public MergeConflict(String left, String base, String right, int startLOC, int endLOC) {
-		this(left, base, right);
+	public MergeConflict(String left, String base, String right, String message, int startLOC, int endLOC) {
+		this(left, base, right, message);
 		this.startLOC = startLOC;
 		this.endLOC = endLOC;
 	}

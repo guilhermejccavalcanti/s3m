@@ -110,6 +110,21 @@ public class DeletionsHandlerTest {
 		assertEquals(1, ctx.innerDeletionConflicts);
 
 	}
+
+	@Test
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
+	public void testInnerDeletionWithNewInstanceOfRenamed_givenShowMessageOptionIsEnabled_whenLeftRenamesAClass_andAddsAReferenceToTheEditedClassByRight_shouldReportConflict() {
+		JFSTMerge.showConflictMessages = true;
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/deletioninnernewinstanceofrenamed/left.java"), 
+				new File("testfiles/deletioninnernewinstanceofrenamed/base.java"), 
+				new File("testfiles/deletioninnernewinstanceofrenamed/right.java"),
+				null);
+		JFSTMerge.showConflictMessages = false;
+		assertEquals("packagecom.example;publicclassTest{<<<<<<<MINE=======possibledeletionorrenamingofclassAwithadditionofnewreferenceclassA{doublea;doubleb;}>>>>>>>YOURSclassB{doublea;}publicstaticvoidmain(String[]args){newB();}}", FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput));
+		assertEquals(1, ctx.innerDeletionConflicts);
+
+	}
 	
 	@Test
 	public void testInnerDeletionWithNoEditionOfOriginal() {

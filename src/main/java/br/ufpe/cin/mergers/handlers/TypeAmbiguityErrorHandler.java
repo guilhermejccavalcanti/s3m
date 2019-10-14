@@ -58,7 +58,7 @@ public final class TypeAmbiguityErrorHandler implements ConflictHandler {
                 if( (rightImportedMember.equals("*;") && leftImportedMember.equals("*;")) ||
                         (rightImportedMember.equals(leftImportedMember))){
                     if(thereIsCompiltationProblemWithImportedStatements(compiler,context,leftImportStatement,rightImportStatement)){
-                        generateConflictWithImportStatements(context,leftImportStatementNode,rightImportStatementNode); break;
+                        generateConflictWithImportStatements(context,leftImportStatementNode,rightImportStatementNode, "type ambiguity error"); break;
                     }
                     /*					else if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
                     generateConflictWithImportStatements(context,leftImportStatement,rightImportStatement); break;
@@ -69,7 +69,7 @@ public final class TypeAmbiguityErrorHandler implements ConflictHandler {
                 else if(rightImportedMember.equals("*;") || leftImportedMember.equals("*;")) {
                     if(thereIsUnstructuredConflictWithImportedStatements(unstructuredMergeConflicts,leftImportStatement, rightImportStatement)){
                         if(thereIsContributionUsingImportedMember(context,rightImportedMember, leftImportedMember)){
-                            generateConflictWithImportStatements(context,leftImportStatementNode,rightImportStatementNode); break;
+                            generateConflictWithImportStatements(context,leftImportStatementNode,rightImportStatementNode, "possible behavioral error"); break;
                         }
                     }
                 }
@@ -180,9 +180,9 @@ public final class TypeAmbiguityErrorHandler implements ConflictHandler {
 	 * @param leftImportStatement
 	 * @param rightImportStatement
 	 */
-	private static void generateConflictWithImportStatements(MergeContext context, FSTNode leftImportNode, FSTNode rightImportNode) {
+	private static void generateConflictWithImportStatements(MergeContext context, FSTNode leftImportNode, FSTNode rightImportNode, String conflictMessage) {
 		//first creates a conflict with the import statements
-		MergeConflict newConflict = new MergeConflict(leftImportNode, null, rightImportNode);
+		MergeConflict newConflict = new MergeConflict(leftImportNode, null, rightImportNode, conflictMessage);
 
 		String leftImportStatement = ((FSTTerminal) leftImportNode).getBody();
 		String rightImportStatement = ((FSTTerminal) rightImportNode).getBody();
