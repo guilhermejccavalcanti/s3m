@@ -30,7 +30,8 @@ public class InitializationBlocksHandlerMultipleBlocksTest {
 		},  true, Charset.defaultCharset().displayName());
 		System.setOut(hideStream);
 	}
-    
+	
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
     @Before
 	public void initJFSTMergeWithNewApproachForInitializationHandler() {
 		JFSTMerge.isInitializationBlocksHandlerEnabled = false;
