@@ -6,7 +6,7 @@ public class Test {
 		int c = 3;
                        
 		for (int i = 0; i < 5; i++) {
-            System.out.println("Índice " + i);
+            System.out.println("Indice " + i);
         }
 	}
 

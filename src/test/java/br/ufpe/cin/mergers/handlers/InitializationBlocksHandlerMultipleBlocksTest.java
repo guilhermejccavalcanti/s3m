@@ -231,7 +231,7 @@ public class InitializationBlocksHandlerMultipleBlocksTest {
 		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
 
 		assertThat(mergeResult).contains("publicclassTest{static{<<<<<<<MINEintvar_a=1;intvar_b=2;intvar_c=3;======="
-				+ "inta=1;intb=2;intc=3;for(inti=0;i<5;i++){System.out.println(\"Índice\"+i);}>>>>>>>YOURS}"
+				+ "inta=1;intb=2;intc=3;for(inti=0;i<5;i++){System.out.println(\"Indice\"+i);}>>>>>>>YOURS}"
 				+ "static{inta=7;intb=8;intc=9;}}");
 		assertThat(ctx.initializationBlocksConflicts).isOne();
 	}
