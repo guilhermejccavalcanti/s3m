@@ -8,6 +8,7 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
+import org.junit.After;
 import org.junit.Before;
 import org.junit.BeforeClass;
 import org.junit.Test;
@@ -18,7 +19,7 @@ import br.ufpe.cin.mergers.util.MergeContext;
 
 public class InitializationBlocksHandlerMultipleBlocksTest {
 
-    JFSTMerge merge;
+    JFSTMerge merge = new JFSTMerge();
 
 	@BeforeClass
 	public static void setUpBeforeClass() throws UnsupportedEncodingException {
@@ -33,10 +34,16 @@ public class InitializationBlocksHandlerMultipleBlocksTest {
 	
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
     @Before
-	public void initJFSTMergeWithNewApproachForInitializationHandler() {
+	public void enableNewApproachForInitializationHandler() {
 		JFSTMerge.isInitializationBlocksHandlerEnabled = false;
 		JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled = true;
-		merge = new JFSTMerge();
+	}
+
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("ST_WRITE_TO_STATIC_FROM_INSTANCE_METHOD")
+	@After
+	public void disableNewApproachForInitializationHandler() {
+		JFSTMerge.isInitializationBlocksHandlerEnabled = true;
+		JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled = false;
 	}
     
 	@Test
