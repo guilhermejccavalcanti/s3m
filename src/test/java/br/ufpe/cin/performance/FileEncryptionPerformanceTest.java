@@ -19,7 +19,7 @@ public class FileEncryptionPerformanceTest {
 	private JFSTMerge merger = new JFSTMerge();
 
 	private final int NUM_ITERATIONS = 5;
-	private final double ACCEPTED_MARGIN = 1000; // milliseconds
+	private final double ACCEPTED_MARGIN = 1500; // milliseconds
 
 	private String[] testFilesPath = new String[] {
 		"testfiles/deletioninnerinleft",
