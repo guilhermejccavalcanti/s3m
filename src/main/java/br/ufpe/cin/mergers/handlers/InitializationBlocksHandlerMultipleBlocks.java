@@ -358,8 +358,8 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 	    	String leftConflictContent = StringUtils.substringBetween(leftNodeContent, "{", "}").trim();
 	    	
 	    	StringBuffer staticBlock = new StringBuffer("static {");
-	    	MergeConflict mergeConflict = new MergeConflict(leftConflictContent, rightConflictContent.toString());
-			staticBlock.append(mergeConflict.body + "\n}");
+	    	MergeConflict mergeConflict = new MergeConflict(leftConflictContent, "", rightConflictContent.toString(), "conflicting static blocks");
+			staticBlock.append(mergeConflict.toString() + "\n}");
 			
 			FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftNodeContent, staticBlock.toString());
 			context.initializationBlocksConflicts++;

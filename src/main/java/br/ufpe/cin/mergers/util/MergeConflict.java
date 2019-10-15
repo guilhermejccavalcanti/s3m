@@ -87,6 +87,14 @@ public class MergeConflict {
 		this.body = assembleBody();
 	}
 
+	public MergeConflict(String left, String base, String right, String message) {
+		this.left = left;
+		this.base = base;
+		this.right = right;
+		this.message = message;
+		this.body = assembleBody();
+	}
+
 	public MergeConflict(String left, String base, String right, int startLOC, int endLOC) {
 		this(left, base, right);
 		this.startLOC = startLOC;
