@@ -109,8 +109,8 @@ public class RenamingUtils {
         return left.getParent().equals(right.getParent());
     }
 
-    public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode) {
-        MergeConflict conflict = new MergeConflict(leftNode, baseNode, rightNode);
+    public static void generateMutualRenamingConflict(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode, FSTNode mergeNode, String conflictMessage) {
+        MergeConflict conflict = new MergeConflict(leftNode, baseNode, rightNode, conflictMessage);
         ((FSTTerminal) mergeNode).setBody(conflict.toString());
 
         context.renamingConflicts++;
