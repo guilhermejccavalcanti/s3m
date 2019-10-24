@@ -32,6 +32,7 @@ dependencies {
     compile 'org.javatuples:javatuples:1.2'
     testCompile 'junit:junit:4.12'
     testCompile 'org.assertj:assertj-core:3.11.0'
+    testCompile group: 'org.hamcrest', name: 'hamcrest-library', version: '2.2'
 }
 
 // the lines bellow deal with exporting a running jar
