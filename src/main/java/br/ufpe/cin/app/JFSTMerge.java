@@ -26,6 +26,7 @@ import com.beust.jcommander.converters.FileConverter;
 import java.io.BufferedReader;
 import java.io.File;
 import java.nio.file.Files;
+import java.nio.file.InvalidPathException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -43,7 +44,7 @@ import java.util.stream.Collectors;
 public class JFSTMerge {
 
 	//log of activities
-	private static final Logger LOGGER = LoggerFactory.make();
+	private final Logger LOGGER = LoggerFactory.make();
 
 	public static final double RENAMING_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
 
@@ -158,7 +159,7 @@ public class JFSTMerge {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			System.err.println("An error occurred. See " + LoggerFactory.logFile() + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 			LOGGER.log(Level.SEVERE, "", e);
 			System.exit(-1);
 		}
@@ -189,7 +190,7 @@ public class JFSTMerge {
 				try {
 					Prettyprinter.generateMergedTuple(tuple);
 				} catch (PrintException pe) {
-					System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+					System.err.println("An error occurred. See " + LoggerFactory.logFile() + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 					LOGGER.log(Level.SEVERE, "", pe);
 					System.exit(-1);
 				}
@@ -234,7 +235,7 @@ public class JFSTMerge {
 
 				conflictState = checkConflictState(context);
 			} catch (TextualMergeException tme) { //textual merge must work even when semistructured not, so this exception precedes others
-				System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+				System.err.println("An error occurred. See " + LoggerFactory.logFile() + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 				LOGGER.log(Level.SEVERE, "", tme);
 				System.exit(-1);
 			} catch (SemistructuredMergeException sme) {
@@ -253,7 +254,7 @@ public class JFSTMerge {
 			}
 			Prettyprinter.generateMergedFile(context, outputFilePath);
 		} catch (PrintException pe) {
-			System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			System.err.println("An error occurred. See " + LoggerFactory.logFile() + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 			LOGGER.log(Level.SEVERE, "", pe);
 			System.exit(-1);
 		}
@@ -266,7 +267,7 @@ public class JFSTMerge {
 				encryptLogFiles();
 			}
 		} catch (Exception e) {
-			System.err.println("An error occurred. See " + LoggerFactory.logfile + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
+			System.err.println("An error occurred. See " + LoggerFactory.logFile() + " file for more details.\n Send the log to gjcc@cin.ufpe.br for analysis if preferable.");
 			LOGGER.log(Level.SEVERE, "", e);
 			System.exit(-1);
 		}
@@ -338,7 +339,7 @@ public class JFSTMerge {
 				fileEncrypterDecrypter.decipher(statisticsFile, statisticsFile);
 			if(Files.exists(filesFile))
 				fileEncrypterDecrypter.decipher(filesFile, filesFile);
-		} catch(CryptoException e) {
+		} catch(CryptoException | InvalidPathException e) {
 			System.out.println("Log files are already decrypted.");
 		}
 	}
@@ -359,7 +360,7 @@ public class JFSTMerge {
 	/**
 	 * Closes the log file.
 	 */
-	public static void closeLogFile() {
+	public void closeLogFile() {
 		LOGGER.getHandlers()[0].close();
   }
 

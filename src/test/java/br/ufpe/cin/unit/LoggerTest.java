@@ -1,6 +1,6 @@
 package br.ufpe.cin.unit;
 
-import static org.hamcrest.MatcherAssert.assertThat;
+import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
 import java.io.OutputStream;
@@ -12,7 +12,6 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.stream.Stream;
 
-import org.hamcrest.Matchers;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -44,7 +43,7 @@ public class LoggerTest {
         merge(merger, "deletioninleft");
         merge(merger, "deletioninright");
         
-        assertThat(2, Matchers.lessThanOrEqualTo(numberOfLogFiles()));
+        assertEquals(1, numberOfLogFiles());
 
     }
 
@@ -53,7 +52,7 @@ public class LoggerTest {
         merge(new JFSTMerge(), "deletioninleft");
         merge(new JFSTMerge(), "deletioninright");
         
-        assertThat(2, Matchers.lessThanOrEqualTo(numberOfLogFiles()));
+        assertEquals(1, numberOfLogFiles());
 
     }
 
