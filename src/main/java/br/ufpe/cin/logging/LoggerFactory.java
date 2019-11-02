@@ -4,6 +4,7 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -69,7 +70,7 @@ public class LoggerFactory {
 	private static void manageLogBuffer() throws IOException {
 			long logSizeMB = LOG_FILE_PATH.toFile().length() / (1024 * 1024);
 			if(logSizeMB >= 10){
-				Files.move(LOG_FILE_PATH, LOG_FILE_PATH.resolveSibling(Paths.get(LOG_FILE_PATH.toString() + System.currentTimeMillis())));
+				Files.move(LOG_FILE_PATH, LOG_FILE_PATH.resolveSibling(Paths.get(LOG_FILE_PATH.toString() + System.currentTimeMillis())), StandardCopyOption.REPLACE_EXISTING);
 			}
 	}
 
