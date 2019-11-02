@@ -44,7 +44,6 @@ public class LoggerTest {
         merge(merger, "deletioninright");
         
         assertEquals(1, numberOfLogFiles());
-
     }
 
     @Test
@@ -60,7 +59,7 @@ public class LoggerTest {
         Stream<Path> walk = Files.walk(s3mFilesDirectory);
         int numberLogFiles = (int) walk.map(Path::getFileName)
                                        .map(Path::toString)
-                                       .filter(path -> path.startsWith("jfstmerge.log"))
+                                       .filter(path -> path.startsWith("jfstmerge.log") && !path.endsWith("lck"))
                                        .count();
 
         walk.close();
