@@ -93,9 +93,9 @@ public class LoggerStatistics {
 			String conflicts = builder.toString();
 
 			String files = context.fullyQualifiedMergedClass;
-			String leftContent = FilesManager.readFileContent(context.getLeft());
-			String baseContent = FilesManager.readFileContent(context.getBase());
-			String rightContent= FilesManager.readFileContent(context.getRight());
+			String leftContent = context.getLeftContent();
+			String baseContent = context.getBaseContent();
+			String rightContent= context.getRightContent();
 			String ssmeContent = context.semistructuredOutput;
 			String txmeContent = context.unstructuredOutput;
 
