@@ -217,7 +217,7 @@ where `leftPath`, `basePath` and `rightPath` can be either a file or a directory
 
 ### Requirements
 
-* **Java 8** 
+* **Java 8** (Java version "1.8.0_212" or above) 
 * **Gradle 4.6** 
 
 ### Getting Started
