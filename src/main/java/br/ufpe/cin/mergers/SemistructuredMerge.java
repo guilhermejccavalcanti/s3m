@@ -160,101 +160,129 @@ public final class SemistructuredMerge {
 	 * @return superimposed tree
 	 */
 	private static FSTNode superimpose(FSTNode nodeA, FSTNode nodeB, FSTNonTerminal parent, MergeContext context, boolean isProcessingBaseTree) {
-		if (nodeA.compatibleWith(nodeB)) {
-			FSTNode composed = nodeA.getShallowClone();
-			composed.index = nodeB.index;
-			composed.setParent(parent);
+		if (!nodeA.compatibleWith(nodeB))
+			return null;
 
-			if (nodeA instanceof FSTNonTerminal && nodeB instanceof FSTNonTerminal) {
-				FSTNonTerminal nonterminalA = (FSTNonTerminal) nodeA;
-				FSTNonTerminal nonterminalB = (FSTNonTerminal) nodeB;
-				FSTNonTerminal nonterminalComposed = (FSTNonTerminal) composed;
+		if (areBothTerminals(nodeA, nodeB, parent)) {
+			FSTTerminal terminalA = (FSTTerminal) nodeA;
+			FSTTerminal terminalB = (FSTTerminal) nodeB;
+			FSTTerminal terminalResult = (FSTTerminal) initSuperimposedNode(nodeA, nodeB, parent);
 
-				/*
-				 * nodes from base or right
-				 */
-				for (FSTNode childB : nonterminalB.getChildren()) { 	
-					FSTNode childA = nonterminalA.getCompatibleChild(childB);
-					if (childA == null) { 								// means that a base node was deleted by left, or that a right node was added
-						FSTNode cloneB = childB.getDeepClone();
-						if (childB.index == -1)
-							childB.index = nodeB.index;
-						cloneB.index = childB.index;
+			return superimposeTerminals(terminalA, terminalB, isProcessingBaseTree, terminalResult);
+		}
 
-						nonterminalComposed.addChild(cloneB);			// cloneB must be removed afterwards if it is a base node
+		else if (areBothNonTerminals(nodeA, nodeB)) {
+			FSTNonTerminal nonTerminalA = (FSTNonTerminal) nodeA;
+			FSTNonTerminal nonTerminalB = (FSTNonTerminal) nodeB;
+			FSTNonTerminal nonTerminalResult = (FSTNonTerminal) initSuperimposedNode(nodeA, nodeB, parent);
 
-						if (isProcessingBaseTree) {
-							context.deletedBaseNodes.add(cloneB); 		// base nodes deleted by left
-							context.nodesDeletedByLeft.add(cloneB);
-						} else {
-							context.addedRightNodes.add(cloneB); 		// nodes added by right
-						}
-					} else {
-						if (childA.index == -1)
-							childA.index = nodeA.index;
-						if (childB.index == -1)
-							childB.index = nodeB.index;
-						
-						if(!isProcessingBaseTree && context.addedLeftNodes.contains(childA)){ //duplications
-							context.addedRightNodes.add(childB); 		
-						}
+			return superimposeNonTerminals(nonTerminalA, nonTerminalB, context, isProcessingBaseTree, nonTerminalResult);
+		} 
+		
+		return null;
+	}
 
-						nonterminalComposed.addChild(superimpose(childA, childB, nonterminalComposed, context, isProcessingBaseTree));
-					}
+	private static boolean areBothTerminals(FSTNode nodeA, FSTNode nodeB, FSTNonTerminal parent) {
+		return nodeA instanceof FSTTerminal && nodeB instanceof FSTTerminal	&& parent instanceof FSTNonTerminal;
+	}
+
+	private static boolean areBothNonTerminals(FSTNode nodeA, FSTNode nodeB) {
+		return nodeA instanceof FSTNonTerminal && nodeB instanceof FSTNonTerminal;
+	}
+
+	private static FSTNode superimposeTerminals(FSTTerminal terminalA, FSTTerminal terminalB, boolean isProcessingBaseTree, FSTTerminal result) {
+		if (!terminalA.getMergingMechanism().equals("Default")) {
+
+			String markedContent = markContributions(terminalA.getBody(), terminalB.getBody(),isProcessingBaseTree, terminalA.index, terminalB.index);
+			String markedPrefix = markContributions(terminalA.getSpecialTokenPrefix(), terminalB.getSpecialTokenPrefix(),isProcessingBaseTree, terminalA.index, terminalB.index);
+			
+			result.setBody(markedContent);
+			result.setSpecialTokenPrefix(markedPrefix);
+		}
+		return result;
+	}
+
+	private static FSTNode superimposeNonTerminals(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB, MergeContext context, boolean isProcessingBaseTree,
+	FSTNonTerminal result) {
+
+
+		/*
+		 * nodes from base or right
+		 */
+		for (FSTNode childB : nonTerminalB.getChildren()) { 	
+			FSTNode childA = nonTerminalA.getCompatibleChild(childB);
+			if (childA == null) { 								// means that a base node was deleted by left, or that a right node was added
+				FSTNode cloneB = childB.getDeepClone();
+				if (childB.index == -1)
+					childB.index = nonTerminalB.index;
+				cloneB.index = childB.index;
+
+				result.addChild(cloneB);			// cloneB must be removed afterwards if it is a base node
+
+				if (isProcessingBaseTree) {
+					context.deletedBaseNodes.add(cloneB); 		// base nodes deleted by left
+					context.nodesDeletedByLeft.add(cloneB);
+				} else {
+					context.addedRightNodes.add(cloneB); 		// nodes added by right
 				}
-
-				/*
-				 * nodes from left or leftBase
-				 */
-				List<FSTNode> nonterminalAChildren = nonterminalA.getChildren();
+			} else {
+				if (childA.index == -1)
+					childA.index = nonTerminalA.index;
+				if (childB.index == -1)
+					childB.index = nonTerminalB.index;
 				
-				for (int i = 0; i < nonterminalAChildren.size(); i++) {
-					FSTNode childA = nonterminalAChildren.get(i);
-					FSTNode childB = nonterminalB.getCompatibleChild(childA);
-					
-					if (childB == null) { 								// is a new node from left, or a deleted base node in right
-						FSTNode cloneA = childA.getDeepClone();
-						if (childA.index == -1)
-							childA.index = nodeA.index;
-						cloneA.index = childA.index;
-
-						FSTNode childALeftNeighbour = getLeftNeighbourNode(nonterminalAChildren, i);
-						FSTNode childARightNeighbour = getRightNeighbourNode(nonterminalAChildren, i);
-						addNodeToNonTerminalNearNeighbour(cloneA, childALeftNeighbour, childARightNeighbour, nonterminalComposed);
-
-						if (context.deletedBaseNodes.contains(childA)) { // this is only possible when processing right nodes because this is a base node not present either in left and right
-							context.deletedBaseNodes.remove(childA);
-							context.deletedBaseNodes.add(cloneA);
-						}
-
-						if(isProcessingBaseTree){ //node added by left in relation to base
-							context.addedLeftNodes.add(cloneA);
-						} else {
-							if(!context.addedLeftNodes.contains(childA))
-								context.nodesDeletedByRight.add(cloneA);
-						}
-					} else {
-						if (!isProcessingBaseTree) {
-							context.deletedBaseNodes.remove(childA); 	// node common to right and base but not to left
-						}
-					}
+				if(!isProcessingBaseTree && context.addedLeftNodes.contains(childA)){ //duplications
+					context.addedRightNodes.add(childB); 		
 				}
-				return nonterminalComposed;
 
-			} else if (nodeA instanceof FSTTerminal && nodeB instanceof FSTTerminal	&& parent instanceof FSTNonTerminal) {
-				FSTTerminal terminalA = (FSTTerminal) nodeA;
-				FSTTerminal terminalB = (FSTTerminal) nodeB;
-				FSTTerminal terminalComposed = (FSTTerminal) composed;
-
-				if (!terminalA.getMergingMechanism().equals("Default")) {
-					terminalComposed.setBody(markContributions(terminalA.getBody(), terminalB.getBody(),isProcessingBaseTree, terminalA.index, terminalB.index));
-					terminalComposed.setSpecialTokenPrefix(markContributions(terminalA.getSpecialTokenPrefix(), terminalB.getSpecialTokenPrefix(),isProcessingBaseTree, terminalA.index, terminalB.index));
-				}
-				return terminalComposed;
+				result.addChild(superimpose(childA, childB, result, context, isProcessingBaseTree));
 			}
-			return null;
-		} else
-			return null;
+		}
+
+		/*
+		 * nodes from left or leftBase
+		 */
+		List<FSTNode> nonterminalAChildren = nonTerminalA.getChildren();
+		
+		for (int i = 0; i < nonterminalAChildren.size(); i++) {
+			FSTNode childA = nonterminalAChildren.get(i);
+			FSTNode childB = nonTerminalB.getCompatibleChild(childA);
+			
+			if (childB == null) { 								// is a new node from left, or a deleted base node in right
+				FSTNode cloneA = childA.getDeepClone();
+				if (childA.index == -1)
+					childA.index = nonTerminalA.index;
+				cloneA.index = childA.index;
+
+				FSTNode childALeftNeighbour = getLeftNeighbourNode(nonterminalAChildren, i);
+				FSTNode childARightNeighbour = getRightNeighbourNode(nonterminalAChildren, i);
+				addNodeToNonTerminalNearNeighbour(cloneA, childALeftNeighbour, childARightNeighbour, result);
+
+				if (context.deletedBaseNodes.contains(childA)) { // this is only possible when processing right nodes because this is a base node not present either in left and right
+					context.deletedBaseNodes.remove(childA);
+					context.deletedBaseNodes.add(cloneA);
+				}
+
+				if(isProcessingBaseTree){ //node added by left in relation to base
+					context.addedLeftNodes.add(cloneA);
+				} else {
+					if(!context.addedLeftNodes.contains(childA))
+						context.nodesDeletedByRight.add(cloneA);
+				}
+			} else {
+				if (!isProcessingBaseTree) {
+					context.deletedBaseNodes.remove(childA); 	// node common to right and base but not to left
+				}
+			}
+		}
+		return result;
+	}
+
+	private static FSTNode initSuperimposedNode(FSTNode nodeA, FSTNode nodeB, FSTNonTerminal parent) {
+		FSTNode result = nodeA.getShallowClone();
+		result.index = nodeB.index;
+		result.setParent(parent);
+		return result;
 	}
 
 	/**
