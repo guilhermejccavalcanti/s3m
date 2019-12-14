@@ -171,12 +171,12 @@ public class MergeContext {
 
 	private void setFullQualifiedMergedClassName(){
 		String name = "";
-		if(this.left != null && this.left.length()!=0 ){
+		if(this.base != null && this.base.length()!=0){
+			name = FilesManager.getFullyQualifiedName(this.base);
+		} else if(this.left != null && this.left.length()!=0 ){
 			name = FilesManager.getFullyQualifiedName(this.left);
 		} else if(this.right != null && this.right.length()!=0){
 			name = FilesManager.getFullyQualifiedName(this.right);
-		} else if(this.base != null && this.base.length()!=0){
-			name = FilesManager.getFullyQualifiedName(this.base);
 		} 
 		if(name.isEmpty()){
 			name = (this.left 	!= null ? this.left.getAbsolutePath() : "<empty left>") + "#" + (

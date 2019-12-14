@@ -17,6 +17,8 @@ import org.javatuples.Quartet;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.concurrent.Callable;
+import java.util.function.BiPredicate;
 import java.util.stream.Collectors;
 
 /**
@@ -133,18 +135,25 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
     }
 
     private FSTNode getMostAccurateMatch(FSTNode node, FSTNode contributionTree) {
-        for(FSTNode contributionNode : Traverser.collectTerminals(contributionTree)) {
-            if(RenamingUtils.isMethodOrConstructorNode(contributionNode) && areVerySimilarNodes(node, contributionNode))
-                return contributionNode;
+        List<FSTTerminal> terminals = Traverser.collectTerminals(contributionTree);
+        FSTNode match = tryFindFirstMatch(terminals, node, (n1, n2) -> RenamingUtils.haveEqualSignature(n1, n2));
+        if(match == null) {
+            match = tryFindFirstMatch(terminals, node, (n1, n2) -> RenamingUtils.haveEqualBodyModuloWhitespace(n1, n2));
+        } if(match == null) {
+            match = tryFindFirstMatch(terminals, node, (n1, n2) -> RenamingUtils.haveSimilarBodyModuloWhitespace(n1, n2) && RenamingUtils.haveEqualSignatureButName(n1, n2));
+        } if(match == null) {
+            match = tryFindFirstMatch(terminals, node, (n1, n2) -> RenamingUtils.oneContainsTheBodyFromTheOther(n1, n2));
         }
-        return null;
+        return match;
     }
 
-    private boolean areVerySimilarNodes(FSTNode node1, FSTNode node2) {
-        return  RenamingUtils.haveEqualSignature(node1, node2)
-                || RenamingUtils.haveEqualBodyModuloWhitespace(node1, node2)
-                || (RenamingUtils.haveSimilarBodyModuloWhitespace(node1, node2) && RenamingUtils.haveEqualSignatureButName(node1, node2))
-                || RenamingUtils.oneContainsTheBodyFromTheOther(node1, node2);
+    private FSTNode tryFindFirstMatch(List<FSTTerminal> candidates, FSTNode node, BiPredicate<FSTNode, FSTNode> predicate) {
+        for(FSTNode candidate : candidates) {
+            if(RenamingUtils.isMethodOrConstructorNode(candidate) && predicate.test(node, candidate)) {
+                return candidate;
+            }
+        }
+        return null;
     }
 
     private List<Pair<Side, FSTNode>> unionRenamedNodes(List<Pair<Side, FSTNode>> renamedWithoutBodyChanges, 

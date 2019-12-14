@@ -180,7 +180,7 @@ For research purposes, S3M's stores a error and some statistical logs in `${HOME
 
 ### Requirements
 
-* **Java 8** 
+* **Java 8** (Java version "1.8.0_212" or above) 
 * **Git [optional]** S3M can behave as a merge driver for `git merge`. If you have interest in this feature, remember to have Git [installed](https://git-scm.com/downloads).
 
 ### Installing
@@ -217,7 +217,7 @@ where `leftPath`, `basePath` and `rightPath` can be either a file or a directory
 
 ### Requirements
 
-* **Java 8** 
+* **Java 8** (Java version "1.8.0_212" or above) 
 * **Gradle 4.6** 
 
 ### Getting Started
