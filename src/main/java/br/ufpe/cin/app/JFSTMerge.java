@@ -98,6 +98,11 @@ public class JFSTMerge {
 			"using textual similarity.", arity = 1)
 	public static boolean isInitializationBlocksHandlerEnabled = true;
 
+	@Parameter(names = {"--handle-initialization-blocks-multiple-blocks", "-hibmb"}, description = "Detects and avoids duplications, possible dependency"
+			+ " and variable renaming conflicts caused by the merge of blocks without identifiers using"
+			+ " using % of insertion and textual similarity.", arity = 1)
+	public static boolean isInitializationBlocksHandlerMultipleBlocksEnabled = false;
+
 	@Parameter(names = {"--handle-new-element-referencing-edited-one", "-hnereo"}, description = "Detects cases where a developer" +
 			"add an element that references an edited one.", arity = 1)
 	public static boolean isNewElementReferencingEditedOneHandlerEnabled = true;
