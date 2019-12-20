@@ -163,8 +163,10 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
             match = tryFindFirstMatch(terminals, node, (n1, n2) -> RenamingUtils.haveEqualBodyModuloWhitespace(n1, n2));
         }
         if (match == null) {
-            match = tryFindFirstMatch(terminals, node, (n1, n2) -> RenamingUtils.haveSimilarBodyModuloWhitespace(n1, n2)
-                    && RenamingUtils.haveEqualSignatureButName(n1, n2));
+            match = tryFindFirstMatch(terminals, node,
+                    (n1, n2) -> RenamingUtils.haveSimilarBodyModuloWhitespace(n1, n2)
+                            && (RenamingUtils.haveEqualSignatureButName(n1, n2)
+                                    || RenamingUtils.haveEqualSignatureButArguments(n1, n2)));
         }
         if (match == null) {
             match = tryFindFirstMatch(terminals, node,
