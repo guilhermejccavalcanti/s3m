@@ -74,7 +74,7 @@ public class LoggerFactory {
 		long logSizeMB = LOG_FILE_PATH.toFile().length() / (1024 * 1024);
 		if (logSizeMB >= 10) {
 			Files.move(LOG_FILE_PATH,
-					LOG_FILE_PATH.resolveSibling(Paths.get(LOG_FILE_PATH.toString() + System.currentTimeMillis())),
+					LOG_FILE_PATH.resolveSibling(LOG_FILE_PATH.toString() + System.currentTimeMillis()),
 					StandardCopyOption.REPLACE_EXISTING);
 		}
 	}
