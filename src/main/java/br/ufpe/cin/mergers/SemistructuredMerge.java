@@ -199,7 +199,7 @@ public final class SemistructuredMerge {
 	}
 
 	private static boolean areBothTerminals(FSTNode nodeA, FSTNode nodeB, FSTNonTerminal parent) {
-		return nodeA instanceof FSTTerminal && nodeB instanceof FSTTerminal && parent instanceof FSTNonTerminal;
+		return nodeA instanceof FSTTerminal && nodeB instanceof FSTTerminal;
 	}
 
 	private static boolean areBothNonTerminals(FSTNode nodeA, FSTNode nodeB) {
