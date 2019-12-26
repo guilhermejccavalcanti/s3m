@@ -179,10 +179,15 @@ public final class SemistructuredMerge {
 		if (!nodeA.compatibleWith(nodeB))
 			return null;
 
+		// Setting up superimposed node.
+		FSTNode result = nodeA.getShallowClone();
+		result.index = nodeB.index;
+		result.setParent(parent);
+
 		if (areBothTerminals(nodeA, nodeB, parent)) {
 			FSTTerminal terminalA = (FSTTerminal) nodeA;
 			FSTTerminal terminalB = (FSTTerminal) nodeB;
-			FSTTerminal terminalResult = (FSTTerminal) initSuperimposedNode(nodeA, nodeB, parent);
+			FSTTerminal terminalResult = (FSTTerminal) result;
 
 			return superimposeTerminals(terminalA, terminalB, step, terminalResult);
 		}
@@ -190,7 +195,7 @@ public final class SemistructuredMerge {
 		else if (areBothNonTerminals(nodeA, nodeB)) {
 			FSTNonTerminal nonTerminalA = (FSTNonTerminal) nodeA;
 			FSTNonTerminal nonTerminalB = (FSTNonTerminal) nodeB;
-			FSTNonTerminal nonTerminalResult = (FSTNonTerminal) initSuperimposedNode(nodeA, nodeB, parent);
+			FSTNonTerminal nonTerminalResult = (FSTNonTerminal) result;
 
 			return superimposeNonTerminals(nonTerminalA, nonTerminalB, context, step, nonTerminalResult);
 		}
@@ -295,13 +300,6 @@ public final class SemistructuredMerge {
 			child.index = nonTerminal.index;
 		clone.index = child.index;
 		return clone;
-	}
-
-	private static FSTNode initSuperimposedNode(FSTNode nodeA, FSTNode nodeB, FSTNonTerminal parent) {
-		FSTNode result = nodeA.getShallowClone();
-		result.index = nodeB.index;
-		result.setParent(parent);
-		return result;
 	}
 
 	/**
