@@ -249,9 +249,13 @@ public final class SemistructuredMerge {
 				FSTNode childARightNeighbour = getRightNeighbourNode(nonTerminalAChildren, i);
 				addNodeToNonTerminalNearNeighbour(cloneA, childALeftNeighbour, childARightNeighbour, result);
 
-				if (step == SuperimpositionStep.Left_Base) { // node added by left in relation to base
+				// node added by left in relation to base
+				if (step == SuperimpositionStep.Left_Base) {
 					context.addedLeftNodes.add(cloneA);
-				} else if (!context.addedLeftNodes.contains(childA)) {
+				}
+
+				// node removed by right
+				else if (!context.addedLeftNodes.contains(childA)) {
 					context.nodesDeletedByRight.add(cloneA);
 
 					if (context.nodesDeletedByLeft.contains(cloneA)) {
@@ -264,26 +268,27 @@ public final class SemistructuredMerge {
 
 	private static void checkAddedByBOrDeletedByANodes(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
 			MergeContext context, SuperimpositionStep step, FSTNonTerminal result) {
-		/*
-		 * nodes from base or right
-		 */
+
 		for (FSTNode childB : nonTerminalB.getChildren()) {
 			FSTNode childA = nonTerminalA.getCompatibleChild(childB);
+
 			if (childA == null) { // means that a base node was deleted by left, or that a right node was added
 				FSTNode cloneB = clone(nonTerminalB, childB);
 				result.addChild(cloneB); // cloneB must be removed afterwards if it is a base node
 
+				// base node deleted by left
 				if (step == SuperimpositionStep.Left_Base) {
-					// base nodes deleted by left
 					context.nodesDeletedByLeft.add(cloneB);
-				} else {
-					context.addedRightNodes.add(cloneB); // nodes added by right
 				}
+
+				// node added by right
+				else {
+					context.addedRightNodes.add(cloneB);
+				}
+
 			} else {
-				if (childA.index == -1)
-					childA.index = nonTerminalA.index;
-				if (childB.index == -1)
-					childB.index = nonTerminalB.index;
+				updateIndexIfMinusOne(nonTerminalA, childA);
+				updateIndexIfMinusOne(nonTerminalB, childB);
 
 				if (step == SuperimpositionStep.LeftBase_Right && context.addedLeftNodes.contains(childA)) { // duplications
 					context.addedRightNodes.add(childB);
@@ -296,10 +301,14 @@ public final class SemistructuredMerge {
 
 	private static FSTNode clone(FSTNonTerminal nonTerminal, FSTNode child) {
 		FSTNode clone = child.getDeepClone();
-		if (child.index == -1)
-			child.index = nonTerminal.index;
+		updateIndexIfMinusOne(nonTerminal, child);
 		clone.index = child.index;
 		return clone;
+	}
+
+	private static void updateIndexIfMinusOne(FSTNonTerminal nonTerminal, FSTNode child) {
+		if (child.index == -1)
+			child.index = nonTerminal.index;
 	}
 
 	/**
