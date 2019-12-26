@@ -169,7 +169,8 @@ public final class SemistructuredMerge {
 	 * 
 	 * @param nodeA                representing the first tree
 	 * @param nodeB                representing the second tree
-	 * @param parent               node to be superimposed in (can be null)
+	 * @param parent               node to be superimposed in or null when nodeA and
+	 *                             nodeB are roots
 	 * @param context
 	 * @param isProcessingBaseTree
 	 * @return superimposed tree
