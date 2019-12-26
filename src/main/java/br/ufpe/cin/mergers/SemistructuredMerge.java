@@ -228,12 +228,12 @@ public final class SemistructuredMerge {
 
 	private static FSTNode superimposeNonTerminals(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
 			MergeContext context, SuperimpositionStep step, FSTNonTerminal result) {
-		checkAddedNodes(nonTerminalA, nonTerminalB, context, step, result);
-		checkRemovedNodes(nonTerminalA, nonTerminalB, context, step, result);
+		checkAddedByBOrDeletedByANodes(nonTerminalA, nonTerminalB, context, step, result);
+		checkAddedByAOrDeletedByBNodes(nonTerminalA, nonTerminalB, context, step, result);
 		return result;
 	}
 
-	private static void checkRemovedNodes(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
+	private static void checkAddedByAOrDeletedByBNodes(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
 			MergeContext context, SuperimpositionStep step, FSTNonTerminal result) {
 
 		List<FSTNode> nonTerminalAChildren = nonTerminalA.getChildren();
@@ -262,8 +262,8 @@ public final class SemistructuredMerge {
 		}
 	}
 
-	private static void checkAddedNodes(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB, MergeContext context,
-			SuperimpositionStep step, FSTNonTerminal result) {
+	private static void checkAddedByBOrDeletedByANodes(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
+			MergeContext context, SuperimpositionStep step, FSTNonTerminal result) {
 		/*
 		 * nodes from base or right
 		 */
