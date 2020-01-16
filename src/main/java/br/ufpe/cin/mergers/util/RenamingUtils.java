@@ -138,6 +138,34 @@ public class RenamingUtils {
         return null;
     }
 
+    public static void generateRenamingConflict(MergeContext context, String currentNodeContent, String firstContent,
+            String secondContent, boolean isLeftToRight) {
+        if (!isLeftToRight) {// managing the origin of the changes in the conflict
+            String aux = secondContent;
+            secondContent = firstContent;
+            firstContent = aux;
+        }
+
+        // statistics
+        if (firstContent.isEmpty() || secondContent.isEmpty()) {
+            context.deletionConflicts++;
+        } else {
+            context.renamingConflicts++;
+        }
+
+        // first creates a conflict
+        MergeConflict newConflict = new MergeConflict(firstContent, "", secondContent, "");
+        // second put the conflict in one of the nodes containing the previous conflict,
+        // and deletes the other node containing the possible renamed version
+        FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, currentNodeContent, newConflict.toString());
+        if (isLeftToRight) {
+            FilesManager.findAndDeleteASTNode(context.superImposedTree, firstContent);
+        } else {
+            FilesManager.findAndDeleteASTNode(context.superImposedTree, secondContent);
+
+        }
+    }
+
     public static List<FSTNode> getMethodsOrConstructors(List<FSTNode> nodes) {
         return nodes.stream().filter(RenamingUtils::isMethodOrConstructorNode).collect(Collectors.toList());
     }
@@ -259,7 +287,7 @@ public class RenamingUtils {
         return TextualMerge.merge(left, base, right, JFSTMerge.isWhitespaceIgnored);
     }
 
-    private static String getNodeContent(FSTNode node) {
+    public static String getNodeContent(FSTNode node) {
         if (node == null)
             return "";
         return ((FSTTerminal) node).getBody();
