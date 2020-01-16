@@ -30,7 +30,7 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
  * @author João Victor (jvsfc@cin.ufpe.br)
  * @author Giovanni Barros (gaabs@cin.ufpe.br)
  */
-public class SafeRenamingHandler implements RenamingHandler {
+public class SafelyMergeSimilarRenamingHandler implements RenamingHandler {
 
     @Override
     public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes)
