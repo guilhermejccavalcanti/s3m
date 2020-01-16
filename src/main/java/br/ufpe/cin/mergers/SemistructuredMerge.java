@@ -53,12 +53,8 @@ public final class SemistructuredMerge {
 		if(JFSTMerge.isNewElementReferencingEditedOneHandlerEnabled)
 			builder.add(new NewElementReferencingEditedOneHandler());
 
-		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled &&
-			!JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
 			builder.add(new MethodAndConstructorRenamingAndDeletionHandler());
-
-		if(JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
-			builder.add(new LegacyMethodAndConstructorRenamingAndDeletionHandler());
     
     if(!JFSTMerge.isInitializationBlocksHandlerEnabled && 
 				JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled)
@@ -351,7 +347,7 @@ public final class SemistructuredMerge {
 		String rightContent = contributionsContents.getRight().trim();
 
 		identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
-		if(JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
     		identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
 
 		return TextualMerge.merge(leftContent, baseContent, rightContent,

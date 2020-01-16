@@ -1,7 +1,8 @@
 package br.ufpe.cin.mergers.util;
 
 public enum RenamingStrategy {
-    SAFE,
-    KEEP_BOTH_METHODS,
-    MERGE_METHODS
+    SAFELY_MERGE_SIMILAR,
+    MERGE_SIMILAR,
+    KEEP_SIMILAR_METHODS,
+    NO_EXTRA_FP
 }

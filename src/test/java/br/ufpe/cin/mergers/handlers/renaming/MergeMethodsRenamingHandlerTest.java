@@ -34,7 +34,7 @@ public class MergeMethodsRenamingHandlerTest {
     public static void setUpBeforeClass() throws UnsupportedEncodingException {
         TestUtils.hideSystemOutput();
 
-        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.MERGE_SIMILAR;
     }
 
     @Test

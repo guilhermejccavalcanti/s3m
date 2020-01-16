@@ -14,6 +14,7 @@ import org.junit.Test;
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeContext;
+import br.ufpe.cin.mergers.util.RenamingStrategy;
 
 public class LegacyMethodAndConstructorRenamingAndDeletionHandlerTest {
 	
@@ -31,12 +32,12 @@ public class LegacyMethodAndConstructorRenamingAndDeletionHandlerTest {
 
 	@BeforeClass
 	public static void enableParameter() {
-		JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled = true;
+		JFSTMerge.renamingStrategy = RenamingStrategy.NO_EXTRA_FP;
 	}
 
 	@AfterClass
 	public static void disableParameter() {
-		JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled = false;
+		JFSTMerge.renamingStrategy = RenamingStrategy.SAFELY_MERGE_SIMILAR;
 	}
 	
 	@Test

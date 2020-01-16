@@ -9,10 +9,10 @@ public class RenamingHandlerFactory {
 
     public static RenamingHandler getHandler(RenamingStrategy strategy) {
         switch (strategy) {
-        case MERGE_METHODS:
+        case MERGE_SIMILAR:
             return mergeMethodsHandler;
 
-        case KEEP_BOTH_METHODS:
+        case KEEP_SIMILAR_METHODS:
             return keepBothMethodsHandler;
 
         default:

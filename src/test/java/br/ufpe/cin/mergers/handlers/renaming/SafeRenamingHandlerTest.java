@@ -31,7 +31,7 @@ public class SafeRenamingHandlerTest {
     public static void setUpBeforeClass() throws UnsupportedEncodingException {
         TestUtils.hideSystemOutput();
 
-        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
+        JFSTMerge.renamingStrategy = RenamingStrategy.SAFELY_MERGE_SIMILAR;
     }
 
     /**********************

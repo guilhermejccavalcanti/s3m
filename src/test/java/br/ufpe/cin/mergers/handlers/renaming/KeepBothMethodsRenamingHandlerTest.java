@@ -37,7 +37,7 @@ public class KeepBothMethodsRenamingHandlerTest {
     public static void setUpBeforeClass() throws UnsupportedEncodingException {
         TestUtils.hideSystemOutput();
 
-        JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_BOTH_METHODS;
+        JFSTMerge.renamingStrategy = RenamingStrategy.KEEP_SIMILAR_METHODS;
     }
 
     @Test
