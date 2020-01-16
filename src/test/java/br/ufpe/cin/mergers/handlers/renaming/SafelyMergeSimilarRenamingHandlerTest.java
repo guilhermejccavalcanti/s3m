@@ -11,7 +11,7 @@ import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingStrategy;
 import br.ufpe.cin.util.TestUtils;
 
-public class SafeRenamingHandlerTest { 
+public class SafelyMergeSimilarRenamingHandlerTest {
 	private File baseFile = new File("testfiles/renaming/method/base_method/Test.java");
 	private File bodyChangedBelowSignatureFile = new File("testfiles/renaming/method/body_changes_only_1/Test.java");
 	private File bodyChangedAtEndFile = new File("testfiles/renaming/method/body_changes_only_2/Test.java");

@@ -1,4 +1,4 @@
-package br.ufpe.cin.mergers.handlers;
+package br.ufpe.cin.mergers.handlers.renaming;
 
 import static org.junit.Assert.assertTrue;
 
@@ -16,7 +16,7 @@ import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingStrategy;
 
-public class LegacyMethodAndConstructorRenamingAndDeletionHandlerTest {
+public class NoExtraFalsePositivesRenamingHandlerTest {
 	
 	@BeforeClass
 	public static void setUpBeforeClass() throws Exception {
