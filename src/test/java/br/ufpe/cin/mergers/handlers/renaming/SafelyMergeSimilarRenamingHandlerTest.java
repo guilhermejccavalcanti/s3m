@@ -165,7 +165,7 @@ public class SafelyMergeSimilarRenamingHandlerTest {
 		merge(renamedMethodWithBodyChangesFile1, renamedMethodWithBodyChangesFile2);
 		JFSTMerge.showConflictMessages = false;
 		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
-				"<<<<<<<MINEpublicvoidmethod1(intx,inty){intd;intb;intc;}=======mutualrenamingpublicvoidmethod2(intx,inty){inta;intb;intd;}>>>>>>>YOURS");
+				"<<<<<<<MINEpublicvoidmethod1(intx,inty){intd;intb;intc;}=======doublerenamingtodifferentsignaturespublicvoidmethod2(intx,inty){inta;intb;intd;}>>>>>>>YOURS");
 	}
 
 	@Test
