@@ -68,7 +68,7 @@ public class CommentsTest {
 
     @Test
     public void testComments_whenLeftAddsACommentJustBeforeMethod_andRightRenamesTheMethod_shouldReportConflict() {
-        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
+        JFSTMerge.renamingStrategy = RenamingStrategy.SAFELY_MERGE_SIMILAR;
         File leftFile = new File("testfiles/comments/addandrenamecomments/left/Test.java");
         File baseFile = new File("testfiles/comments/addandrenamecomments/base/Test.java");
         File rightFile = new File("testfiles/comments/addandrenamecomments/right/Test.java");

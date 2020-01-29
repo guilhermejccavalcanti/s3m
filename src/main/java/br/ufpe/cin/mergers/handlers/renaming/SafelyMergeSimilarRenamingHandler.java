@@ -24,30 +24,30 @@ import de.ovgu.cide.fstgen.ast.FSTNode;
  * deletion cases in two types: Single Renaming and Mutual Renaming.
  * 
  * @see #handleSingleRenaming(MergeContext, Quartet)
- * @see #handleMutualRenaming(MergeContext, Quartet)
+ * @see #handleDoubleRenaming(MergeContext, Quartet)
  * 
  * @author Guilherme Cavalcanti (gjcc@cin.ufpe.br)
  * @author João Victor (jvsfc@cin.ufpe.br)
  * @author Giovanni Barros (gaabs@cin.ufpe.br)
  */
-public class SafeRenamingHandler implements RenamingHandler {
+public class SafelyMergeSimilarRenamingHandler implements RenamingHandler {
 
     @Override
     public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes)
             throws TextualMergeException {
 
             // Only one developer renamed or deleted the method.    
-            if(isSingleRenaming(scenarioNodes)) {
-                handleSingleRenaming(context, scenarioNodes);
+            if(atMostSingleRenamingOrDeletion(scenarioNodes)) {
+                runTextualMergeOnNodes(context, scenarioNodes);
             }
             
             // Both of the developers renamed or deleted the method.
             else {
-                handleMutualRenaming(context, scenarioNodes);
+                handleDoubleRenaming(context, scenarioNodes);
             }
     }
 
-    private boolean isSingleRenaming(Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) {
+    private boolean atMostSingleRenamingOrDeletion(Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) {
         FSTNode leftNode = scenarioNodes.getValue0();
         FSTNode baseNode = scenarioNodes.getValue1();
         FSTNode rightNode = scenarioNodes.getValue2();
@@ -65,7 +65,7 @@ public class SafeRenamingHandler implements RenamingHandler {
      * @param scenarioNodes
      * @throws TextualMergeException
      */
-    private void handleSingleRenaming(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) throws TextualMergeException {
+    private void runTextualMergeOnNodes(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) throws TextualMergeException {
         FSTNode leftNode = scenarioNodes.getValue0();
         FSTNode baseNode = scenarioNodes.getValue1();
         FSTNode rightNode = scenarioNodes.getValue2();
@@ -75,7 +75,7 @@ public class SafeRenamingHandler implements RenamingHandler {
     }
 
     /**
-     * When both developers renamed or deleted a method, we classify the renaming as mutual.
+     * When both developers renamed or deleted a method, we classify the renaming as double.
      * Then, we run a decision tree based on which renaming type each developer did.
      * 
      * For example, if both developers renamed without body changes, we check if they renamed
@@ -87,89 +87,36 @@ public class SafeRenamingHandler implements RenamingHandler {
      * @param scenarioNodes
      * @throws TextualMergeException
      */
-    private void handleMutualRenaming(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) throws TextualMergeException {
+    private void handleDoubleRenaming(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes) throws TextualMergeException {
         FSTNode leftNode = scenarioNodes.getValue0();
         FSTNode baseNode = scenarioNodes.getValue1();
         FSTNode rightNode = scenarioNodes.getValue2();
         FSTNode mergeNode = scenarioNodes.getValue3();
 
-        if (isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isRenamingWithoutBodyChanges(Side.RIGHT, baseNode, context)) {
-            decideWhenBothRenamedWithoutBodyChanges(context, leftNode, baseNode, rightNode, mergeNode);
-        }
-
-        else if (isRenamingWithoutBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) {
-            decideWhenTheyRenamedDifferently(context, leftNode, baseNode, rightNode, mergeNode, leftNode.getName(), context.getLeft());
-        }
-
-        else if (isDeletionOrRenamingWithBodyChanges(Side.LEFT, baseNode, context) && isRenamingWithoutBodyChanges(Side.RIGHT, baseNode, context)) {
-            decideWhenTheyRenamedDifferently(context, leftNode, baseNode, rightNode, mergeNode, rightNode.getName(), context.getRight());
-        }
-
-        else if (isDeletionOrRenamingWithBodyChanges(Side.LEFT, baseNode, context) && isDeletionOrRenamingWithBodyChanges(Side.RIGHT, baseNode, context)) {
-            decideWhenBothDeletedOrRenamedWithBodyChanges(context, leftNode, baseNode, rightNode, mergeNode);
-        }
-    }
-
-    private void decideWhenBothRenamedWithoutBodyChanges(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode,
-            FSTNode mergeNode) {
-        if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
-            return;
-        else
+        if(RenamingUtils.haveDifferentSignature(leftNode, rightNode)) {
             RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode,
-                    "mutual renaming");
-    }
+                    "double renaming to different signatures");
+        }
 
-    private void decideWhenTheyRenamedDifferently(MergeContext context, FSTNode leftNode, FSTNode baseNode,
-            FSTNode rightNode, FSTNode mergeNode, String signature, File toCheckReferencesFile)
-            throws TextualMergeException {
-                
-        if (RenamingUtils.haveEqualSignature(leftNode, rightNode)) {
-            if (thereIsNewReference(toCheckReferencesFile, signature, context.getBase())) {
+        else if(RenamingUtils.haveDifferentBody(leftNode, rightNode)) {
+
+            if(thereIsNewReference(leftNode, context.getLeft(), context) || thereIsNewReference(rightNode, context.getRight(), context)) {
                 RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode,
-                        "mutual renaming and a new reference to method " + signature);
-            } else {
+                    "addition of a new reference when both changed the method's body");
+            } 
+            
+            else {
                 RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
             }
-        } else {
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode,
-                    mutualRenamingConflictMessage(leftNode, rightNode));
-        }
-    }
-
-    private String mutualRenamingConflictMessage(FSTNode leftNode, FSTNode rightNode) {
-        if(leftNode == null) {
-            return "deletion and renaming of method";
-        } 
-        
-        if(rightNode == null) {
-            return "renaming and deletion of method";
+            
         }
 
-        return "mutual renaming";
     }
 
-    private void decideWhenBothDeletedOrRenamedWithBodyChanges(MergeContext context, FSTNode leftNode, FSTNode baseNode,
-            FSTNode rightNode, FSTNode mergeNode) throws TextualMergeException {
-        if (RenamingUtils.haveEqualSignature(leftNode, rightNode))
-            RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
-        else
-            RenamingUtils.generateMutualRenamingConflict(context, leftNode, baseNode, rightNode, mergeNode,
-                    mutualRenamingConflictMessage(leftNode, rightNode));
-    }
-
-    private boolean isRenamingWithoutBodyChanges(Side renamingSide, FSTNode baseNode, MergeContext context) {
-        return context.renamedWithoutBodyChanges.stream()
-                .anyMatch(pair -> pair.getLeft().equals(renamingSide) && pair.getRight().equals(baseNode));
-    }
-
-    private boolean isDeletionOrRenamingWithBodyChanges(Side renamingSide, FSTNode baseNode, MergeContext context) {
-        return context.deletedOrRenamedWithBodyChanges.stream()
-                .anyMatch(pair -> pair.getLeft().equals(renamingSide) && pair.getRight().equals(baseNode));
-    }
-
-    private boolean thereIsNewReference(File contributionFile, String signature, File baseFile) {
-        int numberBaseReferences = countReferences(baseFile, signature);
-        int numberContributionReferences = countReferences(contributionFile, signature);
+    private boolean thereIsNewReference(FSTNode toNode, File inFile, MergeContext context) {
+        String signature = toNode.getName();
+        int numberBaseReferences = countReferences(context.getBase(), signature);
+        int numberContributionReferences = countReferences(inFile, signature);
         return numberContributionReferences > numberBaseReferences;
     }
 

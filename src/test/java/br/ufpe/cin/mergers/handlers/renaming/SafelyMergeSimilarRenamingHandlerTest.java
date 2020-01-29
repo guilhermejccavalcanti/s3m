@@ -11,7 +11,7 @@ import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingStrategy;
 import br.ufpe.cin.util.TestUtils;
 
-public class SafeRenamingHandlerTest { 
+public class SafelyMergeSimilarRenamingHandlerTest {
 	private File baseFile = new File("testfiles/renaming/method/base_method/Test.java");
 	private File bodyChangedBelowSignatureFile = new File("testfiles/renaming/method/body_changes_only_1/Test.java");
 	private File bodyChangedAtEndFile = new File("testfiles/renaming/method/body_changes_only_2/Test.java");
@@ -31,7 +31,7 @@ public class SafeRenamingHandlerTest {
     public static void setUpBeforeClass() throws UnsupportedEncodingException {
         TestUtils.hideSystemOutput();
 
-        JFSTMerge.renamingStrategy = RenamingStrategy.SAFE;
+        JFSTMerge.renamingStrategy = RenamingStrategy.SAFELY_MERGE_SIMILAR;
     }
 
     /**********************
@@ -165,7 +165,7 @@ public class SafeRenamingHandlerTest {
 		merge(renamedMethodWithBodyChangesFile1, renamedMethodWithBodyChangesFile2);
 		JFSTMerge.showConflictMessages = false;
 		TestUtils.verifyMergeResultWithRenamingConflict(mergeContext,
-				"<<<<<<<MINEpublicvoidmethod1(intx,inty){intd;intb;intc;}=======mutualrenamingpublicvoidmethod2(intx,inty){inta;intb;intd;}>>>>>>>YOURS");
+				"<<<<<<<MINEpublicvoidmethod1(intx,inty){intd;intb;intc;}=======doublerenamingtodifferentsignaturespublicvoidmethod2(intx,inty){inta;intb;intd;}>>>>>>>YOURS");
 	}
 
 	@Test

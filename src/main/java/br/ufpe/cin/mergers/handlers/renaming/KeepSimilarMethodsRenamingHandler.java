@@ -20,7 +20,7 @@ import de.ovgu.cide.fstgen.ast.FSTTerminal;
  * @author Giovanni Barros (gaabs@cin.ufpe.br)
  * @author João Victor (jvsfc@cin.ufpe.br)
  */
-public class KeepBothMethodsRenamingHandler implements RenamingHandler {
+public class KeepSimilarMethodsRenamingHandler implements RenamingHandler {
 
     @Override
     public void handle(MergeContext context, Quartet<FSTNode, FSTNode, FSTNode, FSTNode> scenarioNodes)
