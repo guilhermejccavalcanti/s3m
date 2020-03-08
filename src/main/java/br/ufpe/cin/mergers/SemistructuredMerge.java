@@ -229,16 +229,16 @@ public final class SemistructuredMerge {
 
 	private static FSTNode superimposeNonTerminals(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
 			MergeContext context, SuperimpositionStep step, FSTNonTerminal result) {
-		checkAddedByBOrDeletedByANodes(nonTerminalA, nonTerminalB, context, step, result);
-		checkAddedByAOrDeletedByBNodes(nonTerminalA, nonTerminalB, context, step, result);
+		addNewNodesFromLeftOrDeletedNodesFromRight(nonTerminalA, nonTerminalB, context, step, result);
+		addDeletedNodesFromLeftOrNewNodesFromRight(nonTerminalA, nonTerminalB, context, step, result);
 		return result;
 	}
 
 	/*
 	 * For each of A's children, we check if it isn't present in B. If true, we add
-	 * the child in the superimposed node and update the merge context.
+	 * the child in the superimposed node in the correct index position and update the merge context.
 	 */
-	private static void checkAddedByAOrDeletedByBNodes(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
+	private static void addDeletedNodesFromLeftOrNewNodesFromRight(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
 			MergeContext context, SuperimpositionStep step, FSTNonTerminal result) {
 
 		List<FSTNode> nonTerminalAChildren = nonTerminalA.getChildren();
@@ -254,23 +254,17 @@ public final class SemistructuredMerge {
 				FSTNode childARightNeighbour = getRightNeighbourNode(nonTerminalAChildren, i);
 				addNodeToNonTerminalNearNeighbour(cloneA, childALeftNeighbour, childARightNeighbour, result);
 
-				updateMergeContextAddedByAOrDeletedByBNode(context, step, cloneA);
-			}
-		}
-	}
+				if (step == SuperimpositionStep.Left_Base) { // node added by left in relation to base
+					context.addedLeftNodes.add(cloneA);
+				}
 
-	private static void updateMergeContextAddedByAOrDeletedByBNode(MergeContext context, SuperimpositionStep step,
-			FSTNode cloneA) {
+				else if (!context.addedLeftNodes.contains(cloneA)) { // node removed by right
+					context.nodesDeletedByRight.add(cloneA);
 
-		if (step == SuperimpositionStep.Left_Base) { // node added by left in relation to base
-			context.addedLeftNodes.add(cloneA);
-		}
-
-		else if (!context.addedLeftNodes.contains(cloneA)) { // node removed by right
-			context.nodesDeletedByRight.add(cloneA);
-
-			if (context.nodesDeletedByLeft.contains(cloneA)) { // node removed by both
-				context.deletedBaseNodes.add(cloneA);
+					if (context.nodesDeletedByLeft.contains(cloneA)) { // node removed by both
+						context.deletedBaseNodes.add(cloneA);
+					}
+				}
 			}
 		}
 	}
@@ -279,7 +273,7 @@ public final class SemistructuredMerge {
 	 * For each of B's children, we check if it's present in A. If true, we recurse.
 	 * Otherwise, we add it to the superimposed tree and update the merge context.
 	 */
-	private static void checkAddedByBOrDeletedByANodes(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
+	private static void addNewNodesFromLeftOrDeletedNodesFromRight(FSTNonTerminal nonTerminalA, FSTNonTerminal nonTerminalB,
 			MergeContext context, SuperimpositionStep step, FSTNonTerminal result) {
 
 		for (FSTNode childB : nonTerminalB.getChildren()) {
@@ -289,7 +283,13 @@ public final class SemistructuredMerge {
 				FSTNode cloneB = clone(nonTerminalB, childB);
 				result.addChild(cloneB); // cloneB must be removed afterwards if it is a base node
 
-				updateMergeContextAddedByBOrDeletedByANode(context, step, cloneB);
+				if (step == SuperimpositionStep.Left_Base) { // base node deleted by left
+					context.nodesDeletedByLeft.add(cloneB);
+				}
+
+				else { // node added by right
+					context.addedRightNodes.add(cloneB);
+				}
 
 			} else {
 				updateIndexIfMinusOne(nonTerminalA, childA);
@@ -301,18 +301,6 @@ public final class SemistructuredMerge {
 
 				result.addChild(superimpose(childA, childB, result, context, step));
 			}
-		}
-	}
-
-	private static void updateMergeContextAddedByBOrDeletedByANode(MergeContext context, SuperimpositionStep step,
-			FSTNode cloneB) {
-
-		if (step == SuperimpositionStep.Left_Base) { // base node deleted by left
-			context.nodesDeletedByLeft.add(cloneB);
-		}
-
-		else { // node added by right
-			context.addedRightNodes.add(cloneB);
 		}
 	}
 
