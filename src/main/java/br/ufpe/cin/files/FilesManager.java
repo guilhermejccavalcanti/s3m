@@ -23,6 +23,7 @@ import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
 import com.github.javaparser.ast.body.TypeDeclaration;
+import com.github.javaparser.ast.body.EnumDeclaration;
 
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -696,7 +697,7 @@ public final class FilesManager {
 	public static String getFullyQualifiedName(File fileClass) {
 		try {
 			String fullqualifiedname = "";
-			CompilationUnit indenter = JavaParser.parse(fileClass, "");
+			CompilationUnit indenter = JavaParser.parse(fileClass, FilesEncoding.retrieveEncoding(fileClass));
 			PackageDeclaration pckg = indenter.getPackage();
 			if(pckg!=null){
 				fullqualifiedname += pckg.getPackageName();
@@ -704,7 +705,8 @@ public final class FilesManager {
 			List<TypeDeclaration> types = indenter.getTypes();
 			if(!types.isEmpty()){
 				TypeDeclaration type = types.get(0);
-				if(type instanceof ClassOrInterfaceDeclaration ){
+				if(type instanceof ClassOrInterfaceDeclaration 
+						|| type instanceof EnumDeclaration){
 					fullqualifiedname += ((!fullqualifiedname.isEmpty())?".":"") + type.getName();
 				}
 			}

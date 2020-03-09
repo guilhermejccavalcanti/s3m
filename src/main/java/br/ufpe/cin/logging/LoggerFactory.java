@@ -1,74 +1,86 @@
 package br.ufpe.cin.logging;
 
-import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
 import java.util.logging.FileHandler;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.logging.SimpleFormatter;
 
-
 /**
- * Factory of loggers. 
+ * Factory of loggers.
+ * 
  * @author Guilherme
  */
 public class LoggerFactory {
-	
-	public static String logfile = "";
-	
+
+	private static final Path LOG_FILE_PATH = Paths.get(System.getProperty("user.home"), ".jfstmerge", "jfstmerge.log");
+
 	/**
 	 * Creates and configures a logger.
+	 * 
 	 * @return configured Logger
 	 */
 	public static Logger make() {
-		//determining the caller of the factory
+		// determining the caller of the factory
 		Throwable t = new Throwable();
 		StackTraceElement directCaller = t.getStackTrace()[1];
 
-		//instantiating the logger
-		Logger logger =  Logger.getLogger(directCaller.getClassName());
+		// instantiating the logger
+		Logger logger = Logger.getLogger(directCaller.getClassName());
 
-		try{
-			//creating FileHandler to record the logs
-			String logpath = System.getProperty("user.home")+ File.separator + ".jfstmerge" + File.separator;
-			new File(logpath).mkdirs(); //assuring that the directories exists
-			logpath = logpath + "jfstmerge.log";
-			logfile = logpath;
-			manageLogBuffer(logpath);
+		try {
+			if (!Files.exists(LOG_FILE_PATH)) {
 
-			FileHandler fileHandler = new FileHandler(logpath,true);
+				if (!Files.exists(LOG_FILE_PATH.getParent()))
+					Files.createDirectory(LOG_FILE_PATH.getParent());
 
-			//setting formatter to the handler
-			fileHandler.setFormatter(new SimpleFormatter());
-			fileHandler.setEncoding("UTF-16");
+				// creating FileHandler to record the logs
+				FileHandler fileHandler = new FileHandler(LOG_FILE_PATH.toString(), true);
 
-			//setting Level to ALL
-			fileHandler.setLevel(Level.ALL);
-			logger.setLevel(Level.ALL);
+				// setting formatter to the handler
+				fileHandler.setFormatter(new SimpleFormatter());
+				fileHandler.setEncoding("UTF-16");
 
-			//disable console output
-			logger.setUseParentHandlers(false);
+				// setting Level to ALL
+				fileHandler.setLevel(Level.ALL);
+				logger.setLevel(Level.ALL);
 
-			//assigning handler to logger
-			logger.addHandler(fileHandler);
-		} catch(Exception e){
+				// disable console output
+				logger.setUseParentHandlers(false);
+
+				// assigning handler to logger
+				logger.addHandler(fileHandler);
+			} else {
+				manageLogBuffer();
+			}
+		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Error occur during logging's creation.", e);
 		}
+
 		return logger;
 	}
 
 	/**
-	 * When log's size reaches 10 megabytes,a new empty log is started, and the previous one is backup.
+	 * When log's size reaches 10 megabytes,a new empty log is started, and the
+	 * previous one is backup.
+	 * 
 	 * @param logpath
 	 */
-	private static void manageLogBuffer(String logpath) {
-		File log = new File(logpath);
-		if(log.exists()){
-			long logSizeMB = log.length() / (1024 * 1024);
-			if(logSizeMB >= 10){
-				File newLog = new File(logpath+System.currentTimeMillis());
-				log.renameTo(newLog);
-			}
+	private static void manageLogBuffer() throws IOException {
+		long logSizeMB = LOG_FILE_PATH.toFile().length() / (1024 * 1024);
+		if (logSizeMB >= 10) {
+			Files.move(LOG_FILE_PATH,
+					LOG_FILE_PATH.resolveSibling(LOG_FILE_PATH.toString() + System.currentTimeMillis()),
+					StandardCopyOption.REPLACE_EXISTING);
 		}
 	}
-	
+
+	public static String logFile() {
+		return LOG_FILE_PATH.toString();
+	}
+
 }

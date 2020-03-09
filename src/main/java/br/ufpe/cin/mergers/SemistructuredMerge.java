@@ -6,7 +6,6 @@ import java.io.UnsupportedEncodingException;
 import java.util.List;
 
 import com.google.common.collect.ImmutableList;
-
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
 
@@ -19,6 +18,7 @@ import br.ufpe.cin.mergers.handlers.ConflictHandler;
 import br.ufpe.cin.mergers.handlers.DeletionsHandler;
 import br.ufpe.cin.mergers.handlers.DuplicatedDeclarationHandler;
 import br.ufpe.cin.mergers.handlers.InitializationBlocksHandler;
+import br.ufpe.cin.mergers.handlers.InitializationBlocksHandlerMultipleBlocks;
 import br.ufpe.cin.mergers.handlers.LegacyMethodAndConstructorRenamingAndDeletionHandler;
 import br.ufpe.cin.mergers.handlers.MethodAndConstructorRenamingAndDeletionHandler;
 import br.ufpe.cin.mergers.handlers.NewElementReferencingEditedOneHandler;
@@ -58,12 +58,12 @@ public final class SemistructuredMerge {
 		if (JFSTMerge.isNewElementReferencingEditedOneHandlerEnabled)
 			builder.add(new NewElementReferencingEditedOneHandler());
 
-		if (JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled
-				&& !JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
 			builder.add(new MethodAndConstructorRenamingAndDeletionHandler());
-
-		if (JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
-			builder.add(new LegacyMethodAndConstructorRenamingAndDeletionHandler());
+    
+    if(!JFSTMerge.isInitializationBlocksHandlerEnabled && 
+				JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled)
+      builder.add(new InitializationBlocksHandlerMultipleBlocks());
 
 		if (JFSTMerge.isInitializationBlocksHandlerEnabled)
 			builder.add(new InitializationBlocksHandler());
@@ -419,8 +419,8 @@ public final class SemistructuredMerge {
 		String rightContent = contributionsContents.getRight().trim();
 
 		identifyNodesEditedInOnlyOneVersion(node, context, leftContent, baseContent, rightContent);
-		if (JFSTMerge.isLegacyMethodAndConstructorRenamingAndDeletionHandlerEnabled)
-			identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
+		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
+    		identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
 
 		return TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
 	}

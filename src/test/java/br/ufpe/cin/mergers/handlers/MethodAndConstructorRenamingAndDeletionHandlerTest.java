@@ -6,5 +6,6 @@ import org.junit.runners.Suite.SuiteClasses;
 import br.ufpe.cin.mergers.handlers.renaming.*;
 
 @RunWith(Suite.class)
-@SuiteClasses({ SafeRenamingHandlerTest.class, MergeMethodsRenamingHandlerTest.class, KeepBothMethodsRenamingHandlerTest.class })
+@SuiteClasses({ SafelyMergeSimilarRenamingHandlerTest.class, MergeSimilarRenamingHandlerTest.class, KeepSimilarMethodsRenamingHandlerTest.class,
+                NoExtraFalsePositivesRenamingHandlerTest.class })
 public class MethodAndConstructorRenamingAndDeletionHandlerTest {}
