@@ -245,15 +245,16 @@ public final class SemistructuredMerge {
 
 		for (int i = 0; i < nonTerminalAChildren.size(); i++) {
 			FSTNode childA = nonTerminalAChildren.get(i);
-			FSTNode correspondentB = nonTerminalB.getCompatibleChild(childA);
 
-			if (correspondentB == null) { // is a new node from left, or a deleted base node in right
+			if (!thereIsCorrespondentNode(nonTerminalB, childA)) { // is a new node from left, or a deleted base node in right
 				FSTNode cloneA = clone(nonTerminalA, childA);
 
+				/* Add the node to the superimposed tree in a correct index. */
 				FSTNode childALeftNeighbour = getLeftNeighbourNode(nonTerminalAChildren, i);
 				FSTNode childARightNeighbour = getRightNeighbourNode(nonTerminalAChildren, i);
 				addNodeToNonTerminalNearNeighbour(cloneA, childALeftNeighbour, childARightNeighbour, result);
 
+				/* Filling merge context. */
 				if (step == SuperimpositionStep.Left_Base) { // node added by left in relation to base
 					context.addedLeftNodes.add(cloneA);
 				}
@@ -269,6 +270,10 @@ public final class SemistructuredMerge {
 		}
 	}
 
+	private static boolean thereIsCorrespondentNode(FSTNonTerminal nonTerminal, FSTNode node) {
+		return nonTerminal.getCompatibleChild(node) != null;
+	}
+
 	/*
 	 * For each of B's children, we check if it's present in A. If true, we recurse.
 	 * Otherwise, we add it to the superimposed tree and update the merge context.
@@ -281,8 +286,11 @@ public final class SemistructuredMerge {
 
 			if (childA == null) { // means that a base node was deleted by left, or that a right node was added
 				FSTNode cloneB = clone(nonTerminalB, childB);
-				result.addChild(cloneB); // cloneB must be removed afterwards if it is a base node
 
+				/* Add cloneB to the superimposed tree, but it needs to be removed later if it's a base node. */
+				result.addChild(cloneB); 
+
+				/* Filling merge context. */
 				if (step == SuperimpositionStep.Left_Base) { // base node deleted by left
 					context.nodesDeletedByLeft.add(cloneB);
 				}
