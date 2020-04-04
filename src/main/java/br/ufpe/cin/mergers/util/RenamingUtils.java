@@ -72,12 +72,16 @@ public class RenamingUtils {
         return methodSource.contains("{");
     }
 
-    public static String getMethodBodyWithoutWhitespaces(FSTNode node) {
-        if (isMethodOrConstructorNode(node))
-            return StringUtils.deleteWhitespace(((FSTTerminal) node).getDeclarationBody());
-
-        return StringUtils.EMPTY;
-    }
+	public static String getMethodBodyWithoutWhitespaces(FSTNode node) {
+		if (isMethodOrConstructorNode(node)) {
+			String methodBody = StringUtils.deleteWhitespace(((FSTTerminal) node).getDeclarationBody());
+			if(methodBody.equals(";")) {
+				return StringUtils.EMPTY;
+			}
+				return methodBody;
+		}
+		return StringUtils.EMPTY;
+	}
 
     public static String removeSignature(String string) {
         if (!hasDefinedBody(string))
