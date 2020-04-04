@@ -119,5 +119,19 @@ public class NoExtraFalsePositivesRenamingHandlerTest {
 		assertTrue(ctx.renamingConflicts == 0);
 		assertTrue(ctx.deletionConflicts == 0);
 	}
+	
+	@Test
+	public void testRenamingProperBodyOfAbstractMethods() {
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/renamingproperbodyofabstractmethods/left.java"), 
+				new File("testfiles/renamingproperbodyofabstractmethods/base.java"), 
+				new File("testfiles/renamingproperbodyofabstractmethods/right.java"),
+				null);
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+		
+		assertTrue(mergeResult.contains("<<<<<<<MINEpublicObjectm(Objecte){inta;intb;intc;returne;}=======>>>>>>>YOURS"));
+		assertTrue(ctx.renamingConflicts == 0);
+		assertTrue(ctx.deletionConflicts == 1);
+	}
 
 }
