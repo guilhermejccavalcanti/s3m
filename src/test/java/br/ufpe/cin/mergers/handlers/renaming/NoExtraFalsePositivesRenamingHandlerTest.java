@@ -105,5 +105,33 @@ public class NoExtraFalsePositivesRenamingHandlerTest {
 		assertTrue(ctx.renamingConflicts == 1);
 	}
 	
+	
+	@Test
+	public void testRenamingMatchingOnlyMethodDecls() {
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/renamingmatchingonlymethoddecls/left.java"), 
+				new File("testfiles/renamingmatchingonlymethoddecls/base.java"), 
+				new File("testfiles/renamingmatchingonlymethoddecls/right.java"),
+				null);
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+		
+		assertTrue(mergeResult.equals("importjava.util.List;importjavax.inject.Inject;publicinterfaceTest{publicList<Object>ripf(Longl);}"));
+		assertTrue(ctx.renamingConflicts == 0);
+		assertTrue(ctx.deletionConflicts == 0);
+	}
+	
+	@Test
+	public void testRenamingProperBodyOfAbstractMethods() {
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/renamingproperbodyofabstractmethods/left.java"), 
+				new File("testfiles/renamingproperbodyofabstractmethods/base.java"), 
+				new File("testfiles/renamingproperbodyofabstractmethods/right.java"),
+				null);
+		String mergeResult = FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput);
+		
+		assertTrue(mergeResult.contains("<<<<<<<MINEpublicObjectm(Objecte){inta;intb;intc;returne;}=======>>>>>>>YOURS"));
+		assertTrue(ctx.renamingConflicts == 0);
+		assertTrue(ctx.deletionConflicts == 1);
+	}
 
 }
