@@ -181,14 +181,16 @@ For research purposes, S3M's stores a error and some statistical logs in `${HOME
 ### Requirements
 
 * **Java 8** (Java version "1.8.0_212" or above) 
-* **Git [optional]** S3M can behave as a merge driver for `git merge`. If you have interest in this feature, remember to have Git [installed](https://git-scm.com/downloads).
+* **Git [optional]** S3M can behave as a merge driver for `git merge`. If you have interest in this feature, remember to have Git [installed](https://git-scm.com/downloads). You can find more details about *git merge drivers* [here](https://www.git-scm.com/docs/gitattributes#_defining_a_custom_merge_driver).
 
+<!--- 
 ### Installing
 Check the [Releases](https://github.com/guilhermejccavalcanti/jFSTMerge/releases) page. Download and execute the most recent installer and follow its instructions.
+-->
 
 ### Usage
-If integrated with Git, S3M will run automatically every time you invoke the `git merge` command. No further configuration required.  
-You can still run it as a standalone tool, if desired. Its `.jar` is present in the installation directory. You can use the command below:
+If integrated with Git (as a merge driver), S3M will run automatically every time you invoke the `git merge` command. No further configuration required.  
+You can still run it as a standalone tool, if desired, with the `.jar` file present in the [/binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/) folder. You can use the command below after dowloading the `jFSTMerge.jar` file:
 
 `java -jar jFSTMerge.jar leftPath basePath rightPath`
 
@@ -226,7 +228,7 @@ Cloning the repository and setting up a Gradle project should be enough to start
 
 ### Build
 
-We run [Gradle](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/build.gradle) as build tool, alongside a wrapper. One can build the tool in command line running `gradlew build`.
+We run [Gradle](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/build.gradle) as build tool, alongside a wrapper. One can build the tool in command line running `gradlew build`. Additionally, [here](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/documentation/setup-eclipse.pdf) you can find a two-step setup guide on the Eclipse IDE.
 
 ### Testing
 
