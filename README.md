@@ -181,16 +181,32 @@ For research purposes, S3M's stores a error and some statistical logs in `${HOME
 ### Requirements
 
 * **Java 8** (Java version "1.8.0_212" or above) 
-* **Git [optional]** S3M can behave as a merge driver for `git merge`. If you have interest in this feature, remember to have Git [installed](https://git-scm.com/downloads). You can find more details about *git merge drivers* [here](https://www.git-scm.com/docs/gitattributes#_defining_a_custom_merge_driver).
+* **Git** (optional) S3M can behave as a merge driver for `git merge`. If you have interest in this feature, remember to have Git [installed](https://git-scm.com/downloads). You can find more details about *git merge drivers* [here](https://www.git-scm.com/docs/gitattributes#_defining_a_custom_merge_driver).
 
 <!--- 
 ### Installing
 Check the [Releases](https://github.com/guilhermejccavalcanti/jFSTMerge/releases) page. Download and execute the most recent installer and follow its instructions.
 -->
 
+### Git integration (as a merge driver)
+
+1. Download the [binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/jFSTMerge.jar) file; 
+2. Add the following lines to your `.gitconfig` file (typically localized in the folder `$HOME` in Unix or `%USERPROFILE%` in Windows), replacing `pathTo` with the path to the binary file in your machine:
+
+	```
+    [core]
+		attributesfile = ~/.gitattributes
+	[merge "s3m"]
+		name = semi_structured_3_way_merge_tool_for_java
+		driver = java  -jar "\"pathTo/jFSTMerge.jar\"" %A %O %B -o %A -g
+    ```
+3. Add the following line to your `.gitattributes` file (also localized in the `$HOME` / `%USERPROFILE%` folder, create the file if not created already):
+	```
+    *.java merge=s3m
+    ```
+
 ### Usage
-If integrated with Git (as a merge driver), S3M will run automatically every time you invoke the `git merge` command. No further configuration required.  
-You can still run it as a standalone tool, if desired, with the `.jar` file present in the [/binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/) folder. You can use the command below after dowloading the `jFSTMerge.jar` file:
+If integrated with Git (as a merge driver), S3M will run automatically every time you invoke the `git merge` command. No further configuration required. You can still run it as a standalone tool, if desired, with the `.jar` file present in the [/binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/) folder. You can use the command below after dowloading the `jFSTMerge.jar` file:
 
 `java -jar jFSTMerge.jar leftPath basePath rightPath`
 
