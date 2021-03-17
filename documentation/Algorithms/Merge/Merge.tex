@@ -1,0 +1,224 @@
+\documentclass[../Algorithms.tex]{subfiles}
+
+\begin{document}
+    \section{Semistructured Merge}
+
+    \subsection{Early Concepts}
+
+    \begin{enumerate}
+        \item $A_L$ and $A_R$ are the sets of all the nodes added by left and right, respectively
+        \item $D_L$ and $D_R$ are the sets of all the nodes deleted by left and right, respectively
+    \end{enumerate}
+
+    \subsection{Merge Algorithms}
+
+    \begin{algorithm}
+        \caption{Merge Files}
+
+        \KwIn{l, b, r, o}
+
+        \BlankLine
+        \SetKwFunction{ftt}{fileToTree}
+        \SetKwFunction{mt}{mergeTrees}
+        \SetKwFunction{gah}{getActiveHandlers}
+        \SetKwFunction{ttt}{treeToText}
+
+        \uIf{$l.content = b.content$}{
+            $o.content \leftarrow r.content$\;
+        }
+        \uElseIf{$b.content = r.content \lor l.content = r.content$}{
+            $o.content \leftarrow l.content$\;
+        }
+        \Else{
+            $L \leftarrow \ftt{l}$\;
+            $B \leftarrow \ftt{b}$\;
+            $R \leftarrow \ftt(r)$\;
+
+            \BlankLine
+            $M \leftarrow \mt{L, B, R}$\;
+
+            \BlankLine
+            $H \leftarrow \gah{}$\;
+            \ForEach{$h \in H$}{
+                $h.handle(M)$\;
+            }
+
+            \BlankLine
+            $o.content \leftarrow \ttt{M}$\;
+        }
+    \end{algorithm}
+
+    \SetKwFunction{mn}{mergeNodes}
+    \SetKwFunction{rrbn}{removeRemainingBaseNodes}
+    \SetKwFunction{mmc}{mergeMatchedContent}
+    \SetKwFunction{tm}{textualMerge}
+
+    \begin{algorithm}
+        \caption{Merge Trees}
+
+        \KwIn{L, B, R}
+        \KwOut{result of merging left, base and right trees}
+
+        \BlankLine
+
+        $L.index = 1$\;
+        $B.index = 2$\;
+        $R.index = 3$\;
+
+        \BlankLine
+        $LB \leftarrow \mn{L, B, 1}$\;
+        $M \leftarrow \mn{LB, R, 2}$\;
+
+        \BlankLine
+        $D \leftarrow D_{L} \cap D_{R}$\;
+
+        \BlankLine
+        \rrbn{M, D}\;
+        \mmc{M}\;
+
+        \BlankLine
+        \KwRet{M}\;
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{Remove Remaining Base Nodes}
+
+        \KwIn{T, D}
+
+        \BlankLine
+        \lIf{$D = \emptyset$}{ \KwRet }
+
+        \BlankLine
+        \ForEach{$d \in D$}{
+            \If{T = d}{
+                $P \leftarrow T.parent$\;
+                $P.children \leftarrow P.children - T$\;
+                \KwRet\;
+            }
+        }
+
+        \BlankLine
+        \ForEach{$t \in T.children$}{
+            \rrbn{t, D}\;
+        }
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{Merge Matched Content}
+
+        \KwIn{T}
+
+        \BlankLine
+        \Fn{\mmc{T}}{
+            \ForEach{$t \in T.children$}{
+                \mmc{t}\;
+            }
+
+            \BlankLine
+            \If{$T.children = \emptyset$}{
+                \If{$SEPARATOR \in T.body$}{
+                    $l, b, r \leftarrow split(T.body, SEPARATOR)$\;
+                    $l \leftarrow l - MARKER$\;
+                    $T.body \leftarrow \tm{l, b, r}$\;
+                }
+
+                %TODO: decide wether to do the same as above for the special token prefix
+            }
+        }
+    \end{algorithm}
+
+    \begin{algorithm}
+        \caption{Merge Nodes}
+
+        \KwIn{A, B, step}
+        \KwOut{result of merging node A and node B}
+
+        \BlankLine
+        \SetKwFunction{ls}{leftSiblings}
+        \SetKwFunction{rs}{rightSiblings}
+
+        \If{$A.type \neq B.type \lor A.id \neq B.id$}{
+            \KwRet{null}\;
+        }
+
+        \BlankLine
+        $M \leftarrow A$\;
+
+        \BlankLine
+        \uIf{$A.children = \emptyset \land B.children = \emptyset$}{
+            \uIf{$MARKER \in A.body$}{
+                $M.body \leftarrow A.body + B.body$\;
+            }
+            \uElseIf{step = 1}{
+                $M.body \leftarrow MARKER + A.body + SEPARATOR + B.body + SEPARATOR$\;
+            }
+            \uElseIf{A.index = 1}{
+                $M.body \leftarrow MARKER + A.body + SEPARATOR + SEPARATOR + B.body$\;
+            }
+            \Else{
+                $M.body \leftarrow MARKER + SEPARATOR + A.body + SEPARATOR + B.body$\;
+            }
+
+            %TODO: decide wether to do the same as above for the special token prefix
+            \BlankLine
+            \KwRet{M}\;
+        }
+        \ElseIf{$A.children \neq \emptyset \land B.children \neq \emptyset$}{
+            \ForEach{$b \in B.children$}{
+                $a \leftarrow find(a \in A.children \rightarrow a.type = b.type \land a.id = b.id)$\;
+                \uIf{a = null}{
+                    $M.children \leftarrow M.children \cup b$\;
+
+                    \BlankLine
+                    \lIf{step = 1}{
+                        $D_L \leftarrow D_L \cup b$
+                    }
+                    \lElse{
+                        $A_R \leftarrow A_R \cup b$
+                    }
+                }
+                \Else{
+                    \lIf{a.index = -1}{
+                        $a.index \leftarrow A.index$
+                    }
+                    \lIf{b.index = -1}{
+                        $b.index \leftarrow B.index$
+                    }
+
+                    \BlankLine
+                    \lIf{$step = 1 \land a \in A_L$}{
+                        $A_R \leftarrow A_R \cup b$
+                    }
+
+                    \BlankLine
+                    $m \leftarrow \mn{a, b, step}$\;
+                    $M.children \leftarrow M.children \cup m$\;
+                }
+            }
+
+            \BlankLine
+            \ForEach{$a \in A.children$}{
+                $b \leftarrow find(b \in B.children \rightarrow a.type = b.type \land a.id = b.id)$\;
+                \If{b = null}{
+                    $ls \leftarrow \ls{a}$\;
+                    $rs \leftarrow \rs{a}$\;
+                    $M.children \leftarrow ls \cup a \cup rs$\;
+
+                    \BlankLine
+                    \lIf{step = 1}{
+                        $A_L \leftarrow A_L \cup a$
+                    }
+                    \lElse{
+                        $D_R \leftarrow D_R \cup a$
+                    }
+                }
+            }
+
+            \BlankLine
+            \KwRet{M}\;
+        }
+
+        \BlankLine
+        \KwRet{null};
+    \end{algorithm}
+\end{document}
