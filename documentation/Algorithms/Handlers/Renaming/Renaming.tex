@@ -1,0 +1,199 @@
+\documentclass[../../Algorithms.tex]{subfiles}
+
+%TODO: make notation compatible with Merge.tex's notation
+\begin{document}
+    \section{Renaming Handler}
+    \subsection{Early Concepts}
+
+    \subsubsection{Possibly renamed without body changes nodes}
+
+    $R_{wobc}(T, B) = \{ b \in B \, | \, (\lnot \exists t \in T \, (t.id = b.id))) \land (\exists t \in T \, (t.body = b.body)) \}$
+
+    \subsubsection{Possibly deleted or renamed with body changes nodes}
+
+    $DR_{wbc}(T, B) = \{ b \in B \, | \, \lnot \exists t \in T \, (t.id = b.id \lor t.body = b.body) \}$
+
+    \subsection{Match Algorithm}
+    
+    \begin{algorithm}[H]
+        \caption{Match Algorithm}
+        \SetAlgoLined
+
+        \KwIn{L, B, R, M}
+        \KwOut{Set of quadruples $(l, b, r, m)$ consisting of the base node $b$ and its corresponding left node $l$, right node $r$ and merge node $m$}
+        
+        \BlankLine
+        \SetKwFunction{prdbn}{possiblyRenamedOrDeletedBaseNodes}
+        \SetKwFunction{gcn}{getCorrespondentNode}
+        \SetKwFunction{gmn}{getMergeNode}
+        
+        $matches \leftarrow \emptyset$\;
+        \ForEach{b in \prdbn{L, B, R}}{
+            $l \leftarrow \gcn{b, L}$\;
+            $r \leftarrow \gcn{b, R}$\;
+            $m \leftarrow$ \colorbox{red}{$\gmn{l, r, M}$}\;
+            $matches \leftarrow matches \cup (l, b, r, m)$\;
+        }
+
+        \BlankLine
+        \KwRet{matches}
+        \BlankLine
+
+        \Fn{\prdbn{L, B, R}}{
+            \KwRet{$DR_{wbc}(L, B) \cup DR_{wbc}(R, B) \cup R_{wobc}(L, B) \cup R_{wobc}(R, B)$}\;
+        }
+
+        \BlankLine
+        
+        \Fn{\gcn{b, T}}{
+            $t \leftarrow findFirst(t \in T \rightarrow t.id = b.id)$\;
+            
+            \BlankLine
+            \If{t = null}{
+                $t \leftarrow findFirst(t \in T \rightarrow t.body = b.body)$\;
+            }
+                
+            \BlankLine
+            \If{t = null}{
+                $t \leftarrow findFirst(t \in T \rightarrow t.body \approx b.body \land ($ \colorbox{red}{$t.id.name = b.id.name \lor$} $t.id.params = b.id.params))$\;
+            }
+                
+            \BlankLine
+            \If{t = null}{
+                $t \leftarrow findFirst(t \in T \rightarrow t.body = substring(b.body) \lor b.body = substring(t.body))$\;
+            }
+
+            \BlankLine
+            \KwRet{t}\;
+        }
+
+        \BlankLine
+
+        \Fn{\colorbox{red}{\gmn{l, r, M}}}{
+            \If{$l \neq null$}{
+                \KwRet{$find(m \in M \rightarrow m.id = l.id)$}\;
+            }
+
+            \BlankLine
+            \If{$r \neq null$}{
+                \KwRet{$find(m \in M \rightarrow m.id = r.id)$}\;
+            }
+
+            \BlankLine
+            \KwRet{null}\;
+        }
+    \end{algorithm}
+
+    \subsection{Handle Algorithms}
+
+    \SetKwFunction{srd}{singleRenamingOrDeletion}
+    \SetKwFunction{run}{removeUnmatchedNode}
+
+    \begin{algorithm}[H]
+        \caption{Check References and Merge Methods Variant}
+
+        \SetKwFunction{nrt}{newReferenceTo}
+
+        \KwIn{\colorbox{red}{(l, b, r, m), M}}
+
+        \BlankLine
+        \uIf{\srd{l, b, r}}{
+            $m.body = textualMerge(l, b, r)$\;
+            \colorbox{red}{\run{l, r, m, M}}\;
+        }
+        \uElseIf{$l.id \neq r.id$}{
+            $m.body = conflit(l, b, r)$\;
+            \colorbox{red}{\run{l, r, m, M}}\;
+        }
+        \ElseIf{$l.body \neq r.body$}{
+            \uIf{$\nrt{l} \lor \nrt{r}$}{
+                $m.body = conflict(l, b, r)$\;
+                \colorbox{red}{\run{l, r, m, M}}\;
+            }
+            \Else{
+                $m.body = textualMerge(l, b, r)$\;
+                \colorbox{red}{\run{l, r, m, M}}\;
+            }
+        }
+
+        \BlankLine
+        \Fn{\srd{l, b, r}}{
+            \KwRet{$l.id = b.id \lor r.id = b.id$}\;
+        }
+
+        \BlankLine
+        \Fn{\run{l, r, m, M}}{
+            \If{$l.id = m.id \land r.id \neq m.id$}{
+                $removeNode(r, M)$\;
+            }
+        }
+    \end{algorithm}
+    
+    \begin{algorithm}[H]
+        \caption{Merge Methods Variant}
+
+        \KwIn{\colorbox{red}{(l, b, r, m), M}}
+
+        \BlankLine
+        \colorbox{red}{$m.body = textualMerge(l, b, r)$}\;
+
+        \colorbox{red}{\run{l, r, m, M}}\;
+
+        \BlankLine
+        \Fn{\run{l, r, m, M}}{
+            \If{$l.id = m.id \land r.id \neq m.id$}{
+                $removeNode(r, M)$\;
+            }
+        }
+    \end{algorithm}
+    
+    \begin{algorithm}[H]
+        \caption{Check Textual and Keep Both Methods Variant}
+        
+        \KwIn{\colorbox{red}{(l, b, r, m), M}}
+        
+        \BlankLine
+        \SetKwFunction{tmhcis}{textualMergeHasConflictInvolvingSignature}
+        
+        \uIf{\srd{l, b, r}}{
+            \If{\tmhcis{b}}{
+                $m.body = conflict(l, b, r)$\;
+                \colorbox{red}{\run{l, r, m, M}}\;
+            }
+        }
+        \ElseIf{\colorbox{red}{$l.id \neq r.id \land l.body = r.body$}}{
+            $m.body = conflict(l, b, r)$\;
+            \colorbox{red}{\run{l, r, m, M}}\;
+        }
+
+        \BlankLine
+        \Fn{\srd{l, b, r}}{
+            \KwRet{$l.id = b.id \lor r.id = b.id$}\;
+        }
+
+        \BlankLine
+        \Fn{\run{l, r, m, M}}{
+            \If{$l.id = m.id \land r.id \neq m.id$}{
+                $removeNode(r, M)$\;
+            }
+        }
+    \end{algorithm}
+    
+    \begin{algorithm}[H]
+        \caption{Keep Both Methods Variant}
+        
+        \KwIn{\colorbox{red}{(l, b, r, m), M}}
+        
+        \BlankLine
+        \SetKwFunction{hc}{hasConflict}
+        
+        \If{$\srd{l, b, r} \land \hc{m}$}{
+            $removeConflict(m)$\;
+        }
+
+        \BlankLine
+        \Fn{\srd{l, b, r}}{
+            \KwRet{$l.id = b.id \lor r.id = b.id$}\;
+        }
+    \end{algorithm}
+\end{document}
