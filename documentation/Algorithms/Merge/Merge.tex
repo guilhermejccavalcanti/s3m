@@ -8,6 +8,7 @@
     \begin{enumerate}
         \item $A_L$ and $A_R$ are the sets of all the nodes added by left and right, respectively
         \item $D_L$ and $D_R$ are the sets of all the nodes deleted by left and right, respectively
+        \item Every node's origin is set to UNKNOWN beforehand
     \end{enumerate}
 
     \subsection{Merge Algorithms}
@@ -49,9 +50,8 @@
     \end{algorithm}
 
     \SetKwFunction{mn}{mergeNodes}
-    \SetKwFunction{rrbn}{removeRemainingBaseNodes}
-    \SetKwFunction{mmc}{mergeMatchedContent}
-    \SetKwFunction{tm}{textualMerge}
+    \SetKwFunction{rdn}{removeDeletedNodes}
+    \SetKwFunction{ulb}{updateLeafBodies}
 
     \begin{algorithm}[H]
         \caption{Merge Trees}
@@ -61,9 +61,9 @@
 
         \BlankLine
 
-        $L.index = 1$\;
-        $B.index = 2$\;
-        $R.index = 3$\;
+        $L.origin = LEFT$\;
+        $B.origin = BASE$\;
+        $R.origin = RIGHT$\;
 
         \BlankLine
         $LB \leftarrow \mn{L, B, 1}$\;
@@ -73,15 +73,15 @@
         $D \leftarrow D_{L} \cap D_{R}$\;
 
         \BlankLine
-        \rrbn{M, D}\;
-        \mmc{M}\;
+        \rdn{M, D}\;
+        \ulb{M}\;
 
         \BlankLine
         \KwRet{M}\;
     \end{algorithm}
 
     \begin{algorithm}[H]
-        \caption{Remove Remaining Base Nodes}
+        \caption{Remove Deleted Nodes}
 
         \KwIn{T, D}
 
@@ -99,31 +99,31 @@
 
         \BlankLine
         \ForEach{$t \in T.children$}{
-            \rrbn{t, D}\;
+            \rdn{t, D}\;
         }
     \end{algorithm}
 
+    \SetKwFunction{tm}{textualMerge}
+
     \begin{algorithm}[H]
-        \caption{Merge Matched Content}
+        \caption{Update Leaf Bodies}
 
         \KwIn{T}
 
         \BlankLine
-        \Fn{\mmc{T}}{
-            \ForEach{$t \in T.children$}{
-                \mmc{t}\;
+        \ForEach{$t \in T.children$}{
+            \ulb{t}\;
+        }
+
+        \BlankLine
+        \If{$T.children = \emptyset$}{
+            \If{$SEPARATOR \in T.body$}{
+                $l, b, r \leftarrow split(T.body, SEPARATOR)$\;
+                $l \leftarrow l - MARKER$\;
+                $T.body \leftarrow \tm{l, b, r}$\;
             }
 
-            \BlankLine
-            \If{$T.children = \emptyset$}{
-                \If{$SEPARATOR \in T.body$}{
-                    $l, b, r \leftarrow split(T.body, SEPARATOR)$\;
-                    $l \leftarrow l - MARKER$\;
-                    $T.body \leftarrow \tm{l, b, r}$\;
-                }
-
-                %TODO: decide wether to do the same as above for the special token prefix
-            }
+            %TODO: decide wether to do the same as above for the special token prefix
         }
     \end{algorithm}
 
@@ -152,7 +152,7 @@
             \uElseIf{step = 1}{
                 $M.body \leftarrow MARKER + A.body + SEPARATOR + B.body + SEPARATOR$\;
             }
-            \uElseIf{A.index = 1}{
+            \uElseIf{A.origin = LEFT}{
                 $M.body \leftarrow MARKER + A.body + SEPARATOR + SEPARATOR + B.body$\;
             }
             \Else{
@@ -168,6 +168,7 @@
                 $a \leftarrow find(a \in A.children \rightarrow a.type = b.type \land a.id = b.id)$\;
                 \uIf{a = null}{
                     $M.children \leftarrow M.children \cup b$\;
+                    %TODO: update b's origin
 
                     \BlankLine
                     \lIf{step = 1}{
@@ -178,11 +179,11 @@
                     }
                 }
                 \Else{
-                    \lIf{a.index = -1}{
-                        $a.index \leftarrow A.index$
+                    \lIf{a.origin = UNKNOWN}{
+                        $a.origin \leftarrow A.origin$
                     }
-                    \lIf{b.index = -1}{
-                        $b.index \leftarrow B.index$
+                    \lIf{b.origin = UNKNOWN}{
+                        $b.origin \leftarrow B.origin$
                     }
 
                     \BlankLine
