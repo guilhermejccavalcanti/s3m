@@ -66,41 +66,20 @@
         $R.origin = RIGHT$\;
 
         \BlankLine
-        $LB \leftarrow \mn{L, B, 1}$\;
-        $M \leftarrow \mn{LB, R, 2}$\;
+        $LB \leftarrow \mn{L, B, LB-STEP}$\;
+        $M \leftarrow \mn{LB, R, LBR-STEP}$\;
 
         \BlankLine
-        $D \leftarrow D_{L} \cap D_{R}$\;
+        $D_B \leftarrow D_{L} \cap D_{R}$\;
+        \ForEach{$d \in D_B$}{
+            \rn{d, M}\;
+        }
 
         \BlankLine
-        \rdn{M, D}\;
         \ulb{M}\;
 
         \BlankLine
         \KwRet{M}\;
-    \end{algorithm}
-
-    \begin{algorithm}[H]
-        \caption{Remove Deleted Nodes}
-
-        \KwIn{T, D}
-
-        \BlankLine
-        \lIf{$D = \emptyset$}{ \KwRet }
-
-        \BlankLine
-        \ForEach{$d \in D$}{
-            \If{T = d}{
-                $P \leftarrow T.parent$\;
-                $P.children \leftarrow P.children - T$\;
-                \KwRet\;
-            }
-        }
-
-        \BlankLine
-        \ForEach{$t \in T.children$}{
-            \rdn{t, D}\;
-        }
     \end{algorithm}
 
     \SetKwFunction{tm}{textualMerge}
@@ -116,12 +95,10 @@
         }
 
         \BlankLine
-        \If{$T.children = \emptyset$}{
-            \If{$SEPARATOR \in T.body$}{
-                $l, b, r \leftarrow split(T.body, SEPARATOR)$\;
-                $l \leftarrow l - MARKER$\;
-                $T.body \leftarrow \tm{l, b, r}$\;
-            }
+        \If{$T.children = \emptyset \land SEPARATOR \in T.body$}{
+            $l, b, r \leftarrow split(T.body, SEPARATOR)$\;
+            $l \leftarrow l - MARKER$\;
+            $T.body \leftarrow \tm{l, b, r}$\;
 
             %TODO: decide wether to do the same as above for the special token prefix
         }
@@ -131,25 +108,31 @@
         \caption{Merge Nodes}
 
         \KwIn{A, B, step}
-        \KwOut{result of merging node A and node B}
+        \KwOut{result of merging nodes A and B}
 
         \BlankLine
+        \SetKwFunction{mc}{markContributions}
         \SetKwFunction{ls}{leftSiblings}
         \SetKwFunction{rs}{rightSiblings}
 
+        \lIf{A = null}{ \KwRet{B} }
+        \lIf{B = null}{ \KwRet{A} }
+
+        \BlankLine
         \If{$A.type \neq B.type \lor A.id \neq B.id$}{
             \KwRet{null}\;
         }
 
         \BlankLine
         $M \leftarrow A$\;
+        $M.origin \leftarrow B.origin$\;
 
         \BlankLine
-        \uIf{$A.children = \emptyset \land B.children = \emptyset$}{
+        \If{$A.children = \emptyset \land B.children = \emptyset$}{
             \uIf{$MARKER \in A.body$}{
                 $M.body \leftarrow A.body + B.body$\;
             }
-            \uElseIf{step = 1}{
+            \uElseIf{step = LB-STEP}{
                 $M.body \leftarrow MARKER + A.body + SEPARATOR + B.body + SEPARATOR$\;
             }
             \uElseIf{A.origin = LEFT}{
@@ -160,41 +143,40 @@
             }
 
             %TODO: decide wether to do the same as above for the special token prefix
+
             \BlankLine
             \KwRet{M}\;
         }
-        \ElseIf{$A.children \neq \emptyset \land B.children \neq \emptyset$}{
+
+        \BlankLine
+        \If{$A.children \neq \emptyset \land B.children \neq \emptyset$}{
             \ForEach{$b \in B.children$}{
                 $a \leftarrow find(a \in A.children \rightarrow a.type = b.type \land a.id = b.id)$\;
+
+                \BlankLine
+                \lIf{a.origin = UNKNOWN}{
+                    $a.origin \leftarrow A.origin$
+                }
+                \lIf{b.origin = UNKNOWN}{
+                    $b.origin \leftarrow B.origin$
+                }
+
+                \BlankLine
                 \uIf{a = null}{
-                    $M.children \leftarrow M.children \cup b$\;
-                    %TODO: update b's origin
-
-                    \BlankLine
-                    \lIf{step = 1}{
-                        $D_L \leftarrow D_L \cup b$
+                    \uIf{step = LB-STEP}{
+                        $D_L \leftarrow D_L \cup b$\;
                     }
-                    \lElse{
-                        $A_R \leftarrow A_R \cup b$
+                    \Else{
+                        $A_R \leftarrow A_R \cup b$\;
                     }
                 }
-                \Else{
-                    \lIf{a.origin = UNKNOWN}{
-                        $a.origin \leftarrow A.origin$
-                    }
-                    \lIf{b.origin = UNKNOWN}{
-                        $b.origin \leftarrow B.origin$
-                    }
-
-                    \BlankLine
-                    \lIf{$step = 1 \land a \in A_L$}{
-                        $A_R \leftarrow A_R \cup b$
-                    }
-
-                    \BlankLine
-                    $m \leftarrow \mn{a, b, step}$\;
-                    $M.children \leftarrow M.children \cup m$\;
+                \ElseIf{step = LB-STEP $\land \: a \in A_L$}{
+                    $A_R \leftarrow A_R \cup b$\;
                 }
+
+                \BlankLine
+                $m \leftarrow \mn{a, b, step}$\;
+                $M.children \leftarrow M.children \cup m$\;
             }
 
             \BlankLine
@@ -206,10 +188,10 @@
                     $M.children \leftarrow ls \cup a \cup rs$\;
 
                     \BlankLine
-                    \lIf{step = 1}{
+                    \lIf{step = LB-STEP}{
                         $A_L \leftarrow A_L \cup a$
                     }
-                    \lElse{
+                    \lElseIf{$a \notin A_L$}{
                         $D_R \leftarrow D_R \cup a$
                     }
                 }
