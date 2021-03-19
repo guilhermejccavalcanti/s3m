@@ -38,21 +38,24 @@ public class LoggerTest {
     
     @Test
     public void testLogger_givenTheresOneMergerObject_whenTwoConsecutiveMergesOccur_shouldProduceOnlyOneLogFile() throws IOException {
+        int numberOfLogFilesBeforeExecution = numberOfLogFiles();
+        
         JFSTMerge merger = new JFSTMerge();
 
         merge(merger, "deletioninleft");
         merge(merger, "deletioninright");
         
-        assertEquals(1, numberOfLogFiles());
+        assertEquals(numberOfLogFilesBeforeExecution, numberOfLogFiles());
     }
 
     @Test
     public void testLogger_whenTwoConsecutiveMergesOccur_shouldProduceOnlyOneLogFile() throws IOException {
+        int numberOfLogFilesBeforeExecution = numberOfLogFiles();
+
         merge(new JFSTMerge(), "deletioninleft");
         merge(new JFSTMerge(), "deletioninright");
         
-        assertEquals(1, numberOfLogFiles());
-
+        assertEquals(numberOfLogFilesBeforeExecution, numberOfLogFiles());
     }
 
     private int numberOfLogFiles() throws IOException {
