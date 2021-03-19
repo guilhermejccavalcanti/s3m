@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 public class JFSTMerge {
 
 	//log of activities
-	private final Logger LOGGER = LoggerFactory.make();
+	private static final Logger LOGGER = LoggerFactory.make();
 
 	public static final double RENAMING_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
 
