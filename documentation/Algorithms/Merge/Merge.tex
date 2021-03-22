@@ -6,8 +6,6 @@
     \subsection{Early Concepts}
 
     \begin{enumerate}
-        \item $A_L$ and $A_R$ are the sets of all the nodes added by left and right, respectively
-        \item $D_L$ and $D_R$ are the sets of all the nodes deleted by left and right, respectively
         \item Every node's origin is set to UNKNOWN beforehand
     \end{enumerate}
 
@@ -66,11 +64,15 @@
         $R.origin = RIGHT$\;
 
         \BlankLine
-        $LB \leftarrow \mn{L, B, LB-STEP}$\;
-        $M \leftarrow \mn{LB, R, LBR-STEP}$\;
+        $LB \leftarrow \mn{L, B}$\;
+        $M \leftarrow \mn{LB, R}$\;
 
         \BlankLine
+        $D_L \leftarrow \{ b \in B \mid (\lnot \exists l \in L) (l.id = b.id) \}$\;
+        $D_R \leftarrow \{ b \in B \mid (\lnot \exists r \in R) (r.id = b.id) \}$\;
         $D_B \leftarrow D_{L} \cap D_{R}$\;
+
+        \BlankLine
         \ForEach{$d \in D_B$}{
             \rn{d, M}\;
         }
@@ -99,40 +101,36 @@
             $l, b, r \leftarrow split(T.body, SEPARATOR)$\;
             $l \leftarrow l - MARKER$\;
             $T.body \leftarrow \tm{l, b, r}$\;
-
-            %TODO: decide wether to do the same as above for the special token prefix
         }
     \end{algorithm}
 
     \begin{algorithm}[H]
         \caption{Merge Nodes}
 
-        \KwIn{A, B, step}
+        \KwIn{A, B}
         \KwOut{result of merging nodes A and B}
 
         \BlankLine
         \SetKwFunction{mc}{markContributions}
-        \SetKwFunction{ls}{leftSiblings}
-        \SetKwFunction{rs}{rightSiblings}
 
         \lIf{A = null}{ \KwRet{B} }
         \lIf{B = null}{ \KwRet{A} }
-
-        \BlankLine
-        \If{$A.type \neq B.type \lor A.id \neq B.id$}{
-            \KwRet{null}\;
+        \lIf{$A.type \neq B.type \lor A.id \neq B.id$}{
+            \KwRet{null}
         }
 
         \BlankLine
-        $M \leftarrow A$\;
+        $M.id \leftarrow A.id$\;
+        $M.type \leftarrow A.type$\;
         $M.origin \leftarrow B.origin$\;
+        $M.children \leftarrow \emptyset$\;
 
         \BlankLine
-        \If{$A.children = \emptyset \land B.children = \emptyset$}{
+        \uIf{$A.children = \emptyset \land B.children = \emptyset$}{
             \uIf{$MARKER \in A.body$}{
                 $M.body \leftarrow A.body + B.body$\;
             }
-            \uElseIf{step = LB-STEP}{
+            \uElseIf{$A.origin = LEFT \land B.origin = BASE$}{
                 $M.body \leftarrow MARKER + A.body + SEPARATOR + B.body + SEPARATOR$\;
             }
             \uElseIf{A.origin = LEFT}{
@@ -142,14 +140,10 @@
                 $M.body \leftarrow MARKER + SEPARATOR + A.body + SEPARATOR + B.body$\;
             }
 
-            %TODO: decide wether to do the same as above for the special token prefix
-
             \BlankLine
             \KwRet{M}\;
         }
-
-        \BlankLine
-        \If{$A.children \neq \emptyset \land B.children \neq \emptyset$}{
+        \ElseIf{$A.children \neq \emptyset \land B.children \neq \emptyset$}{
             \ForEach{$b \in B.children$}{
                 $a \leftarrow find(a \in A.children \rightarrow a.type = b.type \land a.id = b.id)$\;
 
@@ -162,38 +156,21 @@
                 }
 
                 \BlankLine
-                \uIf{a = null}{
-                    \uIf{step = LB-STEP}{
-                        $D_L \leftarrow D_L \cup b$\;
-                    }
-                    \Else{
-                        $A_R \leftarrow A_R \cup b$\;
-                    }
-                }
-                \ElseIf{step = LB-STEP $\land \: a \in A_L$}{
-                    $A_R \leftarrow A_R \cup b$\;
-                }
-
-                \BlankLine
-                $m \leftarrow \mn{a, b, step}$\;
-                $M.children \leftarrow M.children \cup m$\;
+                $M.children \leftarrow M.children \cup \mn{a, b, step}$\;
             }
 
             \BlankLine
             \ForEach{$a \in A.children$}{
                 $b \leftarrow find(b \in B.children \rightarrow a.type = b.type \land a.id = b.id)$\;
-                \If{b = null}{
-                    $ls \leftarrow \ls{a}$\;
-                    $rs \leftarrow \rs{a}$\;
-                    $M.children \leftarrow ls \cup a \cup rs$\;
 
-                    \BlankLine
-                    \lIf{step = LB-STEP}{
-                        $A_L \leftarrow A_L \cup a$
-                    }
-                    \lElseIf{$a \notin A_L$}{
-                        $D_R \leftarrow D_R \cup a$
-                    }
+                \BlankLine
+                \lIf{a.origin = UNKNOWN}{
+                    $a.origin \leftarrow A.origin$
+                }
+
+                \BlankLine
+                \lIf{b = null}{
+                    $M.children \leftarrow M.children \cup a$
                 }
             }
 
