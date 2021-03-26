@@ -1,4 +1,4 @@
-# Semistructured 3-Way Merge [![Build Status](https://api.travis-ci.org/guilhermejccavalcanti/jFSTMerge.svg?branch=master)](https://travis-ci.org/guilhermejccavalcanti/jFSTMerge)
+# Semistructured 3-Way Merge [![Build Status](https://github.com/guilhermejccavalcanti/jFSTMerge/workflows/build.yml/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
 
 ## Table of Contents
 * [What is semistructured merge?](https://github.com/guilhermejccavalcanti/jFSTMerge#what-is-semistructured-merge-?)
@@ -261,7 +261,7 @@ There's also [two unique JUnit classes](https://github.com/guilhermejccavalcanti
 
 ### Continuous Integration
 
-We run [Travis CI](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/.travis.yml) as CI tool.  
+We run [GitHub Actions](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/.github/workflows/build.yml) as CI tool.
 It runs a typical gradle build and the unique JUnit tests described above.
 
 ---
