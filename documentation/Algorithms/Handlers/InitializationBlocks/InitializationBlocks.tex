@@ -1,0 +1,72 @@
+\documentclass[../../Algorithms.tex]{subfiles}
+
+\begin{document}
+    \section{Initialization Blocks Handler}
+
+    \subsection{Handler Algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Handle}
+
+        \KwIn{L, B, R, M}
+
+        \BlankLine
+        $A_L \leftarrow \{l \in L \mid (\lnot \exists b \in B)(l.id = b.id)\}$\;
+        $A_R \leftarrow \{r \in R \mid (\lnot \exists b \in B)(r.id = b.id)\}$\;
+
+        \BlankLine
+        $D_L \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id)\}$\;
+        $D_R \leftarrow \{b \in B \mid (\lnot \exists r \in R)(b.id = r.id)\}$\;
+        $D \leftarrow D_L \cap D_R$\;
+
+        \BlankLine
+        $IB_L \leftarrow \{n \in A_L \mid n.type = INITBLOCK\}$\;
+        $IB_R \leftarrow \{n \in A_R \mid n.type = INITBLOCK\}$\;
+        $IB_B \leftarrow \{n \in D \mid n.type = INITBLOCK\}$\;
+
+        \BlankLine
+        $matches \leftarrow \emptyset$\;
+        \uIf{$|IB_L| = 1 \land |IB_R| == 1 \land |IB_B| = 1$}{
+            %TODO: fill parentheses
+            $matches \leftarrow matches \cup ()$\;
+        }
+        \Else{
+            \ForEach{$b \in IB_B$}{
+                $l \leftarrow findFirst(l \in IB_L \rightarrow l.body \approx b.body)$\;
+                $r \leftarrow findFirst(r \in IB_R \rightarrow r.body \approx b.body)$\;
+
+                \BlankLine
+                $IB_L \leftarrow IB_L - l$\;
+                $IB_R \leftarrow IB_R - r$\;
+
+                \BlankLine
+                \If{$l \neq null \land r \neq null$}{
+                    $matches \leftarrow matches \cup (l, b, r)$\;
+                }
+            }
+
+            \BlankLine
+            \ForEach{$l \in IB_L$}{
+                $r \leftarrow findFirst(r \in IB_R \rightarrow r.body \approx l.body)$\;
+
+                \BlankLine
+                $IB_R \leftarrow IB_R - r$\;
+
+                \BlankLine
+                \If{$r \neq null$}{
+                    $matches \leftarrow matches \cup (l, null, r)$\;
+                }
+            }
+        }
+
+        \BlankLine
+        \ForEach{$(l, b, r) \in matches$}{
+            $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
+            $m.body \leftarrow \tm{l.body, b.body, r.body}$\;
+
+            \BlankLine
+            $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+            \rn{m, M}\;
+        }
+    \end{algorithm}
+\end{document}
