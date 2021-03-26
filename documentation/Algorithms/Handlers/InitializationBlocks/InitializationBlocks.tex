@@ -13,16 +13,12 @@
         \BlankLine
         $A_L \leftarrow \{l \in L \mid (\lnot \exists b \in B)(l.id = b.id)\}$\;
         $A_R \leftarrow \{r \in R \mid (\lnot \exists b \in B)(r.id = b.id)\}$\;
-
-        \BlankLine
-        $D_L \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id)\}$\;
-        $D_R \leftarrow \{b \in B \mid (\lnot \exists r \in R)(b.id = r.id)\}$\;
-        $D \leftarrow D_L \cap D_R$\;
+        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$\;
 
         \BlankLine
         $IB_L \leftarrow \{n \in A_L \mid n.type = INITBLOCK\}$\;
         $IB_R \leftarrow \{n \in A_R \mid n.type = INITBLOCK\}$\;
-        $IB_B \leftarrow \{n \in D \mid n.type = INITBLOCK\}$\;
+        $IB_B \leftarrow \{n \in D_B \mid n.type = INITBLOCK\}$\;
 
         \BlankLine
         $matches \leftarrow \emptyset$\;

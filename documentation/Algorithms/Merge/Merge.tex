@@ -68,12 +68,8 @@
         $M \leftarrow \mn{LB, R}$\;
 
         \BlankLine
-        $D_L \leftarrow \{ b \in B \mid (\lnot \exists l \in L) (l.id = b.id) \}$\;
-        $D_R \leftarrow \{ b \in B \mid (\lnot \exists r \in R) (r.id = b.id) \}$\;
-        $D \leftarrow D_{L} \cap D_{R}$\;
-
-        \BlankLine
-        \ForEach{$d \in D$}{
+        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$\;
+        \ForEach{$d \in D_B$}{
             \rn{d, M}\;
         }
 
