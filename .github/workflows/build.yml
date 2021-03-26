@@ -47,7 +47,5 @@ jobs:
     - name: Run integration tests
       run: |
         cd testfiles/shelltests
-        pwd
-        ls
         javac -cp ${{ matrix.dependencies }} s3mGitIntegrationTests.java
         java -cp ${{ matrix.dependencies }} org.junit.runner.JUnitCore s3mGitIntegrationTests
