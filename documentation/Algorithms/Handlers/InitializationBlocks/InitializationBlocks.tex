@@ -22,9 +22,8 @@
 
         \BlankLine
         $matches \leftarrow \emptyset$\;
-        \uIf{$|IB_L| = 1 \land |IB_R| == 1 \land |IB_B| = 1$}{
-            %TODO: fill parentheses
-            $matches \leftarrow matches \cup ()$\;
+        \uIf{$|IB_L| = 1 \land |IB_B| == 1 \land |IB_R| = 1$}{
+            $matches \leftarrow matches \cup (IB_{L_1}, IB_{B_1}, IB_{R_1})$\;
         }
         \Else{
             \ForEach{$b \in IB_B$}{
