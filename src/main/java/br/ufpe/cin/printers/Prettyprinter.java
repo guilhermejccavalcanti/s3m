@@ -66,7 +66,7 @@ public final class Prettyprinter {
 			String semistructuredOutputFilePath 	= outputFilePath;
 			String semistructuredMergeOutputContent = context.semistructuredOutput;
 			boolean writeSucceed = FilesManager.writeContent(semistructuredOutputFilePath, semistructuredMergeOutputContent);
-			if(writeSucceed && !JFSTMerge.isGit){
+			if(writeSucceed && !JFSTMerge.isGit && JFSTMerge.showUnstructuredOutput){
 				String unstructuredOutputFilePath  		= outputFilePath +".merge"; 
 				String unstructuredMergeOutputContent 	= context.unstructuredOutput;
 				writeSucceed = FilesManager.writeContent(unstructuredOutputFilePath, unstructuredMergeOutputContent);
