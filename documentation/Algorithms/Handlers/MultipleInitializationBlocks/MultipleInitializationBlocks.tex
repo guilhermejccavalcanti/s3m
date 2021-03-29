@@ -1,0 +1,55 @@
+\documentclass[../../Algorithms.tex]{subfiles}
+
+\begin{document}
+    \section{Multiple Initialization Blocks Handler}
+
+    \subsection{Handler Algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Handle}
+
+        \KwIn{L, B, R, M}
+        \SetKwFunction{en}{editedNodes}
+
+        \BlankLine
+        $A_L \leftarrow \{l \in L \mid (\lnot \exists b \in B)(l.id = b.id)\}$\;
+        $A_R \leftarrow \{r \in R \mid (\lnot \exists b \in B)(r.id = b.id)\}$\;
+        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$\;
+
+        \BlankLine
+        %TODO: remove duplicates
+        $IB_L \leftarrow \{n \in A_L \mid n.type = INITBLOCK\}$\;
+        $IB_R \leftarrow \{n \in A_R \mid n.type = INITBLOCK\}$\;
+        $IB_B \leftarrow \{n \in D_B \mid n.type = INITBLOCK\}$\;
+
+        \BlankLine
+        $E_L \leftarrow \en{$IB_L$, $IB_B$}$\;
+        $E_R \leftarrow \en{$IB_R$, $IB_B$}$\;
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Edited Nodes}
+
+        \KwIn{$IB, IB_B$}
+        \KwOut{set of pairs (b, a) consisting of a deleted base node b in $IB_B$ and its correspondent branch added node a in $IB$}
+
+        \SetKwFunction{sim}{similarity}
+
+        \BlankLine
+        $D \leftarrow \{d \in IB_B \mid (\lnot \exists a \in IB)(d.body = a.body)\}$\;
+        $A \leftarrow \{a \in IB \mid (\lnot \exists d \in IB_B)(a.body = d.body)\}$\;
+
+        \BlankLine
+        $matches \leftarrow \emptyset$\;
+        \ForEach{$a \in A$}{
+            $S \leftarrow \{d \in D \mid a.body \approx d.body\}$\;
+            $b \leftarrow \underset{s \in S}{\operatorname{argmax}} \; (\sim{s.body, a.body})$\;
+            \lIf{$b \neq null$}{
+                $matches \leftarrow matches \cup (b, a)$
+            }
+        }
+
+        \BlankLine
+        \KwRet{matches}
+    \end{algorithm}
+\end{document}
