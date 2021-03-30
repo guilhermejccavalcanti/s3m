@@ -10,6 +10,8 @@
 
         \KwIn{L, B, R, M}
         \SetKwFunction{en}{editedNodes}
+        \SetKwFunction{an}{addedNodes}
+        \SetKwFunction{dn}{deletedNodes}
 
         \BlankLine
         $A_L \leftarrow \{l \in L \mid (\lnot \exists b \in B)(l.id = b.id)\}$\;
@@ -25,13 +27,55 @@
         \BlankLine
         $E_L \leftarrow \en{$IB_L$, $IB_B$}$\;
         $E_R \leftarrow \en{$IB_R$, $IB_B$}$\;
+
+        \BlankLine
+        $D_L \leftarrow \dn{$IB_L$, $IB_B$, $E_L$}$\;
+        $D_R \leftarrow \dn{$IB_R$, $IB_B$, $E_R$}$\;
+        
+        \BlankLine
+        \ForEach{$b \in IB_B$}{
+            $l \leftarrow E_L.getValue(b)$\;
+            $r \leftarrow E_R.getValue(b)$\;
+
+            \BlankLine
+            \uIf{$l \neq null \land r \neq null$}{
+                $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
+                $m.body \leftarrow \tm{l.body, b.body, r.body}$\;
+                $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+            }
+            \uElseIf{$l \neq null \lor r \neq null$}{
+                \uIf{$l \neq null$}{
+                    $r \leftarrow find(r \in D_R \rightarrow r.body = b.body)$\;
+                    \lIf{$r \neq null$}{ \rn{b, M} }
+                }
+                \Else{
+                    $l \leftarrow find(l \in D_L \rightarrow l.body = b.body)$\;
+                    \lIf{$l \neq null$}{ \rn{b, M} }
+                }
+
+                \BlankLine
+                $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
+                $m.body \leftarrow \tm{l.body, b.body, r.body}$\;
+                $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+            }
+            \Else{
+                $m \leftarrow find(m \in M \rightarrow m.body = b.body)$\;
+            }
+
+            \BlankLine
+            \rn{m, M}\;
+        }
+
+        \BlankLine
+        $A_L \leftarrow \an{$IB_L$, $IB_B$, $E_L$}$\;
+        $A_R \leftarrow \an{$IB_R$, $IB_B$, $E_R$}$\;
     \end{algorithm}
 
     \begin{algorithm}[H]
         \caption{Edited Nodes}
 
         \KwIn{$IB, IB_B$}
-        \KwOut{set of pairs (b, a) consisting of a deleted base node b in $IB_B$ and its correspondent branch added node a in $IB$}
+        \KwOut{map associating a deleted base node $b$ in $IB_B$ and its correspondent added branch node $a$ in $IB$}
 
         \SetKwFunction{sim}{similarity}
 
@@ -45,11 +89,35 @@
             $S \leftarrow \{d \in D \mid a.body \approx d.body\}$\;
             $b \leftarrow \underset{s \in S}{\operatorname{argmax}} \; (\sim{s.body, a.body})$\;
             \lIf{$b \neq null$}{
-                $matches \leftarrow matches \cup (b, a)$
+                $matches \leftarrow matches \cup \{b: a\}$
             }
         }
 
         \BlankLine
         \KwRet{matches}
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Added Nodes}
+
+        \KwIn{$IB, IB_B, E$}
+        \KwOut{set of initilization block nodes added by branch}
+
+        \BlankLine
+        $A \leftarrow \{n \in IB \mid (\lnot \exists b \in IB_B)(n.body = b.body)\}$\;
+        $A \leftarrow \{n \in A \mid (\lnot \exists e \in E)(n.body = e.value.body)\}$\;
+        \KwRet{A}\;
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Deleted Nodes}
+
+        \KwIn{$IB, IB_B, E$}
+        \KwOut{set of initialization block nodes deleted by branch}
+
+        \BlankLine
+        $D \leftarrow \{b \in IB_B \mid (\lnot \exists n \in IB)(b.body = n.body)\}$\;
+        $D \leftarrow \{n \in D \mid (\lnot \exists e \in E)(n.body = e.key.body)\}$\;
+        \KwRet{D}\;
     \end{algorithm}
 \end{document}
