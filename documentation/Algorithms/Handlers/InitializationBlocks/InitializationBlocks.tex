@@ -1,19 +1,14 @@
 \documentclass[../../Algorithms.tex]{subfiles}
 
 \begin{document}
-    \section{Initialization Blocks Handler}
+    \subsection{Initialization Blocks Handler}
 
-    \subsection{Handler Algorithm}
+    \subsubsection{Handler Algorithm}
 
     \begin{algorithm}[H]
         \caption{Handle}
 
         \KwIn{L, B, R, M}
-
-        \BlankLine
-        $A_L \leftarrow \{l \in L \mid (\lnot \exists b \in B)(l.id = b.id)\}$\;
-        $A_R \leftarrow \{r \in R \mid (\lnot \exists b \in B)(r.id = b.id)\}$\;
-        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$\;
 
         \BlankLine
         $IB_L \leftarrow \{n \in A_L \mid n.type = INITBLOCK\}$\;

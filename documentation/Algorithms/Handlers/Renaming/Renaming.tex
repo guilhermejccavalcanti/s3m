@@ -1,23 +1,24 @@
 \documentclass[../../Algorithms.tex]{subfiles}
 
-%TODO: make notation compatible with Merge.tex's notation
 \begin{document}
-    \section{Renaming Handler}
-    \subsection{Early Concepts}
+    \subsection{Renaming Handler}
+    \subsubsection{Early Concepts}
 
-    \subsubsection{Possibly renamed without body changes nodes}
+    \begin{enumerate}
+        \item \textbf{Possibly renamed without body changes nodes}:
 
-    $R_{wobc}(T, B) = \{ b \in B \mid (\lnot \exists t \in T) (t.id = b.id)) \land (\exists t \in T) (t.body = b.body)\}$
+        $R_{wobc}(T, B) = \{ b \in B \mid (\lnot \exists t \in T) (t.id = b.id)) \land (\exists t \in T) (t.body = b.body)\}$
 
-    \subsubsection{Possibly deleted or renamed with body changes nodes}
+        \item \textbf{Possibly deleted or renamed with body changes nodes}:
+        
+        $DR_{wbc}(T, B) = \{ b \in B \mid (\lnot \exists t \in T) (t.id = b.id \lor t.body = b.body)\}$
 
-    $DR_{wbc}(T, B) = \{ b \in B \mid (\lnot \exists t \in T) (t.id = b.id \lor t.body = b.body)\}$
+        \item \textbf{Nodes IDs similariy}:
+        
+        $a.id \approx b.id \leftrightarrow a.id.name = b.id.name \lor a.id.params = b.id.params$
+    \end{enumerate}
 
-    \subsubsection{Nodes IDs similarity}
-
-    $a.id \approx b.id \leftrightarrow a.id.name = b.id.name \lor a.id.params = b.id.params$
-
-    \subsection{Match Algorithm}
+    \subsubsection{Match Algorithm}
     
     \begin{algorithm}[H]
         \caption{Match Algorithm}
@@ -90,7 +91,7 @@
         \KwRet{null}\;
     \end{algorithm}
 
-    \subsection{Handle Algorithms}
+    \subsubsection{Handler Algorithms}
 
     \SetKwFunction{srd}{singleRenamingOrDeletion}
     \SetKwFunction{run}{removeUnmatchedNode}
@@ -108,12 +109,12 @@
             \colorbox{red}{\run{l, r, m, M}}\;
         }
         \uElseIf{$l.id \neq r.id$}{
-            $m.body = conflit(l, b, r)$\;
+            $m.body = conflit(l.body, b.body, r.body)$\;
             \colorbox{red}{\run{l, r, m, M}}\;
         }
         \ElseIf{$l.body \neq r.body$}{
             \uIf{$\nrt{l} \lor \nrt{r}$}{
-                $m.body = conflict(l, b, r)$\;
+                $m.body = conflict(l.body, b.body, r.body)$\;
             }
             \Else{
                 $m.body = textualMerge(l, b, r)$\;
@@ -145,12 +146,12 @@
         
         \uIf{$l.id = b.id \lor r.id = b.id$}{
             \If{\tmhcis{b}}{
-                $m.body = conflict(l, b, r)$\;
+                $m.body = conflict(l.body, b.body, r.body)$\;
                 \colorbox{red}{\run{l, r, m, M}}\;
             }
         }
         \ElseIf{\colorbox{red}{$l.id \neq r.id \land l.body = r.body$}}{
-            $m.body = conflict(l, b, r)$\;
+            $m.body = conflict(l.body, b.body, r.body)$\;
             \colorbox{red}{\run{l, r, m, M}}\;
         }
     \end{algorithm}

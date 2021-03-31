@@ -15,6 +15,25 @@
 
 \begin{document}
     \subfile{Merge/Merge.tex}
+
+    \section{Handlers}
+
+    \subsection{Early Concepts}
+
+    \begin{enumerate}
+        \item \textbf{Nodes added by left}:
+        
+        $A_L \leftarrow \{l \in L \mid (\lnot \exists b \in B)(l.id = b.id)\}$\;
+
+        \item \textbf{Nodes added by right}:
+        
+        $A_R \leftarrow \{r \in R \mid (\lnot \exists b \in B)(r.id = b.id)\}$\;
+
+        \item \textbf{Nodes deleted from base}:
+        
+        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$\;
+    \end{enumerate}
+
     \subfile{Handlers/Renaming/Renaming}
     \subfile{Handlers/InitializationBlocks/InitializationBlocks}
     \subfile{Handlers/MultipleInitializationBlocks/MultipleInitializationBlocks}
