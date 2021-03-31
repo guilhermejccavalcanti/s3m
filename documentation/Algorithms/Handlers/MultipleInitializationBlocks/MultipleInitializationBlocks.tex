@@ -1,9 +1,9 @@
 \documentclass[../../Algorithms.tex]{subfiles}
 
 \begin{document}
-    \section{Multiple Initialization Blocks Handler}
+    \subsection{Multiple Initialization Blocks Handler}
 
-    \subsection{Handler Algorithm}
+    \subsubsection{Handler Algorithm}
 
     \begin{algorithm}[H]
         \caption{Handle}
@@ -12,11 +12,9 @@
         \SetKwFunction{en}{editedNodes}
         \SetKwFunction{an}{addedNodes}
         \SetKwFunction{dn}{deletedNodes}
-
-        \BlankLine
-        $A_L \leftarrow \{l \in L \mid (\lnot \exists b \in B)(l.id = b.id)\}$\;
-        $A_R \leftarrow \{r \in R \mid (\lnot \exists b \in B)(r.id = b.id)\}$\;
-        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$\;
+        \SetKwFunction{gv}{globalVariables}
+        \SetKwFunction{umt}{updateMergeTree}
+        \SetKwFunction{depn}{dependentNodes}
 
         \BlankLine
         %TODO: remove duplicates
@@ -29,46 +27,65 @@
         $E_R \leftarrow \en{$IB_R$, $IB_B$}$\;
 
         \BlankLine
-        $D_L \leftarrow \dn{$IB_L$, $IB_B$, $E_L$}$\;
-        $D_R \leftarrow \dn{$IB_R$, $IB_B$, $E_R$}$\;
+        $DEL_L \leftarrow \dn{$IB_L$, $IB_B$, $E_L$}$\;
+        $DEL_R \leftarrow \dn{$IB_R$, $IB_B$, $E_R$}$\;
         
         \BlankLine
         \ForEach{$b \in IB_B$}{
-            $l \leftarrow E_L.getValue(b)$\;
-            $r \leftarrow E_R.getValue(b)$\;
+            $l \leftarrow E_L[b]$\;
+            $r \leftarrow E_R[b]$\;
 
             \BlankLine
             \uIf{$l \neq null \land r \neq null$}{
-                $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
-                $m.body \leftarrow \tm{l.body, b.body, r.body}$\;
-                $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+                \umt{l, b, r, M}\;
             }
             \uElseIf{$l \neq null \lor r \neq null$}{
                 \uIf{$l \neq null$}{
-                    $r \leftarrow find(r \in D_R \rightarrow r.body = b.body)$\;
+                    $r \leftarrow find(r \in DEL_R \rightarrow r.body = b.body)$\;
                     \lIf{$r \neq null$}{ \rn{b, M} }
                 }
                 \Else{
-                    $l \leftarrow find(l \in D_L \rightarrow l.body = b.body)$\;
+                    $l \leftarrow find(l \in DEL_L \rightarrow l.body = b.body)$\;
                     \lIf{$l \neq null$}{ \rn{b, M} }
                 }
 
                 \BlankLine
-                $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
-                $m.body \leftarrow \tm{l.body, b.body, r.body}$\;
-                $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+                \umt{l, b, r, M}\;
             }
             \Else{
                 $m \leftarrow find(m \in M \rightarrow m.body = b.body)$\;
+                \rn{m, M}\;
             }
-
-            \BlankLine
-            \rn{m, M}\;
         }
 
         \BlankLine
-        $A_L \leftarrow \an{$IB_L$, $IB_B$, $E_L$}$\;
-        $A_R \leftarrow \an{$IB_R$, $IB_B$, $E_R$}$\;
+        $ADD_L \leftarrow \an{$IB_L$, $IB_B$, $E_L$}$\;
+        $ADD_R \leftarrow \an{$IB_R$, $IB_B$, $E_R$}$\;
+
+        \BlankLine
+        $DEP \leftarrow \depn{$ADD_L$, $ADD_R$}$\;
+        \ForEach{$(l, rs) \in DEP$}{
+            $s \leftarrow \varepsilon$\;
+            \ForEach{$r \in rs$}{
+                $s \leftarrow s + r.body$\;
+                $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+                \rn{r, M}\;
+            }
+
+            \BlankLine
+            $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
+            $m.body \leftarrow conflict(l.body, \varepsilon, s)$\;
+        }
+
+        \BlankLine
+        \ForEach{$l \in ADD_L$}{
+            \ForEach{$r \in ADD_R$}{
+                \If{$l.body = r.body$}{
+                    $m \in find(m \in M \rightarrow m.body = r.body)$\;
+                    \rn{m, M}\;
+                }
+            }
+        }
     \end{algorithm}
 
     \begin{algorithm}[H]
@@ -119,5 +136,44 @@
         $D \leftarrow \{b \in IB_B \mid (\lnot \exists n \in IB)(b.body = n.body)\}$\;
         $D \leftarrow \{n \in D \mid (\lnot \exists e \in E)(n.body = e.key.body)\}$\;
         \KwRet{D}\;
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Update Merge Tree}
+
+        \KwIn{l, b, r, M}
+
+        \BlankLine
+        $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
+        $m.body \leftarrow \tm{l.body, b.body, r.body}$\;
+
+        \BlankLine
+        $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+        \rn{m, M}\;
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Dependent Nodes}
+
+        \KwIn{$ADD_L, ADD_R$}
+        \KwOut{map associating an added left node $l$ in $ADD_L$ and all added right nodes $r$ in $ADD_R$ with common global variables}
+
+        \BlankLine
+        $DEP \leftarrow \emptyset$\;
+        \ForEach{$l \in ADD_L$}{
+            $DEP \leftarrow DEP \cup \{l: \emptyset\}$\;
+            $V_L \leftarrow \gv{l}$\;
+
+            \BlankLine
+            \ForEach{$r \in ADD_R$}{
+                $V_R \leftarrow \gv{r}$\;
+                \lIf{$V_L \cap V_R \neq \emptyset$}{
+                    $DEP[l] \leftarrow DEP[l] \cup r$
+                }
+            }
+        }
+
+        \BlankLine
+        \KwRet{DEP}\;
     \end{algorithm}
 \end{document}
