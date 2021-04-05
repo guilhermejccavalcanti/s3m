@@ -9,5 +9,89 @@
         \caption{Handle}
 
         \KwIn{L, B, R, M}
+        \SetKwFunction{comp}{compile}
+        \SetKwFunction{probs}{problems}
+        \SetKwFunction{ec}{extractConflicts}
+        \SetKwFunction{epm}{extractPackageMember}
+        \SetKwFunction{idp}{importDeclarationsProblem}
+        \SetKwFunction{idc}{importDeclarationsConflict}
+
+        \BlankLine
+        $ID_L \leftarrow \{n \in A_L \mid n.type = IMPORTDECL\}$\;
+        $ID_R \leftarrow \{n \in A_R \mid n.type = IMPORTDECL\}$\;
+
+        \BlankLine
+        \lIf{$ID_L = \emptyset \lor ID_R = \emptyset$}{ \KwRet }
+
+        \BlankLine
+        $M_U \leftarrow \tm{\ttt{L}, \ttt{B}, \ttt{R}}$\;
+        $cs \leftarrow \ec{$M_U$}$\;
+
+        \BlankLine
+        $c \leftarrow \comp{$M_U$}$\;
+        $ps \leftarrow \probs{c}$\;
+
+        \BlankLine
+        \ForEach{$l \in ID_L$}{
+            $m_l \leftarrow \epm{l.body}$\;
+            \ForEach{$r \in ID_R$}{
+                $m_r \leftarrow \epm{r.body}$\;
+                \uIf{$m_l = m_r$}{
+                    $p \leftarrow \idp{l, r, ps}$\;
+                    \If{$p \neq null$}{
+                        $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
+                        $m.body \leftarrow conflict(l.body, \varepsilon, r.body)$\;
+    
+                        \BlankLine
+                        $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+                        \rn{m, M}\;
+
+                        \BlankLine
+                        $ps \leftarrow ps - p$\;
+                        \Break\;
+                    }
+                }
+                \ElseIf{$m_l = * \lor m_r = *$}{
+                    \If{\idc{l, r, cs}}{
+                        
+                    }
+                }
+            }
+        }
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Import Declarations Problem}
+
+        \KwIn{l, r, ps}
+        \KwOut{compilation problem in $ps$ concerning $l$ and $r$ import declarations, if there is one}
+
+        \BlankLine
+        \ForEach{$p \in ps$}{
+            \uIf{$p.type = COLLISION$}{
+                \ForEach{$a \in p.arguments$}{
+                    \lIf{$a \in l.body \lor a \in r.body$}{ \KwRet{p} }
+                }
+            }
+            \lElseIf{$p.type = AMBIGUITY$}{ \KwRet{p} }
+        }
+
+        \BlankLine
+        \KwRet{null}\;
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Import Declarations Conflict}
+
+        \KwIn{l, r, cs}
+        \KwOut{wether there is a unstructured conflict in $cs$ concerning $l$ and $r$ import declarations}
+
+        \BlankLine
+        \ForEach{$c \in cs$}{
+            \lIf{$l.body \in c.left \land r.body \in c.right$}{ \KwRet{TRUE} }
+        }
+
+        \BlankLine
+        \KwRet{FALSE}\;
     \end{algorithm}
 \end{document}
