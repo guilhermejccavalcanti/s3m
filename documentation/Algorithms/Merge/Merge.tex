@@ -6,7 +6,19 @@
     \subsection{Early Concepts}
 
     \begin{enumerate}
-        \item Every node's origin is set to UNKNOWN beforehand
+        \item \textbf{Every node's origin is set to UNKNOWN beforehand}
+        
+        \item \textbf{Nodes added by left}:
+        
+        $A_L \leftarrow \{l \in L \mid (\lnot \exists b \in B)(l.id = b.id)\}$\;
+
+        \item \textbf{Nodes added by right}:
+        
+        $A_R \leftarrow \{r \in R \mid (\lnot \exists b \in B)(r.id = b.id)\}$\;
+
+        \item \textbf{Nodes deleted from base}:
+        
+        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$\;
     \end{enumerate}
 
     \subsection{Merge Algorithms}
@@ -67,7 +79,6 @@
         $M \leftarrow \mn{LB, R}$\;
 
         \BlankLine
-        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$\;
         \ForEach{$d \in D_B$}{
             \rn{d, M}\;
         }
@@ -106,15 +117,13 @@
         \BlankLine
         \SetKwFunction{mc}{markContributions}
 
-        \lIf{A = null}{ \KwRet{B} }
-        \lIf{B = null}{ \KwRet{A} }
-        \lIf{$A.type \neq B.type \lor A.id \neq B.id$}{
-            \KwRet{null}
-        }
+        \lIf{A = null}{\KwRet{B}}
+        \lIf{B = null}{\KwRet{A}}
+        \lIf{$A.type \neq B.type \lor A.id \neq B.id$}{\KwRet{null}}
 
         \BlankLine
-        $M.id \leftarrow A.id$\;
-        $M.type \leftarrow A.type$\;
+        $M.id \leftarrow B.id$\;
+        $M.type \leftarrow B.type$\;
         $M.origin \leftarrow B.origin$\;
         $M.children \leftarrow \emptyset$\;
 
@@ -141,12 +150,8 @@
                 $a \leftarrow find(a \in A.children \rightarrow a.type = b.type \land a.id = b.id)$\;
 
                 \BlankLine
-                \lIf{a.origin = UNKNOWN}{
-                    $a.origin \leftarrow A.origin$
-                }
-                \lIf{b.origin = UNKNOWN}{
-                    $b.origin \leftarrow B.origin$
-                }
+                \lIf{a.origin = UNKNOWN}{$a.origin \leftarrow A.origin$}
+                \lIf{b.origin = UNKNOWN}{$b.origin \leftarrow B.origin$}
 
                 \BlankLine
                 $M.children \leftarrow M.children \cup \mn{a, b, step}$\;
@@ -157,14 +162,10 @@
                 $b \leftarrow find(b \in B.children \rightarrow a.type = b.type \land a.id = b.id)$\;
 
                 \BlankLine
-                \lIf{a.origin = UNKNOWN}{
-                    $a.origin \leftarrow A.origin$
-                }
+                \lIf{a.origin = UNKNOWN}{$a.origin \leftarrow A.origin$}
 
                 \BlankLine
-                \lIf{b = null}{
-                    $M.children \leftarrow M.children \cup a$
-                }
+                \lIf{b = null}{$M.children \leftarrow M.children \cup a$}
             }
 
             \BlankLine
