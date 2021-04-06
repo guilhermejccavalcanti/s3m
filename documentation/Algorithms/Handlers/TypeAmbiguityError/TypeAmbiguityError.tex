@@ -12,6 +12,7 @@
         \SetKwFunction{comp}{compile}
         \SetKwFunction{probs}{problems}
         \SetKwFunction{ec}{extractConflicts}
+        \SetKwFunction{ei}{extractInsertions}
         \SetKwFunction{epm}{extractPackageMember}
         \SetKwFunction{idp}{importDeclarationsProblem}
         \SetKwFunction{idc}{importDeclarationsConflict}
@@ -21,10 +22,11 @@
         $ID_R \leftarrow \{n \in A_R \mid n.type = IMPORTDECL\}$\;
 
         \BlankLine
-        \lIf{$ID_L = \emptyset \lor ID_R = \emptyset$}{ \KwRet }
+        \lIf{$ID_L = \emptyset \lor ID_R = \emptyset$}{\KwRet}
 
         \BlankLine
         $M_U \leftarrow \tm{\ttt{L}, \ttt{B}, \ttt{R}}$\;
+        $I_L, I_R \leftarrow \ei{$M_U$}$\;
         $cs \leftarrow \ec{$M_U$}$\;
 
         \BlankLine
@@ -51,9 +53,26 @@
                         \Break\;
                     }
                 }
-                \ElseIf{$m_l = * \lor m_r = *$}{
-                    \If{\idc{l, r, cs}}{
-                        
+                \ElseIf{$(m_l = * \lor m_r = *) \land \idc{l, r, cs}$}{
+                    $I \leftarrow I_L$\;
+                    $m \leftarrow m_r$\;
+
+                    \BlankLine
+                    \If{$m_l \neq *$}{
+                        $I \leftarrow I_R$\;
+                        $m \leftarrow m_l$\;
+                    }
+
+                    \BlankLine
+                    $i \leftarrow find(i \in I \rightarrow \textbf{import} \notin i \land m \in i)$\;
+                    \If{$i \neq null$}{
+                        $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
+                        $m.body \leftarrow conflict(l.body, \varepsilon, r.body)$\;
+
+                        \BlankLine
+                        $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+                        \rn{m, M}\;
+                        \Break\;
                     }
                 }
             }
@@ -70,10 +89,10 @@
         \ForEach{$p \in ps$}{
             \uIf{$p.type = COLLISION$}{
                 \ForEach{$a \in p.arguments$}{
-                    \lIf{$a \in l.body \lor a \in r.body$}{ \KwRet{p} }
+                    \lIf{$a \in l.body \lor a \in r.body$}{\KwRet{p}}
                 }
             }
-            \lElseIf{$p.type = AMBIGUITY$}{ \KwRet{p} }
+            \lElseIf{$p.type = AMBIGUITY$}{\KwRet{p}}
         }
 
         \BlankLine
@@ -88,7 +107,7 @@
 
         \BlankLine
         \ForEach{$c \in cs$}{
-            \lIf{$l.body \in c.left \land r.body \in c.right$}{ \KwRet{TRUE} }
+            \lIf{$l.body \in c.left \land r.body \in c.right$}{\KwRet{TRUE}}
         }
 
         \BlankLine
