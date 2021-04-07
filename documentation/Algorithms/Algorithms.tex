@@ -16,6 +16,30 @@
 \SetKw{Break}{break}
 
 \begin{document}
+    \section{Early Concepts}
+
+    \begin{itemize}
+        \item \textbf{Nodes added by left}:
+        
+        $A_L \leftarrow \{l \in L \mid (\lnot \exists b \in B)(l.id = b.id)\}$
+
+        \item \textbf{Nodes added by right}:
+        
+        $A_R \leftarrow \{r \in R \mid (\lnot \exists b \in B)(r.id = b.id)\}$
+
+        \item \textbf{Nodes edited by left}:
+        
+        $E_L \leftarrow \{l \in L \mid (\exists b \in B)(\exists r \in R)(l.id = b.id = r.id \land l.body \neq b.body \land b.body = r.body)\}$
+
+        \item \textbf{Nodes edited by right}:
+        
+        $E_R \leftarrow \{r \in R \mid (\exists b \in B)(\exists l \in L)(r.id = b.id = l.id \land r.body \neq b.body \land b.body = l.body)\}$
+
+        \item \textbf{Nodes deleted from base}:
+        
+        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$
+    \end{itemize}
+
     \subfile{Merge/Merge.tex}
 
     \section{Handlers}

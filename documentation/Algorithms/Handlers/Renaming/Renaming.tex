@@ -4,7 +4,7 @@
     \subsection{Renaming Handler}
     \subsubsection{Early Concepts}
 
-    \begin{enumerate}
+    \begin{itemize}
         \item \textbf{Possibly renamed without body changes nodes}:
 
         $R_{wobc}(T, B) = \{ b \in B \mid (\lnot \exists t \in T) (t.id = b.id)) \land (\exists t \in T) (t.body = b.body)\}$
@@ -16,7 +16,7 @@
         \item \textbf{Nodes IDs similarity}:
         
         $a.id \approx b.id \leftrightarrow a.id.name = b.id.name \lor a.id.params = b.id.params$
-    \end{enumerate}
+    \end{itemize}
 
     \subsubsection{Match Algorithm}
     
