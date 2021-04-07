@@ -38,27 +38,27 @@ public class LoggerTest {
     
     @Test
     public void testLogger_givenTheresOneMergerObject_whenTwoConsecutiveMergesOccur_shouldProduceOnlyOneLogFile() throws IOException {
-        int numberOfLogFilesBeforeExecution = numberOfLogFiles();
-        
         JFSTMerge merger = new JFSTMerge();
-
+        
         merge(merger, "deletioninleft");
+        int numberOfLogFiles = numberOfLogFiles();
         merge(merger, "deletioninright");
         
-        assertEquals(numberOfLogFilesBeforeExecution, numberOfLogFiles());
+        assertEquals(numberOfLogFiles, numberOfLogFiles());
     }
 
     @Test
     public void testLogger_whenTwoConsecutiveMergesOccur_shouldProduceOnlyOneLogFile() throws IOException {
-        int numberOfLogFilesBeforeExecution = numberOfLogFiles();
-
         merge(new JFSTMerge(), "deletioninleft");
+        int numberOfLogFiles = numberOfLogFiles();
         merge(new JFSTMerge(), "deletioninright");
         
-        assertEquals(numberOfLogFilesBeforeExecution, numberOfLogFiles());
+        assertEquals(numberOfLogFiles, numberOfLogFiles());
     }
 
     private int numberOfLogFiles() throws IOException {
+        if (!Files.exists(s3mFilesDirectory)) return 0;
+
         Stream<Path> walk = Files.walk(s3mFilesDirectory);
         int numberLogFiles = (int) walk.map(Path::getFileName)
                                        .map(Path::toString)
