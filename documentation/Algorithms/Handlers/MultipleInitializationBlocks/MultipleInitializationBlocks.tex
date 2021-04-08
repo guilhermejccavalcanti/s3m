@@ -20,7 +20,7 @@
         %TODO: remove duplicates
         $IB_L \leftarrow \{n \in A_L \mid n.type = INITBLOCK\}$\;
         $IB_R \leftarrow \{n \in A_R \mid n.type = INITBLOCK\}$\;
-        $IB_B \leftarrow \{n \in D_B \mid n.type = INITBLOCK\}$\;
+        $IB_B \leftarrow \{n \in D_L \cap D_R \mid n.type = INITBLOCK\}$\;
 
         \BlankLine
         $eIB_L \leftarrow \en{$IB_L$, $IB_B$}$\;

@@ -26,15 +26,17 @@
 
         $A_R \leftarrow \{r \in R \mid (\lnot \exists b \in B)(r.id = b.id)\}$
 
+        \item \textbf{Nodes deleted by left/right}:
+        
+        $D_L \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id)\}$
+
+        $D_R \leftarrow \{b \in B \mid (\lnot \exists r \in R)(b.id = r.id)\}$
+
         \item \textbf{Nodes edited by left/right}:
         
         $E_L \leftarrow \{l \in L \mid (\exists b \in B)(\exists r \in R)(l.id = b.id = r.id \land l.body \neq b.body \land b.body = r.body)\}$
 
         $E_R \leftarrow \{r \in R \mid (\exists b \in B)(\exists l \in L)(r.id = b.id = l.id \land r.body \neq b.body \land b.body = l.body)\}$
-
-        \item \textbf{Nodes deleted from base}:
-        
-        $D_B \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\lnot \exists r \in R)(b.id = r.id)\}$
     \end{itemize}
 
     \subfile{Merge/Merge.tex}
