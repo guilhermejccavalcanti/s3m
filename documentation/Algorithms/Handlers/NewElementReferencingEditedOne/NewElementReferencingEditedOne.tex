@@ -9,5 +9,64 @@
         \caption{Handle}
 
         \KwIn{L, B, R, M}
+        \SetKwFunction{nc}{nodesConflict}
+
+        \BlankLine
+        $M_U \leftarrow \tm{\ttt{L}, \ttt{B}, \ttt{R}}$\;
+        $cs \leftarrow \ec{$M_U$}$\;
+
+        \BlankLine
+        $aMFD_L \leftarrow \{l \in A_L \mid l.type = METHODDECL \lor l.type = FIELDDECL\}$\;
+        $aMFD_R \leftarrow \{r \in A_R \mid r.type = METHODDECL \lor r.type = FIELDDECL\}$\;
+
+        \BlankLine
+        $eMFD_L \leftarrow \{l \in E_L \mid l.type = METHODDECL \lor l.type = FIELDDECL\}$\;
+        $eMFD_R \leftarrow \{r \in E_R \mid r.type = METHODDECL \lor r.type = FIELDDECL\}$\;
+
+        \BlankLine
+        \ForEach{$a_l \in aMFD_L$}{
+            \ForEach{$e_r \in eMFD_R$}{
+                \If{$\nc{$a_l$, $e_r$, cs} \land e_r.id.name \in a_l.body$}{
+                    $b \leftarrow find(b \in B \rightarrow b.id = e_r.id)$\;
+                    $m \leftarrow find(m \in M \rightarrow m.body = e_r.body)$\;
+                    $m.body \leftarrow conflict(e_r.body, b.body, a_l.body)$\;
+
+                    \BlankLine
+                    $m \leftarrow find(m \in M \rightarrow m.body = a_l.body)$\;
+                    \rn{m, M}\;
+                }
+            }
+        }
+
+        \BlankLine
+        \ForEach{$a_r \in aMFD_R$}{
+            \ForEach{$e_l \in eMFD_L$}{
+                \If{$\nc{$a_r$, $e_l$, cs} \land r_l.id.name \in a_r.body$}{
+                    $b \leftarrow find(b \in B \rightarrow b.id = e_l.id)$\;
+                    $m \leftarrow find(m \in M \rightarrow m.body = e_l.body)$\;
+                    $m.body \leftarrow conflict(e_l.body, b.body, a_r.body)$\;
+
+                    \BlankLine
+                    $m \leftarrow find(m \in M \rightarrow m.body = a_r.body)$\;
+                    \rn{m, M}\;
+                }
+            }
+        }
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Nodes Conflict}
+
+        \KwIn{a, b, cs}
+        \KwOut{wether there is an unstructured conflict in $cs$ concerning $a$ and $b$ nodes}
+
+        \BlankLine
+        \ForEach{$c \in cs$}{
+            \lIf{$c.left = a.body \land c.right = b.body$}{\KwRet{TRUE}}
+            \lIf{$c.left = b.body \land c.right = a.body$}{\KwRet{TRUE}}
+        }
+
+        \BlankLine
+        \KwRet{FALSE}\;
     \end{algorithm}
 \end{document}
