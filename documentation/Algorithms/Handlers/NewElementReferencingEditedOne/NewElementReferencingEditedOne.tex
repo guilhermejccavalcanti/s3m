@@ -12,7 +12,12 @@
         \SetKwFunction{nc}{nodesConflict}
 
         \BlankLine
-        $M_U \leftarrow \tm{\ttt{L}, \ttt{B}, \ttt{R}}$\;
+        $T_L \leftarrow \ttt{L}$\;
+        $T_B \leftarrow \ttt{B}$\;
+        $T_R \leftarrow \ttt{R}$\;
+
+        \BlankLine
+        $M_U \leftarrow \tm{$T_L$, $T_B$, $T_R$}$\;
         $cs \leftarrow \ec{$M_U$}$\;
 
         \BlankLine
@@ -27,12 +32,12 @@
         \ForEach{$a_l \in aMFD_L$}{
             \ForEach{$e_r \in eMFD_R$}{
                 \If{$\nc{$a_l$, $e_r$, cs} \land e_r.id.name \in a_l.body$}{
-                    $b \leftarrow find(b \in B \rightarrow b.id = e_r.id)$\;
-                    $m \leftarrow find(m \in M \rightarrow m.body = e_r.body)$\;
-                    $m.body \leftarrow conflict(e_r.body, b.body, a_l.body)$\;
+                    $b \leftarrow$ \find{$b \in B \rightarrow b.id = e_r.id$}\;
+                    $m \leftarrow$ \find{$m \in M \rightarrow m.body = e_r.body$}\;
+                    $m.body \leftarrow \conflict{$e_r$.body, b.body, $a_l$.body}$\;
 
                     \BlankLine
-                    $m \leftarrow find(m \in M \rightarrow m.body = a_l.body)$\;
+                    $m \leftarrow$ \find{$m \in M \rightarrow m.body = a_l.body$}\;
                     \rn{m, M}\;
                 }
             }
@@ -41,13 +46,13 @@
         \BlankLine
         \ForEach{$a_r \in aMFD_R$}{
             \ForEach{$e_l \in eMFD_L$}{
-                \If{$\nc{$a_r$, $e_l$, cs} \land r_l.id.name \in a_r.body$}{
-                    $b \leftarrow find(b \in B \rightarrow b.id = e_l.id)$\;
-                    $m \leftarrow find(m \in M \rightarrow m.body = e_l.body)$\;
-                    $m.body \leftarrow conflict(e_l.body, b.body, a_r.body)$\;
+                \If{$\nc{$a_r$, $e_l$, cs} \land e_l.id.name \in a_r.body$}{
+                    $b \leftarrow$ \find{$b \in B \rightarrow b.id = e_l.id$}\;
+                    $m \leftarrow$ \find{$m \in M \rightarrow m.body = e_l.body$}\;
+                    $m.body \leftarrow \conflict{$e_l$.body, b.body, $a_r$.body}$\;
 
                     \BlankLine
-                    $m \leftarrow find(m \in M \rightarrow m.body = a_r.body)$\;
+                    $m \leftarrow$ \find{$m \in M \rightarrow m.body = a_r.body$}\;
                     \rn{m, M}\;
                 }
             }
@@ -62,11 +67,11 @@
 
         \BlankLine
         \ForEach{$c \in cs$}{
-            \lIf{$c.left = a.body \land c.right = b.body$}{\KwRet{TRUE}}
-            \lIf{$c.left = b.body \land c.right = a.body$}{\KwRet{TRUE}}
+            \lIf{$c.left = a.body \land c.right = b.body$}{\KwRet{\True}}
+            \lIf{$c.left = b.body \land c.right = a.body$}{\KwRet{\True}}
         }
 
         \BlankLine
-        \KwRet{FALSE}\;
+        \KwRet{\False}\;
     \end{algorithm}
 \end{document}

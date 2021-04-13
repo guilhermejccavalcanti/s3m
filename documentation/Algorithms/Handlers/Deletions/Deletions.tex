@@ -22,8 +22,8 @@
         \BlankLine
         \ForEach{$d_l \in D_L$}{
             \If{$d_l.children \neq \emptyset$}{
-                $r \leftarrow find(r \in R \rightarrow r.id = d_l.id)$\;
-                $m \leftarrow find(m \in M \rightarrow m.id = d_l.id)$\;
+                $r \leftarrow$ \find{$r \in R \rightarrow r.id = d_l.id$}\;
+                $m \leftarrow$ \find{$m \in M \rightarrow m.id = d_l.id$}\;
 
                 \BlankLine
                 \lIf{$\ss{$d_l$, r} \land d_l.body = r.body$}{\rn{m, M}}
@@ -33,7 +33,7 @@
                     $a_l \leftarrow \rm{$A_L$, $d_l$, $T_B$, $T_L$}$\;
 
                     \BlankLine
-                    \uIf{$a_l \neq null$}{
+                    \uIf{$a_l \neq \Null$}{
                         $r.id \leftarrow a_l.id$\;
                         \rn{$a_l$, M}\;
                         m.parent.\ac{r, m.index}\;
@@ -41,7 +41,7 @@
                     \Else{
                         $n.id \leftarrow r.id$\;
                         $n.type \leftarrow r.type$\;
-                        $n.body \leftarrow conflict(\varepsilon, d_l, r)$\;
+                        $n.body \leftarrow \conflict{$\varepsilon$, $d_l$, r}$\;
                         m.parent.\ac{n, m.index}\;
                     }
                 }
@@ -51,8 +51,8 @@
         \BlankLine
         \ForEach{$d_r \in D_R$}{
             \If{$d_r.children \neq \emptyset$}{
-                $l \leftarrow find(l \in L \rightarrow l.id = d_r.id)$\;
-                $m \leftarrow find(m \in M \rightarrow m.id = d_r.id)$\;
+                $l \leftarrow$ \find{$l \in L \rightarrow l.id = d_r.id$}\;
+                $m \leftarrow$ \find{$m \in M \rightarrow m.id = d_r.id$}\;
 
                 \BlankLine
                 \lIf{$\ss{$d_r$, l} \land d_r.body = l.body$}{\rn{m, M}}
@@ -62,7 +62,7 @@
                     $a_r \leftarrow \rm{$A_R$, $d_r$, $T_B$, $T_R$}$\;
 
                     \BlankLine
-                    \uIf{$a_r \neq null$}{
+                    \uIf{$a_r \neq \Null$}{
                         $l.id \leftarrow a_r.id$\;
                         \rn{$a_r$, M}\;
                         m.parent.\ac{l, m.index}\;
@@ -70,7 +70,7 @@
                     \Else{
                         $n.id \leftarrow l.id$\;
                         $n.type \leftarrow l.type$\;
-                        $n.body \leftarrow conflict(l, d_r, \varepsilon)$\;
+                        $n.body \leftarrow \conflict{l, $d_r$, $\varepsilon$}$\;
                         m.parent.\ac{n, m.index}\;
                     }
                 }
@@ -86,11 +86,11 @@
 
         \BlankLine
         \lIf{$A.children = \emptyset \land B.children = \emptyset$}{\KwRet{A.type = B.type}}
-        \lIf{$A.children = \emptyset \lor B.children = \emptyset$}{\KwRet{FALSE}}
-        \lIf{$|A.children| \neq |B.children|$}{\KwRet{FALSE}}
+        \lIf{$A.children = \emptyset \lor B.children = \emptyset$}{\KwRet{\False}}
+        \lIf{$|A.children| \neq |B.children|$}{\KwRet{\False}}
 
         \BlankLine
-        $result \leftarrow TRUE$\;
+        $result \leftarrow \True$\;
         \ForEach{$(a, b) \in (A.children, B.children)$}{
             $result \leftarrow result \land \ss{a, b}$\;
         }
@@ -118,6 +118,6 @@
         \KwOut{added node $a$ in $A$ with the same shape and similar body as deleted node $d$, such that there are no new references to $a$'s id in $T$}
 
         \BlankLine
-        \KwRet{$find(a \in A \rightarrow \ss{a, d} \land a.body \approx d.body \land \lnot \nr{a.id, $T_B$, T})$}\;
+        \KwRet{\find{$a \in A \rightarrow \ss{a, d} \land a.body \approx d.body \land \lnot \nr{a.id, $T_B$, T}$}}\;
     \end{algorithm}
 \end{document}

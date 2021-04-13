@@ -36,24 +36,24 @@
             $r \leftarrow eIB_R[b]$\;
 
             \BlankLine
-            \uIf{$l \neq null \land r \neq null$}{
+            \uIf{$l \neq \Null \land r \neq \Null$}{
                 \umt{l, b, r, M}\;
             }
-            \uElseIf{$l \neq null \lor r \neq null$}{
-                \uIf{$l \neq null$}{
-                    $r \leftarrow find(r \in dIB_R \rightarrow r.body = b.body)$\;
-                    \lIf{$r \neq null$}{ \rn{b, M} }
+            \uElseIf{$l \neq \Null \lor r \neq \Null$}{
+                \uIf{$l \neq \Null$}{
+                    $r \leftarrow$ \find{$r \in dIB_R \rightarrow r.body = b.body$}\;
+                    \lIf{$r \neq \Null$}{\rn{b, M}}
                 }
                 \Else{
-                    $l \leftarrow find(l \in dIB_L \rightarrow l.body = b.body)$\;
-                    \lIf{$l \neq null$}{ \rn{b, M} }
+                    $l \leftarrow$ \find{$l \in dIB_L \rightarrow l.body = b.body$}\;
+                    \lIf{$l \neq \Null$}{\rn{b, M}}
                 }
 
                 \BlankLine
                 \umt{l, b, r, M}\;
             }
             \Else{
-                $m \leftarrow find(m \in M \rightarrow m.body = b.body)$\;
+                $m \leftarrow$ \find{$m \in M \rightarrow m.body = b.body$}\;
                 \rn{m, M}\;
             }
         }
@@ -68,20 +68,20 @@
             $s \leftarrow \varepsilon$\;
             \ForEach{$r \in rs$}{
                 $s \leftarrow s + r.body$\;
-                $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+                $m \leftarrow$ \find{$m \in M \rightarrow m.body = r.body$}\;
                 \rn{r, M}\;
             }
 
             \BlankLine
-            $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
-            $m.body \leftarrow conflict(l.body, \varepsilon, s)$\;
+            $m \leftarrow$ \find{$m \in M \rightarrow m.body = l.body$}\;
+            $m.body \leftarrow \conflict{l.body, $\varepsilon$, s}$\;
         }
 
         \BlankLine
         \ForEach{$l \in aIB_L$}{
             \ForEach{$r \in aIB_R$}{
                 \If{$l.body = r.body$}{
-                    $m \in find(m \in M \rightarrow m.body = r.body)$\;
+                    $m \leftarrow$ \find{$m \in M \rightarrow m.body = r.body$}\;
                     \rn{m, M}\;
                 }
             }
@@ -105,9 +105,7 @@
         \ForEach{$a \in A$}{
             $S \leftarrow \{d \in D \mid a.body \approx d.body\}$\;
             $b \leftarrow \underset{s \in S}{\operatorname{argmax}} \; (\sim{s.body, a.body})$\;
-            \lIf{$b \neq null$}{
-                $matches \leftarrow matches \cup \{b: a\}$
-            }
+            \lIf{$b \neq \Null$}{$matches \leftarrow matches \cup \{b: a\}$}
         }
 
         \BlankLine
@@ -144,11 +142,11 @@
         \KwIn{l, b, r, M}
 
         \BlankLine
-        $m \leftarrow find(m \in M \rightarrow m.body = l.body)$\;
+        $m \leftarrow$ \find{$m \in M \rightarrow m.body = l.body$}\;
         $m.body \leftarrow \tm{l.body, b.body, r.body}$\;
 
         \BlankLine
-        $m \leftarrow find(m \in M \rightarrow m.body = r.body)$\;
+        $m \leftarrow$ \find{$m \in M \rightarrow m.body = r.body$}\;
         \rn{m, M}\;
     \end{algorithm}
 
@@ -167,9 +165,7 @@
             \BlankLine
             \ForEach{$r \in aIB_R$}{
                 $V_R \leftarrow \gv{r}$\;
-                \lIf{$V_L \cap V_R \neq \emptyset$}{
-                    $DEP[l] \leftarrow DEP[l] \cup r$
-                }
+                \lIf{$V_L \cap V_R \neq \emptyset$}{$DEP[l] \leftarrow DEP[l] \cup r$}
             }
         }
 

@@ -15,8 +15,9 @@
         \caption{Merge Files}
 
         \KwIn{l, b, r, o}
-
+        
         \BlankLine
+        \SetKwFunction{handle}{handle}
         \SetKwFunction{ftt}{fileToTree}
         \SetKwFunction{mt}{mergeTrees}
         \SetKwFunction{gah}{getActiveHandlers}
@@ -38,7 +39,7 @@
             \BlankLine
             $H \leftarrow \gah{}$\;
             \ForEach{$h \in H$}{
-                $h.handle(M)$\;
+                $h$.\handle{M}\;
             }
 
             \BlankLine
@@ -58,9 +59,9 @@
 
         \BlankLine
 
-        $L.origin = LEFT$\;
-        $B.origin = BASE$\;
-        $R.origin = RIGHT$\;
+        $L.origin \leftarrow LEFT$\;
+        $B.origin \leftarrow BASE$\;
+        $R.origin \leftarrow RIGHT$\;
 
         \BlankLine
         $LB \leftarrow \mn{L, B}$\;
@@ -105,9 +106,9 @@
         \BlankLine
         \SetKwFunction{mc}{markContributions}
 
-        \lIf{A = null}{\KwRet{B}}
-        \lIf{B = null}{\KwRet{A}}
-        \lIf{$A.type \neq B.type \lor A.id \neq B.id$}{\KwRet{null}}
+        \lIf{A = \Null}{\KwRet{B}}
+        \lIf{B = \Null}{\KwRet{A}}
+        \lIf{$A.type \neq B.type \lor A.id \neq B.id$}{\KwRet{\Null}}
 
         \BlankLine
         $M.id \leftarrow B.id$\;
@@ -135,25 +136,26 @@
         }
         \ElseIf{$A.children \neq \emptyset \land B.children \neq \emptyset$}{
             \ForEach{$b \in B.children$}{
-                $a \leftarrow find(a \in A.children \rightarrow a.type = b.type \land a.id = b.id)$\;
+                $a \leftarrow$ \find{$a \in A.children \rightarrow a.type = b.type \land a.id = b.id$}\;
 
                 \BlankLine
                 \lIf{a.origin = UNKNOWN}{$a.origin \leftarrow A.origin$}
                 \lIf{b.origin = UNKNOWN}{$b.origin \leftarrow B.origin$}
 
                 \BlankLine
-                $M.children \leftarrow M.children \cup \mn{a, b, step}$\;
+                $M.children \leftarrow M.children \cup \mn{a, b}$\;
             }
 
             \BlankLine
             \ForEach{$a \in A.children$}{
-                $b \leftarrow find(b \in B.children \rightarrow a.type = b.type \land a.id = b.id)$\;
+                $b \leftarrow$ \find{$b \in B.children \rightarrow a.type = b.type \land a.id = b.id$}\;
 
                 \BlankLine
                 \lIf{a.origin = UNKNOWN}{$a.origin \leftarrow A.origin$}
 
                 \BlankLine
-                \lIf{b = null}{$M.children \leftarrow M.children \cup a$}
+                %TODO: add at correct index
+                \lIf{b = \Null}{$M.children \leftarrow M.children \cup a$}
             }
 
             \BlankLine
@@ -161,6 +163,6 @@
         }
 
         \BlankLine
-        \KwRet{null};
+        \KwRet{\Null};
     \end{algorithm}
 \end{document}

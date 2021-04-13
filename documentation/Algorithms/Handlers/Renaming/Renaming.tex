@@ -2,16 +2,21 @@
 
 \begin{document}
     \subsection{Renaming Handler}
+
     \subsubsection{Early Concepts}
 
     \begin{itemize}
-        \item \textbf{Possibly renamed without body changes nodes}:
-
-        $R_{wobc}(T, B) = \{ b \in B \mid (\lnot \exists t \in T) (t.id = b.id)) \land (\exists t \in T) (t.body = b.body)\}$
-
-        \item \textbf{Possibly deleted or renamed with body changes nodes}:
+        \item \textbf{Nodes possibly renamed by left/right without body changes}:
         
-        $DR_{wbc}(T, B) = \{ b \in B \mid (\lnot \exists t \in T) (t.id = b.id \lor t.body = b.body)\}$
+        $R_L = \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id) \land (\exists l \in L)(b.body - l.body)\}$
+
+        $R_R = \{b \in B \mid (\lnot \exists r \in R)(b.id = r.id) \land (\exists r \in R)(b.body - r.body)\}$
+
+        \item \textbf{Nodes possibly deleted or renamed by left/right with body changes}:
+        
+        $DR_L \leftarrow \{b \in B \mid (\lnot \exists l \in L)(b.id = l.id \lor b.body = l.body)\}$
+
+        $DR_R \leftarrow \{b \in B \mid (\lnot \exists r \in R)(b.id = r.id \lor b.body = r.body)\}$
 
         \item \textbf{Nodes IDs similarity}:
         
@@ -32,7 +37,7 @@
         \SetKwFunction{mn}{mergeNode}
         
         $matches \leftarrow \emptyset$\;
-        \ForEach{$b \in DR_{wbc}(L, B) \cup DR_{wbc}(R, B) \cup R_{wobc}(L, B) \cup R_{wobc}(R, B)$}{
+        \ForEach{$b \in R_L \cup R_R \cup DR_L \cup DR_R$}{
             $l \leftarrow \cn{b, L}$\;
             $r \leftarrow \cn{b, R}$\;
             $m \leftarrow$ \colorbox{red}{$\mn{l, r, M}$}\;
@@ -47,24 +52,26 @@
         \caption{Correspondent Node}
 
         \KwIn{b, T}
-        \KwOut{b's correspondent node on tree T}
+        \KwOut{$b$'s correspondent node on tree $T$}
+
+        \SetKwFunction{substring}{substring}
 
         \BlankLine
-        $t \leftarrow findFirst(t \in T \rightarrow t.id = b.id)$\;
+        $t \leftarrow$ \findFirst{$t \in T \rightarrow t.id = b.id$}\;
             
         \BlankLine
-        \If{t = null}{
-            $t \leftarrow findFirst(t \in T \rightarrow t.body = b.body)$\;
+        \If{t = \Null}{
+            $t \leftarrow$ \findFirst{$t \in T \rightarrow t.body = b.body$}\;
         }
             
         \BlankLine
-        \If{t = null}{
-            $t \leftarrow findFirst(t \in T \rightarrow t.body \approx b.body \land t.id \approx b.id)$\;
+        \If{t = \Null}{
+            $t \leftarrow$ \findFirst{$t \in T \rightarrow t.id \approx b.id \land t.body \approx b.body$}\;
         }
             
         \BlankLine
-        \If{t = null}{
-            $t \leftarrow findFirst(t \in T \rightarrow t.body = substring(b.body) \lor b.body = substring(t.body))$\;
+        \If{t = \Null}{
+            $t \leftarrow$ \findFirst{$t \in T \rightarrow t.body = \substring{b.body} \lor b.body = \substring{t.body}$}\;
         }
 
         \BlankLine
@@ -78,17 +85,17 @@
         \KwOut{l and r's merge node on tree M}
 
         \BlankLine
-        \If{$l \neq null$}{
-            \KwRet{$find(m \in M \rightarrow m.id = l.id)$}\;
+        \If{$l \neq \Null$}{
+            \KwRet{\find{$m \in M \rightarrow m.id = l.id$}}\;
         }
 
         \BlankLine
-        \If{$r \neq null$}{
-            \KwRet{$find(m \in M \rightarrow m.id = r.id)$}\;
+        \If{$r \neq \Null$}{
+            \KwRet{\find{$m \in M \rightarrow m.id = r.id$}}\;
         }
 
         \BlankLine
-        \KwRet{null}\;
+        \KwRet{\Null}\;
     \end{algorithm}
 
     \subsubsection{Handler Algorithms}
@@ -105,19 +112,19 @@
 
         \BlankLine
         \uIf{$l.id = b.id \lor r.id = b.id$}{
-            $m.body = textualMerge(l, b, r)$\;
+            $m.body \leftarrow \tm{l, b, r}$\;
             \colorbox{red}{\run{l, r, m, M}}\;
         }
         \uElseIf{$l.id \neq r.id$}{
-            $m.body = conflit(l.body, b.body, r.body)$\;
+            $m.body \leftarrow \conflict{l.body, b.body, r.body}$\;
             \colorbox{red}{\run{l, r, m, M}}\;
         }
         \ElseIf{$l.body \neq r.body$}{
             \uIf{$\nrt{l} \lor \nrt{r}$}{
-                $m.body = conflict(l.body, b.body, r.body)$\;
+                $m.body \leftarrow \conflict{l.body, b.body, r.body}$\;
             }
             \Else{
-                $m.body = textualMerge(l, b, r)$\;
+                $m.body \leftarrow \tm{l, b, r}$\;
             }
 
             \BlankLine
@@ -131,7 +138,7 @@
         \KwIn{\colorbox{red}{(l, b, r, m), M}}
 
         \BlankLine
-        \colorbox{red}{$m.body = textualMerge(l, b, r)$}\;
+        \colorbox{red}{$m.body \leftarrow \tm{l, b, r}$}\;
 
         \colorbox{red}{\run{l, r, m, M}}\;
     \end{algorithm}
@@ -146,12 +153,12 @@
         
         \uIf{$l.id = b.id \lor r.id = b.id$}{
             \If{\tmhcis{b}}{
-                $m.body = conflict(l.body, b.body, r.body)$\;
+                $m.body \leftarrow \conflict{l.body, b.body, r.body}$\;
                 \colorbox{red}{\run{l, r, m, M}}\;
             }
         }
         \ElseIf{\colorbox{red}{$l.id \neq r.id \land l.body = r.body$}}{
-            $m.body = conflict(l.body, b.body, r.body)$\;
+            $m.body \leftarrow \conflict{l.body, b.body, r.body}$\;
             \colorbox{red}{\run{l, r, m, M}}\;
         }
     \end{algorithm}
@@ -162,10 +169,11 @@
         \KwIn{\colorbox{red}{(l, b, r, m), M}}
         
         \BlankLine
-        \SetKwFunction{hc}{hasConflict}
+        \SetKwFunction{hasConflict}{hasConflict}
+        \SetKwFunction{removeConflict}{removeConflict}
         
-        \If{$(l.id = b.id \lor r.id = b.id) \land \hc{m}$}{
-            $removeConflict(m)$\;
+        \If{$(l.id = b.id \lor r.id = b.id) \land \hasConflict{m}$}{
+            \removeConflict{m}\;
         }
     \end{algorithm}
 
