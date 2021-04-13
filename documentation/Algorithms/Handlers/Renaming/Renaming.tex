@@ -40,7 +40,7 @@
         \ForEach{$b \in R_L \cup R_R \cup DR_L \cup DR_R$}{
             $l \leftarrow \cn{b, L}$\;
             $r \leftarrow \cn{b, R}$\;
-            $m \leftarrow$ \colorbox{red}{$\mn{l, r, M}$}\;
+            $m \leftarrow$ $\mn{l, r, M}$\;
             $matches \leftarrow matches \cup (l, b, r, m)$\;
         }
 
@@ -81,7 +81,7 @@
     \begin{algorithm}[H]
         \caption{Merge Node}
 
-        \KwIn{\colorbox{red}{l, r, M}}
+        \KwIn{l, r, M}
         \KwOut{l and r's merge node on tree M}
 
         \BlankLine
@@ -108,16 +108,16 @@
 
         \SetKwFunction{nrt}{newReferenceTo}
 
-        \KwIn{\colorbox{red}{(l, b, r, m), M}}
+        \KwIn{(l, b, r, m), M}
 
         \BlankLine
         \uIf{$l.id = b.id \lor r.id = b.id$}{
             $m.body \leftarrow \tm{l, b, r}$\;
-            \colorbox{red}{\run{l, r, m, M}}\;
+            \run{l, r, m, M}\;
         }
         \uElseIf{$l.id \neq r.id$}{
             $m.body \leftarrow \conflict{l.body, b.body, r.body}$\;
-            \colorbox{red}{\run{l, r, m, M}}\;
+            \run{l, r, m, M}\;
         }
         \ElseIf{$l.body \neq r.body$}{
             \uIf{$\nrt{l} \lor \nrt{r}$}{
@@ -128,25 +128,25 @@
             }
 
             \BlankLine
-            \colorbox{red}{\run{l, r, m, M}}\;
+            \run{l, r, m, M}\;
         }
     \end{algorithm}
     
     \begin{algorithm}[H]
         \caption{Merge Methods Variant}
 
-        \KwIn{\colorbox{red}{(l, b, r, m), M}}
+        \KwIn{(l, b, r, m), M}
 
         \BlankLine
-        \colorbox{red}{$m.body \leftarrow \tm{l, b, r}$}\;
+        $m.body \leftarrow \tm{l, b, r}$\;
 
-        \colorbox{red}{\run{l, r, m, M}}\;
+        \run{l, r, m, M}\;
     \end{algorithm}
     
     \begin{algorithm}[H]
         \caption{Check Textual and Keep Both Methods Variant}
         
-        \KwIn{\colorbox{red}{(l, b, r, m), M}}
+        \KwIn{(l, b, r, m), M}
         
         \BlankLine
         \SetKwFunction{tmhcis}{textualMergeHasConflictInvolvingSignature}
@@ -154,19 +154,19 @@
         \uIf{$l.id = b.id \lor r.id = b.id$}{
             \If{\tmhcis{b}}{
                 $m.body \leftarrow \conflict{l.body, b.body, r.body}$\;
-                \colorbox{red}{\run{l, r, m, M}}\;
+                \run{l, r, m, M}\;
             }
         }
-        \ElseIf{\colorbox{red}{$l.id \neq r.id \land l.body = r.body$}}{
+        \ElseIf{$l.id \neq r.id \land l.body = r.body$}{
             $m.body \leftarrow \conflict{l.body, b.body, r.body}$\;
-            \colorbox{red}{\run{l, r, m, M}}\;
+            \run{l, r, m, M}\;
         }
     \end{algorithm}
     
     \begin{algorithm}[H]
         \caption{Keep Both Methods Variant}
         
-        \KwIn{\colorbox{red}{(l, b, r, m), M}}
+        \KwIn{(l, b, r, m), M}
         
         \BlankLine
         \SetKwFunction{hasConflict}{hasConflict}
