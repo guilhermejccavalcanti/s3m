@@ -1,0 +1,62 @@
+\documentclass[../../Algorithms.tex]{subfiles}
+
+\begin{document}
+    \subsection{Initialization Blocks Handler}
+
+    \subsubsection{Handler Algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Handle}
+
+        \KwIn{L, B, R, M}
+
+        \BlankLine
+        $IB_L \leftarrow \{n \in A_L \mid n.type = INITBLOCK\}$\;
+        $IB_R \leftarrow \{n \in A_R \mid n.type = INITBLOCK\}$\;
+        $IB_B \leftarrow \{n \in D_L \cap D_R \mid n.type = INITBLOCK\}$\;
+
+        \BlankLine
+        $matches \leftarrow \emptyset$\;
+        \uIf{$|IB_L| = 1 \land |IB_B| = 1 \land |IB_R| = 1$}{
+            $matches \leftarrow matches \cup (IB_{L_1}, IB_{B_1}, IB_{R_1})$\;
+        }
+        \Else{
+            \ForEach{$b \in IB_B$}{
+                $l \leftarrow$ \findFirst{$l \in IB_L \rightarrow l.body \approx b.body$}\;
+                $r \leftarrow$ \findFirst{$r \in IB_R \rightarrow r.body \approx b.body$}\;
+
+                \BlankLine
+                $IB_L \leftarrow IB_L - l$\;
+                $IB_R \leftarrow IB_R - r$\;
+
+                \BlankLine
+                \If{$l \neq \Null \land r \neq \Null$}{
+                    $matches \leftarrow matches \cup (l, b, r)$\;
+                }
+            }
+
+            \BlankLine
+            \ForEach{$l \in IB_L$}{
+                $r \leftarrow$ \findFirst{$r \in IB_R \rightarrow r.body \approx l.body$}\;
+
+                \BlankLine
+                $IB_R \leftarrow IB_R - r$\;
+
+                \BlankLine
+                \If{$r \neq \Null$}{
+                    $matches \leftarrow matches \cup (l, \Null, r)$\;
+                }
+            }
+        }
+
+        \BlankLine
+        \ForEach{$(l, b, r) \in matches$}{
+            $m \leftarrow$ \find{$m \in M \rightarrow m.body = l.body$}\;
+            $m.body \leftarrow \tm{l.body, b.body, r.body}$\;
+
+            \BlankLine
+            $m \leftarrow$ \find{$m \in M \rightarrow m.body = r.body$}\;
+            \rn{m, M}\;
+        }
+    \end{algorithm}
+\end{document}
