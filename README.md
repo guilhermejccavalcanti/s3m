@@ -1,4 +1,5 @@
-# Semistructured 3-Way Merge [![Build Status](https://github.com/guilhermejccavalcanti/jFSTMerge/workflows/build.yml/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
+# Semistructured 3-Way Merge
+[![Build Status](https://github.com/guilhermejccavalcanti/jFSTMerge/actions/workflows/build.yml/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
 
 ## Table of Contents
 * [What is semistructured merge?](https://github.com/guilhermejccavalcanti/jFSTMerge#what-is-semistructured-merge-?)
