@@ -16,6 +16,7 @@ import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.MergeScenario;
 import br.ufpe.cin.mergers.util.RenamingStrategy;
+import br.ufpe.cin.mergers.util.converters.MergeStrategyConverter;
 import br.ufpe.cin.mergers.util.converters.RenamingStrategyConverter;
 import br.ufpe.cin.printers.Prettyprinter;
 import br.ufpe.cin.statistics.Statistics;
@@ -63,8 +64,6 @@ public class JFSTMerge {
 	+ "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
 
-	public static MergeStrategy mergeStrategy = new TextualMerge();
-
 	@Parameter(names = "-g", description = "Parameter to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
 
@@ -87,6 +86,9 @@ public class JFSTMerge {
 
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
+
+	@Parameter(names = "--merge-strategy", description = "Parameter to choose merge strategy on terminal nodes.", converter = MergeStrategyConverter.class)
+	public static MergeStrategy mergeStrategy = new TextualMerge();
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
 	@Parameter(names = {"-r", "--renaming-strategy"}, description = "Parameter to choose strategy on renaming conflicts.",
