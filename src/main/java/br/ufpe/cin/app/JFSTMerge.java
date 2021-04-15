@@ -87,6 +87,7 @@ public class JFSTMerge {
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
 
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
 	@Parameter(names = "--merge-strategy", description = "Parameter to choose merge strategy on terminal nodes.", converter = MergeStrategyConverter.class)
 	public static MergeStrategy mergeStrategy = new TextualMerge();
 
