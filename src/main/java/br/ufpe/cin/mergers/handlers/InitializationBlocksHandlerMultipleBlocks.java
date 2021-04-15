@@ -111,7 +111,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		if(leftNode != null && rightNode != null) {
 			// both branches edited the node
 			
-		    String mergedContent = TextualMerge.merge(leftContent, baseContent, rightContent, 
+		    String mergedContent = JFSTMerge.mergeStrategy.merge(leftContent, baseContent, rightContent, 
 					JFSTMerge.isWhitespaceIgnored);
 		    
             FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, mergedContent);
@@ -213,10 +213,10 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		
 		// order of parameters changes depending on which branch changes/deleted the node
 		if(isLeftNode) {
-			mergedContent = TextualMerge.merge(otherNodeContent, baseContent, editedNodeContent, 
+			mergedContent = JFSTMerge.mergeStrategy.merge(otherNodeContent, baseContent, editedNodeContent, 
 					JFSTMerge.isWhitespaceIgnored);
 		} else {
-			mergedContent = TextualMerge.merge(editedNodeContent, baseContent, otherNodeContent, 
+			mergedContent = JFSTMerge.mergeStrategy.merge(editedNodeContent, baseContent, otherNodeContent, 
 					JFSTMerge.isWhitespaceIgnored);
 		}
 		

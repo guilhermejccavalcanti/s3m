@@ -23,7 +23,7 @@ import br.ufpe.cin.files.FilesManager;
  * unstructured merge to output base's contribution in conflicts, conformant with diff3 style.
  * @author Guilherme
  */
-public final class TextualMerge {
+public final class TextualMerge implements MergeStrategy {
 
 	private static String encoding;
 
@@ -62,8 +62,12 @@ public final class TextualMerge {
 		String leftContent = ((left == null || !left.exists()) ? "" : FilesManager.readFileContent(left));
 		String baseContent = ((base == null || !base.exists()) ? "" : FilesManager.readFileContent(base));
 		String rightContent= ((right== null || !right.exists())? "" : FilesManager.readFileContent(right));
-		textualMergeResult = merge(leftContent,baseContent,rightContent,ignoreWhiteSpaces);
+		textualMergeResult = mergeContents(leftContent, baseContent, rightContent, ignoreWhiteSpaces);
 		return textualMergeResult;
+	}
+
+	public String merge(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException {
+		return mergeContents(leftContent, baseContent, rightContent, ignoreWhiteSpaces);
 	}
 
 	/**
@@ -75,7 +79,7 @@ public final class TextualMerge {
 	 * @return merged string.
 	 * @throws TextualMergeException 
 	 */
-	public static String merge(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException{
+	private static String mergeContents(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException {
 		String textualMergeResult = null;
 		try{
 			RawTextComparator textComparator = ((ignoreWhiteSpaces) ? RawTextComparator.WS_IGNORE_ALL : RawTextComparator.DEFAULT);

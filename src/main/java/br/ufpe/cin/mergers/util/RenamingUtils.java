@@ -256,7 +256,7 @@ public class RenamingUtils {
 
 	private static String mergeContent(FSTNode leftNode, FSTNode baseNode, FSTNode rightNode)
 			throws TextualMergeException {
-		return TextualMerge.merge(getNodeContent(leftNode), getNodeContent(baseNode), getNodeContent(rightNode),
+		return JFSTMerge.mergeStrategy.merge(getNodeContent(leftNode), getNodeContent(baseNode), getNodeContent(rightNode),
 				JFSTMerge.isWhitespaceIgnored);
 	}
 
@@ -287,7 +287,7 @@ public class RenamingUtils {
 			}
 		}
 
-		return TextualMerge.merge(left, base, right, JFSTMerge.isWhitespaceIgnored);
+		return JFSTMerge.mergeStrategy.merge(left, base, right, JFSTMerge.isWhitespaceIgnored);
 	}
 
 	public static String getNodeContent(FSTNode node) {

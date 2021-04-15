@@ -422,7 +422,7 @@ public final class SemistructuredMerge {
 		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
     		identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
 
-		return TextualMerge.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
+		return JFSTMerge.mergeStrategy.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
 	}
 
 	private static String mergePrefixContent(FSTNode node, MergeContext context, String nodeField)

@@ -9,6 +9,7 @@ import br.ufpe.cin.files.FilesEncoding;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.files.FilesTuple;
 import br.ufpe.cin.logging.LoggerFactory;
+import br.ufpe.cin.mergers.MergeStrategy;
 import br.ufpe.cin.mergers.SemistructuredMerge;
 import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeConflict;
@@ -50,17 +51,19 @@ public class JFSTMerge {
 
 	//indicator of conflicting merge
 	private static int conflictState = 0;
-
+	
 	// EncrypterDecrypter
 	private FileEncrypterDecrypter fileEncrypterDecrypter = new FileEncrypterDecrypter();
-
+	
 	//command line options
 	@Parameter(arity = 3, description = "MinePath BasePath YoursPath", required = true, listConverter = FileConverter.class)
 	List<File> files = new ArrayList<>();
-
+	
 	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
-            + "then it will use \"yours\" as the destination for the merge. ")
+	+ "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
+
+	public static MergeStrategy mergeStrategy = new TextualMerge();
 
 	@Parameter(names = "-g", description = "Parameter to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
