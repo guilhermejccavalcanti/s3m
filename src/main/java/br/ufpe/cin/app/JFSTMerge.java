@@ -9,14 +9,14 @@ import br.ufpe.cin.files.FilesEncoding;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.files.FilesTuple;
 import br.ufpe.cin.logging.LoggerFactory;
-import br.ufpe.cin.mergers.MergeStrategy;
+import br.ufpe.cin.mergers.Diff3;
 import br.ufpe.cin.mergers.SemistructuredMerge;
-import br.ufpe.cin.mergers.TextualMerge;
+import br.ufpe.cin.mergers.TextualMergeStrategy;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.MergeScenario;
 import br.ufpe.cin.mergers.util.RenamingStrategy;
-import br.ufpe.cin.mergers.util.converters.MergeStrategyConverter;
+import br.ufpe.cin.mergers.util.converters.TextualMergeStrategyConverter;
 import br.ufpe.cin.mergers.util.converters.RenamingStrategyConverter;
 import br.ufpe.cin.printers.Prettyprinter;
 import br.ufpe.cin.statistics.Statistics;
@@ -88,8 +88,8 @@ public class JFSTMerge {
 	public static boolean keepBothVersionsOfRenamedMethod = false;
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-	@Parameter(names = "--merge-strategy", description = "Parameter to choose merge strategy on terminal nodes.", converter = MergeStrategyConverter.class)
-	public static MergeStrategy mergeStrategy = new TextualMerge();
+	@Parameter(names = "--merge-strategy", description = "Parameter to choose merge strategy on terminal nodes.", converter = TextualMergeStrategyConverter.class)
+	public static TextualMergeStrategy textualMergeStrategy = new Diff3();
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
 	@Parameter(names = {"-r", "--renaming-strategy"}, description = "Parameter to choose strategy on renaming conflicts.",
@@ -232,7 +232,7 @@ public class JFSTMerge {
 			long t0 = System.nanoTime();
 			try {
 				//running unstructured merge first is necessary due to future steps.
-				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
+				context.unstructuredOutput = Diff3.merge(left, base, right, false);
 				context.unstructuredMergeTime = System.nanoTime() - t0;
 
 				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);

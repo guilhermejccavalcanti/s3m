@@ -23,7 +23,7 @@ import br.ufpe.cin.files.FilesManager;
  * unstructured merge to output base's contribution in conflicts, conformant with diff3 style.
  * @author Guilherme
  */
-public final class TextualMerge implements MergeStrategy {
+public final class Diff3 implements TextualMergeStrategy {
 
 	private static String encoding;
 
