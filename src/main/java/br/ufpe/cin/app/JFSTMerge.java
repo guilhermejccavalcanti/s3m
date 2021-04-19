@@ -65,8 +65,8 @@ public class JFSTMerge {
 	@Parameter(names = "-g", description = "Parameter to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
 
-	@Parameter(names = "-u", description = "Parameter to enable writing unstructured merge output to file")
-	public static boolean showUnstructuredOutput = false;
+	@Parameter(names = "-u", description = "Parameter to disable writing unstructured merge output to file")
+	public static boolean showUnstructuredOutput = true;
 
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).", arity = 1)
 	private boolean isCryptographed = true;
