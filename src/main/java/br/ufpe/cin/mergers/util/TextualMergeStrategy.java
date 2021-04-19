@@ -1,4 +1,4 @@
-package br.ufpe.cin.mergers;
+package br.ufpe.cin.mergers.util;
 
 import br.ufpe.cin.exceptions.TextualMergeException;
 

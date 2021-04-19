@@ -1,4 +1,4 @@
-package br.ufpe.cin.mergers;
+package br.ufpe.cin.mergers.textual;
 
 import java.io.ByteArrayOutputStream;
 import java.io.File;
@@ -16,6 +16,7 @@ import br.ufpe.cin.exceptions.ExceptionUtils;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesEncoding;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.util.TextualMergeStrategy;
 
 /**
  * Represents unstructured, linebased, textual merge.
