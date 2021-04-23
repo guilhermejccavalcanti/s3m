@@ -7,6 +7,7 @@ import java.nio.charset.Charset;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 
 import com.google.common.io.CharStreams;
 
@@ -15,10 +16,11 @@ import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.TextualMergeStrategy;
 
 public class CSDiff implements TextualMergeStrategy {
+    private static final String tempPath = System.getProperty("java.io.tmpdir");
     private static final String CSDiffScriptPath = "/csdiff.sh";
-    private static final String CSDiffOutputFileName = "csdiff-merge-output";
-    private static final String diff3OutputFileName = "diff3-merge-output";
-    private static final String gitMergeOutputFileName = "git-merge-output";
+    private static final String CSDiffOutputFileName = "csdiff-output";
+    private static final String diff3OutputFileName = "diff3-output";
+    private static final String gitMergeOutputFileName = "git_merge.java";
 
     public String merge(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException {
         try {
@@ -54,12 +56,12 @@ public class CSDiff implements TextualMergeStrategy {
 
     private static void runCSDiff(Path left, Path base, Path right, Path CSDiffOutput, Path diff3Output) throws IOException, InterruptedException {
         Path script = createScriptFile();
-        Path gitMergeOutputFile = createTempJavaFile(gitMergeOutputFileName);
 
         String[] command = buildCommand(script, left, base, right, CSDiffOutput, diff3Output);
         Process process = Runtime.getRuntime().exec(command);
         process.waitFor();
 
+        Path gitMergeOutputFile = Paths.get(tempPath, gitMergeOutputFileName);
         deleteTempFiles(script, gitMergeOutputFile);
     }
 
