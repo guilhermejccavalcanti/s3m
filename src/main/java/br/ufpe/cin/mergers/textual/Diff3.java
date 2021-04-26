@@ -26,7 +26,7 @@ import br.ufpe.cin.mergers.util.TextualMergeStrategy;
  */
 public final class Diff3 implements TextualMergeStrategy {
 
-	public static String encoding;
+	private static String encoding;
 
 	/**
 	 * Three-way unstructured merge of three given files.
