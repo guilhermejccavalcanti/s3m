@@ -4,6 +4,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
 
 import com.google.common.io.CharStreams;
@@ -62,7 +63,7 @@ public class CSDiff implements TextualMergeStrategy {
 
     private static File createScriptFile() throws IOException {
         InputStream scriptStream = CSDiff.class.getResourceAsStream(CSDiffScriptPath);
-        InputStreamReader scriptStreamReader = new InputStreamReader(scriptStream);
+        InputStreamReader scriptStreamReader = new InputStreamReader(scriptStream, StandardCharsets.UTF_8);
         String content = CharStreams.toString(scriptStreamReader);
         
         File file = File.createTempFile("csdiff", ".sh");
