@@ -6,11 +6,18 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Paths;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.LinkedList;
+import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.io.CharStreams;
 
+import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.TextualMergeStrategy;
 
 public class CSDiff implements TextualMergeStrategy {
@@ -29,7 +36,8 @@ public class CSDiff implements TextualMergeStrategy {
             File outputFile = createTempJavaFile(CSDiffOutputFileName);
             
             runCSDiff(leftFile, baseFile, rightFile, outputFile);
-            return FilesManager.readFileContent(outputFile);
+            String output = FilesManager.readFileContent(outputFile);
+            return fixConflictMarkers(output);
         } catch (IOException e) {
             throw new TextualMergeException("Error during opening/closing of temporary files");
         } catch (InterruptedException e) {
@@ -76,7 +84,7 @@ public class CSDiff implements TextualMergeStrategy {
         boolean isWindows = System.getProperty("os.name").toLowerCase().trim().startsWith("windows");
 
         String[] command = new String[7];
-        command[0] = isWindows ? "" : "sh";
+        command[0] = isWindows ? "" : "sh"; //TODO: add command for Windows
         command[1] = script.getAbsolutePath();
         command[2] = left.getAbsolutePath();
         command[3] = base.getAbsolutePath();
@@ -85,5 +93,55 @@ public class CSDiff implements TextualMergeStrategy {
         command[6] = diff3Output.getAbsolutePath();
 
         return command;
+    }
+
+    private static String fixConflictMarkers(String output) {
+        List<String> lines = new ArrayList<String>(Arrays.asList(output.split("\\R")));
+
+        for (int i = 0; i < lines.size(); i++)
+            lines.set(i, handleOutputLine(lines.get(i)));
+
+        if (!JFSTMerge.showBase)
+            removeBaseFromConflicts(lines);
+
+        String result = "";
+        for (int i = 0; i < lines.size(); i++) {
+            if (i > 0) result += "\n";
+            result += lines.get(i);
+        }
+
+        return result;
+    }
+    
+    private static String handleOutputLine(String line) {
+        if (line.startsWith("<<<<<<<"))
+            return MergeConflict.MINE_CONFLICT_MARKER;
+        
+        if (line.startsWith("|||||||"))
+            return MergeConflict.BASE_CONFLICT_MARKER;
+        
+        if (line.startsWith(">>>>>>>"))
+            return MergeConflict.YOURS_CONFLICT_MARKER;
+        
+        return line;
+    }
+
+    private static void removeBaseFromConflicts(List<String> lines) {
+        int index = 0;
+        boolean inBase = false;
+
+        while (index < lines.size()) {
+            if (lines.get(index).equals(MergeConflict.BASE_CONFLICT_MARKER)) {
+                inBase = true;
+                lines.remove(index);
+            } else if (lines.get(index).equals(MergeConflict.CHANGE_CONFLICT_MARKER)) {
+                index++;
+                inBase = false;
+            } else if (inBase) {
+                lines.remove(index);
+            } else {
+                index++;
+            }
+        }
     }
 }
