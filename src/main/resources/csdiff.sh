@@ -38,7 +38,4 @@ sed "s/\(<<<<<<< $ESCAPED_TEMP_LEFT\)\(.\+\)/\1\n\2/" "$parentFolder/merged" \
 | sed "s/$ESCAPED_TEMP_BASE/$ESCAPED_BASE/g" \
 | sed "s/$ESCAPED_TEMP_RIGHT/$ESCAPED_RIGHT/g" > $4
 
-diff3 -m $1 $2 $3 > $5
-git merge-file -p --diff3 $1 $2 $3 > "$parentFolder/git_merge.java"
-
 rm "$parentFolder/merged"

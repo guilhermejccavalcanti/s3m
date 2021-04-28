@@ -5,12 +5,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Arrays;
-import java.util.LinkedList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import com.google.common.io.CharStreams;
 
@@ -21,19 +18,14 @@ import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.TextualMergeStrategy;
 
 public class CSDiff implements TextualMergeStrategy {
-    private static final String tempPath = System.getProperty("java.io.tmpdir");
-
     private static final String CSDiffScriptPath = "/csdiff.sh";
-    private static final String CSDiffOutputFileName = "csdiff-output";
-    private static final String diff3OutputFileName = "diff3-output";
-    private static final String gitMergeOutputFileName = "git_merge.java";
 
     public String merge(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException {
         try {
             File leftFile = createContributionFile("left", leftContent);
             File baseFile = createContributionFile("base", baseContent);
             File rightFile = createContributionFile("right", rightContent);
-            File outputFile = createTempJavaFile(CSDiffOutputFileName);
+            File outputFile = createTempJavaFile("output");
             
             runCSDiff(leftFile, baseFile, rightFile, outputFile);
             String output = FilesManager.readFileContent(outputFile);
@@ -59,14 +51,10 @@ public class CSDiff implements TextualMergeStrategy {
     
     private static void runCSDiff(File left, File base, File right, File output) throws IOException, InterruptedException {
         File script = createScriptFile();
-        File diff3Output = createTempJavaFile(diff3OutputFileName);
+        String[] command = buildCommand(script, left, base, right, output);
 
-        String[] command = buildCommand(script, left, base, right, output, diff3Output);
         Process process = Runtime.getRuntime().exec(command);
         process.waitFor();
-
-        // Deletes CSDiff's generated git_merge.java file
-        Paths.get(tempPath, gitMergeOutputFileName).toFile().delete();
     }
 
     private static File createScriptFile() throws IOException {
@@ -80,17 +68,16 @@ public class CSDiff implements TextualMergeStrategy {
         return file;
     }
 
-    private static String[] buildCommand(File script, File left, File base, File right, File CSDiffOutput, File diff3Output) {
+    private static String[] buildCommand(File script, File left, File base, File right, File output) {
         boolean isWindows = System.getProperty("os.name").toLowerCase().trim().startsWith("windows");
 
-        String[] command = new String[7];
+        String[] command = new String[6];
         command[0] = isWindows ? "" : "sh"; //TODO: add command for Windows
         command[1] = script.getAbsolutePath();
         command[2] = left.getAbsolutePath();
         command[3] = base.getAbsolutePath();
         command[4] = right.getAbsolutePath();
-        command[5] = CSDiffOutput.getAbsolutePath();
-        command[6] = diff3Output.getAbsolutePath();
+        command[5] = output.getAbsolutePath();
 
         return command;
     }
@@ -98,8 +85,14 @@ public class CSDiff implements TextualMergeStrategy {
     private static String fixConflictMarkers(String output) {
         List<String> lines = new ArrayList<String>(Arrays.asList(output.split("\\R")));
 
-        for (int i = 0; i < lines.size(); i++)
-            lines.set(i, handleOutputLine(lines.get(i)));
+        for (int i = 0; i < lines.size(); i++) {
+            if (lines.get(i).startsWith("<<<<<<<"))
+                lines.set(i, MergeConflict.MINE_CONFLICT_MARKER);
+            else if (lines.get(i).startsWith("|||||||"))
+                lines.set(i, MergeConflict.BASE_CONFLICT_MARKER);
+            else if (lines.get(i).startsWith(">>>>>>>"))
+                lines.set(i, MergeConflict.YOURS_CONFLICT_MARKER);
+        }
 
         if (!JFSTMerge.showBase)
             removeBaseFromConflicts(lines);
@@ -111,19 +104,6 @@ public class CSDiff implements TextualMergeStrategy {
         }
 
         return result;
-    }
-    
-    private static String handleOutputLine(String line) {
-        if (line.startsWith("<<<<<<<"))
-            return MergeConflict.MINE_CONFLICT_MARKER;
-        
-        if (line.startsWith("|||||||"))
-            return MergeConflict.BASE_CONFLICT_MARKER;
-        
-        if (line.startsWith(">>>>>>>"))
-            return MergeConflict.YOURS_CONFLICT_MARKER;
-        
-        return line;
     }
 
     private static void removeBaseFromConflicts(List<String> lines) {
