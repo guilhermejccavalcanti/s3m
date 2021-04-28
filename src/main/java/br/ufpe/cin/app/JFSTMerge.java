@@ -88,7 +88,7 @@ public class JFSTMerge {
 	public static boolean keepBothVersionsOfRenamedMethod = false;
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-	@Parameter(names = "--merge-strategy", description = "Parameter to choose merge strategy on terminal nodes.", converter = TextualMergeStrategyConverter.class)
+	@Parameter(names = { "--textual-merge-strategy", "-tms" }, description = "Parameter to choose merge strategy on terminal nodes.", converter = TextualMergeStrategyConverter.class)
 	public static TextualMergeStrategy textualMergeStrategy = new Diff3();
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
