@@ -731,4 +731,13 @@ public final class FilesManager {
 		}
 		return lastLine;
 	}
+
+	/**
+	 * Creates a temporary file on system's default temporary directory
+	 */
+	public static File createTempFile(String name) throws IOException {
+		File file = File.createTempFile(name, ".tmp");
+		file.deleteOnExit();
+		return file;
+	}
 }

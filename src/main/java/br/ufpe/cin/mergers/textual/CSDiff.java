@@ -25,47 +25,51 @@ public class CSDiff implements TextualMergeStrategy {
             File leftFile = createContributionFile("left", leftContent);
             File baseFile = createContributionFile("base", baseContent);
             File rightFile = createContributionFile("right", rightContent);
-            File outputFile = createTempJavaFile("output");
+            File outputFile = FilesManager.createTempFile("output");
             
             runCSDiff(leftFile, baseFile, rightFile, outputFile);
             String output = FilesManager.readFileContent(outputFile);
             return fixConflictMarkers(output);
         } catch (IOException e) {
-            throw new TextualMergeException("Error during opening/closing of temporary files");
-        } catch (InterruptedException e) {
-            throw new TextualMergeException("Error during CSDiff's execution");
+            throw new TextualMergeException("Error during opening of temporary output file");
         }
     }
     
-    private static File createContributionFile(String name, String content) throws IOException {
-        File file = createTempJavaFile(name);
-        FilesManager.writeContent(file.getAbsolutePath(), content);
-        return file;
+    private static File createContributionFile(String name, String content) throws TextualMergeException {
+        try {
+            File file = FilesManager.createTempFile(name);
+            FilesManager.writeContent(file.getAbsolutePath(), content);
+            return file;
+        } catch (IOException e) {
+            throw new TextualMergeException("Error during opening of temporary files");
+        }
     }
     
-    private static File createTempJavaFile(String name) throws IOException {
-        File file = File.createTempFile(name, ".java");
-        file.deleteOnExit();
-        return file;
-    }
-    
-    private static void runCSDiff(File left, File base, File right, File output) throws IOException, InterruptedException {
-        File script = createScriptFile();
-        String[] command = buildCommand(script, left, base, right, output);
+    private static void runCSDiff(File left, File base, File right, File output) throws TextualMergeException {
+        try {
+            File script = createScriptFile();
+            String[] command = buildCommand(script, left, base, right, output);
 
-        Process process = Runtime.getRuntime().exec(command);
-        process.waitFor();
+            Process process = Runtime.getRuntime().exec(command);
+            process.waitFor();
+        } catch (InterruptedException|IOException e) {
+            throw new TextualMergeException("Error during CSDiff's execution");
+        }
     }
 
-    private static File createScriptFile() throws IOException {
-        InputStream scriptStream = CSDiff.class.getResourceAsStream(CSDiffScriptPath);
-        InputStreamReader scriptStreamReader = new InputStreamReader(scriptStream, StandardCharsets.UTF_8);
-        String content = CharStreams.toString(scriptStreamReader);
-        
-        File file = File.createTempFile("csdiff", ".sh");
-        FilesManager.writeContent(file.getAbsolutePath(), content);
-        file.deleteOnExit();
-        return file;
+    private static File createScriptFile() throws TextualMergeException {
+        try {
+            InputStream scriptStream = CSDiff.class.getResourceAsStream(CSDiffScriptPath);
+            InputStreamReader scriptStreamReader = new InputStreamReader(scriptStream, StandardCharsets.UTF_8);
+            String content = CharStreams.toString(scriptStreamReader);
+            
+            File file = File.createTempFile("csdiff", ".sh");
+            FilesManager.writeContent(file.getAbsolutePath(), content);
+            file.deleteOnExit();
+            return file;
+        } catch (IOException e) {
+            throw new TextualMergeException("Error during opening of temporary script file");
+        }
     }
 
     private static String[] buildCommand(File script, File left, File base, File right, File output) {
