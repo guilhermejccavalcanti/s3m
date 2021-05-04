@@ -89,4 +89,15 @@ public class CSDiffTest {
 
         assertThat(actualOutput).isEqualTo(expectedOutput);
     }
+
+    @Test
+    public void testChangesToArithmeticExpressionWithParentheses() {
+        String testFilesPath = "testfiles/arithmeticexpression/withparentheses/";
+        String mergeOutput = merge(testFilesPath);
+
+        String expectedOutput = getExpectedOutput(testFilesPath);
+        String actualOutput = FilesManager.getStringContentIntoSingleLineNoSpacing(mergeOutput);
+
+        assertThat(actualOutput).isEqualTo(expectedOutput);
+    }
 }
