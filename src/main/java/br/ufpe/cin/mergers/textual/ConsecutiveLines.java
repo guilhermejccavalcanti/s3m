@@ -11,15 +11,16 @@ import java.util.stream.Collectors;
 
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
+import br.ufpe.cin.mergers.util.CSDiffRunner;
+import br.ufpe.cin.mergers.util.CSDiffScript;
 import br.ufpe.cin.mergers.util.TextualMergeStrategy;
 
 public class ConsecutiveLines implements TextualMergeStrategy {
     private static final String linesIntervalPattern = "\\d+(,)?\\d*";
+    private static final CSDiffScript script = CSDiffScript.ConsecutiveLines;
 
     public String merge(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException {
-        boolean isConsecutiveLinesConflict = thereAreChangesOnConsecutiveLines(leftContent, baseContent, rightContent);
-        TextualMergeStrategy merger = isConsecutiveLinesConflict ? new CSDiff() : new Diff3();
-        return merger.merge(leftContent, baseContent, rightContent, ignoreWhiteSpaces);
+        return CSDiffRunner.runCSDiff(script, leftContent, baseContent, rightContent);
     }
 
     private static boolean thereAreChangesOnConsecutiveLines(String leftContent, String baseContent, String rightContent) throws TextualMergeException {
