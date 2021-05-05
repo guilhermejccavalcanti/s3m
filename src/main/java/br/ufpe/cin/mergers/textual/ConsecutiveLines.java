@@ -4,6 +4,7 @@ import java.io.BufferedReader;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
@@ -75,8 +76,9 @@ public class ConsecutiveLines implements TextualMergeStrategy {
             String[] command = buildDiffCommand(parentFile, baseFile);
             Process process = Runtime.getRuntime().exec(command);
             process.waitFor();
-            
-            BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+
+            InputStreamReader processOutput = new InputStreamReader(process.getInputStream(), StandardCharsets.UTF_8);
+            BufferedReader reader = new BufferedReader(processOutput);
             return reader.lines().collect(Collectors.toList());
         } catch (InterruptedException|IOException e) {
             throw new TextualMergeException("Error during diff's execution");
