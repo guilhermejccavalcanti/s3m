@@ -734,9 +734,23 @@ public final class FilesManager {
 
 	/**
 	 * Creates a temporary file on system's default temporary directory
+	 * @param prefix of the file's name
+	 * @return temporary file created
 	 */
-	public static File createTempFile(String name) throws IOException {
-		File file = File.createTempFile(name, ".tmp");
+	public static File createTempFile(String prefix) throws IOException {
+		File file = File.createTempFile(prefix, ".tmp");
+		file.deleteOnExit();
+		return file;
+	}
+
+	/**
+	 * Creates a temporary file on system's deafult temporary directory
+	 * @param prefix of the file's name
+	 * @param suffix of the file's name
+	 * @return temporary file created
+	 */
+	public static File createTempFile(String prefix, String suffix) throws IOException {
+		File file = File.createTempFile(prefix, suffix);
 		file.deleteOnExit();
 		return file;
 	}
