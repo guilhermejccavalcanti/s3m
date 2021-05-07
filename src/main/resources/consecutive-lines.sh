@@ -2,9 +2,9 @@
 
 parentFolder=$(echo "${1%/*}")
 
-sed ':a;N;$!ba;s/\n/\n$$$$$$$\n$$$$$$$\n/g' $1 > "$1_temp"
-sed ':a;N;$!ba;s/\n/\n$$$$$$$\n$$$$$$$\n/g' $2 > "$2_temp"
-sed ':a;N;$!ba;s/\n/\n$$$$$$$\n$$$$$$$\n/g' $3 > "$3_temp"
+sed 'a\\$\$\$\$\$\$\$' $1 > "$1_temp"
+sed 'a\\$\$\$\$\$\$\$' $2 > "$2_temp"
+sed 'a\\$\$\$\$\$\$\$' $3 > "$3_temp"
 
 diff3 -m "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
 
