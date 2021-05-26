@@ -2,7 +2,6 @@ package br.ufpe.cin.mergers.textual;
 
 import static org.assertj.core.api.Assertions.*;
 
-import java.io.File;
 import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
@@ -15,10 +14,10 @@ import org.junit.Test;
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.TextualMergeStrategy;
+import br.ufpe.cin.util.TestUtils;
 
 public class CSDiffTest {
     private static TextualMergeStrategy originalStrategy;
-    private static String testFileName = "Test.java";
 
     @BeforeClass
     public static void setUpBeforeClass() throws UnsupportedEncodingException {
@@ -42,27 +41,12 @@ public class CSDiffTest {
         JFSTMerge.textualMergeStrategy = originalStrategy;
     }
 
-    private String merge(String testFilesPath) {
-        return (new JFSTMerge()).mergeFiles(
-            new File(testFilesPath + "left/" + testFileName),
-            new File(testFilesPath + "base/" + testFileName),
-            new File(testFilesPath + "right/" + testFileName),
-            null
-        ).semistructuredOutput;
-    }
-
-    private String getExpectedOutput(String testFilesPath) {
-        File mergeFile = new File(testFilesPath + "merge/" + testFileName);
-        String content = FilesManager.readFileContent(mergeFile);
-        return FilesManager.getStringContentIntoSingleLineNoSpacing(content);
-    }
-
     @Test
-    public void testConsecutiveLines() {
+    public void testChangesToConsecutiveLines() {
         String testFilesPath = "testfiles/consecutivelines/";
-        String mergeOutput = merge(testFilesPath);
+        String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
-        String expectedOutput = getExpectedOutput(testFilesPath);
+        String expectedOutput = TestUtils.getTestExpectedOutput(testFilesPath);
         String actualOutput = FilesManager.getStringContentIntoSingleLineNoSpacing(mergeOutput);
 
         assertThat(actualOutput).isEqualTo(expectedOutput);
@@ -71,9 +55,9 @@ public class CSDiffTest {
     @Test
     public void testChangesToDifferentArgumentsOfSameMethod() {
         String testFilesPath = "testfiles/methodarguments/different/";
-        String mergeOutput = merge(testFilesPath);
+        String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
-        String expectedOutput = getExpectedOutput(testFilesPath);
+        String expectedOutput = TestUtils.getTestExpectedOutput(testFilesPath);
         String actualOutput = FilesManager.getStringContentIntoSingleLineNoSpacing(mergeOutput);
 
         assertThat(actualOutput).isEqualTo(expectedOutput);
@@ -82,9 +66,9 @@ public class CSDiffTest {
     @Test
     public void testChangesToSameArgumentsOfSameMethod() {
         String testFilesPath = "testfiles/methodarguments/same/";
-        String mergeOutput = merge(testFilesPath);
+        String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
-        String expectedOutput = getExpectedOutput(testFilesPath);
+        String expectedOutput = TestUtils.getTestExpectedOutput(testFilesPath);
         String actualOutput = FilesManager.getStringContentIntoSingleLineNoSpacing(mergeOutput);
 
         assertThat(actualOutput).isEqualTo(expectedOutput);
@@ -93,9 +77,9 @@ public class CSDiffTest {
     @Test
     public void testChangesToArithmeticExpressionWithParentheses() {
         String testFilesPath = "testfiles/arithmeticexpression/withparentheses/";
-        String mergeOutput = merge(testFilesPath);
+        String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
-        String expectedOutput = getExpectedOutput(testFilesPath);
+        String expectedOutput = TestUtils.getTestExpectedOutput(testFilesPath);
         String actualOutput = FilesManager.getStringContentIntoSingleLineNoSpacing(mergeOutput);
 
         assertThat(actualOutput).isEqualTo(expectedOutput);
