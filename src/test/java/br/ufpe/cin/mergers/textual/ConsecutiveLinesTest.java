@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -43,7 +44,7 @@ public class ConsecutiveLinesTest {
 
     @Test
     public void testChangesToConsecutiveLines() {
-        String testFilesPath = "testfiles/consecutivelines/";
+        String testFilesPath = "consecutivelines";
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
         String expectedOutput = TestUtils.getTestExpectedOutput(testFilesPath);

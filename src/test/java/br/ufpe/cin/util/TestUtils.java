@@ -9,6 +9,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
@@ -38,15 +39,15 @@ public class TestUtils {
 
     public static String mergeTestFiles(String testFilesPath) {
         return new JFSTMerge().mergeFiles(
-            new File(testFilesPath + "left/" + TEST_FILE_NAME),
-            new File(testFilesPath + "base/" + TEST_FILE_NAME),
-            new File(testFilesPath + "right/" + TEST_FILE_NAME),
+            Paths.get("testfiles", testFilesPath, "left", TEST_FILE_NAME).toFile(),
+            Paths.get("testfiles", testFilesPath, "base", TEST_FILE_NAME).toFile(),
+            Paths.get("testfiles", testFilesPath, "right", TEST_FILE_NAME).toFile(),
             null
         ).semistructuredOutput;
     }
 
     public static String getTestExpectedOutput(String testFilesPath) {
-        File mergeFile = new File(testFilesPath + "merge/" + TEST_FILE_NAME);
+        File mergeFile = Paths.get("testfiles", testFilesPath, "merge", TEST_FILE_NAME).toFile();
         String content = FilesManager.readFileContent(mergeFile);
         return FilesManager.getStringContentIntoSingleLineNoSpacing(content);
     }

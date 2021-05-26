@@ -6,6 +6,7 @@ import java.io.OutputStream;
 import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
+import java.nio.file.Paths;
 
 import org.junit.AfterClass;
 import org.junit.BeforeClass;
@@ -43,7 +44,7 @@ public class CSDiffTest {
 
     @Test
     public void testChangesToConsecutiveLines() {
-        String testFilesPath = "testfiles/consecutivelines/";
+        String testFilesPath = "consecutivelines";
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
         String expectedOutput = TestUtils.getTestExpectedOutput(testFilesPath);
@@ -54,7 +55,7 @@ public class CSDiffTest {
 
     @Test
     public void testChangesToDifferentArgumentsOfSameMethod() {
-        String testFilesPath = "testfiles/methodarguments/different/";
+        String testFilesPath = Paths.get("methodarguments", "different").toString();
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
         String expectedOutput = TestUtils.getTestExpectedOutput(testFilesPath);
@@ -65,7 +66,7 @@ public class CSDiffTest {
 
     @Test
     public void testChangesToSameArgumentsOfSameMethod() {
-        String testFilesPath = "testfiles/methodarguments/same/";
+        String testFilesPath = Paths.get("methodarguments", "same").toString();
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
         String expectedOutput = TestUtils.getTestExpectedOutput(testFilesPath);
@@ -76,7 +77,7 @@ public class CSDiffTest {
 
     @Test
     public void testChangesToArithmeticExpressionWithParentheses() {
-        String testFilesPath = "testfiles/arithmeticexpression/withparentheses/";
+        String testFilesPath = "arithmeticexpression";
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
         String expectedOutput = TestUtils.getTestExpectedOutput(testFilesPath);
