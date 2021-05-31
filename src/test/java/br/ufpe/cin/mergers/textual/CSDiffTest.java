@@ -35,7 +35,6 @@ public class CSDiffTest {
     
     @BeforeClass
     public static void setUpTextualMergeStrategy() {
-        Assume.assumeTrue(SystemUtils.IS_OS_LINUX);
         originalStrategy = JFSTMerge.textualMergeStrategy;
         JFSTMerge.textualMergeStrategy = new CSDiff();
     }
@@ -47,6 +46,8 @@ public class CSDiffTest {
 
     @Test
     public void testChangesToConsecutiveLines() {
+        Assume.assumeTrue(SystemUtils.IS_OS_LINUX);
+        
         String testFilesPath = "consecutivelines";
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
@@ -58,6 +59,8 @@ public class CSDiffTest {
 
     @Test
     public void testChangesToDifferentArgumentsOfSameMethod() {
+        Assume.assumeTrue(SystemUtils.IS_OS_LINUX);
+
         String testFilesPath = Paths.get("methodarguments", "different").toString();
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
@@ -69,6 +72,8 @@ public class CSDiffTest {
 
     @Test
     public void testChangesToSameArgumentsOfSameMethod() {
+        Assume.assumeTrue(SystemUtils.IS_OS_LINUX);
+
         String testFilesPath = Paths.get("methodarguments", "same").toString();
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
@@ -80,6 +85,8 @@ public class CSDiffTest {
 
     @Test
     public void testChangesToArithmeticExpressionWithParentheses() {
+        Assume.assumeTrue(SystemUtils.IS_OS_LINUX);
+        
         String testFilesPath = "arithmeticexpression";
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 

@@ -34,7 +34,6 @@ public class ConsecutiveLinesTest {
 
     @BeforeClass
     public static void setUpTextualMergeStrategy() {
-        Assume.assumeTrue(SystemUtils.IS_OS_LINUX);
         originalStrategy = JFSTMerge.textualMergeStrategy;
         JFSTMerge.textualMergeStrategy = new ConsecutiveLines();
     }
@@ -46,6 +45,8 @@ public class ConsecutiveLinesTest {
 
     @Test
     public void testChangesToConsecutiveLines() {
+        Assume.assumeTrue(SystemUtils.IS_OS_LINUX);
+        
         String testFilesPath = "consecutivelines";
         String mergeOutput = TestUtils.mergeTestFiles(testFilesPath);
 
