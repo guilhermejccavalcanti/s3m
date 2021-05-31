@@ -7,7 +7,9 @@ import java.io.PrintStream;
 import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 
+import org.apache.commons.lang.SystemUtils;
 import org.junit.AfterClass;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -32,6 +34,7 @@ public class ConsecutiveLinesTest {
 
     @BeforeClass
     public static void setUpTextualMergeStrategy() {
+        Assume.assumeTrue(SystemUtils.IS_OS_LINUX);
         originalStrategy = JFSTMerge.textualMergeStrategy;
         JFSTMerge.textualMergeStrategy = new ConsecutiveLines();
     }

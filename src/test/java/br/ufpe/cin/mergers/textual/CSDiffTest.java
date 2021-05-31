@@ -8,7 +8,9 @@ import java.io.UnsupportedEncodingException;
 import java.nio.charset.Charset;
 import java.nio.file.Paths;
 
+import org.apache.commons.lang.SystemUtils;
 import org.junit.AfterClass;
+import org.junit.Assume;
 import org.junit.BeforeClass;
 import org.junit.Test;
 
@@ -33,6 +35,7 @@ public class CSDiffTest {
     
     @BeforeClass
     public static void setUpTextualMergeStrategy() {
+        Assume.assumeTrue(SystemUtils.IS_OS_LINUX);
         originalStrategy = JFSTMerge.textualMergeStrategy;
         JFSTMerge.textualMergeStrategy = new CSDiff();
     }
