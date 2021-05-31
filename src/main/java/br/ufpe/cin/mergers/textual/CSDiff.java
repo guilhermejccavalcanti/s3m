@@ -9,6 +9,10 @@ public class CSDiff implements TextualMergeStrategy {
     private static final CSDiffScript script = CSDiffScript.CSDiff;
 
     public String merge(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException {
+        return merge(leftContent, baseContent, rightContent);
+    }
+    
+    public static String merge(String leftContent, String baseContent, String rightContent) throws TextualMergeException {
         return CSDiffRunner.runCSDiff(script, leftContent, baseContent, rightContent);
     }
 }

@@ -2,9 +2,7 @@ package br.ufpe.cin.mergers.util.converters;
 
 import com.beust.jcommander.IStringConverter;
 
-import br.ufpe.cin.mergers.textual.CSDiff;
-import br.ufpe.cin.mergers.textual.ConsecutiveLines;
-import br.ufpe.cin.mergers.textual.Diff3;
+import br.ufpe.cin.mergers.textual.*;
 import br.ufpe.cin.mergers.util.TextualMergeStrategy;
 
 public class TextualMergeStrategyConverter implements IStringConverter<TextualMergeStrategy> {
@@ -15,6 +13,8 @@ public class TextualMergeStrategyConverter implements IStringConverter<TextualMe
                 return new CSDiff();
             case "CONSECUTIVE":
                 return new ConsecutiveLines();
+            case "AUTOTUNING":
+                return new CSDiffAndDiff3();
             default:
                 return new Diff3();
         }

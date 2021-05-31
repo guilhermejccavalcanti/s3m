@@ -80,7 +80,7 @@ public final class Diff3 implements TextualMergeStrategy {
 	 * @return merged string.
 	 * @throws TextualMergeException 
 	 */
-	private static String mergeTexts(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException {
+	public static String mergeTexts(String leftContent, String baseContent, String rightContent, boolean ignoreWhiteSpaces) throws TextualMergeException {
 		String textualMergeResult = null;
 		try{
 			RawTextComparator textComparator = ((ignoreWhiteSpaces) ? RawTextComparator.WS_IGNORE_ALL : RawTextComparator.DEFAULT);
