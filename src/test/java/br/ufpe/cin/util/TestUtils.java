@@ -1,5 +1,7 @@
 package br.ufpe.cin.util;
 
+import static org.assertj.core.api.Assertions.*;
+
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.MergeContext;
@@ -37,7 +39,14 @@ public class TestUtils {
         assertThat(mergeContext.renamingConflicts).isZero();
     }
 
-    public static String mergeTestFiles(String testFilesPath) {
+    public static void testMerge(String testFilesPath) {
+        String mergeOutput = mergeTestFiles(testFilesPath);
+        String expectedOutput = getTestExpectedOutput(testFilesPath);
+        String actualOutput = FilesManager.getStringContentIntoSingleLineNoSpacing(mergeOutput);
+        assertThat(actualOutput).isEqualTo(expectedOutput);
+    }
+
+    private static String mergeTestFiles(String testFilesPath) {
         return new JFSTMerge().mergeFiles(
             Paths.get("testfiles", testFilesPath, "left", TEST_FILE_NAME).toFile(),
             Paths.get("testfiles", testFilesPath, "base", TEST_FILE_NAME).toFile(),
@@ -46,7 +55,7 @@ public class TestUtils {
         ).semistructuredOutput;
     }
 
-    public static String getTestExpectedOutput(String testFilesPath) {
+    private static String getTestExpectedOutput(String testFilesPath) {
         File mergeFile = Paths.get("testfiles", testFilesPath, "merge", TEST_FILE_NAME).toFile();
         String content = FilesManager.readFileContent(mergeFile);
         return FilesManager.getStringContentIntoSingleLineNoSpacing(content);
