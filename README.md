@@ -1,5 +1,8 @@
 # Semistructured 3-Way Merge
+
 [![Build Status](https://github.com/guilhermejccavalcanti/jFSTMerge/actions/workflows/build.yml/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
+
+[![GitHub Super-Linter](https://github.com/leonardoAnjos16/jFSTMerge/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
 
 ## Table of Contents
 * [What is semistructured merge?](https://github.com/guilhermejccavalcanti/jFSTMerge#what-is-semistructured-merge-?)
