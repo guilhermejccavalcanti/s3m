@@ -99,7 +99,10 @@ public class Math {
 }
 ```
 
-It parses the code completely, creating an AST (Abstract Syntax Tree) for this purpose, but it maintains the contents of the nodes as a text. Whitespaces and comments that occur between a node and its preceding one in the code are stored as a `prefix` of the latter. Nodes are matched if they have the same identifier (we call this superimposition) and their contents are merged using textual merge. You can check below the identifier of some of Java declarations.
+It parses the code completely, creating an AST (Abstract Syntax Tree) for this purpose, but it maintains the contents of the nodes as a text.
+Whitespaces and comments that occur between a node and its preceding one in the code are stored as a `prefix` of the latter.
+Nodes are matched if they have the same identifier (we call this superimposition) and their contents are merged using textual merge.
+You can check below the identifier of some of Java declarations.
 
 <center>
 
@@ -204,13 +207,18 @@ Check the [Releases](https://github.com/guilhermejccavalcanti/jFSTMerge/releases
     name = semi_structured_3_way_merge_tool_for_java
     driver = java  -jar "\"pathTo/jFSTMerge.jar\"" %A %O %B -o %A -g
 ```
+
 3. Add the following line to your `.gitattributes` file (also localized in the `$HOME` / `%USERPROFILE%` folder, create the file if not created already):
+
 ```conf
 *.java merge=s3m
 ```
 
 ### Usage
-If integrated with Git (as a merge driver), S3M will run automatically every time you invoke the `git merge` command. No further configuration required. You can still run it as a standalone tool, if desired, with the `.jar` file present in the [/binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/) folder. You can use the command below after dowloading the `jFSTMerge.jar` file:
+If integrated with Git (as a merge driver), S3M will run automatically every time you invoke the `git merge` command.
+No further configuration required.
+You can still run it as a standalone tool, if desired, with the `.jar` file present in the [/binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/) folder.
+You can use the command below after dowloading the `jFSTMerge.jar` file:
 
 `java -jar jFSTMerge.jar leftPath basePath rightPath`
 
@@ -237,7 +245,7 @@ where `leftPath`, `basePath` and `rightPath` can be either a file or a directory
 
 ## Contributor Guide
 
-### Requirements
+### Contributor Requirements
 
 * **Java 8** (Java version "1.8.0_212" or above)
 * **Gradle 4.6**
