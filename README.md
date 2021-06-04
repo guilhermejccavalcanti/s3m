@@ -17,86 +17,86 @@ Regular merge tools (such as *git merge*) are called **textual** or **unstructur
 Despite being extremely fast, they have no idea about what the developers did on their code and this leads to a large number of inconveniences for the developers: conflicts are reported when they shouldn't **(false positives)**, wasting development time to manually fix them, and actual conflicts are missed by the tool and are not reported **(false negatives)**, leading to defects that affect users.
 
 For example, imagine that on `master` branch there is this Java class:
-```java
-public class Math {
+  ```java
+  public class Math {
 
-    public int sum(int a, int b) {
-        return a + b;
-    }
+      public int sum(int a, int b) {
+          return a + b;
+      }
 
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-}
-```
+  }
+  ```
 
 A developer created a branch named `left` and swapped `sum` and `isEven` positions:
-```java
-public class Math {
+  ```java
+  public class Math {
 
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-    public int sum(int a, int b) {
-        return a + b;
-    }
+      public int sum(int a, int b) {
+          return a + b;
+      }
 
-}
-```
+  }
+  ```
 
 Meanwhile, another developer created a branch named `right` on top of `master` and renamed `sum` to `sumIntegers`:
-```java
-public class Math {
+  ```java
+  public class Math {
 
-    public int sumIntegers(int a, int b) {
-        return a + b;
-    }
+      public int sumIntegers(int a, int b) {
+          return a + b;
+      }
 
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-}
-```
+  }
+  ```
 
 As there are different consecutive lines in all of the three parts, unstructured merge outputs a conflict on it (and it repeats method `sum`):
-```java
-public class Math {
+  ```java
+  public class Math {
 
-<<<<<<< MINE
-=======
-    public int sumIntegers(int a, int b) {
-        return a + b;
-    }
+  <<<<<<< MINE
+  =======
+      public int sumIntegers(int a, int b) {
+          return a + b;
+      }
 
->>>>>>> YOURS
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+  >>>>>>> YOURS
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-    public int sum(int a, int b) {
-        return a + b;
-    }
+      public int sum(int a, int b) {
+          return a + b;
+      }
 
-}
-```
+  }
+  ```
 **Semistructured merge**, on the other hand, "understands" the changes made by both contributions and produces no conflict:
 
-```java
-public class Math {
+  ```java
+  public class Math {
 
-    public int sumIntegers(int a, int b) {
-        return a + b;
-    }
+      public int sumIntegers(int a, int b) {
+          return a + b;
+      }
 
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-}
-```
+  }
+  ```
 
 It parses the code completely, creating an AST (Abstract Syntax Tree) for this purpose, but it maintains the contents of the nodes as a text.
 Whitespaces and comments that occur between a node and its preceding one in the code are stored as a `prefix` of the latter.
@@ -199,19 +199,19 @@ Check the [Releases](https://github.com/guilhermejccavalcanti/jFSTMerge/releases
 1. Download the [binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/jFSTMerge.jar) file;
 2. Add the following lines to your `.gitconfig` file (typically localized in the folder `$HOME` in Unix or `%USERPROFILE%` in Windows), replacing `pathTo` with the path to the binary file in your machine:
 
-```conf
-[core]
-    attributesfile = ~/.gitattributes
-[merge "s3m"]
-    name = semi_structured_3_way_merge_tool_for_java
-    driver = java  -jar "\"pathTo/jFSTMerge.jar\"" %A %O %B -o %A -g
-```
+  ```conf
+  [core]
+      attributesfile = ~/.gitattributes
+  [merge "s3m"]
+      name = semi_structured_3_way_merge_tool_for_java
+      driver = java  -jar "\"pathTo/jFSTMerge.jar\"" %A %O %B -o %A -g
+  ```
 
 3. Add the following line to your `.gitattributes` file (also localized in the `$HOME` / `%USERPROFILE%` folder, create the file if not created already):
 
-```conf
-*.java merge=s3m
-```
+  ```conf
+  *.java merge=s3m
+  ```
 
 ### Usage
 If integrated with Git (as a merge driver), S3M will run automatically every time you invoke the `git merge` command.
