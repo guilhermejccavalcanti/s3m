@@ -1,8 +1,7 @@
 # Semistructured 3-Way Merge
 
 [![Build Status](https://github.com/guilhermejccavalcanti/jFSTMerge/actions/workflows/build.yml/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
-
-[![GitHub Super-Linter](https://github.com/leonardoAnjos16/jFSTMerge/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/marketplace/actions/super-linter)
+[![GitHub Super-Linter](https://github.com/guilhermejccavalcanti/jFSTMerge/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
 
 ## Table of Contents
 * [What is semistructured merge?](https://github.com/guilhermejccavalcanti/jFSTMerge#what-is-semistructured-merge-?)
@@ -273,8 +272,8 @@ There's also [two unique JUnit classes](https://github.com/guilhermejccavalcanti
 
 ### Continuous Integration
 
-We run [GitHub Actions](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/.github/workflows/build.yml) as CI tool.
-It runs a typical gradle build and the unique JUnit tests described above.
+We run [GitHub Actions](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/.github/workflows/) as CI tool.
+It runs a typical gradle build, the unique JUnit tests described above and linters for every new or edited file.
 
 ---
 
