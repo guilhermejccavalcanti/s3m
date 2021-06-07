@@ -1,5 +1,7 @@
 # Semistructured 3-Way Merge
+
 [![Build Status](https://github.com/guilhermejccavalcanti/jFSTMerge/actions/workflows/build.yml/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
+[![GitHub Super-Linter](https://github.com/guilhermejccavalcanti/jFSTMerge/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
 
 ## Table of Contents
 * [What is semistructured merge?](https://github.com/guilhermejccavalcanti/jFSTMerge#what-is-semistructured-merge-?)
@@ -15,99 +17,102 @@ Regular merge tools (such as *git merge*) are called **textual** or **unstructur
 Despite being extremely fast, they have no idea about what the developers did on their code and this leads to a large number of inconveniences for the developers: conflicts are reported when they shouldn't **(false positives)**, wasting development time to manually fix them, and actual conflicts are missed by the tool and are not reported **(false negatives)**, leading to defects that affect users.
 
 For example, imagine that on `master` branch there is this Java class:
-```
-public class Math {
+  ```java
+  public class Math {
 
-    public int sum(int a, int b) {
-        return a + b;
-    }
+      public int sum(int a, int b) {
+          return a + b;
+      }
 
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-}
-```
+  }
+  ```
 
 A developer created a branch named `left` and swapped `sum` and `isEven` positions:
-```
-public class Math {
+  ```java
+  public class Math {
 
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-    public int sum(int a, int b) {
-        return a + b;
-    }
+      public int sum(int a, int b) {
+          return a + b;
+      }
 
-}
-```
+  }
+  ```
 
 Meanwhile, another developer created a branch named `right` on top of `master` and renamed `sum` to `sumIntegers`:
-```
-public class Math {
+  ```java
+  public class Math {
 
-    public int sumIntegers(int a, int b) {
-        return a + b;
-    }
+      public int sumIntegers(int a, int b) {
+          return a + b;
+      }
 
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-}
-```
+  }
+  ```
 
 As there are different consecutive lines in all of the three parts, unstructured merge outputs a conflict on it (and it repeats method `sum`):
-```
-public class Math {
+  ```java
+  public class Math {
 
-<<<<<<< MINE
-=======
-    public int sumIntegers(int a, int b) {
-        return a + b;
-    }
+  <<<<<<< MINE
+  =======
+      public int sumIntegers(int a, int b) {
+          return a + b;
+      }
 
->>>>>>> YOURS
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+  >>>>>>> YOURS
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-    public int sum(int a, int b) {
-        return a + b;
-    }
+      public int sum(int a, int b) {
+          return a + b;
+      }
 
-}
-```
+  }
+  ```
 **Semistructured merge**, on the other hand, "understands" the changes made by both contributions and produces no conflict:
 
-```
-public class Math {
+  ```java
+  public class Math {
 
-    public int sumIntegers(int a, int b) {
-        return a + b;
-    }
+      public int sumIntegers(int a, int b) {
+          return a + b;
+      }
 
-    public boolean isEven(int a) {
-        return a % 2 == 0;
-    }
+      public boolean isEven(int a) {
+          return a % 2 == 0;
+      }
 
-}
-```
+  }
+  ```
 
-It parses the code completely, creating an AST (Abstract Syntax Tree) for this purpose, but it maintains the contents of the nodes as a text. Whitespaces and comments that occur between a node and its preceding one in the code are stored as a `prefix` of the latter. Nodes are matched if they have the same identifier (we call this superimposition) and their contents are merged using textual merge. You can check below the identifier of some of Java declarations.
+It parses the code completely, creating an AST (Abstract Syntax Tree) for this purpose, but it maintains the contents of the nodes as a text.
+Whitespaces and comments that occur between a node and its preceding one in the code are stored as a `prefix` of the latter.
+Nodes are matched if they have the same identifier (we call this superimposition) and their contents are merged using textual merge.
+You can check below the identifier of some of Java declarations.
 
 <center>
 
-|  Declaration 	|       Identifier       	|
-|:------------:	|:----------------------:	|
-| Classes      	| Name                   	|
-| Fields       	| Name                   	|
-| Methods      	| Signature              	|
-| Constructors 	| Signature              	|
-| Packages      | Whole of the statement 	|
-| Imports      	| Whole of the statement 	|
+| Declaration  | Identifier             |
+| :----------: | :--------------------: |
+| Classes      | Name                   |
+| Fields       | Name                   |
+| Methods      | Signature              |
+| Constructors | Signature              |
+| Packages     | Whole of the statement |
+| Imports      | Whole of the statement |
 
 </center>
 
@@ -119,7 +124,7 @@ We use [Feature House](http://fosd.net/fh) as base framework for parsing and sup
 
 ## Conflict Handlers
 
-Conflict Handlers (or just Handlers) are algorithms that run in sequence after every semistructured merge (or if the user desires so), analysing the merge output and taking actions to refine the result according to the peculiarities of the multiple types of the language's constructions. 
+Conflict Handlers (or just Handlers) are algorithms that run in sequence after every semistructured merge (or if the user desires so), analysing the merge output and taking actions to refine the result according to the peculiarities of the multiple types of the language's constructions.
 
 ### [Deletions Handler](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/DeletionsHandler.java)
 
@@ -136,7 +141,7 @@ If there's exactly one initialization block in A, B and base's code, they're mer
 Otherwise, for each initialization block in base, the handler searches for the first A's and B's initialization block with string similarity higher or equal than 0.7 and merge them. If there's none, the handler uses an empty string for the merge.
 
 
-### [Method and Constructor Renaming or Deletion Handler](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/MethodAndConstructorRenamingAndDeletionHandler.java) 
+### [Method and Constructor Renaming or Deletion Handler](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/MethodAndConstructorRenamingAndDeletionHandler.java)
 
 Executes when a developer renamed or deleted a method or a constructor.  
 
@@ -181,7 +186,7 @@ For research purposes, S3M's stores a error and some statistical logs in `${HOME
 
 ### Requirements
 
-* **Java 8** (Java version "1.8.0_212" or above) 
+* **Java 8** (Java version "1.8.0_212" or above)
 * **Git** (optional) S3M can behave as a merge driver for `git merge`. If you have interest in this feature, remember to have Git [installed](https://git-scm.com/downloads). You can find more details about *git merge drivers* [here](https://www.git-scm.com/docs/gitattributes#_defining_a_custom_merge_driver).
 
 <!--- 
@@ -191,23 +196,28 @@ Check the [Releases](https://github.com/guilhermejccavalcanti/jFSTMerge/releases
 
 ### Git integration (as a merge driver)
 
-1. Download the [binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/jFSTMerge.jar) file; 
+1. Download the [binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/jFSTMerge.jar) file;
 2. Add the following lines to your `.gitconfig` file (typically localized in the folder `$HOME` in Unix or `%USERPROFILE%` in Windows), replacing `pathTo` with the path to the binary file in your machine:
 
-	```
-    [core]
-		attributesfile = ~/.gitattributes
-	[merge "s3m"]
-		name = semi_structured_3_way_merge_tool_for_java
-		driver = java  -jar "\"pathTo/jFSTMerge.jar\"" %A %O %B -o %A -g
-    ```
+  ```conf
+  [core]
+      attributesfile = ~/.gitattributes
+  [merge "s3m"]
+      name = semi_structured_3_way_merge_tool_for_java
+      driver = java  -jar "\"pathTo/jFSTMerge.jar\"" %A %O %B -o %A -g
+  ```
+
 3. Add the following line to your `.gitattributes` file (also localized in the `$HOME` / `%USERPROFILE%` folder, create the file if not created already):
-	```
-    *.java merge=s3m
-    ```
+
+  ```conf
+  *.java merge=s3m
+  ```
 
 ### Usage
-If integrated with Git (as a merge driver), S3M will run automatically every time you invoke the `git merge` command. No further configuration required. You can still run it as a standalone tool, if desired, with the `.jar` file present in the [/binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/) folder. You can use the command below after dowloading the `jFSTMerge.jar` file:
+If integrated with Git (as a merge driver), S3M will run automatically every time you invoke the `git merge` command.
+No further configuration required.
+You can still run it as a standalone tool, if desired, with the `.jar` file present in the [/binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/) folder.
+You can use the command below after dowloading the `jFSTMerge.jar` file:
 
 `java -jar jFSTMerge.jar leftPath basePath rightPath`
 
@@ -234,10 +244,10 @@ where `leftPath`, `basePath` and `rightPath` can be either a file or a directory
 
 ## Contributor Guide
 
-### Requirements
+### Contributor Requirements
 
-* **Java 8** (Java version "1.8.0_212" or above) 
-* **Gradle 4.6** 
+* **Java 8** (Java version "1.8.0_212" or above)
+* **Gradle 4.6**
 
 ### Getting Started
 
@@ -250,7 +260,7 @@ We run [Gradle](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/b
 ### Testing
 
 We have [a bunch of JUnit classes](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/src/test/java/br/ufpe/cin). They mostly test the behavior of the handlers.  
-We encourage the usage of 
+We encourage the usage of
 
 `testWhatYoureTesting_givenAConditionIsSatisfied_whenSomeActionHappens_shouldExpectedBehavior`
 
@@ -262,8 +272,8 @@ There's also [two unique JUnit classes](https://github.com/guilhermejccavalcanti
 
 ### Continuous Integration
 
-We run [GitHub Actions](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/.github/workflows/build.yml) as CI tool.
-It runs a typical gradle build and the unique JUnit tests described above.
+We run [GitHub Actions](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/.github/workflows/) as CI tool.
+It runs a typical gradle build, the unique JUnit tests described above and linters for every new or edited file.
 
 ---
 
