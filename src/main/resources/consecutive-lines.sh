@@ -6,7 +6,11 @@ sed 'a\\$\$\$\$\$\$\$' $1 > "$1_temp"
 sed 'a\\$\$\$\$\$\$\$' $2 > "$2_temp"
 sed 'a\\$\$\$\$\$\$\$' $3 > "$3_temp"
 
-diff3 -L MINE -L BASE -L YOURS -m "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
+if [ "$5" = "--show-base" ]; then
+    diff3 -m "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
+else
+    diff3 -E -m "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
+fi
 
 rm "$1_temp"
 rm "$2_temp"

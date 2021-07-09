@@ -5,6 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -15,12 +17,6 @@ import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 
 public final class CSDiffRunner {
-    private static final String[] CONFLICT_MARKERS = {
-        MergeConflict.BASE_CONFLICT_MARKER,
-        MergeConflict.CHANGE_CONFLICT_MARKER,
-        MergeConflict.YOURS_CONFLICT_MARKER
-    };
-
     public static String runCSDiff(CSDiffScript script, String leftContent, String baseContent, String rightContent) throws TextualMergeException {
         try {
             File leftFile = createContributionFile("left", leftContent);
@@ -30,7 +26,13 @@ public final class CSDiffRunner {
 
             runCSDiff(script, leftFile, baseFile, rightFile, outputFile);
             String output = FilesManager.readFileContent(outputFile);
-            return fixConflictMarkers(output);
+
+            String leftFilePath = leftFile.getAbsolutePath();
+            String baseFilePath = baseFile.getAbsolutePath();
+            String rightFilePath = rightFile.getAbsolutePath();
+
+            return fixConflictMarkers(output, leftFilePath, baseFilePath, rightFilePath);
+            // return output;
         } catch (IOException e) {
             throw new TextualMergeException("Error during opening of temporary output file");
         }
@@ -73,38 +75,84 @@ public final class CSDiffRunner {
     }
 
     private static String[] buildCSDiffCommand(File scriptFile, File leftFile, File baseFile, File rightFile, File outputFile) {
-        String[] command = new String[6];
+        String[] command = new String[!JFSTMerge.showBase ? 6 : 7];
+
         command[0] = "sh";
         command[1] = scriptFile.getAbsolutePath();
         command[2] = leftFile.getAbsolutePath();
         command[3] = baseFile.getAbsolutePath();
         command[4] = rightFile.getAbsolutePath();
         command[5] = outputFile.getAbsolutePath();
+
+        if (JFSTMerge.showBase) {
+            command[6] = "--show-base";
+        }
+
         return command;
     }
 
-    public static String fixConflictMarkers(String output) throws TextualMergeException {
-        StringBuilder result = new StringBuilder();
-        List<String> lines = output.lines().collect(Collectors.toList());
+    public static String fixConflictMarkers(
+        String mergeContent,
+        String leftFilePath,
+        String baseFilePath,
+        String rightFilePath
+    ) throws TextualMergeException {
+        String[] conflictMarkers = getConflictMarkers(leftFilePath, baseFilePath, rightFilePath);
 
-        for (int i = 0; i < lines.size(); i++) {
-            String line = lines.get(i);
-            if (i > 0) result.append("\n");
+        List<String> lines = new ArrayList<String>(Arrays.asList(mergeContent.split("\\R")));
+        List<String> newLines = removeConflictMarkersFromLineEndings(lines, conflictMarkers);
 
-            if (!hasConflictMarkerAtEnd(line)) {
-                result.append(line);
+        replaceConflictMarkers(newLines);
+        return linesToString(newLines);
+    }
+
+    private static String[] getConflictMarkers(String leftFilePath, String baseFilePath, String rightFilePath) {
+        String[] conflictMarkers = new String[4];
+        conflictMarkers[0] = "<<<<<<< " + leftFilePath;
+        conflictMarkers[1] = "||||||| " + baseFilePath;
+        conflictMarkers[2] = "=======";
+        conflictMarkers[3] = ">>>>>>> " + rightFilePath;
+        return conflictMarkers;
+    }
+
+    private static List<String> removeConflictMarkersFromLineEndings(
+        List<String> lines,
+        String[] conflictMarkers
+    ) throws TextualMergeException {
+        List<String> newLines = new ArrayList<String>();
+
+        for (String line: lines) {
+            if (!lineEndsWithConflictMarker(line, conflictMarkers)) {
+                newLines.add(line);
             } else {
-                String conflictMarker = extractConflictMarker(line);
-                line = line.replace(conflictMarker, "");
-                result.append(line).append("\n").append(conflictMarker);
+                String conflictMarker = extractConflictMarker(line, conflictMarkers);
+                String newLine = line.replace(conflictMarker, "");
+
+                newLines.add(newLine);
+                newLines.add(conflictMarker);
             }
         }
 
-        return result.toString();
+        return newLines;
     }
 
-    private static boolean hasConflictMarkerAtEnd(String line) {
-        for (String conflictMarker: CONFLICT_MARKERS) {
+    private static void replaceConflictMarkers(List<String> lines) {
+        for (int i = 0; i < lines.size(); i++) {
+            if (lines.get(i).startsWith("<<<<<<<"))
+                lines.set(i, MergeConflict.MINE_CONFLICT_MARKER);
+            else if (lines.get(i).startsWith("|||||||"))
+                lines.set(i, MergeConflict.BASE_CONFLICT_MARKER);
+            else if (lines.get(i).startsWith(">>>>>>>"))
+                lines.set(i, MergeConflict.YOURS_CONFLICT_MARKER);
+        }
+    }
+
+    private static String linesToString(List<String> lines) {
+        return lines.stream().collect(Collectors.joining("\n"));
+    }
+
+    private static boolean lineEndsWithConflictMarker(String line, String[] conflictMarkers) {
+        for (String conflictMarker: conflictMarkers) {
             if (!line.startsWith(conflictMarker) && line.endsWith(conflictMarker))
                 return true;
         }
@@ -112,8 +160,8 @@ public final class CSDiffRunner {
         return false;
     }
 
-    private static String extractConflictMarker(String line) throws TextualMergeException {
-        for (String conflictMarker: CONFLICT_MARKERS) {
+    private static String extractConflictMarker(String line, String[] conflictMarkers) throws TextualMergeException {
+        for (String conflictMarker: conflictMarkers) {
             if (line.endsWith(conflictMarker))
                 return conflictMarker;
         }
