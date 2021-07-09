@@ -5,9 +5,8 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.google.common.io.CharStreams;
 
@@ -16,6 +15,12 @@ import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 
 public final class CSDiffRunner {
+    private static final String[] CONFLICT_MARKERS = {
+        MergeConflict.BASE_CONFLICT_MARKER,
+        MergeConflict.CHANGE_CONFLICT_MARKER,
+        MergeConflict.YOURS_CONFLICT_MARKER
+    };
+
     public static String runCSDiff(CSDiffScript script, String leftContent, String baseContent, String rightContent) throws TextualMergeException {
         try {
             File leftFile = createContributionFile("left", leftContent);
@@ -78,45 +83,41 @@ public final class CSDiffRunner {
         return command;
     }
 
-    private static String fixConflictMarkers(String output) {
-        List<String> lines = new ArrayList<String>(Arrays.asList(output.split("\\R")));
-        for (int i = 0; i < lines.size(); i++) {
-            if (lines.get(i).startsWith("<<<<<<<"))
-                lines.set(i, MergeConflict.MINE_CONFLICT_MARKER);
-            else if (lines.get(i).startsWith("|||||||"))
-                lines.set(i, MergeConflict.BASE_CONFLICT_MARKER);
-            else if (lines.get(i).startsWith(">>>>>>>"))
-                lines.set(i, MergeConflict.YOURS_CONFLICT_MARKER);
-        }
-
-        if (!JFSTMerge.showBase)
-            removeBaseFromConflicts(lines);
-
+    public static String fixConflictMarkers(String output) throws TextualMergeException {
         StringBuilder result = new StringBuilder();
+        List<String> lines = output.lines().collect(Collectors.toList());
+
         for (int i = 0; i < lines.size(); i++) {
+            String line = lines.get(i);
             if (i > 0) result.append("\n");
-            result.append(lines.get(i));
+
+            if (!hasConflictMarkerAtEnd(line)) {
+                result.append(line);
+            } else {
+                String conflictMarker = extractConflictMarker(line);
+                line = line.replace(conflictMarker, "");
+                result.append(line).append("\n").append(conflictMarker);
+            }
         }
 
         return result.toString();
     }
 
-    private static void removeBaseFromConflicts(List<String> lines) {
-        int index = 0;
-        boolean inBase = false;
-
-        while (index < lines.size()) {
-            if (lines.get(index).equals(MergeConflict.BASE_CONFLICT_MARKER)) {
-                inBase = true;
-                lines.remove(index);
-            } else if (lines.get(index).equals(MergeConflict.CHANGE_CONFLICT_MARKER)) {
-                index++;
-                inBase = false;
-            } else if (inBase) {
-                lines.remove(index);
-            } else {
-                index++;
-            }
+    private static boolean hasConflictMarkerAtEnd(String line) {
+        for (String conflictMarker: CONFLICT_MARKERS) {
+            if (!line.startsWith(conflictMarker) && line.endsWith(conflictMarker))
+                return true;
         }
+
+        return false;
+    }
+
+    private static String extractConflictMarker(String line) throws TextualMergeException {
+        for (String conflictMarker: CONFLICT_MARKERS) {
+            if (line.endsWith(conflictMarker))
+                return conflictMarker;
+        }
+
+        throw new TextualMergeException("Line doesn't end with any conflict marker");
     }
 }

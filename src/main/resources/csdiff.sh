@@ -6,7 +6,7 @@ sed 's/{/\n$$$$$$${\n$$$$$$$/g' $1 | sed 's/}/\n$$$$$$$}\n$$$$$$$/g' | sed 's/(/
 sed 's/{/\n$$$$$$${\n$$$$$$$/g' $2 | sed 's/}/\n$$$$$$$}\n$$$$$$$/g' | sed 's/(/\n$$$$$$$(\n$$$$$$$/g' | sed 's/)/\n$$$$$$$)\n$$$$$$$/g' | sed 's/;/\n$$$$$$$;\n$$$$$$$/g' | sed 's/,/\n$$$$$$$,\n$$$$$$$/g' > "$2_temp"
 sed 's/{/\n$$$$$$${\n$$$$$$$/g' $3 | sed 's/}/\n$$$$$$$}\n$$$$$$$/g' | sed 's/(/\n$$$$$$$(\n$$$$$$$/g' | sed 's/)/\n$$$$$$$)\n$$$$$$$/g' | sed 's/;/\n$$$$$$$;\n$$$$$$$/g' | sed 's/,/\n$$$$$$$,\n$$$$$$$/g' > "$3_temp"
 
-diff3 -m "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
+diff3 -L MINE -L BASE -L YOURS -m "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
 
 rm "$1_temp"
 rm "$2_temp"
