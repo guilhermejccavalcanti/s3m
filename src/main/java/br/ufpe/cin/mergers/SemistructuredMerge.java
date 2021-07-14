@@ -19,7 +19,6 @@ import br.ufpe.cin.mergers.handlers.DeletionsHandler;
 import br.ufpe.cin.mergers.handlers.DuplicatedDeclarationHandler;
 import br.ufpe.cin.mergers.handlers.InitializationBlocksHandler;
 import br.ufpe.cin.mergers.handlers.InitializationBlocksHandlerMultipleBlocks;
-import br.ufpe.cin.mergers.handlers.LegacyMethodAndConstructorRenamingAndDeletionHandler;
 import br.ufpe.cin.mergers.handlers.MethodAndConstructorRenamingAndDeletionHandler;
 import br.ufpe.cin.mergers.handlers.NewElementReferencingEditedOneHandler;
 import br.ufpe.cin.mergers.handlers.TypeAmbiguityErrorHandler;
@@ -60,13 +59,11 @@ public final class SemistructuredMerge {
 
 		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
 			builder.add(new MethodAndConstructorRenamingAndDeletionHandler());
-    
-    if(!JFSTMerge.isInitializationBlocksHandlerEnabled && 
-				JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled)
-      builder.add(new InitializationBlocksHandlerMultipleBlocks());
 
 		if (JFSTMerge.isInitializationBlocksHandlerEnabled)
 			builder.add(new InitializationBlocksHandler());
+		else if (JFSTMerge.isInitializationBlocksHandlerMultipleBlocksEnabled)
+			builder.add(new InitializationBlocksHandlerMultipleBlocks());
 
 		if (JFSTMerge.isDuplicatedDeclarationHandlerEnabled)
 			builder.add(new DuplicatedDeclarationHandler());
