@@ -44,7 +44,7 @@ import java.util.stream.Collectors;
 public class JFSTMerge {
 
 	//log of activities
-	private final Logger LOGGER = LoggerFactory.make();
+	private static final Logger LOGGER = LoggerFactory.make();
 
 	public static final double RENAMING_SIMILARITY_THRESHOLD = 0.7;  //a typical value of 0.7 (up to 1.0) is used, increase it for a more accurate comparison, or decrease for a more relaxed one.
 
@@ -64,6 +64,9 @@ public class JFSTMerge {
 
 	@Parameter(names = "-g", description = "Parameter to identify that the tool is being used as a git merge driver.")
 	public static boolean isGit = false;
+
+	@Parameter(names = "-u", description = "Parameter to disable writing unstructured merge output to file")
+	public static boolean showUnstructuredOutput = true;
 
 	@Parameter(names = "-c", description = "Parameter to disable cryptography during logs generation (true or false).", arity = 1)
 	private boolean isCryptographed = true;

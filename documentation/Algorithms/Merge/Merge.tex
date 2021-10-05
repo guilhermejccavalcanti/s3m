@@ -1,0 +1,168 @@
+\documentclass[../Algorithms.tex]{subfiles}
+
+\begin{document}
+    \section{Semistructured Merge}
+
+    \subsection{Early Concepts}
+
+    \begin{itemize}
+        \item Every node's origin is set to UNKNOWN beforehand
+    \end{itemize}
+
+    \subsection{Merge Algorithms}
+
+    \begin{algorithm}[H]
+        \caption{Merge Files}
+
+        \KwIn{l, b, r, o}
+        
+        \BlankLine
+        \SetKwFunction{handle}{handle}
+        \SetKwFunction{ftt}{fileToTree}
+        \SetKwFunction{mt}{mergeTrees}
+        \SetKwFunction{gah}{getActiveHandlers}
+
+        \uIf{$l.content = b.content$}{
+            $o.content \leftarrow r.content$\;
+        }
+        \uElseIf{$b.content = r.content \lor l.content = r.content$}{
+            $o.content \leftarrow l.content$\;
+        }
+        \Else{
+            $L \leftarrow \ftt{l}$\;
+            $B \leftarrow \ftt{b}$\;
+            $R \leftarrow \ftt(r)$\;
+
+            \BlankLine
+            $M \leftarrow \mt{L, B, R}$\;
+
+            \BlankLine
+            $H \leftarrow \gah{}$\;
+            \ForEach{$h \in H$}{
+                $h$.\handle{M}\;
+            }
+
+            \BlankLine
+            $o.content \leftarrow \ttt{M}$\;
+        }
+    \end{algorithm}
+
+    \SetKwFunction{mn}{mergeNodes}
+    \SetKwFunction{rdn}{removeDeletedNodes}
+    \SetKwFunction{rtmol}{runTextualMergeOnLeaves}
+
+    \begin{algorithm}[H]
+        \caption{Merge Trees}
+
+        \KwIn{L, B, R}
+        \KwOut{result of merging left, base and right trees}
+
+        \BlankLine
+
+        $L.origin \leftarrow LEFT$\;
+        $B.origin \leftarrow BASE$\;
+        $R.origin \leftarrow RIGHT$\;
+
+        \BlankLine
+        $LB \leftarrow \mn{L, B}$\;
+        $M \leftarrow \mn{LB, R}$\;
+
+        \BlankLine
+        \ForEach{$d \in D_L \cap D_R$}{
+            \rn{d, M}\;
+        }
+
+        \BlankLine
+        \rtmol{M}\;
+
+        \BlankLine
+        \KwRet{M}\;
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Run Textual Merge On Leaves}
+
+        \KwIn{T}
+
+        \BlankLine
+        \ForEach{$t \in T.children$}{
+            \rtmol{t}\;
+        }
+
+        \BlankLine
+        \If{$T.children = \emptyset \land SEPARATOR \in T.body$}{
+            $l, b, r \leftarrow split(T.body, SEPARATOR)$\;
+            $l \leftarrow l - MARKER$\;
+            $T.body \leftarrow \tm{l, b, r}$\;
+        }
+    \end{algorithm}
+
+    \begin{algorithm}[H]
+        \caption{Merge Nodes}
+
+        \KwIn{A, B}
+        \KwOut{result of merging nodes A and B}
+
+        \BlankLine
+        \SetKwFunction{mc}{markContributions}
+
+        \lIf{A = \Null}{\KwRet{B}}
+        \lIf{B = \Null}{\KwRet{A}}
+        \lIf{$A.type \neq B.type \lor A.id \neq B.id$}{\KwRet{\Null}}
+
+        \BlankLine
+        $M.id \leftarrow B.id$\;
+        $M.type \leftarrow B.type$\;
+        $M.origin \leftarrow B.origin$\;
+        $M.children \leftarrow \emptyset$\;
+
+        \BlankLine
+        \uIf{$A.children = \emptyset \land B.children = \emptyset$}{
+            \uIf{$MARKER \in A.body$}{
+                $M.body \leftarrow A.body + B.body$\;
+            }
+            \uElseIf{$A.origin = LEFT \land B.origin = BASE$}{
+                $M.body \leftarrow MARKER + A.body + SEPARATOR + B.body + SEPARATOR$\;
+            }
+            \uElseIf{A.origin = LEFT}{
+                $M.body \leftarrow MARKER + A.body + SEPARATOR + SEPARATOR + B.body$\;
+            }
+            \Else{
+                $M.body \leftarrow MARKER + SEPARATOR + A.body + SEPARATOR + B.body$\;
+            }
+
+            \BlankLine
+            \KwRet{M}\;
+        }
+        \ElseIf{$A.children \neq \emptyset \land B.children \neq \emptyset$}{
+            \ForEach{$b \in B.children$}{
+                $a \leftarrow$ \find{$a \in A.children \rightarrow a.type = b.type \land a.id = b.id$}\;
+
+                \BlankLine
+                \lIf{a.origin = UNKNOWN}{$a.origin \leftarrow A.origin$}
+                \lIf{b.origin = UNKNOWN}{$b.origin \leftarrow B.origin$}
+
+                \BlankLine
+                $M.children \leftarrow M.children \cup \mn{a, b}$\;
+            }
+
+            \BlankLine
+            \ForEach{$a \in A.children$}{
+                $b \leftarrow$ \find{$b \in B.children \rightarrow a.type = b.type \land a.id = b.id$}\;
+
+                \BlankLine
+                \lIf{a.origin = UNKNOWN}{$a.origin \leftarrow A.origin$}
+
+                \BlankLine
+                %TODO: add at correct index
+                \lIf{b = \Null}{$M.children \leftarrow M.children \cup a$}
+            }
+
+            \BlankLine
+            \KwRet{M}\;
+        }
+
+        \BlankLine
+        \KwRet{\Null};
+    \end{algorithm}
+\end{document}

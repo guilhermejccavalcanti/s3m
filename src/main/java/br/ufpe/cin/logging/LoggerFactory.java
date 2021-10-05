@@ -34,29 +34,28 @@ public class LoggerFactory {
 
 		try {
 			if (!Files.exists(LOG_FILE_PATH)) {
-
 				if (!Files.exists(LOG_FILE_PATH.getParent()))
 					Files.createDirectory(LOG_FILE_PATH.getParent());
-
-				// creating FileHandler to record the logs
-				FileHandler fileHandler = new FileHandler(LOG_FILE_PATH.toString(), true);
-
-				// setting formatter to the handler
-				fileHandler.setFormatter(new SimpleFormatter());
-				fileHandler.setEncoding("UTF-16");
-
-				// setting Level to ALL
-				fileHandler.setLevel(Level.ALL);
-				logger.setLevel(Level.ALL);
-
-				// disable console output
-				logger.setUseParentHandlers(false);
-
-				// assigning handler to logger
-				logger.addHandler(fileHandler);
 			} else {
 				manageLogBuffer();
 			}
+
+			// creating FileHandler to record the logs
+			FileHandler fileHandler = new FileHandler(LOG_FILE_PATH.toString(), true);
+			
+			// setting formatter to the handler
+			fileHandler.setFormatter(new SimpleFormatter());
+			fileHandler.setEncoding("UTF-16");
+
+			// setting Level to ALL
+			fileHandler.setLevel(Level.ALL);
+			logger.setLevel(Level.ALL);
+
+			// disable console output
+			logger.setUseParentHandlers(false);
+
+			// assigning handler to logger
+			logger.addHandler(fileHandler);
 		} catch (IOException e) {
 			logger.log(Level.SEVERE, "Error occur during logging's creation.", e);
 		}
