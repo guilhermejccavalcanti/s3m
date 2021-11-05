@@ -744,7 +744,7 @@ public final class FilesManager {
 	}
 
 	/**
-	 * Creates a temporary file on system's deafult temporary directory
+	 * Creates a temporary file on system's default temporary directory
 	 * @param prefix of the file's name
 	 * @param suffix of the file's name
 	 * @return temporary file created
