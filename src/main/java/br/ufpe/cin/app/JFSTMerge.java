@@ -17,6 +17,7 @@ import br.ufpe.cin.mergers.util.MergeScenario;
 import br.ufpe.cin.mergers.util.RenamingStrategy;
 import br.ufpe.cin.mergers.util.TextualMergeStrategy;
 import br.ufpe.cin.mergers.util.converters.TextualMergeStrategyConverter;
+import br.ufpe.cin.mergers.util.validators.CSDiffOSValidator;
 import br.ufpe.cin.mergers.util.converters.RenamingStrategyConverter;
 import br.ufpe.cin.printers.Prettyprinter;
 import br.ufpe.cin.statistics.Statistics;
@@ -88,7 +89,11 @@ public class JFSTMerge {
 	public static boolean keepBothVersionsOfRenamedMethod = false;
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
-	@Parameter(names = { "--textual-merge-strategy", "-tms" }, description = "Parameter to choose merge strategy on terminal nodes.", converter = TextualMergeStrategyConverter.class)
+	@Parameter(
+		names = { "--textual-merge-strategy", "-tms" },
+		description = "Parameter to choose merge strategy on terminal nodes.",
+		converter = TextualMergeStrategyConverter.class,
+		validateWith = CSDiffOSValidator.class)
 	public static TextualMergeStrategy textualMergeStrategy = new Diff3();
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
