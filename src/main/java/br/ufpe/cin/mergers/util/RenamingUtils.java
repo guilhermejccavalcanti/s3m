@@ -12,7 +12,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
-import br.ufpe.cin.mergers.TextualMerge;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 import de.ovgu.cide.fstgen.ast.FSTTerminal;
 
@@ -256,7 +255,7 @@ public class RenamingUtils {
 
 	private static String mergeContent(FSTNode leftNode, FSTNode baseNode, FSTNode rightNode)
 			throws TextualMergeException {
-		return TextualMerge.merge(getNodeContent(leftNode), getNodeContent(baseNode), getNodeContent(rightNode),
+		return JFSTMerge.textualMergeStrategy.merge(getNodeContent(leftNode), getNodeContent(baseNode), getNodeContent(rightNode),
 				JFSTMerge.isWhitespaceIgnored);
 	}
 
@@ -287,7 +286,7 @@ public class RenamingUtils {
 			}
 		}
 
-		return TextualMerge.merge(left, base, right, JFSTMerge.isWhitespaceIgnored);
+		return JFSTMerge.textualMergeStrategy.merge(left, base, right, JFSTMerge.isWhitespaceIgnored);
 	}
 
 	public static String getNodeContent(FSTNode node) {
