@@ -206,8 +206,8 @@ public class s3mGitIntegrationTests {
         commitFiles(filesPath + "/right", "right");
         output.append(runProgram("git", "checkout", "master"));
 
-        output.append(runProgram("git", "merge", "left", "--no-edit"));
-        output.append(runProgram("git", "merge", "right", "--no-edit"));
+        output.append(runProgram("git", "merge", "left", "--no-edit", "-s", "recursive"));
+        output.append(runProgram("git", "merge", "right", "--no-edit", "-s", "recursive"));
         return output.toString();
     }
 
