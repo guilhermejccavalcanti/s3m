@@ -122,9 +122,14 @@ public class RenamingUtils {
 		removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
 	}
 
-	public static void removeUnmmatchedNode(FSTNode mergeTree, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
-		if (equalIfExists(leftNode, mergeNode) && !equalIfExists(rightNode, leftNode))
+	public static FSTNode removeUnmmatchedNode(FSTNode mergeTree, FSTNode leftNode, FSTNode rightNode, FSTNode mergeNode) {
+		if (equalIfExists(leftNode, mergeNode) && !equalIfExists(rightNode, leftNode)) {
+			FSTNode nodeInTree = Traverser.retrieveNodeFromTree(rightNode, mergeTree);
 			Traverser.removeNode(rightNode, mergeTree);
+			return nodeInTree;
+		}
+
+		return null;
 	}
 
 	private static boolean equalIfExists(FSTNode node1, FSTNode node2) {
@@ -244,13 +249,20 @@ public class RenamingUtils {
 
 	public static void runTextualMerge(MergeContext context, FSTNode leftNode, FSTNode baseNode, FSTNode rightNode,
 			FSTNode mergeNode) throws TextualMergeException {
+		boolean nodeHadConflict = nodeHasConflict(mergeNode);
 		((FSTTerminal) mergeNode).setBody(mergeContent(leftNode, baseNode, rightNode));
 		((FSTTerminal) mergeNode).setSpecialTokenPrefix(mergePrefix(leftNode, baseNode, rightNode));
 
-		if (nodeHasConflict(mergeNode))
-			context.renamingConflicts++;
-
-		removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
+		if (Traverser.isInTree(mergeNode, context.superImposedTree)) {
+			if (!nodeHadConflict && nodeHasConflict(mergeNode))
+				context.renamingConflicts++;
+			else if (nodeHadConflict && !nodeHasConflict(mergeNode))
+				context.renamingConflicts--;
+		}
+		
+		FSTNode removedNode = removeUnmmatchedNode(context.superImposedTree, leftNode, rightNode, mergeNode);
+		if (removedNode != null && nodeHasConflict(removedNode))
+			context.renamingConflicts--;
 	}
 
 	private static String mergeContent(FSTNode leftNode, FSTNode baseNode, FSTNode rightNode)
