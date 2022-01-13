@@ -3,6 +3,8 @@ package br.ufpe.cin.mergers.handlers.renaming;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 import org.eclipse.jdt.core.dom.ASTNode;
 import org.eclipse.jdt.core.dom.ASTVisitor;
@@ -14,9 +16,9 @@ import org.javatuples.Quartet;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.mergers.util.JavaCompiler;
+import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.RenamingUtils;
-import br.ufpe.cin.mergers.util.Side;
 import de.ovgu.cide.fstgen.ast.FSTNode;
 
 /**
@@ -103,18 +105,27 @@ public class SafelyMergeSimilarRenamingHandler implements RenamingHandler {
         if(RenamingUtils.haveDifferentSignature(leftNode, rightNode)) {
             RenamingUtils.generateMutualRenamingConflict(
                 context, leftNode, baseNode, rightNode, mergeNode,
-                "double renaming to different signatures");
+                "double renaming to different signatures"
+            );
         } else if(RenamingUtils.haveDifferentBody(leftNode, rightNode)) {
             try {
                 if(thereIsNewReference(leftNode, rightNode, context)) {
                     RenamingUtils.generateMutualRenamingConflict(
                         context, leftNode, baseNode, rightNode, mergeNode,
-                        "addition of a new reference when both changed the method's body");
+                        "addition of a new reference when both changed the method's body"
+                    );
                 } else {
                     RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
                 }
-            } catch (CountReferencesVisitorException e) {
-
+            } catch (CountReferencesException e) {
+                if (textualHasConflictWithSignature(context, leftNode.getName())) {
+                    RenamingUtils.generateMutualRenamingConflict(
+                        context, leftNode, baseNode, rightNode, mergeNode,
+                        "unable to count references to method signature, but textual reported conflict"
+                    );
+                } else {
+                    RenamingUtils.runTextualMerge(context, leftNode, baseNode, rightNode, mergeNode);
+                }
             }  
         }
     }
@@ -123,7 +134,7 @@ public class SafelyMergeSimilarRenamingHandler implements RenamingHandler {
         FSTNode leftNode,
         FSTNode rightNode,
         MergeContext context
-    ) throws CountReferencesVisitorException {
+    ) throws CountReferencesException {
         boolean thereIs = thereIsNewReference(leftNode, context.getLeft(), context);
         thereIs |= thereIsNewReference(rightNode, context.getRight(), context);
         return thereIs;
@@ -133,55 +144,58 @@ public class SafelyMergeSimilarRenamingHandler implements RenamingHandler {
         FSTNode toNode,
         File inFile,
         MergeContext context
-    ) throws CountReferencesVisitorException {
+    ) throws CountReferencesException {
         String signature = toNode.getName();
         int numberBaseReferences = countReferences(context.getBase(), signature);
         int numberContributionReferences = countReferences(inFile, signature);
         return numberContributionReferences > numberBaseReferences;
     }
 
-    private int countReferences(File file, String signature) throws CountReferencesVisitorException {
+    private int countReferences(File file, String signature) throws CountReferencesException {
         String programSource = FilesManager.readFileContent(file);
         CompilationUnit compilationUnit = new JavaCompiler().compile(programSource);
 
         CountReferencesVisitor visitor = new CountReferencesVisitor(signature);
         return visitor.countReferences(compilationUnit);
+    }
 
-        /* List<ASTNode> instances = new ArrayList<ASTNode>();
+    private boolean textualHasConflictWithSignature(MergeContext context, String signature) {
+        String textualOutput = context.unstructuredOutput;
+        List<MergeConflict> textualConflicts = FilesManager.extractMergeConflicts(textualOutput);
 
-        compilationUnit.accept(new ASTVisitor() {
-            public boolean parserFailed = false;
-            
-            @Override
-            public void endVisit(MethodInvocation node) {
-                try {
-                    if (sameSignatureAs(node, signature))
-                        instances.add(node);
-                } catch (RuntimeException e) {
-                    // The parser may fail at identifying an expression's type
-                    parserFailed = true;
-                }
-            }
+        Pattern pattern = getMethodSignaturePattern(signature);
+        for (MergeConflict conflict: textualConflicts) {
+            Matcher matcher = pattern.matcher(conflict.getLeft());
+            if (matcher.find()) return true;
 
-            private boolean sameSignatureAs(MethodInvocation node, String signature) {
-                String[] nameAndArguments = signature.split("[\\(\\)]");
-                String nodeMethodName = node.getName().toString();
-                return nodeMethodName.equals(nameAndArguments[0]) && sameArgumentList(node.arguments(), nameAndArguments[1].split("-"));
-            }
+            matcher = pattern.matcher(conflict.getRight());
+            if (matcher.find()) return true;
+        }
 
-            private boolean sameArgumentList(List nodeArguments, String[] arguments) {
-                for (int i = 0; i < nodeArguments.size(); i++) {
-                    String typeName = ((Expression) nodeArguments.get(i)).resolveTypeBinding().getName();
-                    if(!typeName.equals(arguments[i*2])) // Twice because the FST parser replicates the arguments.
-                        return false;
-                }
-                return true;
-            }
+        return false;
+    }
 
-        });
-        return instances.size(); */
-    }    
-    
+    private Pattern getMethodSignaturePattern(String signature) {
+        String[] nameAndParameters = signature.split("[\\(\\)]");
+        String methodName = nameAndParameters[0];
+        String[] methodParameters = nameAndParameters[1].split("-");
+
+        String[] noDuplicates = new String[methodParameters.length / 2];
+        for (int i = 0; i < methodParameters.length; i += 2)
+            noDuplicates[i / 2] = methodParameters[i];
+
+        methodParameters = noDuplicates;
+
+        String pattern = methodName + "\\s*\\(";
+        for (int i = 0; i < methodParameters.length; i++) {
+            if (i > 0) pattern += "\\s*,";
+            pattern += "\\s*" + methodParameters[i] + "\\s+.+";
+        }
+
+        pattern += "\\s*\\)";
+        return Pattern.compile(pattern);
+    }
+
 }
 
 class CountReferencesVisitor extends ASTVisitor {
@@ -195,14 +209,14 @@ class CountReferencesVisitor extends ASTVisitor {
         this.methodParameters = nameAndParameters[1].split("-");
     }
 
-    public int countReferences(CompilationUnit compilationUnit) throws CountReferencesVisitorException {
+    public int countReferences(CompilationUnit compilationUnit) throws CountReferencesException {
         try {
             instances = new ArrayList<ASTNode>();
             compilationUnit.accept(this);
             return instances.size();
         } catch (RuntimeException e) {
             // Parser may fail at identifying an expression's type at argumentsMatchParameters
-            throw new CountReferencesVisitorException();
+            throw new CountReferencesException();
         }
     }
 
@@ -231,4 +245,4 @@ class CountReferencesVisitor extends ASTVisitor {
     }
 }
 
-class CountReferencesVisitorException extends Exception {}
+class CountReferencesException extends Exception {}
