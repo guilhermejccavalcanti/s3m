@@ -57,6 +57,8 @@ public class Traverser {
     }
 
     public static FSTNode retrieveNodeFromTree(FSTNode node, FSTNode tree) {
+        if (node == null) return null;
+        
         List<FSTNode> nodes = collectNodes(tree);
         for (FSTNode treeNode : nodes) {
             if(treeNode.getName().equals(node.getName()))
