@@ -10,11 +10,14 @@ import br.ufpe.cin.files.FilesManager;
 import br.ufpe.cin.files.FilesTuple;
 import br.ufpe.cin.logging.LoggerFactory;
 import br.ufpe.cin.mergers.SemistructuredMerge;
-import br.ufpe.cin.mergers.TextualMerge;
+import br.ufpe.cin.mergers.textual.Diff3;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import br.ufpe.cin.mergers.util.MergeScenario;
 import br.ufpe.cin.mergers.util.RenamingStrategy;
+import br.ufpe.cin.mergers.util.TextualMergeStrategy;
+import br.ufpe.cin.mergers.util.converters.TextualMergeStrategyConverter;
+import br.ufpe.cin.mergers.util.validators.CSDiffOSValidator;
 import br.ufpe.cin.mergers.util.converters.RenamingStrategyConverter;
 import br.ufpe.cin.printers.Prettyprinter;
 import br.ufpe.cin.statistics.Statistics;
@@ -50,16 +53,16 @@ public class JFSTMerge {
 
 	//indicator of conflicting merge
 	private static int conflictState = 0;
-
+	
 	// EncrypterDecrypter
 	private FileEncrypterDecrypter fileEncrypterDecrypter = new FileEncrypterDecrypter();
-
+	
 	//command line options
 	@Parameter(arity = 3, description = "MinePath BasePath YoursPath", required = true, listConverter = FileConverter.class)
 	List<File> files = new ArrayList<>();
-
+	
 	@Parameter(names = "-o", description = "Destination of the merged content. Optional. If no destination is specified, "
-            + "then it will use \"yours\" as the destination for the merge. ")
+	+ "then it will use \"yours\" as the destination for the merge. ")
 	String outputpath = "";
 
 	@Parameter(names = "-g", description = "Parameter to identify that the tool is being used as a git merge driver.")
@@ -84,6 +87,14 @@ public class JFSTMerge {
 
 	@Parameter(names = "-rn", description = "Parameter to enable keeping both methods on renaming conflicts.")
 	public static boolean keepBothVersionsOfRenamedMethod = false;
+
+	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
+	@Parameter(
+		names = { "--textual-merge-strategy", "-tms" },
+		description = "Parameter to choose merge strategy on terminal nodes.",
+		converter = TextualMergeStrategyConverter.class,
+		validateWith = CSDiffOSValidator.class)
+	public static TextualMergeStrategy textualMergeStrategy = new Diff3();
 
 	@edu.umd.cs.findbugs.annotations.SuppressFBWarnings("MS_SHOULD_BE_FINAL")
 	@Parameter(names = {"-r", "--renaming-strategy"}, description = "Parameter to choose strategy on renaming conflicts.",
@@ -226,7 +237,7 @@ public class JFSTMerge {
 			long t0 = System.nanoTime();
 			try {
 				//running unstructured merge first is necessary due to future steps.
-				context.unstructuredOutput = TextualMerge.merge(left, base, right, false);
+				context.unstructuredOutput = Diff3.merge(left, base, right, false);
 				context.unstructuredMergeTime = System.nanoTime() - t0;
 
 				context.semistructuredOutput = SemistructuredMerge.merge(left, base, right, context);

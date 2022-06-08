@@ -20,7 +20,6 @@ import org.apache.commons.lang3.tuple.Pair;
 import br.ufpe.cin.app.JFSTMerge;
 import br.ufpe.cin.exceptions.TextualMergeException;
 import br.ufpe.cin.files.FilesManager;
-import br.ufpe.cin.mergers.TextualMerge;
 import br.ufpe.cin.mergers.util.MergeConflict;
 import br.ufpe.cin.mergers.util.MergeContext;
 import de.ovgu.cide.fstgen.ast.FSTNode;
@@ -111,7 +110,7 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		if(leftNode != null && rightNode != null) {
 			// both branches edited the node
 			
-		    String mergedContent = TextualMerge.merge(leftContent, baseContent, rightContent, 
+		    String mergedContent = JFSTMerge.textualMergeStrategy.merge(leftContent, baseContent, rightContent, 
 					JFSTMerge.isWhitespaceIgnored);
 		    
             FilesManager.findAndReplaceASTNodeContent(context.superImposedTree, leftContent, mergedContent);
@@ -213,10 +212,10 @@ public class InitializationBlocksHandlerMultipleBlocks implements ConflictHandle
 		
 		// order of parameters changes depending on which branch changes/deleted the node
 		if(isLeftNode) {
-			mergedContent = TextualMerge.merge(otherNodeContent, baseContent, editedNodeContent, 
+			mergedContent = JFSTMerge.textualMergeStrategy.merge(otherNodeContent, baseContent, editedNodeContent, 
 					JFSTMerge.isWhitespaceIgnored);
 		} else {
-			mergedContent = TextualMerge.merge(editedNodeContent, baseContent, otherNodeContent, 
+			mergedContent = JFSTMerge.textualMergeStrategy.merge(editedNodeContent, baseContent, otherNodeContent, 
 					JFSTMerge.isWhitespaceIgnored);
 		}
 		
