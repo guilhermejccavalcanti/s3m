@@ -239,7 +239,7 @@ where `leftPath`, `basePath` and `rightPath` can be either a file or a directory
 | `-hnereo`, `--handle-new-element-referencing-edited-one` | 1 | Boolean | Enables or disables New Element Referencing Edited One Handler. *(default: true)*
 | `-hmcrd`, `--handle-method-constructor-renaming-deletion` | 1 | Boolean | Enables or disables Method and Constructor Renaming or Deletion Handler. *(default: true)*
 | `-htae`, `--handle-type-ambiguity-error` | 1 | Boolean | Enables or disables Type Ambiguity Error Handler. *(default: true)*
-| `--textual-merge-strategy`, `-tms` | 1 | Boolean | Specify the merge strategy on terminal nodes. *(possible values: DIFF3, CSDIFF, CONSECUTIVE, AUTOTUNING)* *(default: diff3)*
+| `--textual-merge-strategy`, `-tms` | 1 | String | Specify the merge strategy on terminal nodes. *(possible values: DIFF3, CSDIFF, CONSECUTIVE, AUTOTUNING)* *(default: diff3)*
 | `--diff3-style`, `--show-base` | 1 | Boolean | Outputs the base version of the code (the common ancestor) in merge conflicts. *(default: false)*
 ---
 
