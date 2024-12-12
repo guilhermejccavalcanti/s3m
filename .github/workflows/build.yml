@@ -33,7 +33,7 @@ jobs:
     - name: Build
       run: |
         ./gradlew clean build -x test --console=plain
-        cp build/libs/jFSTMerge-all.jar ${HOME}/s3m.jar
+        cp build/libs/s3m-all.jar ${HOME}/s3m.jar
 
     - name: Configure git integration with S3M
       run: |
