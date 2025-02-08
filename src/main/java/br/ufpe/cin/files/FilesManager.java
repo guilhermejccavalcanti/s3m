@@ -754,4 +754,17 @@ public final class FilesManager {
 		file.deleteOnExit();
 		return file;
 	}
+
+	/**
+	 * Creates a file to be merged based on the given content
+	 * @param name
+	 * @param content
+	 * @return file to be used in a three-way-merge
+	 * @throws TextualMergeException
+	 */
+	public static File createContributionFile(String name, String content) throws IOException {
+		File file = FilesManager.createTempFile(name);
+		FilesManager.writeContent(file.getAbsolutePath(), content);
+		return file;
+	}
 }
