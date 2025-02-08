@@ -19,9 +19,9 @@ import br.ufpe.cin.files.FilesManager;
 public final class CSDiffRunner {
     public static String runCSDiff(CSDiffScript script, String leftContent, String baseContent, String rightContent) throws TextualMergeException {
         try {
-            File leftFile = createContributionFile("left", leftContent);
-            File baseFile = createContributionFile("base", baseContent);
-            File rightFile = createContributionFile("right", rightContent);
+            File leftFile = FilesManager.createContributionFile("left", leftContent);
+            File baseFile = FilesManager.createContributionFile("base", baseContent);
+            File rightFile = FilesManager.createContributionFile("right", rightContent);
             File outputFile = FilesManager.createTempFile("output");
 
             runCSDiff(script, leftFile, baseFile, rightFile, outputFile);
@@ -35,16 +35,6 @@ public final class CSDiffRunner {
             // return output;
         } catch (IOException e) {
             throw new TextualMergeException("Error during opening of temporary output file");
-        }
-    }
-
-    private static File createContributionFile(String name, String content) throws TextualMergeException {
-        try {
-            File file = FilesManager.createTempFile(name);
-            FilesManager.writeContent(file.getAbsolutePath(), content);
-            return file;
-        } catch (IOException e) {
-            throw new TextualMergeException("Error during opening of temporary input file(s)");
         }
     }
 
