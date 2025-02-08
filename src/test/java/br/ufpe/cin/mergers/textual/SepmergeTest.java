@@ -41,7 +41,7 @@ public class SepmergeTest {
                 null);
         assertTrue(
                 FilesManager.getStringContentIntoSingleLineNoSpacing(ctx.semistructuredOutput)
-                        .equals("<<<<<<<MINEpackagecom.example;publicclassTest{voidm(){}}=======>>>>>>>YOURS")
+                        .equals("publicclassTest{StringtoString(List<T>l){inta=20;intb=20;<<<<<<<MINEintc=20=======intc=30>>>>>>>YOURS;for(inti=1;i<11;i++){System.out.println(i);}if(l==null||l.isEmpty()){returnEMPTY;}returnString.join(\",\",l);}}")
         );
     }
 }

@@ -18,8 +18,6 @@ public class Sepmerge implements TextualMergeStrategy {
             File rightFile = FilesManager.createContributionFile("right", rightContent);
 
             mergeResult = SepMerge.run(leftFile.getAbsolutePath(), baseFile.getAbsolutePath(), rightFile.getAbsolutePath());
-
-            System.out.println("teste");
         } catch (IOException e) {
             throw new TextualMergeException("Error during opening of temporary input file(s).");
         } catch (Exception e){
