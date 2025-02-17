@@ -17,6 +17,7 @@ public class CSDiffOSValidator implements IParameterValidator {
         switch (textualMergeStrategy) {
             case "CSDIFF":
             case "CONSECUTIVE":
+            case "SEPMERGE":
             case "AUTOTUNING":
                 return true;
             default:

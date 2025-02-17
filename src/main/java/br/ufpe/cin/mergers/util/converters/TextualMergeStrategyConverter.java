@@ -13,6 +13,8 @@ public class TextualMergeStrategyConverter implements IStringConverter<TextualMe
                 return new CSDiff();
             case "CONSECUTIVE":
                 return new ConsecutiveLines();
+            case "SEPMERGE":
+                return new Sepmerge();
             case "AUTOTUNING":
                 return new CSDiffAndDiff3();
             default:
