@@ -7,9 +7,9 @@ sed 's/{/\n$$$$$$${\n$$$$$$$/g' $2 | sed 's/}/\n$$$$$$$}\n$$$$$$$/g' | sed 's/(/
 sed 's/{/\n$$$$$$${\n$$$$$$$/g' $3 | sed 's/}/\n$$$$$$$}\n$$$$$$$/g' | sed 's/(/\n$$$$$$$(\n$$$$$$$/g' | sed 's/)/\n$$$$$$$)\n$$$$$$$/g' | sed 's/;/\n$$$$$$$;\n$$$$$$$/g' | sed 's/,/\n$$$$$$$,\n$$$$$$$/g' > "$3_temp"
 
 if [ "$5" = "--show-base" ]; then
-    diff3 -m "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
+    git merge-file -L MINE -L BASE -L YOURS -p -q --diff3 "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
 else
-    diff3 -E -m "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
+    git merge-file -L MINE -L BASE -L YOURS -p -q "$1_temp" "$2_temp" "$3_temp" > "$parentFolder/mid_merged"
 fi
 
 rm "$1_temp"
