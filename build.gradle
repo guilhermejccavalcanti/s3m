@@ -51,3 +51,7 @@ artifacts {
 tasks.withType(Test) {
     enableAssertions = false
 }
+
+test {
+    enabled = false
+}

@@ -18,7 +18,6 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 import com.github.javaparser.JavaParser;
-import com.github.javaparser.ParseException;
 import com.github.javaparser.ast.CompilationUnit;
 import com.github.javaparser.ast.PackageDeclaration;
 import com.github.javaparser.ast.body.ClassOrInterfaceDeclaration;
@@ -589,10 +588,10 @@ public final class FilesManager {
 	public static String indentCode(String sourceCode){
 		String indentedCode;
 		try{
-			String fileEncoding = FilesEncoding.retrieveBaseEncoding();
+			String fileEncoding = FilesEncoding.detectEncoding(sourceCode);
 			CompilationUnit indenter = JavaParser.parse(new ByteArrayInputStream(sourceCode.getBytes(Charset.forName(fileEncoding))), Charset.forName(fileEncoding).displayName());
 			indentedCode = indenter.toString();
-		} catch (ParseException e) { //in case of any errors, returns the non-indented sourceCode.
+		} catch (Exception e) { //in case of any errors, returns the non-indented sourceCode.
 			return sourceCode;
 		}
 		return indentedCode;
@@ -760,7 +759,7 @@ public final class FilesManager {
 	 * @param name
 	 * @param content
 	 * @return file to be used in a three-way-merge
-	 * @throws TextualMergeException
+	 * @throws IOException
 	 */
 	public static File createContributionFile(String name, String content) throws IOException {
 		File file = FilesManager.createTempFile(name);

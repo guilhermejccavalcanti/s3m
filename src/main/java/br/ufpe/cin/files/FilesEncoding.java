@@ -1,5 +1,6 @@
 package br.ufpe.cin.files;
 
+import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
@@ -49,8 +50,29 @@ public class FilesEncoding {
         return baseEncoding;
     }
 
-    private static String detectEncoding(File file) throws IOException {
+    public static String detectEncoding(File file) throws IOException {
         InputStream reader = Files.newInputStream(Paths.get(file.getAbsolutePath()));
+        UniversalDetector detector = new UniversalDetector(null);
+
+        byte[] data = new byte[4096];
+        int dataRead = reader.read(data);
+        while(dataRead > 0 && !detector.isDone()) {
+            detector.handleData(data, 0, dataRead);
+            dataRead = reader.read(data);
+        }
+        detector.dataEnd();
+
+        String encoding = detector.getDetectedCharset();
+        detector.reset();
+
+        if(encoding == null)
+            return DEFAULT_ENCODING;
+        else
+            return encoding;
+    }
+
+    public static String detectEncoding(String s) throws IOException {
+        InputStream reader = new ByteArrayInputStream(s.getBytes());
         UniversalDetector detector = new UniversalDetector(null);
 
         byte[] data = new byte[4096];

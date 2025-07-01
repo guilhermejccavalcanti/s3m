@@ -77,6 +77,9 @@ public class JFSTMerge {
 	@Parameter(names = "-l", description = "Parameter to disable logging of merged files (true or false).",arity = 1)
 	public static boolean logFiles = true;
 
+	@Parameter(names = "-s", description = "Parameter to apply full structured merge on terminal nodes (true or false). Default is false. Only works on Linux.",arity = 1)
+	public static boolean isStructured = false;
+
 	@Parameter(names = "--files-encoding", description = "Determines the encoding of the input files. If not specified," +
 			"the tool tries to infer the encoding of the files. If this fails, it assumes the files are encoded in UTF-8.", arity = 3)
 	private List<String> filesEncoding = new ArrayList<>();

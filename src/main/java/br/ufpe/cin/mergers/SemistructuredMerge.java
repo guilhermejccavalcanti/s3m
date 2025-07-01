@@ -5,6 +5,7 @@ import java.io.FileNotFoundException;
 import java.io.UnsupportedEncodingException;
 import java.util.List;
 
+import br.ufpe.cin.mergers.structured.LastMerge;
 import com.google.common.collect.ImmutableList;
 import org.apache.commons.lang3.tuple.Pair;
 import org.apache.commons.lang3.tuple.Triple;
@@ -103,8 +104,9 @@ public final class SemistructuredMerge {
 			context.join(merge(leftTree, baseTree, rightTree));
 
 			// handling special kinds of conflicts
-			context.semistructuredOutput = Prettyprinter.print(context.superImposedTree); // partial result of
-																							// semistructured merge is
+			String prettyPrint = Prettyprinter.print(context.superImposedTree);
+			if(JFSTMerge.isStructured) prettyPrint = FilesManager.indentCode(prettyPrint);
+			context.semistructuredOutput = prettyPrint; // partial result of semistructured merge is
 																							// necessary for further
 																							// processing
 			for (ConflictHandler conflictHandler : conflictHandlers) {
@@ -127,7 +129,9 @@ public final class SemistructuredMerge {
 
 		// during the parsing process, code indentation is typically lost, so we
 		// reindent the code
-		return Prettyprinter.print(context.superImposedTree);
+		String mergedCode = Prettyprinter.print(context.superImposedTree);
+		if(JFSTMerge.isStructured) mergedCode = FilesManager.indentCode(mergedCode);
+		return mergedCode;
 	}
 
 	/**
@@ -409,7 +413,7 @@ public final class SemistructuredMerge {
 	}
 
 	private static String mergeBodyContent(FSTNode node, MergeContext context, String nodeField)
-			throws TextualMergeException {
+            throws TextualMergeException {
 		Triple<String, String, String> contributionsContents = splitContributionsContents(nodeField);
 		String leftContent = contributionsContents.getLeft().trim();
 		String baseContent = contributionsContents.getMiddle().trim();
@@ -419,7 +423,15 @@ public final class SemistructuredMerge {
 		if(JFSTMerge.isMethodAndConstructorRenamingAndDeletionHandlerEnabled)
     		identifyPossibleNodesDeletionOrRenamings(node, context, leftContent, baseContent, rightContent);
 
-		return JFSTMerge.textualMergeStrategy.merge(leftContent, baseContent, rightContent, JFSTMerge.isWhitespaceIgnored);
+		String output;
+		if(JFSTMerge.isStructured) {
+			output = LastMerge.merge(leftContent,baseContent,rightContent);
+		} else {
+			output = JFSTMerge.textualMergeStrategy.merge(leftContent, baseContent, rightContent,
+					JFSTMerge.isWhitespaceIgnored);
+		}
+
+		return output;
 	}
 
 	private static String mergePrefixContent(FSTNode node, MergeContext context, String nodeField)
