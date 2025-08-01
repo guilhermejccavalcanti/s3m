@@ -15,6 +15,8 @@ public class TextualMergeStrategyConverter implements IStringConverter<TextualMe
                 return new ConsecutiveLines();
             case "SEPMERGE":
                 return new Sepmerge();
+            case "AUTOSEPMERGE":
+                return new AutotuningSepmerge();
             case "AUTOTUNING":
                 return new CSDiffAndDiff3();
             default:
