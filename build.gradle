@@ -53,5 +53,5 @@ tasks.withType(Test) {
 }
 
 test {
-    enabled = false
+    enabled = true
 }
