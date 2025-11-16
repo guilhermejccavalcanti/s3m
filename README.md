@@ -1,13 +1,12 @@
 # Semistructured 3-Way Merge
 
-[![Build Status](https://github.com/guilhermejccavalcanti/jFSTMerge/actions/workflows/build.yml/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
-[![GitHub Super-Linter](https://github.com/guilhermejccavalcanti/jFSTMerge/workflows/Lint%20Code%20Base/badge.svg)](https://github.com/guilhermejccavalcanti/jFSTMerge/actions)
+[![Build Status](https://github.com/guilhermejccavalcanti/s3m/actions/workflows/build.yml/badge.svg)](https://github.com/guilhermejccavalcanti/s3m/actions)
 
 ## Table of Contents
-* [What is semistructured merge?](https://github.com/guilhermejccavalcanti/jFSTMerge#what-is-semistructured-merge-?)
-* [Conflict Handlers](https://github.com/guilhermejccavalcanti/jFSTMerge#conflict-handlers)
-* [User Guide](https://github.com/guilhermejccavalcanti/jFSTMerge#user-guide)
-* [Contributor Guide](https://github.com/guilhermejccavalcanti/jFSTMerge#contributor-guide)
+* [What is semistructured merge?](https://github.com/guilhermejccavalcanti/s3m#what-is-semistructured-merge-?)
+* [Conflict Handlers](https://github.com/guilhermejccavalcanti/s3m#conflict-handlers)
+* [User Guide](https://github.com/guilhermejccavalcanti/s3m#user-guide)
+* [Contributor Guide](https://github.com/guilhermejccavalcanti/s3m#contributor-guide)
 
 ---
 
@@ -126,14 +125,14 @@ We use [Feature House](http://fosd.net/fh) as base framework for parsing and sup
 
 Conflict Handlers (or just Handlers) are algorithms that run in sequence after every semistructured merge (or if the user desires so), analysing the merge output and taking actions to refine the result according to the peculiarities of the multiple types of the language's constructions.
 
-### [Deletions Handler](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/DeletionsHandler.java)
+### [Deletions Handler](https://github.com/guilhermejccavalcanti/s3m/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/DeletionsHandler.java)
 
 Executes when a developer A changed the content of an inner class while another developer B deleted or renamed it.
 
 If A included a reference to the changed class, the handler keeps both A's and B's classes (if B deleted it, it keeps only A's).  
 Otherwise, if B included a reference to its renamed class, the handler outputs a conflict between A's and B's classes. Else, the handler merges both classes.
 
-### [Initialization Blocks Handler](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/InitializationBlocksHandler.java)
+### [Initialization Blocks Handler](https://github.com/guilhermejccavalcanti/s3m/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/InitializationBlocksHandler.java)
 
 Executes when there's at least one initialization block in the code.
 
@@ -141,7 +140,7 @@ If there's exactly one initialization block in A, B and base's code, they're mer
 Otherwise, for each initialization block in base, the handler searches for the first A's and B's initialization block with string similarity higher or equal than 0.7 and merge them. If there's none, the handler uses an empty string for the merge.
 
 
-### [Method and Constructor Renaming or Deletion Handler](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/MethodAndConstructorRenamingAndDeletionHandler.java)
+### [Method and Constructor Renaming or Deletion Handler](https://github.com/guilhermejccavalcanti/s3m/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/MethodAndConstructorRenamingAndDeletionHandler.java)
 
 Executes when a developer renamed or deleted a method or a constructor.  
 
@@ -149,18 +148,18 @@ For each method or constructor in base, if its signature is not present in A's o
 Then, for each marked method or constructor in base, the handler searches for the first A's and B's method or constructor that satisfies one of the following conditions: (1) equal body; (2) string similarity higher than 0.7 in the body and equal signature but the name; (3) one body is contained in the other. If there's none, they're treated as deleted.  
 Finally, for each triple of methods or constructors made by the previous search (A's, base's and B's), the handler does an operation based on one of its user-chosen variants:
 
-- Safe (default): applies a [decision tree](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/documentation/Renaming-Handler-Table.png) to decide the result.
+- Safe (default): applies a [decision tree](https://github.com/guilhermejccavalcanti/s3m/blob/master/documentation/Renaming-Handler-Table.png) to decide the result.
 - Keep Both Methods: always keeps A's and B's methods in the triple.
 - Merge Methods: runs textual merge on A's and B's methods.
 
 
-### [New Element Referencing Edited One Handler](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/NewElementReferencingEditedOneHandler.java)
+### [New Element Referencing Edited One Handler](https://github.com/guilhermejccavalcanti/s3m/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/NewElementReferencingEditedOneHandler.java)
 
 Executes when developer A added a method or field that refers to a method or field edited by developer B.
 
 For each A's and for each B's method or field, if there's an unstructured merge conflict surrounding them and if A's refers to B's, the handler outputs a conflict. Otherwise, the handler keeps both.
 
-### [Type Ambiguity Error Handler](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/TypeAmbiguityErrorHandler.java)
+### [Type Ambiguity Error Handler](https://github.com/guilhermejccavalcanti/s3m/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/TypeAmbiguityErrorHandler.java)
 
 Executes when developer A or B add at least one import statement.
 
@@ -169,7 +168,7 @@ Else if A is importing a class and B is importing a package, the handler outputs
 If none of these conditions are true, the handler keeps the import statements.
 
 
-### [Duplicated Declaration Handler](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/DuplicatedDeclarationHandler.java)
+### [Duplicated Declaration Handler](https://github.com/guilhermejccavalcanti/s3m/blob/master/src/main/java/br/ufpe/cin/mergers/handlers/DuplicatedDeclarationHandler.java)
 
 Executes as a statistical tool, when unstructured merge result presents a duplicated declaration from a method or field.
 
@@ -186,25 +185,25 @@ For research purposes, S3M's stores a error and some statistical logs in `${HOME
 
 ### Requirements
 
-* **Java 8** (Java version "1.8.0_212" or above)
+* **Java 17**
 * **Git** (optional) S3M can behave as a merge driver for `git merge`. If you have interest in this feature, remember to have Git [installed](https://git-scm.com/downloads). You can find more details about *git merge drivers* [here](https://www.git-scm.com/docs/gitattributes#_defining_a_custom_merge_driver).
 
 <!--- 
 ### Installing
-Check the [Releases](https://github.com/guilhermejccavalcanti/jFSTMerge/releases) page. Download and execute the most recent installer and follow its instructions.
+Check the [Releases](https://github.com/guilhermejccavalcanti/s3m/releases) page. Download and execute the most recent installer and follow its instructions.
 -->
 
 ### Git integration (as a merge driver)
 
-1. Download the [binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/jFSTMerge.jar) file;
-2. Add the following lines to your `.gitconfig` file (typically localized in the folder `$HOME` in Unix or `%USERPROFILE%` in Windows), replacing `pathTo` with the path to the binary file in your machine:
+1. Generate an executable jar file (e.g. the gradle assemble command generates a `s3m-all.jar` file);
+2. Add the following lines to your `.gitconfig` file (typically localized in the folder `$HOME` in Unix or `%USERPROFILE%` in Windows), replacing `pathTo` with the path to the generated jar file in your machine:
 
   ```conf
   [core]
       attributesfile = ~/.gitattributes
   [merge "s3m"]
       name = semi_structured_3_way_merge_tool_for_java
-      driver = java  -jar "\"pathTo/jFSTMerge.jar\"" %A %O %B -o %A -g
+      driver = java  -jar "\"pathTo/s3m-all.jar\"" %A %O %B -o %A -g
   ```
 
 3. Add the following line to your `.gitattributes` file (also localized in the `$HOME` / `%USERPROFILE%` folder, create the file if not created already):
@@ -216,10 +215,10 @@ Check the [Releases](https://github.com/guilhermejccavalcanti/jFSTMerge/releases
 ### Usage
 If integrated with Git (as a merge driver), S3M will run automatically every time you invoke the `git merge` command.
 No further configuration required.
-You can still run it as a standalone tool, if desired, with the `.jar` file present in the [/binary](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/binary/) folder.
-You can use the command below after dowloading the `jFSTMerge.jar` file:
+You can still run it as a standalone tool, if desired, generate an executable jar file (e.g. the gradle assemble command generates a `s3m-all.jar`file).
+You can use the command below after generating the jar file:
 
-`java -jar jFSTMerge.jar leftPath basePath rightPath`
+`java -jar s3m-all.jar leftPath basePath rightPath`
 
 where `leftPath`, `basePath` and `rightPath` can be either a file or a directory.
 
@@ -247,8 +246,8 @@ where `leftPath`, `basePath` and `rightPath` can be either a file or a directory
 
 ### Contributor Requirements
 
-* **Java 8** (Java version "1.8.0_212" or above)
-* **Gradle 4.6**
+* **Java 17** 
+* **Gradle 7.2**
 
 ### Getting Started
 
@@ -256,29 +255,25 @@ Cloning the repository and setting up a Gradle project should be enough to start
 
 ### Build
 
-We run [Gradle](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/build.gradle) as build tool, alongside a wrapper. One can build the tool in command line running `gradlew build`. Additionally, [here](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/documentation/setup-eclipse.pdf) you can find a two-step setup guide on the Eclipse IDE.
+We run [Gradle](https://github.com/guilhermejccavalcanti/s3m/blob/master/build.gradle) as build tool, alongside a wrapper. One can build the tool in command line running `gradlew build`. Additionally, [here](https://github.com/guilhermejccavalcanti/s3m/blob/master/documentation/setup-eclipse.pdf) you can find a two-step setup guide on the Eclipse IDE.
 
 ### Testing
 
-We have [a bunch of JUnit classes](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/src/test/java/br/ufpe/cin). They mostly test the behavior of the handlers.  
+We have [a bunch of JUnit classes](https://github.com/guilhermejccavalcanti/s3m/tree/master/src/test/java/br/ufpe/cin). They mostly test the behavior of the handlers.  
 We encourage the usage of
 
 `testWhatYoureTesting_givenAConditionIsSatisfied_whenSomeActionHappens_shouldExpectedBehavior`
 
 style of method names when writing unit tests.
 
-There's also [two unique JUnit classes](https://github.com/guilhermejccavalcanti/jFSTMerge/tree/master/testfiles/shelltests):
-1. one for testing the git merge driver, that serve primarily for the installer (see below);
-2. and another that runs periodically as a Cron Job (see below).
-
 ### Continuous Integration
 
-We run [GitHub Actions](https://github.com/guilhermejccavalcanti/jFSTMerge/blob/master/.github/workflows/) as CI tool.
-It runs a typical gradle build, the unique JUnit tests described above and linters for every new or edited file.
+We run [GitHub Actions](https://github.com/guilhermejccavalcanti/s3m/blob/master/.github/workflows/) as CI tool.
+It runs a typical gradle build with JUnit tests.
 
 ---
 
-Copyright (c) 2016-2019 by the Federal University of Pernambuco.
+Copyright (c) 2016-2025 by the Federal University of Pernambuco.
 
 Paulo Borba &lt;<phmb@cin.ufpe.br>&gt;  
 Guilherme Cavalcanti &lt;<gjcc@cin.ufpe.br>&gt;  
