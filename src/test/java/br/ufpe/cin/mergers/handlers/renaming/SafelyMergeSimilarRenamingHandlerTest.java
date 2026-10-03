@@ -196,6 +196,17 @@ public class SafelyMergeSimilarRenamingHandlerTest {
 			"<<<<<<<MINEpublicabstractvoidn1();=======publicabstractvoidn2();>>>>>>>YOURS");
 	}
 
+	@Test
+	public void testHandle_whenThereAreSimilarMethodsOnOuterAndInnerClasses() {
+		MergeContext ctx = 	new JFSTMerge().mergeFiles(
+				new File("testfiles/renamingsimilarouterandinnerclasses/left.java"),
+				new File("testfiles/renamingsimilarouterandinnerclasses/base.java"),
+				new File("testfiles/renamingsimilarouterandinnerclasses/right.java"),
+				null);
+		TestUtils.verifyMergeResultWithoutRenamingConflict(ctx,
+				"publicclassQingCloudRouterStatics{privateStringval5;privateStringrouter_static_id;privateList<RouterStaticEntry>entry_set;publicStringgetRouter_static_id(){returnrouter_static_id;}publicvoidsetRouter_static_id(Stringrouter_static_id){this.router_static_id=router_static_id;}}");
+	}
+
     private void merge(File left, File right) {
         mergeContext = jfstMerge.mergeFiles(left, baseFile, right, null);
 	}

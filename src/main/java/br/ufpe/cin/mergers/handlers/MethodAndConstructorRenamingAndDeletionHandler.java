@@ -179,7 +179,9 @@ public final class MethodAndConstructorRenamingAndDeletionHandler implements Con
 	private FSTNode tryFindFirstMatch(List<FSTTerminal> candidates, FSTNode node,
 			BiPredicate<FSTNode, FSTNode> predicate) {
 		for (FSTNode candidate : candidates) {
-			if (RenamingUtils.isMethodOrConstructorNode(candidate) && predicate.test(node, candidate)) {
+			if (RenamingUtils.isMethodOrConstructorNode(candidate) &&
+					RenamingUtils.isMethodOrConstructorNodeFromTheSameParent(candidate,node) &&
+					predicate.test(node, candidate)) {
 				return candidate;
 			}
 		}

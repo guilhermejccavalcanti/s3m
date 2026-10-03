@@ -308,4 +308,16 @@ public class RenamingUtils {
 		}
 		return false;
 	}
+
+	public static boolean isMethodOrConstructorNodeFromTheSameParent(FSTNode candidate, FSTNode node) {
+		String candidateParentType = candidate.getParent().getType();
+		String nodeParentType = node.getParent().getType();
+
+		String candidateParentName = candidate.getParent().getName();
+		String nodeParentName = node.getParent().getName();
+
+		return (candidateParentType.equals(nodeParentType))
+				&&
+				(candidateParentName.equals(nodeParentName));
+	}
 }
